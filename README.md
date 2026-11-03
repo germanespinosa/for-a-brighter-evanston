@@ -65,6 +65,20 @@ data/news.json         articles for In the news
 
 No build tools or frameworks: plain HTML, CSS and JavaScript, with Jekyll includes so the header, footer and both languages stay in sync.
 
+## Updates from #website (sandbox and vote)
+
+Fabian builds proposed changes in a sandbox branch `sandbox/<id>`. The site is built by GitHub Actions (`.github/workflows/pages.yml`):
+- the live site at `/`,
+- the one open sandbox at `/sandbox/<id>/`, with a preview banner, hidden from search engines, and always showing the live news list.
+
+Changes go live only after a validation report and a vote in #website: 2 ✅ and no ❌. See `docs/agents/fabian-website.md`.
+
+Checks used before a vote:
+- `python3 scripts/sandbox_check.py --base origin/main [--url <sandbox url>]`: what may change, page settings, unsafe code, Spanish coverage, broken links.
+- `python3 scripts/sandbox_screens.py --sandbox <sandbox url> --live <site url> <paths…>`: desktop and phone screenshots, layout problems. Needs Playwright.
+
+GitHub Pages must be set to **Settings → Pages → Source: GitHub Actions**.
+
 ## Preview locally
 
 ```
