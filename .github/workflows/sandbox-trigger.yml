@@ -1,0 +1,19 @@
+# When the sandbox branch changes, rebuild the site from main so the preview
+# at /sandbox/<id>/ updates. (Publishing always runs from main.)
+name: Rebuild for sandbox changes
+
+on:
+  push:
+    branches: ['sandbox/**']
+
+permissions:
+  actions: write
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start the site build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "${{ github.repository }}" --ref main

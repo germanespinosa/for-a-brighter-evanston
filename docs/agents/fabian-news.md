@@ -360,7 +360,7 @@ Removed by Fabian (Hermes agent) following docs/agents/fabian-news.md
 | Push still fails after two more tries | Stop and send **Message G** with the error text. |
 | Authentication or permission error (401/403, "permission denied", "could not read Username") | Don't retry with other credentials. Send **Message G**. |
 | Force push | Never use `git push --force` or `--force-with-lease` on `main`. |
-| Pushed, but the live file hasn't changed after 10 minutes | Check the build with `gh run list --repo germanespinosa/for-a-brighter-evanston --limit 3` ("pages build and deployment"), or the Actions tab on github.com. Still running: wait 5 more minutes. Failed: send **Message H** with the run link. Succeeded but the change is missing: re-check with the `nocache` URL; if it's still missing, send **Message H**. |
+| Pushed, but the live file hasn't changed after 10 minutes | Check the build with `gh run list --repo germanespinosa/for-a-brighter-evanston --limit 3` ("Build and deploy site"), or the Actions tab on github.com. Still running: wait 5 more minutes. Failed: send **Message H** with the run link. Succeeded but the change is missing: re-check with the `nocache` URL; if it's still missing, send **Message H**. |
 | `check` fails after your push, or the live page says "The articles couldn't load" | You published a broken file. Immediately run `git revert --no-edit HEAD && git push origin main`, confirm the page lists articles again, then send **Message H**. |
 
 ---

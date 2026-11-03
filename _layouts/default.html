@@ -8,6 +8,9 @@
   <title>{{ page.title }}{% unless page.is_home %} · For A Brighter Evanston{% endunless %}</title>
   <meta name="description" content="{{ page.description | strip_html | escape }}">
   <meta name="theme-color" content="#13224F">
+  {%- if site.sandbox_id %}
+  <meta name="robots" content="noindex, nofollow">
+  {%- endif %}
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   {%- if page.alt_url %}
   <link rel="alternate" hreflang="{{ page.lang }}" href="{{ page.url | absolute_url }}">
@@ -41,6 +44,9 @@
 </head>
 <body class="{{ page.body_class }}">
   <a class="skip-link" href="#main">{{ t.nav.skip }}</a>
+  {%- if site.sandbox_id %}
+  {% include sandbox-banner.html %}
+  {%- endif %}
 
   {% include header.html %}
   {% include alert-bar.html %}

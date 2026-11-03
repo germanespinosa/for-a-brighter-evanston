@@ -1,0 +1,119 @@
+# Builds and publishes forabrighterevanston.org.
+#
+#   /                 the live site, built from main
+#   /sandbox/<id>/    the one open update, built from the branch sandbox/<id>
+#                     (see docs/agents/fabian-website.md)
+#
+# The sandbox always shows the live news list: data/news.json is copied from
+# main into the sandbox build, so sandboxes never have news of their own.
+#
+# Requires Settings → Pages → Build and deployment → Source: "GitHub Actions".
+
+name: Build and deploy site
+
+on:
+  push:
+    branches: [main]
+  delete:            # a sandbox branch was destroyed: rebuild without it
+  workflow_dispatch: # started by sandbox-trigger.yml or by hand
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the live site (main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: live
+
+      - name: Find the open sandbox
+        id: sandbox
+        working-directory: live
+        run: |
+          branches=$(git ls-remote --heads origin 'refs/heads/sandbox/*' | awk '{print $2}' | sed 's#^refs/heads/##')
+          count=$(printf '%s\n' "$branches" | grep -c . || true)
+          if [ "$count" -gt 1 ]; then
+            echo "::warning::More than one sandbox branch exists; only the first is published: $(echo $branches)"
+          fi
+          branch=$(printf '%s\n' "$branches" | grep . | sort | head -n1 || true)
+          id="${branch#sandbox/}"
+          if [ -n "$branch" ] && ! printf '%s' "$id" | grep -Eq '^[a-z0-9][a-z0-9-]{0,39}$'; then
+            echo "::warning::Ignoring sandbox branch with an invalid name: $branch"
+            branch=""; id=""
+          fi
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+          echo "Sandbox: ${branch:-none}"
+
+      - name: Check out the sandbox
+        if: steps.sandbox.outputs.branch != ''
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.sandbox.outputs.branch }}
+          path: sandbox-src
+
+      - name: Prepare the sandbox build
+        if: steps.sandbox.outputs.branch != ''
+        env:
+          ID: ${{ steps.sandbox.outputs.id }}
+        run: |
+          cd sandbox-src
+          # Serve it under /sandbox/<id>/, mark it as a preview, link back to the live site
+          live_url=$(grep -E '^url:' ../live/_config.yml | head -n1 | sed -E 's/^url:[[:space:]]*//; s/[[:space:]]*$//')
+          sed -i -E 's#^baseurl:.*#baseurl: "/sandbox/'"$ID"'"#' _config.yml
+          printf '\nsandbox_id: "%s"\nlive_url: "%s"\n' "$ID" "$live_url" >> _config.yml
+          # News always comes from the live site
+          cp ../live/data/news.json data/news.json
+          # Only the live site has a domain file
+          rm -f CNAME
+
+      - name: Build the live site
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./live
+          destination: ./_site
+
+      - name: Build the sandbox
+        if: steps.sandbox.outputs.branch != ''
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./sandbox-src
+          destination: ./_sandbox_site
+
+      - name: Put the sandbox under /sandbox/<id>/
+        if: steps.sandbox.outputs.branch != ''
+        env:
+          ID: ${{ steps.sandbox.outputs.id }}
+        run: |
+          sudo chown -R "$(id -u)" _site _sandbox_site
+          rm -rf "_site/sandbox"
+          mkdir -p "_site/sandbox"
+          mv _sandbox_site "_site/sandbox/$ID"
+          rm -f "_site/sandbox/$ID/robots.txt" "_site/sandbox/$ID/sitemap.xml" "_site/sandbox/$ID/CNAME"
+          echo "Sandbox published at /sandbox/$ID/"
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
