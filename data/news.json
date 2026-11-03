@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-10-30",
+      "source": "WTTW",
+      "site": "WTTW",
+      "url": "https://news.wttw.com/2026/10/30/evanston-parents-threaten-legal-action-following-district-s-proposal-close-two-schools",
+      "title": "Evanston Parents Threaten Legal Action Following District’s Proposal to Close Two Schools",
+      "summary": "Attorneys and District 65 community members submitted a legal objection seeking withdrawal or postponement of the plan to close Dewey and Lincolnwood. They argue the decision-making process violates Illinois law and say they are prepared to pursue legal remedies.",
+      "title_es": "Padres de Evanston amenazan con emprender acciones legales ante la propuesta del distrito de cerrar dos escuelas",
+      "summary_es": "Abogados y miembros de la comunidad del Distrito 65 presentaron una objeción legal para pedir que se retire o aplace el plan de cerrar Dewey y Lincolnwood. Sostienen que el proceso de toma de decisiones viola la ley de Illinois y afirman estar preparados para recurrir a la vía judicial."
+    },
+    {
       "date": "2026-10-31",
       "source": "People Magazine",
       "site": "People Magazine",
