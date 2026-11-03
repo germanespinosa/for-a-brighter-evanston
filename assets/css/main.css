@@ -195,7 +195,10 @@ button { font: inherit; color: inherit; }
   .site-nav__list a, .site-nav__button { min-height: 44px; font-size: .8125rem; }
 }
 @media (max-width: 520px) {
-  .brand { font-size: .8125rem; letter-spacing: .02em; gap: 6px; }
+  /* Stack the name into a two-line lockup so it shares the row with the buttons */
+  .brand { font-size: .8125rem; letter-spacing: .02em; gap: 8px; white-space: normal; line-height: 1.1; }
+  .brand__name { max-width: 9.5em; }
+  .brand__star { font-size: 1.25rem; }
   .lang-switch__full {
     position: absolute; width: 1px; height: 1px; overflow: hidden;
     clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
@@ -203,8 +206,10 @@ button { font: inherit; color: inherit; }
   .lang-switch__short { display: inline; }
 }
 @media (max-width: 360px) {
-  .brand__name { font-size: .6875rem; }
-  .site-header__actions .btn--sm { padding-inline: 10px; }
+  .brand { font-size: .75rem; }
+  .brand__star { display: none; }
+  .site-header__actions { gap: 6px; }
+  .site-header__actions .btn--sm { padding-inline: 9px; font-size: .75rem; }
 }
 
 /* ---------- Alert bar ---------- */
