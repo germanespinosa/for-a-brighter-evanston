@@ -1,0 +1,112 @@
+# English text for the shared parts of the site (header, footer, dialogs)
+# and for the home page. Strings ending in _html may contain HTML.
+
+lang_name: English
+switch_label: Español
+switch_short: ES
+
+urls:
+  home: /
+  write: /home/write-to-the-board-issue/
+  news: /home/in-the-news/
+  new_homes: /home/new-homes/
+
+nav:
+  label: Main
+  write: Write to the Board
+  news: In the news
+  updates: Get updates
+  instagram: Follow us on Instagram
+  sign: Sign the letter
+  skip: Skip to content
+  details: Details
+
+footer:
+  contact: Contact
+  disclaimer: Not affiliated with Evanston/Skokie School District 65
+
+updates:
+  title: Get updates
+  lead: Sign up for D65 meeting reminders and updates.
+  first: First name
+  last: Last name
+  email: Email address
+  email_ph: you@example.com
+  submit: Sign up
+  thanks: Thanks! You’re on the list.
+  fine: We’ll only email you about D65 updates.
+  close: Close
+
+calendar:
+  add: Add to calendar
+  google: Google Calendar
+  apple: Apple / iPhone (.ics)
+  outlook: Outlook.com
+  office: Outlook (work or school)
+
+home:
+  title: "Sign the letter: Give Evanston a real say on D65 school closures"
+  description: A $17 million mistake. Fix the budget, protect our schools and build the plan together. Sign the open letter to the D65 board.
+  share_image: /assets/img/share-new-homes-en.jpg
+  photo_credit: Photo by Joerg Metzner
+  h1: A $17 million mistake.
+  h1_mark: Decisions that could last generations.
+  lead: Fix the budget. Protect our schools. Build the plan together.
+  sig_label: Signatures and counting!
+  sign_btn: Sign the letter
+  share_btn: Share the letter
+  wtb:
+    eyebrow: Add your voice
+    title: Write to the School Board.
+    text: Pick the issue that matters most to you. We draft the letter, you send it from your own email. It takes about two minutes.
+    cta: Click here to write to the Board
+    comment: How to sign up for public comment
+  error:
+    eyebrow: The $17 million error
+    title: Capital spending was counted twice.
+    text: "Community members identified a $17 million error in District 65’s five-year financial projections: capital spending had been counted twice."
+    sources_html: "Sources: <a href=\"https://evanstonroundtable.com/2026/10/25/district-65-financial-projections-error/\" target=\"_blank\" rel=\"noopener\">Evanston RoundTable</a> · <a href=\"https://patch.com/illinois/evanston/district-65-corrects-17m-projection-error-budget-cuts-still-advance\" target=\"_blank\" rel=\"noopener\">Patch</a> (D65’s CFO confirmed capital needs were double-counted)."
+    why_title: Why independent review matters
+    why_1: That correction does not erase the district’s financial challenges. It does underscore why community expertise, transparent calculations, and independent review must be part of the process before schools close and programs are cut.
+    why_2: Evanston and Skokie deserve a financially sustainable plan that protects students, strengthens neighborhood schools, and earns the community’s trust.
+  asks:
+    tag: Vote no on the current proposal
+    title: "Put a moratorium on school closures until:"
+    items:
+      - title: Independent review
+        text: Corrected financial projections and savings estimates are independently reviewed and publicly explained.
+      - title: Real alternatives
+        text: Credible alternatives—including administrative and other spending reductions—are compared.
+      - title: Student impacts
+        text: Student impacts on learning, bilingual education, special education, child care, and safe access to school are verified and discussed.
+      - title: A shared plan
+        text: Families, educators, the district, and city leaders have a meaningful opportunity to shape the path forward.
+  new_homes:
+    tag: New homes, farther schools
+    title: 932 new homes are coming. The closure plan sends their kids farther away.
+    text: Five developments near Dewey and Lincolnwood are approved, in approval or under construction. Under D65’s proposed boundaries, every one is assigned to a farther school, and the district’s forecast doesn’t count them.
+    cta: See the five developments
+    svg_label: "Illustration: new apartment buildings, the nearby school marked closed, and a child walking a longer path to a farther school, 1.2 miles on average."
+    svg_homes: New homes
+    svg_closed: CLOSED
+    svg_school: Neighborhood school
+    svg_far: Farther school
+    svg_walk: average walk, today vs. proposed
+  share:
+    title: Share the letter
+    lead: Choose where to share it.
+    img_alt: "Shareable image: I signed the letter"
+    img_help: Save this image (long-press on a phone), then post it on Instagram and paste the copied text as the caption.
+    site_path: /
+    text:
+      a: "I signed the open letter asking the D65 board to give residents a real say on the proposed closures of Dewey and Lincolnwood. "
+      b: "{n} Evanston neighbors have signed so far. "
+      c: "The board is expected to vote Nov. 9. Add your name: "
+      fb: Message copied. Paste it into your Facebook post.
+      fbNo: Facebook only shares the link. Copy the text first if you want to include it.
+      igDl: Image ready below, and the text is copied for your caption.
+      big: ["I signed", "the letter."]
+      sub: Every Evanston resident deserves a real say on D65’s proposed school closures.
+      cnt: "{n} neighbors have signed. Add your name."
+      cta: D65 board vote expected Nov. 9
+      png: sign-the-letter.png

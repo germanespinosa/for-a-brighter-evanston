@@ -1,0 +1,30 @@
+{%- assign t = site.data.i18n[page.lang] -%}
+<dialog class="dialog" id="updates-dialog" aria-labelledby="updates-title">
+  <button type="button" class="dialog__close" data-dialog-close aria-label="{{ t.updates.close }}">{% include icons/close.svg %}</button>
+  <h2 class="dialog__title" id="updates-title">{{ t.updates.title }}</h2>
+  <div data-form-panel>
+    <p>{{ t.updates.lead }}</p>
+    <form class="form" action="{{ site.links.updates_form }}" method="post" target="gf_hidden" data-google-form>
+      <div class="form__row">
+        <div class="field">
+          <label for="updates-first">{{ t.updates.first }}</label>
+          <input id="updates-first" type="text" name="entry.1745172000" autocomplete="given-name" required>
+        </div>
+        <div class="field">
+          <label for="updates-last">{{ t.updates.last }}</label>
+          <input id="updates-last" type="text" name="entry.154916979" autocomplete="family-name" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="updates-email">{{ t.updates.email }}</label>
+        <div class="field__inline">
+          <input id="updates-email" type="email" name="entry.1895762409" autocomplete="email" placeholder="{{ t.updates.email_ph }}" required>
+          <button class="btn btn--navy" type="submit">{{ t.updates.submit }}</button>
+        </div>
+      </div>
+      <input type="hidden" name="entry.104417968" value="{{ page.lang }}">
+    </form>
+  </div>
+  <p class="form__thanks" data-form-thanks hidden role="status">{{ t.updates.thanks }}</p>
+  <p class="dialog__fine">{{ t.updates.fine }}</p>
+</dialog>

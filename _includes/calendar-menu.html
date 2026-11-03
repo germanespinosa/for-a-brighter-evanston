@@ -1,0 +1,17 @@
+{%- assign t = site.data.i18n[page.lang] -%}
+{%- assign ev = site.data.event -%}
+{%- assign title_q = ev.calendar_title | url_encode -%}
+{%- assign loc_q = ev.location | url_encode -%}
+{%- assign title_o = title_q | replace: '+', '%20' -%}
+{%- assign loc_o = loc_q | replace: '+', '%20' -%}
+{%- assign start_o = ev.start_iso | url_encode -%}
+{%- assign end_o = ev.end_iso | url_encode -%}
+<details class="cal-menu" data-cal-menu>
+  <summary class="btn btn--navy btn--block">{{ t.calendar.add }} <span aria-hidden="true">▾</span></summary>
+  <ul class="cal-menu__list">
+    <li><a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ title_q }}&amp;dates={{ ev.start_local }}/{{ ev.end_local }}&amp;ctz=America/Chicago&amp;location={{ loc_q }}" target="_blank" rel="noopener">{{ t.calendar.google }}</a></li>
+    <li><a href="{{ '/d65-board-meeting.ics' | relative_url }}" download="d65-board-meeting.ics">{{ t.calendar.apple }}</a></li>
+    <li><a href="https://outlook.live.com/calendar/0/action/compose?rru=addevent&amp;subject={{ title_o }}&amp;startdt={{ start_o }}&amp;enddt={{ end_o }}&amp;location={{ loc_o }}" target="_blank" rel="noopener">{{ t.calendar.outlook }}</a></li>
+    <li><a href="https://outlook.office.com/calendar/0/action/compose?rru=addevent&amp;subject={{ title_o }}&amp;startdt={{ start_o }}&amp;enddt={{ end_o }}&amp;location={{ loc_o }}" target="_blank" rel="noopener">{{ t.calendar.office }}</a></li>
+  </ul>
+</details>

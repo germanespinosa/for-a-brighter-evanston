@@ -1,0 +1,251 @@
+{
+  "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
+  "articles": [
+    {
+      "date": "2026-10-31",
+      "source": "People Magazine",
+      "site": "People Magazine",
+      "url": "https://people.com/illinois-parents-find-usd17-million-budget-error-as-district-plans-2-school-closures-12202845",
+      "title": "Parents Discover $17M Math Error in School District’s Budget as Officials Plan to Close 2 Elementary Schools, Eliminate Jobs",
+      "summary": "Dewey parents found that District 65 had counted facilities costs twice in its budget forecasts, a $17 million error the district has confirmed, and they are asking the board to delay its November 9 vote on closing Dewey and Lincolnwood until the numbers are independently reviewed, though the district says the fix doesn’t change its structural deficit.",
+      "summary_es": "Padres de Dewey descubrieron que el Distrito 65 había contado dos veces los costos de instalaciones en sus proyecciones, un error de $17 millones que el distrito confirmó, y piden a la junta aplazar la votación del 9 de noviembre sobre el cierre de Dewey y Lincolnwood hasta una revisión independiente, aunque el distrito dice que la corrección no cambia su déficit estructural."
+    },
+    {
+      "date": "2026-10-30",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/30/tiger-times-special-issue-highlights-student-perspectives-on-proposed-dewey-closure/",
+      "title": "Tiger Times special issue highlights student perspectives on proposed Dewey closure"
+    },
+    {
+      "date": "2026-10-30",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/30/district-65-parents-threaten-lawsuit/",
+      "title": "District 65 parents threaten lawsuit over school closures"
+    },
+    {
+      "date": "2026-10-28",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/10/28/city/d65-parents-oppose-eliminating-sacc-board-weighs-17-million-projection-error/",
+      "title": "D65 parents defend SACC, Head Start",
+      "summary": "Parents pushed back on cuts to before- and after-school childcare and early childhood programs as the board weighed a $17 million projection error.",
+      "title_es": "Padres del D65 se oponen a eliminar SACC; la junta analiza el error de proyección de 17 millones de dólares",
+      "summary_es": "Las familias se opusieron a recortar el cuidado antes y después de clases y los programas de primera infancia, mientras la junta evaluaba un error de proyección de $17 millones."
+    },
+    {
+      "date": "2026-10-28",
+      "source": "Chicago Tribune",
+      "site": "Chicago Tribune",
+      "url": "https://www.chicagotribune.com/2026/10/28/17-million-math-error-district-65s/",
+      "title": "Parents discovered a $17M math error in Evanston District 65 budget. It still plans to close two schools.",
+      "summary": "Parents found a $17 million error in D65’s budget projections. The district confirmed the mistake but says its plan to close two schools still stands.",
+      "title_es": "Padres descubren un error de cálculo de 17 millones de dólares en el presupuesto del Distrito 65 de Evanston. El distrito aún planea cerrar dos escuelas.",
+      "summary_es": "Familias encontraron un error de $17 millones en las proyecciones del presupuesto del D65. El distrito confirmó el error, pero mantiene su plan de cerrar dos escuelas."
+    },
+    {
+      "date": "2026-10-28",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/28/analysis-district-65-administrative-staffing/",
+      "title": "Analysis: District 65 board should look at administrative staffing",
+      "summary": "An analysis arguing the D65 board should review the district's administrative staffing.",
+      "title_es": "Análisis: la junta del Distrito 65 debería revisar el personal administrativo",
+      "summary_es": "Un análisis que sostiene que la junta del D65 debería revisar el personal administrativo del distrito."
+    },
+    {
+      "date": "2026-10-27",
+      "source": "Evanston Now",
+      "site": "Evanston Now",
+      "url": "https://evanstonnow.com/d65-apologizes-for-math-mistake/",
+      "title": "D65 apologizes for math mistake",
+      "summary": "District 65 apologizes for the $17 million error in its financial projections.",
+      "title_es": "El D65 pide disculpas por el error de cálculo",
+      "summary_es": "El Distrito 65 pide disculpas por el error de $17 millones en sus proyecciones financieras."
+    },
+    {
+      "date": "2026-10-27",
+      "source": "WTTW",
+      "site": "WTTW",
+      "url": "https://news.wttw.com/2026/10/27/evanston-families-are-pushing-back-against-district-s-plan-close-two-schools",
+      "title": "Evanston Families Are Pushing Back Against District’s Plan to Close Two Schools",
+      "summary": "Dewey and Lincolnwood families organize to persuade board members to change course and slow down the closure process ahead of the Nov. 9 vote.",
+      "title_es": "Familias de Evanston se oponen al plan del distrito de cerrar dos escuelas",
+      "summary_es": "Familias de Dewey y Lincolnwood se organizan para convencer a la junta de cambiar de rumbo y frenar el proceso de cierre antes de la votación del 9 de noviembre."
+    },
+    {
+      "date": "2026-10-27",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/27/district-65-board-meeting-budget-cuts-october-26/",
+      "title": "No major changes to sweeping budget cut plan, District 65 administrators say",
+      "summary": "At the Oct. 26 board meeting, administrators held firm on the cuts and closures despite the $17 million error.",
+      "title_es": "Sin cambios importantes al amplio plan de recortes presupuestarios, dicen administradores del Distrito 65",
+      "summary_es": "En la reunión de la junta del 26 de octubre, la administración mantuvo los recortes y cierres a pesar del error de $17 millones."
+    },
+    {
+      "date": "2026-10-27",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/10/27/city/dewey-and-lincolnwood-parents-community-members-protest-proposed-school-closures/",
+      "title": "Parents protest planned District 65 school closures",
+      "summary": "Parents, students and teachers rallied before the Oct. 26 board meeting, raising concerns about financial transparency after the district overestimated capital spending by $17 million.",
+      "title_es": "Padres y vecinos de Dewey y Lincolnwood protestan contra los cierres de escuelas propuestos",
+      "summary_es": "Familias, estudiantes y docentes se manifestaron antes de la reunión de la junta del 26 de octubre, preocupados por la transparencia financiera tras una sobreestimación de $17 millones en gastos de capital."
+    },
+    {
+      "date": "2026-10-27",
+      "source": "Axios Chicago",
+      "site": "Axios Chicago",
+      "url": "https://www.axios.com/local/chicago/2026/10/27/evanston-skokie-district-65-dewey-lincolnwood-closures-childcare-budget",
+      "title": "District 65 weighs school closures and childcare cuts",
+      "summary": "Axios looks at District 65's budget plan, including proposed school closures and cuts to childcare.",
+      "title_es": "El Distrito 65 evalúa cerrar escuelas y recortar el cuidado infantil",
+      "summary_es": "Axios analiza el plan de presupuesto del Distrito 65, que incluye cierres de escuelas y recortes al cuidado infantil."
+    },
+    {
+      "date": "2026-10-26",
+      "source": "Evanston Now",
+      "site": "Evanston Now",
+      "url": "https://evanstonnow.com/big-crowd-rallies-against-school-closings/",
+      "title": "Big crowd rallies against school closings",
+      "summary": "Coverage of the community rally against D65's proposed school closures.",
+      "title_es": "Una gran multitud se manifiesta contra el cierre de escuelas",
+      "summary_es": "Cobertura de la manifestación de la comunidad contra los cierres de escuelas que propone el D65."
+    },
+    {
+      "date": "2026-10-26",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/10/26/city/d65-revises-school-boundaries-map-after-parent-criticism/",
+      "title": "D65 revises school boundaries map after parent criticism",
+      "summary": "After widespread parent opposition, D65 revised its proposed elementary school boundary map.",
+      "title_es": "El D65 modifica su mapa de límites escolares tras las críticas de los padres",
+      "summary_es": "Tras la amplia oposición de las familias, el D65 modificó su mapa propuesto de zonas escolares de primaria."
+    },
+    {
+      "date": "2026-10-26",
+      "source": "FOIA Gras",
+      "site": "FOIA Gras",
+      "url": "https://foiagras.com/p/letter-to-board-oct/",
+      "title": "My Comment to the Board Tonight",
+      "summary": "Tom Hayden's public comment asking the D65 board to pause closure work until summer 2027, citing a projection error and incomplete planning.",
+      "title_es": "Mi comentario a la junta esta noche",
+      "summary_es": "El comentario público de Tom Hayden, que pide a la junta del D65 pausar el trabajo sobre los cierres hasta el verano de 2027, citando un error en las proyecciones y una planificación incompleta."
+    },
+    {
+      "date": "2026-10-26",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/10/26/city/dewey-student-newspaper-laments-proposed-school-closure-in-special-issue/",
+      "title": "Dewey student newspaper laments proposed school closure in special issue",
+      "summary": "Dewey students put out a special edition of their paper, the Tiger Times, with opinion pieces and letters to district leaders.",
+      "title_es": "El periódico estudiantil de Dewey lamenta en una edición especial el cierre propuesto de su escuela",
+      "summary_es": "Estudiantes de Dewey publicaron una edición especial de su periódico, el Tiger Times, con artículos de opinión y cartas a la dirección del distrito."
+    },
+    {
+      "date": "2026-10-25",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/25/district-65-financial-projections-error/",
+      "title": "District 65 financial projections overstated spending by millions",
+      "summary": "Reporting on errors in the budget projections behind D65's proposed cuts.",
+      "title_es": "Las proyecciones financieras del Distrito 65 sobrestimaron el gasto en millones",
+      "summary_es": "Errores en las proyecciones de presupuesto en las que se basan los recortes que propone el D65."
+    },
+    {
+      "date": "2026-10-25",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/25/district-65-parent-group-rally/",
+      "title": "District 65 community members plan rally, circulate open letter",
+      "summary": "Coverage of residents organizing ahead of the board's vote, including the open letter to the board.",
+      "title_es": "Vecinos del Distrito 65 organizan una manifestación y hacen circular una carta abierta",
+      "summary_es": "Vecinos se organizan antes de la votación de la junta, con una carta abierta a la junta."
+    },
+    {
+      "date": "2026-10-25",
+      "source": "FOIA Gras",
+      "site": "FOIA Gras",
+      "url": "https://foiagras.com/p/d65-proposal-half-baked/",
+      "title": "20 Reasons this District 65 Closure Plan is a Bad Idea",
+      "summary": "A point-by-point critique of the plan's savings estimates, staffing cuts, boundaries and missing equity analysis.",
+      "title_es": "20 razones por las que este plan de cierres del Distrito 65 es una mala idea",
+      "summary_es": "Una crítica punto por punto de los ahorros estimados, los recortes de personal, los límites escolares y la falta de un análisis de equidad."
+    },
+    {
+      "date": "2026-10-24",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/10/24/district-65-revised-school-boundaries/",
+      "title": "District 65 updates elementary school boundary plans",
+      "summary": "D65 releases a revised elementary boundary map after parents criticized the first proposal.",
+      "title_es": "El Distrito 65 actualiza sus planes de límites de escuelas primarias",
+      "summary_es": "El D65 publica un mapa revisado de límites escolares tras las críticas de familias a la primera propuesta."
+    },
+    {
+      "date": "2026-10-23",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/10/23/city/parents-emphasize-clear-communication-rebuilding-trust-during-d65-superintendent-search-input-meetings/",
+      "title": "Parents emphasize clear communication, rebuilding trust during D65 superintendent search input meetings",
+      "summary": "At input sessions for the superintendent search, parents asked for a leader who communicates openly and can rebuild trust with families.",
+      "title_es": "Padres piden comunicación clara y recuperar la confianza en las sesiones sobre la búsqueda de superintendente del D65",
+      "summary_es": "En las sesiones sobre la búsqueda de superintendente, las familias pidieron un líder que se comunique con transparencia y recupere la confianza."
+    },
+    {
+      "date": "2026-10-20",
+      "source": "Chicago Tribune",
+      "site": "Chicago Tribune",
+      "url": "https://www.chicagotribune.com/2026/10/20/dewey-lincolnwood-chopping-block-district-65/",
+      "title": "Dewey, Lincolnwood on chopping block for District 65’s budget overhaul",
+      "summary": "An in-depth look at D65’s $20 million cutback plan, which would close Dewey and Lincolnwood elementary schools.",
+      "title_es": "Dewey y Lincolnwood, en la mira de la reestructuración del presupuesto del Distrito 65",
+      "summary_es": "Un análisis a fondo del plan de recortes de $20 millones del D65, que cerraría las escuelas primarias Dewey y Lincolnwood.",
+      "alt_url": "https://www.yahoo.com/news/us/articles/dewey-lincolnwood-elementary-chopping-block-175800125.html",
+      "alt_label": "Read free on Yahoo",
+      "alt_label_es": "Leer gratis en Yahoo"
+    },
+    {
+      "date": "2026-10-14",
+      "source": "Chicago Sun-Times",
+      "site": "Chicago Sun-Times",
+      "url": "https://chicago.suntimes.com/education/2026/10/14/evanston-skokie-school-district-65-proposes-closure-of-2-elementary-schools",
+      "title": "Evanston/Skokie School District 65 proposes closure of 2 elementary schools",
+      "summary": "D65 proposes closing Lincolnwood and Dewey, redrawing boundaries and ending several child care programs; more than 700 students would switch schools.",
+      "title_es": "El Distrito Escolar 65 de Evanston/Skokie propone cerrar 2 escuelas primarias",
+      "summary_es": "El D65 propone cerrar Lincolnwood y Dewey, redibujar los límites escolares y eliminar varios programas de cuidado infantil; más de 700 estudiantes cambiarían de escuela."
+    },
+    {
+      "date": "2026-10-14",
+      "source": "CBS Chicago",
+      "site": "CBS Chicago",
+      "url": "https://www.cbsnews.com/chicago/news/evanston-skokie-school-district-65-school-closures/",
+      "title": "Evanston-Skokie School District 65 make final recommendation to close 2 schools",
+      "summary": "Citing a deficit and shrinking enrollment, the district recommends closing Lincolnwood and Dewey along with other budget cuts.",
+      "title_es": "El Distrito Escolar 65 de Evanston-Skokie hace su recomendación final de cerrar 2 escuelas",
+      "summary_es": "Ante un déficit y la baja matrícula, el distrito recomienda cerrar Lincolnwood y Dewey junto con otros recortes."
+    },
+    {
+      "date": "2026-10-14",
+      "source": "ABC7 Chicago",
+      "site": "ABC7 Chicago",
+      "url": "https://abc7chicago.com/post/evanstonskokie-school-district-65-cuts-would-close-lincolnwood-elementary-dewey-end-childcare-program/19936826/",
+      "title": "Proposed District 65 cuts would close schools, change boundaries, end childcare program",
+      "summary": "The plan would close two elementary schools, redraw attendance zones affecting more than 700 students and end district-run child care.",
+      "title_es": "Los recortes propuestos por el Distrito 65 cerrarían escuelas, cambiarían los límites escolares y eliminarían el programa de cuidado infantil",
+      "summary_es": "El plan cerraría dos escuelas primarias, redibujaría zonas de asistencia que afectan a más de 700 estudiantes y eliminaría el cuidado infantil del distrito."
+    },
+    {
+      "date": "2026-10-14",
+      "source": "FOX 32 Chicago",
+      "site": "FOX 32 Chicago",
+      "url": "https://www.fox32chicago.com/news/evanston-skokie-district-65-school-closures",
+      "title": "Evanston-Skokie District 65 considers closing two more schools",
+      "summary": "The district weighs closing Dewey and Lincolnwood, which could cut more than 200 jobs and require roughly 700 students to transfer.",
+      "title_es": "El Distrito 65 de Evanston-Skokie considera cerrar dos escuelas más",
+      "summary_es": "El distrito evalúa cerrar Dewey y Lincolnwood, lo que podría eliminar más de 200 empleos y obligar a unos 700 estudiantes a cambiar de escuela."
+    }
+  ]
+}

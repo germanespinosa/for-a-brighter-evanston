@@ -1,0 +1,113 @@
+# Texto en español para las partes compartidas del sitio (encabezado, pie,
+# ventanas) y para la página de inicio. Los textos que terminan en _html
+# pueden contener HTML.
+
+lang_name: Español
+switch_label: English
+switch_short: EN
+
+urls:
+  home: /es/
+  write: /es/escriba-a-la-junta-issue/
+  news: /es/noticias/
+  new_homes: /es/nuevas-viviendas/
+
+nav:
+  label: Principal
+  write: Escribe a la Junta
+  news: Noticias
+  updates: Recibir noticias
+  instagram: Síganos en Instagram
+  sign: Firmar la carta
+  skip: Saltar al contenido
+  details: Detalles
+
+footer:
+  contact: Contacto
+  disclaimer: Sin afiliación con el Distrito Escolar 65 de Evanston/Skokie
+
+updates:
+  title: Recibir noticias
+  lead: Inscríbase para recibir recordatorios de las reuniones y noticias del D65.
+  first: Nombre
+  last: Apellido
+  email: Correo electrónico
+  email_ph: usted@ejemplo.com
+  submit: Inscribirse
+  thanks: ¡Gracias! Ya está en la lista.
+  fine: Solo le escribiremos sobre novedades del D65.
+  close: Cerrar
+
+calendar:
+  add: Agregar al calendario
+  google: Google Calendar
+  apple: Apple / iPhone (.ics)
+  outlook: Outlook.com
+  office: Outlook (trabajo o escuela)
+
+home:
+  title: "Firme la carta: Una voz real sobre los cierres de escuelas del D65"
+  description: Un error de 17 millones de dólares. Corregir el presupuesto, proteger nuestras escuelas y construir el plan entre todos. Firme la carta abierta a la junta del D65.
+  share_image: /assets/img/share-new-homes-es.jpg
+  photo_credit: Foto de Joerg Metzner
+  h1: Un error de 17 millones de dólares.
+  h1_mark: Decisiones que podrían afectar a generaciones.
+  lead: Corregir el presupuesto. Proteger nuestras escuelas. Construir el plan entre todos.
+  sig_label: ¡Firmas y seguimos sumando!
+  sign_btn: Firmar la carta
+  share_btn: Compartir la carta
+  wtb:
+    eyebrow: Haz escuchar tu voz
+    title: Escribe a la Junta Escolar.
+    text: Elige el tema que más te importa. Nosotros preparamos la carta y tú la envías desde tu correo. Toma unos dos minutos.
+    cta: Haz clic aquí para escribir a la Junta
+    comment: Cómo inscribirse para hacer un comentario público
+  error:
+    eyebrow: El error de 17 millones
+    title: Los gastos de capital se contaron dos veces.
+    text: "Miembros de la comunidad identificaron un error de 17 millones de dólares en las proyecciones financieras a cinco años del Distrito 65: los gastos de capital se habían contabilizado dos veces."
+    sources_html: "Fuentes: <a href=\"https://evanstonroundtable.com/2026/10/25/district-65-financial-projections-error/\" target=\"_blank\" rel=\"noopener\">Evanston RoundTable</a> · <a href=\"https://patch.com/illinois/evanston/district-65-corrects-17m-projection-error-budget-cuts-still-advance\" target=\"_blank\" rel=\"noopener\">Patch</a> (el director financiero del D65 confirmó que se contaron dos veces las necesidades de capital)."
+    why_title: Por qué importa una revisión independiente
+    why_1: Esta corrección no elimina los desafíos financieros del distrito. Sin embargo, demuestra por qué es fundamental incorporar los conocimientos de la comunidad, cálculos transparentes y una revisión independiente antes de cerrar escuelas y recortar programas.
+    why_2: Evanston y Skokie merecen un plan financieramente sostenible que proteja a los estudiantes, fortalezca las escuelas de nuestros vecindarios y se gane la confianza de la comunidad.
+  asks:
+    tag: Vota no a la propuesta actual
+    title: "Exige una suspensión de los cierres de escuelas hasta que:"
+    items:
+      - title: Revisión independiente
+        text: Las proyecciones financieras corregidas y las estimaciones de ahorro sean revisadas de manera independiente y explicadas públicamente.
+      - title: Alternativas reales
+        text: Se comparen alternativas viables, incluidas reducciones de gastos administrativos y otros gastos.
+      - title: Impacto en los estudiantes
+        text: Se evalúen y discutan las consecuencias para el aprendizaje, la educación bilingüe, la educación especial, el cuidado infantil y el acceso seguro a las escuelas.
+      - title: Un plan compartido
+        text: Las familias, los educadores, el distrito y los líderes municipales tengan una oportunidad real de participar en las decisiones.
+  new_homes:
+    tag: Nuevas viviendas, escuelas más lejos
+    title: Se vienen 932 viviendas nuevas. El plan de cierres aleja la escuela de sus niños.
+    text: Cinco desarrollos cerca de Dewey y Lincolnwood están aprobados, en aprobación o en construcción. Con los límites que propone el D65, a todos se les asigna una escuela más lejana, y el pronóstico del distrito no los cuenta.
+    cta: Vea los cinco desarrollos
+    svg_label: "Ilustración: edificios de viviendas nuevas, la escuela cercana marcada como cerrada y un niño que camina un trayecto más largo hasta una escuela más lejana, 1.2 millas en promedio."
+    svg_homes: Viviendas nuevas
+    svg_closed: CERRADA
+    svg_school: Escuela del barrio
+    svg_far: Escuela más lejos
+    svg_walk: caminata promedio, hoy vs. propuesta
+  share:
+    title: Compartir la carta
+    lead: Elija dónde compartirla.
+    img_alt: "Imagen para compartir: Firmé la carta"
+    img_help: Guarde esta imagen (mantenga presionado en el teléfono), publíquela en Instagram y pegue el texto copiado como descripción.
+    site_path: /es/
+    text:
+      a: "Firmé la carta abierta que pide a la junta del D65 dar a los residentes una voz real sobre el cierre propuesto de Dewey y Lincolnwood. "
+      b: "Ya firmaron {n} vecinos de Evanston. "
+      c: "Se prevé que la junta vote el 9 de noviembre. Agregue su nombre: "
+      fb: Mensaje copiado. Péguelo en su publicación de Facebook.
+      fbNo: Facebook solo comparte el enlace. Copie el texto primero si quiere incluirlo.
+      igDl: La imagen está lista abajo y el texto está copiado para la descripción.
+      big: ["Firmé", "la carta."]
+      sub: Cada residente de Evanston merece una voz real sobre los cierres de escuelas que propone el D65.
+      cnt: Ya firmaron {n} vecinos. Agregue su nombre.
+      cta: "Votación prevista: 9 de noviembre"
+      png: firme-la-carta.png

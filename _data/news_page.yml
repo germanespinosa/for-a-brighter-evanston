@@ -1,0 +1,67 @@
+# Text for the In the news page. The articles themselves are in /data/news.json.
+en:
+  title: In the news
+  description: The latest coverage, analysis and community voices on D65’s proposed school closures, newest first.
+  h1: In the
+  h1_mark: news.
+  lead: The latest coverage, analysis and community voices on D65’s proposed school closures, newest first.
+  share_btn: Share an article
+  filter_title: Browse by source
+  all: All sources
+  read: Read on
+  more: Show more
+  empty: No articles yet.
+  loading: Loading articles…
+  error: The articles couldn’t load. Please refresh the page.
+  months: [JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC]
+  missed_title: Seen a story we missed?
+  missed_text: Send us the link. We read every submission before it goes up.
+  form:
+    title: Share an article
+    lead: Found a news story, blog post or letter about D65’s plans? Send us the link. We read every submission before it goes up.
+    url: Link to the article
+    src: Where is it from?
+    src_ph: e.g. Evanston RoundTable, a blog, a letter
+    why: Why should neighbors read it?
+    why_ph: One or two sentences
+    name: Your name
+    email: Email
+    optional: (optional)
+    submit: Send link
+    fine: We only use your email if we have a question about the link. Your name is never posted.
+    ok_title: Thanks! We got your link.
+    ok_text: A volunteer will read it. If it’s about D65’s closures, budget or boundaries, it will show up on this page.
+    again: Share another
+es:
+  title: En las noticias
+  description: Noticias, análisis y voces de la comunidad sobre los cierres de escuelas que propone el D65, lo más reciente primero.
+  h1: En las
+  h1_mark: noticias.
+  lead: Noticias, análisis y voces de la comunidad sobre los cierres de escuelas que propone el D65, lo más reciente primero. Los artículos están en inglés.
+  share_btn: Compartir un artículo
+  filter_title: Ver por fuente
+  all: Todas las fuentes
+  read: Leer en
+  more: Ver más
+  empty: Todavía no hay artículos.
+  loading: Cargando artículos…
+  error: No se pudieron cargar los artículos. Vuelva a cargar la página.
+  months: [ENE, FEB, MAR, ABR, MAY, JUN, JUL, AGO, SEP, OCT, NOV, DIC]
+  missed_title: ¿Vio un artículo que nos falta?
+  missed_text: Envíenos el enlace. Revisamos cada envío antes de publicarlo.
+  form:
+    title: Compartir un artículo
+    lead: ¿Encontró una noticia, un blog o una carta sobre los planes del D65? Envíenos el enlace. Revisamos cada envío antes de publicarlo.
+    url: Enlace al artículo
+    src: ¿De dónde es?
+    src_ph: p. ej., Evanston RoundTable, un blog, una carta
+    why: ¿Por qué deberían leerlo sus vecinos?
+    why_ph: Una o dos oraciones
+    name: Su nombre
+    email: Correo electrónico
+    optional: (opcional)
+    submit: Enviar enlace
+    fine: Solo usaremos su correo si tenemos una pregunta sobre el enlace. Nunca publicamos su nombre.
+    ok_title: ¡Gracias! Recibimos su enlace.
+    ok_text: Un voluntario lo revisará. Si trata sobre los cierres, el presupuesto o los límites escolares del D65, aparecerá en esta página.
+    again: Compartir otro

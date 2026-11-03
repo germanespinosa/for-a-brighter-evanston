@@ -1,0 +1,41 @@
+# Home page hero slideshow. Photos live in assets/img/hero/.
+# `position` is the CSS background-position (which part of the photo stays in view).
+# The first photo shows immediately; the rest rotate every 12 seconds.
+- file: 00.jpg
+  position: "center 40%"
+- file: 01.jpg
+  position: "center 30%"
+- file: 02.jpg
+  position: "68% center"
+- file: 03.jpg
+  position: "62% center"
+- file: 04.jpg
+  position: "70% 40%"
+- file: 05.jpg
+  position: "center 40%"
+- file: 06.jpg
+  position: "center 40%"
+- file: 07.jpg
+  position: "center 40%"
+- file: 08.jpg
+  position: "center 40%"
+- file: 09.jpg
+  position: "center 40%"
+- file: 10.jpg
+  position: "center 40%"
+- file: 11.jpg
+  position: "center 40%"
+- file: 12.jpg
+  position: "center 40%"
+- file: 13.jpg
+  position: "center 40%"
+- file: 14.jpg
+  position: "center 40%"
+- file: 15.jpg
+  position: "center 40%"
+- file: 16.jpg
+  position: "center 40%"
+- file: 17.jpg
+  position: "center 40%"
+- file: 18.jpg
+  position: "center 40%"

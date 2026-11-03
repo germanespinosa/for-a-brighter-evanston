@@ -1,0 +1,31 @@
+# For A Brighter Evanston — Jekyll config (GitHub Pages builds this automatically)
+title: For A Brighter Evanston
+description: Fix the budget. Protect our schools. Build the plan together.
+
+# Production address. While the site is served from github.io, `baseurl` must be
+# the repository name. When forabrighterevanston.org points at GitHub Pages
+# (custom domain + CNAME file), change `url` to https://www.forabrighterevanston.org
+# and set `baseurl` to "".
+url: https://germanespinosa.github.io
+baseurl: /for-a-brighter-evanston
+
+# Shared links used across the site
+links:
+  sign_letter: https://form.jotform.com/262943138295061
+  instagram: https://www.instagram.com/forabrighterevanston/
+  email: forabrighterevanston@gmail.com
+  board_meetings: https://www.district65.net/about/board-of-education/board-meetings
+  # Google Form behind "Get updates"
+  updates_form: https://docs.google.com/forms/d/e/1FAIpQLSdVXc1v5tKPgxX-VI8_tt1r_p1qzCqeZK9Mg8neI2CAA1A8yA/formResponse
+  # Google Form behind "Share an article" on the In the news page
+  share_article_form: https://docs.google.com/forms/d/e/1FAIpQLSdu0-2BdMymlh2hyQ6dqYhvpuiH7tz0ZOWJ_d8OBlD16yodGQ/formResponse
+  # Google Apps Script that returns the live signature count (JSONP)
+  signature_count: https://script.google.com/macros/s/AKfycbwGmdmTu8HYHA_oLDCN-d-nVIwHdxNlBOPaxTl8Dc_K-p52Gx9-xPdWngNt15wP9iMEZg/exec
+
+markdown: kramdown
+permalink: pretty
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

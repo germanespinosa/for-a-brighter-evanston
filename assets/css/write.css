@@ -1,0 +1,114 @@
+/* Write to the Board page (/home/write-to-the-board-issue/ and /es/escriba-a-la-junta-issue/) */
+
+.page-write main { background: var(--navy); }
+.letter__body { padding-bottom: clamp(32px, 6vw, 64px); }
+.letter__noscript { padding: 16px; background: var(--gold); color: var(--navy); font-weight: 700; }
+
+.letter-card {
+  padding: clamp(18px, 4vw, 36px);
+  background: var(--paper);
+  color: var(--navy);
+  border-top: 6px solid var(--gold);
+  border-radius: var(--radius);
+}
+.letter-step { padding-bottom: 26px; margin-bottom: 26px; border-bottom: 1px solid #DCD7CA; }
+.letter-step:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: 0; }
+.letter-step > .field + .field,
+.letter-step > .field + .letter-fieldset,
+.letter-step > .letter-fieldset + .field { margin-top: 16px; }
+.letter-step__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+.letter-step__num {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--gold);
+  font-size: .875rem;
+}
+.letter-fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.letter-fieldset > legend { padding: 0; margin: 0 0 12px; }
+.letter-fieldset > legend.field__label { margin-top: 16px; margin-bottom: 8px; }
+
+/* Issue cards */
+.choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.choice {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1.5px solid #C9D2E3;
+  border-radius: var(--radius);
+  background: var(--white);
+  line-height: 1.35;
+  cursor: pointer;
+}
+.choice:hover { border-color: var(--blue); }
+.choice input { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--navy); }
+.choice__title { display: block; font-weight: 700; font-size: .96875rem; }
+.choice__desc { display: block; margin-top: 3px; font-size: .8125rem; color: var(--blue); }
+.choice:has(input:checked) { border-color: var(--navy); box-shadow: inset 0 0 0 1.5px var(--navy); background: var(--gold-soft); }
+.choice:has(input:focus-visible) { outline: var(--focus); outline-offset: 2px; }
+@media (max-width: 700px) { .choice-grid { grid-template-columns: minmax(0, 1fr); } .choice { padding: 12px; } }
+
+/* Role chips */
+.chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1.5px solid #C9D2E3;
+  border-radius: var(--radius);
+  background: var(--white);
+  font-size: .9375rem;
+  cursor: pointer;
+}
+.chip input { width: 18px; height: 18px; margin: 0; accent-color: var(--navy); }
+.chip:has(input:checked) { border-color: var(--navy); }
+.chip:has(input:focus-visible) { outline: var(--focus); outline-offset: 2px; }
+
+/* Recipients + letter */
+.letter-to { padding: 12px 14px; background: #E8ECF4; border-radius: var(--radius); font-size: .875rem; line-height: 1.55; }
+.letter-to small { display: block; margin-top: 4px; font-size: .8125rem; color: var(--blue); }
+.field__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+#letter-body { min-height: 320px; resize: vertical; font-size: 16px; line-height: 1.55; }
+
+/* Send buttons */
+.send-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 12px; }
+.send-row.is-mobile { grid-template-columns: minmax(0, 1fr); }
+.send-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 76px;
+  padding: 14px 12px;
+  border: 0;
+  border-radius: var(--radius);
+  font: 700 1rem var(--font-body);
+  text-align: center;
+  cursor: pointer;
+}
+.send-btn small { font-weight: 400; font-size: .75rem; }
+.send-btn--primary { background: var(--gold); color: var(--navy); font-size: 1.125rem; }
+.send-btn--primary:hover { background: #E6CA86; }
+.send-btn--secondary { background: var(--white); color: var(--navy); box-shadow: inset 0 0 0 2px var(--navy); }
+.send-btn--secondary small { color: var(--blue); }
+.send-btn--secondary:hover { background: var(--tint); }
+.letter-status { min-height: 1.4em; margin: 12px 0; font-size: .875rem; font-weight: 700; }
+.letter-status.is-warning { color: var(--danger); }
+@media (max-width: 520px) { .send-row { grid-template-columns: minmax(0, 1fr); } }

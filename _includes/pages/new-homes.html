@@ -1,0 +1,107 @@
+{%- comment -%}
+  New homes page template, shared by /home/new-homes/ and /es/nuevas-viviendas/.
+  Text and the developments table: _data/new_homes.yml.
+{%- endcomment -%}
+{%- assign d = site.data.new_homes -%}
+{%- assign n = d[page.lang] -%}
+
+<section class="page-hero" aria-labelledby="nh-page-title">
+  <div class="container">
+    <p class="eyebrow eyebrow--gold">{{ n.eyebrow }}</p>
+    <h1 class="page-hero__title page-hero__title--md" id="nh-page-title">{{ n.h1 }}<br> <mark class="mark">{{ n.h1_mark }}</mark></h1>
+    <p class="page-hero__lead page-hero__lead--wide">{{ n.lead }}</p>
+  </div>
+</section>
+
+<section class="band band--white band--tight-bottom" aria-label="{{ n.dev_tag }}">
+  <div class="container">
+    <ul class="stat-grid">
+      {%- for s in n.stats %}
+      <li class="stat"><span class="stat__big">{{ s.big }}</span><span class="stat__text">{{ s.text }}</span></li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="band band--white" aria-labelledby="what-title">
+  <div class="container two-col two-col--top">
+    <figure class="map-figure">
+      <img src="{{ '/assets/img/new-homes-map.jpg' | relative_url }}" width="720" height="661" alt="{{ n.map_alt }}" loading="lazy" decoding="async">
+      <figcaption>{{ n.map_caption }}</figcaption>
+    </figure>
+    <div>
+      <p class="eyebrow">{{ n.what_eyebrow }}</p>
+      <h2 class="section-title" id="what-title">{{ n.what_title }}</h2>
+      {%- for p in n.points %}
+      <div class="point">
+        <h3 class="point__title">{{ p.title }}</h3>
+        <p>{{ p.text }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="band band--tint" aria-labelledby="dev-title">
+  <div class="container">
+    <p class="tag">{{ n.dev_tag }}</p>
+    <h2 class="section-title" id="dev-title">{{ n.dev_title }}</h2>
+    <div class="table-wrap">
+      <table class="dev-table">
+        <caption class="visually-hidden">{{ n.table.caption }}</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">#</span></th>
+            <th scope="col">{{ n.table.development }}</th>
+            <th scope="col" class="num">{{ n.table.homes }}</th>
+            <th scope="col">{{ n.table.status }}</th>
+            <th scope="col">{{ n.table.school }}</th>
+            <th scope="col" class="walk">{{ n.table.walk }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for dev in d.developments %}
+          <tr>
+            <td class="n"><span class="n__dot">{{ forloop.index }}</span></td>
+            <th scope="row" class="addr">{{ dev.address }}</th>
+            <td class="num" data-unit="{{ n.table.homes_unit }}">{{ dev.homes }}</td>
+            <td class="st">{{ n.status[dev.status] }}</td>
+            <td class="sc">{{ dev.schools }}</td>
+            <td class="walk">{{ dev.walk }}</td>
+          </tr>
+          {%- endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="n"></td>
+            <th scope="row" class="addr">{{ n.table.total }}</th>
+            <td class="num" data-unit="{{ n.table.homes_unit }}">{{ d.total_homes }}</td>
+            <td class="st"></td>
+            <td class="sc">{{ n.table.total_school }}</td>
+            <td class="walk">{{ d.avg_walk }} {{ n.table.avg }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band band--white" aria-label="{{ n.asks[0].who }}">
+  <div class="container">
+    <div class="ask-pair">
+      {%- for a in n.asks %}
+      <div class="ask-box">
+        <p class="eyebrow eyebrow--rust">{{ a.who }}</p>
+        <p>{{ a.text }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="sources-strip">
+  <div class="container sources-strip__inner">
+    <p class="sources-strip__text">{{ n.sources }}</p>
+    <p class="sources-strip__contact">{{ n.contact }}: {{ d.contact_name }}<br><a href="mailto:{{ d.contact_email }}">{{ d.contact_email }}</a></p>
+  </div>
+</section>

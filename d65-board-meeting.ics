@@ -1,0 +1,18 @@
+---
+layout: null
+permalink: /d65-board-meeting.ics
+---
+{%- assign ev = site.data.event -%}
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//For a Brighter Evanston//EN
+BEGIN:VEVENT
+UID:d65-board-{{ ev.start_utc }}@forabrighterevanston.org
+DTSTAMP:{{ site.time | date: '%Y%m%dT%H%M%SZ' }}
+DTSTART:{{ ev.start_utc }}
+DTEND:{{ ev.end_utc }}
+SUMMARY:{{ ev.calendar_title }}
+LOCATION:{{ ev.location | replace: ',', '\,' }}
+URL:{{ ev.details_url }}
+END:VEVENT
+END:VCALENDAR

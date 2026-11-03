@@ -1,0 +1,131 @@
+{%- comment -%}
+  Home page template, shared by / (English) and /es/ (Spanish).
+  Text comes from _data/i18n/<lang>.yml (the `home:` section).
+  The meeting card comes from _data/event.yml; hero photos from _data/hero.yml.
+{%- endcomment -%}
+{%- assign t = site.data.i18n[page.lang] -%}
+{%- assign h = t.home -%}
+{%- assign ev = site.data.event -%}
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__media" aria-hidden="true">
+    {%- for photo in site.data.hero %}
+    <div class="hero__slide{% if forloop.first %} is-active{% endif %}" style="background-position: {{ photo.position }};{% if forloop.first %} background-image: url('{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}');{% endif %}" data-src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}"></div>
+    {%- endfor %}
+  </div>
+  <div class="hero__overlay" aria-hidden="true"></div>
+  <p class="hero__credit">{{ h.photo_credit }}</p>
+
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <h1 class="hero__title" id="hero-title">{{ h.h1 }}<br> <mark class="mark">{{ h.h1_mark }}</mark></h1>
+      <p class="hero__lead">{{ h.lead }}</p>
+
+      <div class="sig-count" data-signature-count data-src="{{ site.links.signature_count }}" hidden>
+        <p class="sig-count__label" id="sig-label">{{ h.sig_label }}</p>
+        <p class="sig-count__number" aria-describedby="sig-label" aria-live="polite">0</p>
+      </div>
+
+      <div class="hero__actions">
+        <span class="btn-group">
+          <a class="btn btn--gold btn--lg" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.sign_btn }} <span aria-hidden="true">→</span></a>
+          <button type="button" class="btn btn--gold btn--lg btn--icon" data-dialog-open="share-dialog" aria-haspopup="dialog" aria-label="{{ h.share_btn }}" title="{{ h.share_btn }}">{% include icons/share.svg %}</button>
+        </span>
+        <button type="button" class="btn btn--outline-light btn--lg" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
+      </div>
+    </div>
+
+    {%- if ev.show %}
+    <aside class="event-card" aria-labelledby="event-title">
+      <p class="eyebrow">{{ ev[page.lang].eyebrow }}</p>
+      <h2 class="event-card__title" id="event-title">{{ ev[page.lang].title }}</h2>
+      <p class="event-card__date">{{ ev[page.lang].date_html }}</p>
+      <p class="event-card__time"><time datetime="{{ ev.start_iso }}">{{ ev[page.lang].time }}</time></p>
+      <p class="event-card__place"><span aria-hidden="true">📍</span> {{ ev.location }}</p>
+      {% include calendar-menu.html %}
+    </aside>
+    {%- endif %}
+  </div>
+</section>
+
+<section class="band band--gold" aria-labelledby="wtb-title">
+  <div class="container cta-band">
+    <div class="cta-band__copy">
+      <p class="eyebrow eyebrow--ink">{{ h.wtb.eyebrow }}</p>
+      <h2 class="section-title" id="wtb-title">{{ h.wtb.title }}</h2>
+      <p>{{ h.wtb.text }}</p>
+    </div>
+    <div class="cta-band__actions">
+      <a class="btn btn--navy btn--lg btn--block" href="{{ t.urls.write | relative_url }}">{{ h.wtb.cta }} <span aria-hidden="true">→</span></a>
+      <a class="btn btn--outline-navy btn--block" href="{{ site.links.board_meetings }}" target="_blank" rel="noopener">{{ h.wtb.comment }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="band band--white" aria-labelledby="error-title">
+  <div class="container">
+    <p class="eyebrow">{{ h.error.eyebrow }}</p>
+    <h2 class="section-title" id="error-title">{{ h.error.title }}</h2>
+    <div class="two-col">
+      <div>
+        <p class="big-number" aria-hidden="true">$17M</p>
+        <p>{{ h.error.text }}</p>
+        <p class="source-note">{{ h.error.sources_html }}</p>
+      </div>
+      <div>
+        <h3 class="subhead">{{ h.error.why_title }}</h3>
+        <p>{{ h.error.why_1 }}</p>
+        <p>{{ h.error.why_2 }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band--tint" aria-labelledby="asks-title">
+  <div class="container">
+    <p class="tag">{{ h.asks.tag }}</p>
+    <h2 class="section-title" id="asks-title">{{ h.asks.title }}</h2>
+    <ol class="ask-grid">
+      {%- for item in h.asks.items %}
+      <li class="ask-card">
+        <span class="ask-card__num" aria-hidden="true">{{ forloop.index }}</span>
+        <h3 class="ask-card__title">{{ item.title }}</h3>
+        <p>{{ item.text }}</p>
+      </li>
+      {%- endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="band band--white band--rule" aria-labelledby="nh-title">
+  <div class="container feature">
+    <div class="feature__copy">
+      <p class="tag">{{ h.new_homes.tag }}</p>
+      <h2 class="section-title" id="nh-title">{{ h.new_homes.title }}</h2>
+      <p>{{ h.new_homes.text }}</p>
+      <a class="btn btn--navy btn--lg" href="{{ t.urls.new_homes | relative_url }}">{{ h.new_homes.cta }} <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="feature__media">
+      {% include new-homes-illustration.svg t=h.new_homes %}
+    </figure>
+  </div>
+</section>
+
+{%- comment -%} Share dialog (opened by the share button next to "Sign the letter") {%- endcomment -%}
+{%- capture share_url -%}{{ h.share.site_path | absolute_url }}{%- endcapture -%}
+<dialog class="dialog" id="share-dialog" aria-labelledby="share-title" data-share data-url="{{ share_url }}">
+  <button type="button" class="dialog__close" data-dialog-close aria-label="{{ t.updates.close }}">{% include icons/close.svg %}</button>
+  <h2 class="dialog__title" id="share-title">{{ h.share.title }}</h2>
+  <p>{{ h.share.lead }}</p>
+  <div class="share-grid">
+    <a class="share-grid__btn" href="#" data-network="fb" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">{% include icons/facebook.svg %}</a>
+    <a class="share-grid__btn" href="#" data-network="x" target="_blank" rel="noopener" aria-label="X" title="X">{% include icons/x.svg %}</a>
+    <button type="button" class="share-grid__btn" data-network="img" aria-label="Instagram" title="Instagram">{% include icons/instagram.svg %}</button>
+  </div>
+  <p class="share-status" data-share-status role="status" aria-live="polite"></p>
+  <div class="share-image" data-share-image hidden>
+    <img alt="{{ h.share.img_alt }}" width="170" height="170">
+    <p>{{ h.share.img_help }}</p>
+  </div>
+  <script type="application/json" data-share-text>{{ h.share.text | jsonify }}</script>
+</dialog>

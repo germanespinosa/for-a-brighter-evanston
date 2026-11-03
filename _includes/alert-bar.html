@@ -1,0 +1,13 @@
+{%- assign t = site.data.i18n[page.lang] -%}
+{%- assign ev = site.data.event -%}
+{%- if ev.show -%}
+<aside class="alert-bar" aria-label="{{ ev[page.lang].eyebrow }}">
+  <div class="container alert-bar__inner">
+    <p class="alert-bar__text">
+      <span class="alert-bar__long">{{ ev[page.lang].bar_long }}</span>
+      <span class="alert-bar__short" aria-hidden="true">{{ ev[page.lang].bar_short }}</span>
+    </p>
+    <a class="alert-bar__link" href="{{ ev.details_url }}" target="_blank" rel="noopener">{{ t.nav.details }}</a>
+  </div>
+</aside>
+{%- endif -%}

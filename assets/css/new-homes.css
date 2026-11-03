@@ -1,0 +1,135 @@
+/* New homes page (/home/new-homes/ and /es/nuevas-viviendas/) */
+
+.page-hero .eyebrow--gold { margin-bottom: 12px; }
+
+/* Stats */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: var(--navy);
+  color: var(--white);
+  border-top: 6px solid var(--orange);
+  border-radius: var(--radius);
+}
+.stat__big {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.75rem, 3.2vw, 2.125rem);
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--orange-light);
+  white-space: nowrap;
+}
+.stat__text { font-size: .9375rem; font-weight: 700; line-height: 1.35; }
+@media (max-width: 700px) {
+  .stat-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .stat { padding: 14px 16px; gap: 6px; }
+}
+
+/* Map + points */
+.map-figure { margin: 0; }
+.map-figure img { width: 100%; border: 1px solid #E1E6EF; }
+.map-figure figcaption { margin-top: 8px; font-size: .8125rem; line-height: 1.45; color: var(--blue); }
+.point { margin-bottom: 16px; }
+.point__title { margin: 0 0 2px; font-family: var(--font-display); font-weight: 900; font-size: 1.0625rem; }
+.point p { font-size: .96875rem; }
+
+/* Developments table */
+.table-wrap { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.dev-table { width: 100%; border-collapse: collapse; background: var(--white); font-size: .90625rem; }
+.dev-table thead th {
+  padding: 12px 14px;
+  background: var(--navy);
+  color: var(--white);
+  font-size: .6875rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.dev-table td, .dev-table tbody th, .dev-table tfoot th {
+  padding: 12px 14px;
+  border-top: 1px solid #E1E6EF;
+  text-align: left;
+  vertical-align: middle;
+}
+.dev-table .addr { font-weight: 700; }
+.dev-table .num, .dev-table .walk { text-align: right; }
+.dev-table td.walk { color: var(--rust); font-weight: 700; white-space: nowrap; }
+.dev-table td.n { width: 48px; }
+.n__dot {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: var(--white);
+  font-size: .8125rem;
+  font-weight: 700;
+}
+.dev-table tfoot td, .dev-table tfoot th { background: var(--cream); font-weight: 700; }
+
+/* Table becomes stacked cards on phones */
+@media (max-width: 700px) {
+  .dev-table thead { display: none; }
+  .dev-table, .dev-table tbody, .dev-table tfoot, .dev-table tr { display: block; width: 100%; }
+  .dev-table tr {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    column-gap: 10px;
+    row-gap: 2px;
+    padding: 12px 14px;
+    border-top: 1px solid #E1E6EF;
+  }
+  .dev-table tbody tr:first-child { border-top: 0; }
+  .dev-table td, .dev-table tbody th, .dev-table tfoot th { display: block; padding: 0; border: 0; width: auto; }
+  .dev-table td.n { grid-row: span 3; width: auto; }
+  .dev-table .addr { grid-column: 2; }
+  .dev-table td.num { grid-column: 3; }
+  .dev-table td.num::after { content: " " attr(data-unit); font-weight: 400; font-size: .75rem; color: var(--blue); }
+  .dev-table td.st { grid-column: 2; font-size: .8125rem; color: var(--blue); }
+  .dev-table td.sc { grid-column: 2; font-size: .84375rem; }
+  .dev-table td.walk { grid-column: 3; grid-row: 3; align-self: end; }
+  .dev-table tfoot tr { background: var(--cream); }
+  .dev-table tfoot td.n { grid-row: auto; }
+  .dev-table td.st:empty { display: none; }
+}
+
+/* Asks */
+.ask-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ask-box {
+  padding: 20px 22px;
+  border: 2px solid var(--navy);
+  border-top: 6px solid var(--orange);
+  border-radius: var(--radius);
+}
+.ask-box p:last-child { font-size: 1rem; }
+@media (max-width: 700px) { .ask-pair { grid-template-columns: minmax(0, 1fr); } }
+
+/* Sources strip */
+.sources-strip { border-top: 1px solid #E1E6EF; background: var(--white); }
+.sources-strip__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 40px;
+  padding-block: 20px 28px;
+  font-size: .8125rem;
+  line-height: 1.55;
+  color: var(--blue);
+}
+.sources-strip__text { flex: 1 1 420px; margin: 0; }
+.sources-strip__contact { flex: 0 1 auto; margin: 0; text-align: right; }
+.sources-strip a { color: var(--navy); }
+@media (max-width: 700px) { .sources-strip__contact { text-align: left; } }

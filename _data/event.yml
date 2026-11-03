@@ -1,0 +1,33 @@
+# The next meeting shown in the yellow bar at the top of every page and in the
+# "Next up" card on the home page. Update this one file when the date changes;
+# the calendar links and the .ics download are built from it.
+# Set `show: false` to hide the bar and card.
+show: true
+calendar_title: D65 Board Meeting
+location: 1500 McDaniel Ave, Evanston, IL 60201
+location_short: 1500 McDaniel Ave, Evanston
+details_url: https://www.district65.net/about/board-of-education/board-meetings
+
+# Times in Chicago local time (used by Google Calendar and Outlook links)
+start_local: 20261109T170000
+end_local: 20261109T200000
+start_iso: "2026-11-09T17:00:00-06:00"
+end_iso: "2026-11-09T20:00:00-06:00"
+# Same times in UTC (used by the .ics file)
+start_utc: 20261109T230000Z
+end_utc: 20261110T020000Z
+
+en:
+  bar_long: D65 Board Vote Expected · Monday, November 9 · 5 PM · 1500 McDaniel Ave, Evanston
+  bar_short: Board Vote · Mon, Nov 9 · 5 PM
+  eyebrow: Next up
+  title: D65 Board Vote (expected)
+  date_html: Monday,<br>November 9
+  time: 5 PM
+es:
+  bar_long: Votación prevista de la Junta del D65 · lunes 9 de noviembre · 5 p. m. · 1500 McDaniel Ave, Evanston
+  bar_short: Votación D65 · lun 9 nov · 5 p. m.
+  eyebrow: Próximo evento
+  title: Votación de la Junta del D65 (prevista)
+  date_html: Lunes,<br>9 de noviembre
+  time: 5 p. m.

@@ -1,0 +1,74 @@
+{%- comment -%}
+  Write to the Board page template, shared by /home/write-to-the-board-issue/
+  and /es/escriba-a-la-junta-issue/. All labels and letter text come from
+  assets/js/letter-content.js; assets/js/letter.js fills in this markup.
+{%- endcomment -%}
+{%- assign t = site.data.i18n[page.lang] -%}
+
+<div class="letter" data-letter data-lang="{{ page.lang }}">
+  <section class="page-hero" aria-labelledby="write-title">
+    <div class="container container--narrow">
+      <h1 class="page-hero__title page-hero__title--lg" id="write-title"><span data-ui="h1a"></span><br> <mark class="mark" data-ui="h1b"></mark></h1>
+      <p class="page-hero__lead page-hero__lead--wide" data-ui="lead"></p>
+    </div>
+  </section>
+
+  <div class="letter__body">
+    <div class="container container--narrow">
+      <noscript><p class="letter__noscript">This page needs JavaScript to draft your letter. · Esta página necesita JavaScript para preparar su carta.</p></noscript>
+
+      <form class="letter-card" data-letter-form novalidate>
+        <section class="letter-step" aria-labelledby="step-1">
+          <h2 class="letter-step__title" id="step-1"><span class="letter-step__num" aria-hidden="true">1</span><span data-ui="s0"></span></h2>
+          <fieldset class="letter-fieldset">
+            <legend class="field__hint" data-ui="s0h"></legend>
+            <div class="choice-grid" data-issues></div>
+          </fieldset>
+        </section>
+
+        <section class="letter-step" aria-labelledby="step-2">
+          <h2 class="letter-step__title" id="step-2"><span class="letter-step__num" aria-hidden="true">2</span><span data-ui="s1"></span></h2>
+          <div class="field">
+            <label for="letter-name" data-ui="name"></label>
+            <input type="text" id="letter-name" autocomplete="name" data-ui-placeholder="namePh">
+          </div>
+          <fieldset class="letter-fieldset">
+            <legend class="field__label" data-ui="role"></legend>
+            <div class="chip-row" data-roles></div>
+          </fieldset>
+        </section>
+
+        <section class="letter-step" aria-labelledby="step-3">
+          <h2 class="letter-step__title" id="step-3"><span class="letter-step__num" aria-hidden="true">3</span><span data-ui="s2"></span></h2>
+          <div class="field">
+            <span class="field__label" id="letter-to-label" data-ui="to"></span>
+            <div class="letter-to" aria-labelledby="letter-to-label"><span data-ui="toList"></span><small data-ui="toNote"></small></div>
+          </div>
+          <div class="field">
+            <label for="letter-subject" data-ui="subject"></label>
+            <input type="text" id="letter-subject">
+          </div>
+          <div class="field">
+            <div class="field__head">
+              <label for="letter-body" data-ui="body"></label>
+              <button type="button" class="btn btn--outline-navy btn--sm" data-shuffle data-ui="shuffle"></button>
+            </div>
+            <textarea id="letter-body" rows="16"></textarea>
+            <p class="field__hint" data-ui="hint"></p>
+          </div>
+        </section>
+
+        <section class="letter-step" aria-labelledby="step-4">
+          <h2 class="letter-step__title" id="step-4"><span class="letter-step__num" aria-hidden="true">4</span><span data-ui="s3"></span></h2>
+          <div class="send-row" data-send-row>
+            <button type="button" class="send-btn send-btn--primary" data-send><span data-ui="send"></span><small data-send-sub></small></button>
+            <button type="button" class="send-btn send-btn--secondary" data-copy><span data-ui="copy"></span><small data-ui="copyS"></small></button>
+          </div>
+          <p class="field__hint" data-send-note></p>
+          <p class="letter-status" data-status role="status" aria-live="polite"></p>
+          <p class="field__hint" data-ui="priv"></p>
+        </section>
+      </form>
+    </div>
+  </div>
+</div>

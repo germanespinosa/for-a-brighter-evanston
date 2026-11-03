@@ -1,0 +1,27 @@
+{%- assign t = site.data.i18n[page.lang] -%}
+<header class="site-header">
+  <div class="container site-header__bar">
+    <a class="brand" href="{{ t.urls.home | relative_url }}"{% if page.is_home %} aria-current="page"{% endif %}>
+      <span class="brand__star" aria-hidden="true">★</span><span class="brand__name">For A Brighter Evanston</span>
+    </a>
+
+    <nav class="site-nav" aria-label="{{ t.nav.label }}">
+      <ul class="site-nav__list">
+        <li><a href="{{ t.urls.write | relative_url }}"{% if page.nav == 'write' %} aria-current="page"{% endif %}>{{ t.nav.write }}</a></li>
+        <li><a href="{{ t.urls.news | relative_url }}"{% if page.nav == 'news' %} aria-current="page"{% endif %}>{{ t.nav.news }}</a></li>
+        <li><button type="button" class="site-nav__button" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button></li>
+        <li><a class="site-nav__icon" href="{{ site.links.instagram }}" target="_blank" rel="noopener" aria-label="{{ t.nav.instagram }}" title="{{ t.nav.instagram }}">{% include icons/instagram.svg %}</a></li>
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="btn btn--gold btn--sm" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ t.nav.sign }}</a>
+      {%- if page.alt_url %}
+      {%- assign other = 'es' %}{% if page.lang == 'es' %}{% assign other = 'en' %}{% endif %}
+      <a class="btn btn--outline-light btn--sm lang-switch" href="{{ page.alt_url | relative_url }}" hreflang="{{ other }}" lang="{{ other }}">
+        <span class="lang-switch__full">{{ t.switch_label }}</span><span class="lang-switch__short" aria-hidden="true">{{ t.switch_short }}</span>
+      </a>
+      {%- endif %}
+    </div>
+  </div>
+</header>

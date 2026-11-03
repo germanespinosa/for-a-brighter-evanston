@@ -1,0 +1,91 @@
+{%- comment -%}
+  In the news page template, shared by /home/in-the-news/ and /es/noticias/.
+  Page text: _data/news_page.yml. Articles are loaded in the browser from
+  /data/news.json by assets/js/news.js.
+{%- endcomment -%}
+{%- assign n = site.data.news_page[page.lang] -%}
+
+<section class="page-hero page-hero--split" aria-labelledby="news-title">
+  <div class="container page-hero__inner">
+    <h1 class="page-hero__title" id="news-title">{{ n.h1 }} <span class="text-gold">{{ n.h1_mark }}</span></h1>
+    <div class="page-hero__aside">
+      <p class="page-hero__lead">{{ n.lead }}</p>
+      <button type="button" class="btn btn--gold btn--lg" data-dialog-open="share-article-dialog" aria-haspopup="dialog">{{ n.share_btn }} <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="band band--white news" aria-label="{{ n.title }}">
+  <div class="container news__layout">
+    <nav class="news-filter" aria-labelledby="filter-title">
+      <h2 class="news-filter__title" id="filter-title">{{ n.filter_title }}</h2>
+      <div class="news-filter__list" data-news-filters></div>
+    </nav>
+
+    <div class="news-feed">
+      <div class="news-feed__list" data-news-list aria-live="polite" aria-busy="true">
+        <p class="news-feed__status">{{ n.loading }}</p>
+      </div>
+      <button type="button" class="btn btn--outline-navy" data-news-more hidden>{{ n.more }}</button>
+    </div>
+
+    <aside class="news-missed" aria-labelledby="missed-title">
+      <h2 class="news-missed__title" id="missed-title">{{ n.missed_title }}</h2>
+      <p>{{ n.missed_text }}</p>
+      <button type="button" class="btn btn--navy btn--block" data-dialog-open="share-article-dialog" aria-haspopup="dialog">{{ n.share_btn }} <span aria-hidden="true">→</span></button>
+    </aside>
+  </div>
+
+  <script type="application/json" data-news-config>
+    {
+      "src": {{ '/data/news.json' | relative_url | jsonify }},
+      "lang": {{ page.lang | jsonify }},
+      "all": {{ n.all | jsonify }},
+      "read": {{ n.read | jsonify }},
+      "empty": {{ n.empty | jsonify }},
+      "error": {{ n.error | jsonify }},
+      "months": {{ n.months | jsonify }}
+    }
+  </script>
+</section>
+
+<dialog class="dialog dialog--wide" id="share-article-dialog" aria-labelledby="share-article-title">
+  <button type="button" class="dialog__close" data-dialog-close aria-label="{{ site.data.i18n[page.lang].updates.close }}">{% include icons/close.svg %}</button>
+  <div data-form-panel>
+    <h2 class="dialog__title" id="share-article-title">{{ n.form.title }}</h2>
+    <p>{{ n.form.lead }}</p>
+    <form class="form" action="{{ site.links.share_article_form }}" method="post" target="gf_hidden" data-google-form>
+      <div class="field">
+        <label for="sa-url">{{ n.form.url }}</label>
+        <input id="sa-url" type="url" name="entry.1542110014" placeholder="https://" inputmode="url" required>
+      </div>
+      <div class="field">
+        <label for="sa-src">{{ n.form.src }} <span class="field__opt">{{ n.form.optional }}</span></label>
+        <input id="sa-src" type="text" name="entry.1288570270" placeholder="{{ n.form.src_ph }}">
+      </div>
+      <div class="field">
+        <label for="sa-why">{{ n.form.why }} <span class="field__opt">{{ n.form.optional }}</span></label>
+        <textarea id="sa-why" name="entry.838513382" rows="2" placeholder="{{ n.form.why_ph }}"></textarea>
+      </div>
+      <div class="form__row">
+        <div class="field">
+          <label for="sa-name">{{ n.form.name }} <span class="field__opt">{{ n.form.optional }}</span></label>
+          <input id="sa-name" type="text" name="entry.1173557525" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="sa-email">{{ n.form.email }} <span class="field__opt">{{ n.form.optional }}</span></label>
+          <input id="sa-email" type="email" name="entry.740649594" autocomplete="email" placeholder="{{ site.data.i18n[page.lang].updates.email_ph }}">
+        </div>
+      </div>
+      <input type="hidden" name="entry.1514173737" value="{{ page.lang }}">
+      <button class="btn btn--navy btn--lg btn--block" type="submit">{{ n.form.submit }}</button>
+    </form>
+    <p class="dialog__fine">{{ n.form.fine }}</p>
+  </div>
+  <div class="form-success" data-form-thanks hidden role="status">
+    <span class="form-success__icon">{% include icons/check.svg %}</span>
+    <h2 class="dialog__title">{{ n.form.ok_title }}</h2>
+    <p>{{ n.form.ok_text }}</p>
+    <button type="button" class="btn btn--navy" data-form-again>{{ n.form.again }}</button>
+  </div>
+</dialog>

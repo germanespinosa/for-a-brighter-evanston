@@ -1,0 +1,134 @@
+# Data and text for the New homes page (/home/new-homes/ and /es/nuevas-viviendas/).
+# Numbers live in `developments` once; words are per language below.
+
+developments:
+  - address: 605 Davis St
+    homes: 419
+    status: approved
+    schools: Dewey → Lincoln
+    walk: 0.65 → 1.0 mi
+  - address: 900 Clark St
+    homes: 360
+    status: in_approval
+    schools: Dewey → Lincoln
+    walk: 0.7 → 1.5 mi
+  - address: 1621 Chicago Ave
+    homes: 110
+    status: under_construction
+    schools: Dewey → Lincoln
+    walk: 0.7 → 1.0 mi
+  - address: 1103–1105 Emerson St
+    homes: 30
+    status: approved
+    schools: Dewey → Orrington
+    walk: 0.7 → 1.25 mi
+  - address: 1915–1917 Grant St
+    homes: 13
+    status: under_construction
+    schools: Lincolnwood → Willard
+    walk: 0.6 → 1.5 mi
+total_homes: 932
+avg_walk: 0.7 → 1.2 mi
+
+contact_name: Jake Rothschild
+contact_email: jacob.e.rothschild@gmail.com
+
+en:
+  title: New homes and school closures
+  description: 932 new homes are coming to the Dewey and Lincolnwood areas. Under D65’s proposed boundaries, every development is assigned to a farther school.
+  eyebrow: District 65 closures and new housing
+  h1: New homes are coming.
+  h1_mark: D65’s closure plan moves their school farther away.
+  lead: Five developments in the Dewey and Lincolnwood areas are being built or in approval. Under the district’s Oct. 23 boundaries, each one is assigned to a farther school.
+  stats:
+    - big: 932 homes
+      text: Coming to the closing schools’ areas
+    - big: 0.7 → 1.2 mi
+      text: Average walk to school, today vs. proposed
+    - big: 5 of 5
+      text: Developments moved to a farther school
+  map_alt: "Map of the Dewey and Lincolnwood attendance areas with five numbered developments and arrows to their proposed schools: 1, 2 and 3 to Lincoln, 4 to Orrington, 5 to Willard."
+  map_caption: "Arrows: each development to its proposed school. Shaded: today’s Dewey and Lincolnwood areas."
+  what_eyebrow: What the closures would do
+  what_title: Farther schools for 932 new homes.
+  points:
+    - title: Downtown loses its neighborhood school.
+      text: The four Dewey-area developments sit downtown or at its edge, about a 0.7-mile walk from Dewey.
+    - title: Either children walk, or the district pays.
+      text: Two developments reach about 1.5 miles, where Illinois requires busing. Serious hazards on the route, like busy arterials, can require it too.
+    - title: The district’s forecast doesn’t count them.
+      text: Its enrollment projection assumes a flat population.
+  dev_tag: The developments
+  dev_title: Five developments, five longer walks.
+  table:
+    caption: The five developments, their proposed schools and walking distances
+    development: Development
+    homes: Homes
+    homes_unit: homes
+    status: Status
+    school: School
+    walk: Walk to school
+    total: Total
+    total_school: Each one farther
+    avg: avg.
+  status:
+    approved: Approved
+    in_approval: In approval
+    under_construction: Under construction
+  asks:
+    - who: We ask the D65 Board
+      text: Keep Dewey and Lincolnwood open until the district assesses school access and enrollment for the housing already in the works.
+    - who: We ask the City of Evanston
+      text: Work with D65 to review school access for approved developments before any closure is final.
+  sources: "Sources: City of Evanston development projects list (checked Nov. 1, 2026); D65 Data Hub (Oct. 23 proposed boundaries). Walks measured along the street grid; average weighted by number of homes."
+  contact: Contact
+
+es:
+  title: Nuevas viviendas y cierres de escuelas
+  description: Se vienen 932 viviendas nuevas a las zonas de Dewey y Lincolnwood. Con los límites que propone el D65, a cada desarrollo se le asigna una escuela más lejana.
+  eyebrow: Cierres del Distrito 65 y nuevas viviendas
+  h1: Se vienen nuevas viviendas.
+  h1_mark: El plan de cierres del D65 aleja su escuela.
+  lead: Cinco desarrollos en las zonas de Dewey y Lincolnwood están en construcción o en proceso de aprobación. Con los límites que propuso el distrito el 23 de octubre, a cada uno se le asigna una escuela más lejana.
+  stats:
+    - big: 932 viviendas
+      text: Llegan a las zonas de las escuelas que cerrarían
+    - big: 0.7 → 1.2 mi
+      text: Caminata promedio a la escuela, hoy vs. propuesta
+    - big: 5 de 5
+      text: Desarrollos asignados a una escuela más lejana
+  map_alt: "Mapa de las zonas de Dewey y Lincolnwood con cinco desarrollos numerados y flechas hacia sus escuelas propuestas: 1, 2 y 3 a Lincoln, 4 a Orrington y 5 a Willard."
+  map_caption: "Flechas: cada desarrollo hacia su escuela propuesta. Sombreado: las zonas actuales de Dewey y Lincolnwood."
+  what_eyebrow: Lo que harían los cierres
+  what_title: Escuelas más lejos para 932 viviendas nuevas.
+  points:
+    - title: El centro pierde su escuela de barrio.
+      text: Los cuatro desarrollos de la zona de Dewey están en el centro o en su borde, a unas 0.7 millas a pie de Dewey.
+    - title: O los niños caminan, o el distrito paga.
+      text: Dos desarrollos quedan a unas 1.5 millas, la distancia a partir de la cual Illinois exige transporte escolar. Los peligros serios en el camino, como avenidas con mucho tránsito, también pueden exigirlo.
+    - title: El pronóstico del distrito no los cuenta.
+      text: Su proyección de matrícula supone una población sin cambios.
+  dev_tag: Los desarrollos
+  dev_title: Cinco desarrollos, cinco caminatas más largas.
+  table:
+    caption: Los cinco desarrollos, sus escuelas propuestas y las distancias a pie
+    development: Desarrollo
+    homes: Viviendas
+    homes_unit: viviendas
+    status: Estado
+    school: Escuela
+    walk: Caminata a la escuela
+    total: Total
+    total_school: Todos más lejos
+    avg: prom.
+  status:
+    approved: Aprobado
+    in_approval: En aprobación
+    under_construction: En construcción
+  asks:
+    - who: Le pedimos a la Junta del D65
+      text: Mantener abiertas Dewey y Lincolnwood hasta que el distrito evalúe el acceso a las escuelas y la matrícula de las viviendas que ya están en marcha.
+    - who: Le pedimos a la Ciudad de Evanston
+      text: Trabajar con el D65 para revisar el acceso a las escuelas de los desarrollos aprobados antes de que cualquier cierre sea definitivo.
+  sources: "Fuentes: lista de proyectos de desarrollo de la Ciudad de Evanston (consultada el 1 de noviembre de 2026); D65 Data Hub (límites propuestos el 23 de octubre). Caminatas medidas por la red de calles; promedio ponderado por número de viviendas."
+  contact: Contacto
