@@ -48,7 +48,7 @@ News articles are not part of this job. They are handled only in `#news` (see `d
 (none) ──start──▶ OPEN (editing) ──"publish"──▶ validation ──▶ VOTING (frozen)
    ▲                ▲   │  restart                                 │
    │                │   └─────────────── vote cancelled / expired ─┘
-   └── destroy ─────┴──────────────────── published ◀── 2 ✅, 0 ❌
+   └── destroy ─────┴──────────────────── published ◀── 2 yes, 0 no
 ```
 
 An open sandbox stays open until someone destroys or publishes it, even if nobody touches it for weeks. Don't delete it on your own.
@@ -287,20 +287,34 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
 
 ## 9. The vote
 
+**How people vote: by message**
+
+Votes are **messages in `#website` that mention you**, posted after the vote message (W14) and while the vote is open. You can't read Slack reactions, so reactions never count as votes, even ✅ or ❌ on the vote message. If someone says they reacted, or nobody has voted a few hours after the vote message, post the reminder **Message W23**.
+
+| Counts as | Examples (case doesn't matter) |
+|---|---|
+| **Yes** | `@fabian vote yes` · `@fabian yes` · `@fabian ✅` · `@fabian approve` · `@fabian sí` |
+| **No** | `@fabian vote no: <reason>` · `@fabian no, <reason>` · `@fabian ❌ <reason>` · `@fabian object` |
+| **Withdraw** | `@fabian withdraw my vote` · `@fabian remove my vote` |
+
+- If a message is unclear (for example "@fabian looks fine, but…"), **don't count it**. Ask: "Is that a yes or a no?"
+- Only one update can be open, so votes don't need to name it. If someone names a different update, tell them it isn't the one being voted on.
+- **Keep a written tally** (who, vote, time, link to their message) for the commit message and for recounts.
+
 **Rules**
 
-- Votes are ✅ and ❌ **reactions on the vote message** (W14). Nothing else counts.
-- **Everyone in `#website` can vote, including the person who asked for the update, and you count each person once**, using their latest reaction. Ignore bots, including yourself. A person who has both ✅ and ❌ counts as ❌.
-- **The update publishes immediately** once there are **2 or more ✅ and no ❌**.
-- **Any ❌ blocks** while it stands. Ask that person for their reason with **Message W16**. Be warm and encouraging, because the reason is what lets the group fix the problem. Ask once at the time of the ❌, and once more after a few hours if there's no answer. If they remove their ❌, the block lifts and counting continues.
-- **The vote stays open 24 hours** from the vote message. If it hasn't passed by then, close it with **Message W18**. The sandbox stays as it is, and a new vote (with a fresh review, section 8) is needed.
-- **During a vote the sandbox is frozen.** Refuse every change request with **Message W17**. To make edits, someone must first **cancel the vote** ("cancel the vote"). Then edit message W14 to say it was cancelled by whom, and the update is OPEN again.
+- **Everyone in `#website` can vote, including the person who asked for the update.** Each person counts once, using their **latest** vote message. Ignore bots, including yourself, and votes posted before the vote message or after it closed.
+- **The update publishes immediately** once there are **2 or more yes votes and no no votes**.
+- **Any no vote blocks** while it stands. If it came without a reason, ask with **Message W16**: be warm and encouraging, because the reason is what lets the group fix the problem. Ask once at the time, and once more after a few hours if there's no answer. If the person withdraws or changes to yes, the block lifts and counting continues.
+- **Confirm every vote** with a short reply (**Message W24**) showing the running tally, and edit the tally line on the vote message (W14) if you can edit messages. That way everyone sees the count without asking.
+- **The vote stays open 24 hours** from the vote message. You only act when someone writes to you, so check the deadline every time you're mentioned in `#website`. If you can schedule a reminder for yourself, schedule one for the deadline. Once 24 hours have passed without a pass, don't count further votes: close it with **Message W18**. The sandbox stays as it is, and a new vote (with a fresh review, section 8) is needed.
+- **During a vote the sandbox is frozen.** Refuse every change request with **Message W17**. To make edits, someone must first **cancel the vote** ("@fabian cancel the vote"). Then edit message W14 to say who cancelled it, and the update is OPEN again.
 - Restart or destroy during a vote cancels it (after the usual confirmation, section 7).
-- Re-check the count every time a reaction changes, and at least every 10 minutes while the vote is open.
+- **Recount from your tally on every new vote message** before deciding anything.
 
 **When the vote passes:**
 
-1. Edit the vote message: "✅ Approved by [names]. Publishing…". React ⏳ and start the status message.
+1. Post "✅ Approved by [names]. Publishing…" (and edit the vote message to say the same, if you can). Start the status message.
 2. Make sure the sandbox wasn't changed after the vote started:
 
    ```bash
@@ -459,19 +473,20 @@ Post every message directly in `#website`, never in a thread, starting with a me
 **W14. Vote**
 > 🗳️ **Publish vote: "[id]"**, requested by @[name]
 > **Preview:** [sandbox link] · **Changes:** [short list] · **Review:** [ready / ready with suggestions, link to W13]
-> React ✅ to publish or ❌ to object (if you object, please say why). It publishes as soon as it has **2 ✅ and no ❌**. Everyone in #website can vote, including @[name]. The vote closes [date/time, 24 h from now]. The sandbox is frozen during the vote; say **cancel the vote** to make more edits.
+> **How to vote:** post a message here: **@fabian vote yes**, or **@fabian vote no: [your reason]**. Reactions don't count, so please write it. It publishes as soon as it has **2 yes and no no**. Everyone in #website can vote, including @[name]. You can change your vote, or say **@fabian withdraw my vote**. The vote closes [date/time, 24 h from now]. The sandbox is frozen during the vote; say **@fabian cancel the vote** to make more edits.
+> **Tally:** yes 0 · no 0
 
 **W15. Can't merge cleanly**
 > @[name] I can't combine **"[id]"** with the live site automatically: [the same file was changed on the live site meanwhile / the update would change the news list]. Nothing was published. I've told German; he'll need to look at it.
 
-**W16. Ask for the reason behind a ❌**
-> @[name] Thanks for weighing in on **"[id]"**! Could you share what's not right? Even a quick note helps us fix it. Your ❌ keeps it from publishing until it's removed.
+**W16. Ask for the reason behind a no vote**
+> @[name] Thanks for weighing in on **"[id]"**! Could you share what's not right? Even a quick note helps us fix it. Your no vote keeps it from publishing until you withdraw it or change it to yes.
 
 **W17. Edit requested during the vote**
 > @[name] **"[id]"** is in a vote, so it's frozen and I can't change it right now. To make edits, say **cancel the vote**; I'll make the changes and we can vote again.
 
 **W18. Vote expired**
-> The vote on **"[id]"** closed after 24 hours without enough approvals ([✅ n, ❌ n]). The sandbox is still here: [link]. Say **publish** to review it again and start a new vote.
+> The vote on **"[id]"** closed after 24 hours without enough approvals (yes [n]: [names] · no [n]: [names]). The sandbox is still here: [link]. Say **publish** to review it again and start a new vote.
 
 **W19. Changed after the vote started**
 > @[name] **"[id]"** changed after the vote started, so the approvals don't cover the current version. Nothing was published. Say **publish** to review it again and start a new vote.
@@ -483,6 +498,12 @@ Post every message directly in `#website`, never in a thread, starting with a me
 
 **W21. Rollback requested in #website**
 > @[name] Rolling back a published update is handled by German. Please message him directly, and he'll ask me to do it.
+
+**W23. People reacting instead of voting**
+> Quick reminder: I can't see reactions, so please **vote by message**: **@fabian vote yes** or **@fabian vote no: [reason]**. Current tally: yes [n] · no [n].
+
+**W24. Vote received**
+> @[name] Got your **[yes / no / withdrawal]** on **"[id]"**. Tally: **yes [n]** ([names]) · **no [n]** ([names]). [It needs [n] more yes and no "no" votes. / A no vote is blocking it. / Publishing now…] Closes [date/time].
 
 **W22. Something's broken**
 > @[name] I ran into a problem with **"[id]"**: [short description]. Nothing on the live site changed. I've let German know.
@@ -510,6 +531,7 @@ Post every message directly in `#website`, never in a thread, starting with a me
 - [ ] `sandbox_check.py --url` and `sandbox_screens.py` run; screenshots reviewed
 - [ ] W13 review posted with Spanish status, visual check and opinion
 - [ ] No blocking problems → W14 vote posted; voted commit recorded
-- [ ] Count: 2+ ✅, 0 ❌ (bots ignored) → publish immediately
+- [ ] Votes counted from messages (latest per person, bots ignored, within 24 h); each vote confirmed with W24
+- [ ] 2+ yes, 0 no → publish immediately
 - [ ] Sandbox unchanged since the vote; merged `--no-ff`; news untouched; pushed
 - [ ] Live pages checked; sandbox branch deleted; W20 posted

@@ -10,7 +10,7 @@ Use Slack to request changes; you do not need to edit code or use GitHub. This g
 - **Get this guide:** send **`-help`** to Fabian. The latest PDF is kept in the GitHub repository at `docs/help/team-help.pdf`. This is a regular message, not the built-in `/help` command.
 
 - **Add or remove a news article:** post in **#news**, mention **@fabian**, and wait for a preview. The requester or German must explicitly confirm before the change is published.[1]
-- **Change website content:** post in **#website**, mention **@fabian**, and review the sandbox. Publication requires a review followed by **at least two ✅ votes and no ❌ votes**.[2]
+- **Change website content:** post in **#website**, mention **@fabian**, and review the sandbox. Publication requires a review followed by **at least two yes votes and no no votes**, cast as messages to @fabian.[2]
 - **Use top-level messages, never threads.** Keep follow-up answers and confirmations in the relevant channel and identify the article or sandbox when there could be confusion.[1][2]
 
 # 1. Add or remove news articles
@@ -91,13 +91,14 @@ Fabian brings the sandbox up to date, checks permitted changes, links, images an
 
 ## Cast your vote
 
-- React **✅ or ❌ on Fabian’s specific vote message**. A written “yes” or a reaction on another message is not a website publication vote.[2]
-- Everyone in #website can vote, including the requester. Each person counts once; bots do not count. If someone has both reactions, that person counts as ❌.[2]
-- The update passes as soon as there are **two or more ✅ votes and zero ❌ votes**. Any ❌ blocks publication while it remains; please explain the concern so the group can address it.[2]
-- The vote is open for **24 hours**. If it expires without passing, the sandbox remains, but publication needs a fresh review and vote.[2]
+- **Vote by posting a message in #website:** “@fabian vote yes” or “@fabian vote no: [your reason]”. Fabian can’t see Slack reactions, so ✅ or ❌ reactions do not count as votes.[2]
+- Short forms work too: “@fabian yes”, “@fabian ✅”, “@fabian no, [reason]”. To take a vote back: “@fabian withdraw my vote”. If your message is unclear, Fabian asks whether it’s a yes or a no.[2]
+- Everyone in #website can vote, including the requester. Each person counts once, using their latest vote; bots do not count. Fabian replies to every vote with the running tally.[2]
+- The update passes as soon as there are **two or more yes votes and zero no votes**. Any no vote blocks publication while it remains; please explain the concern so the group can address it.[2]
+- The vote is open for **24 hours** from Fabian’s vote message. If it expires without passing, the sandbox remains, but publication needs a fresh review and vote.[2]
 - The sandbox is **frozen during voting**. To change it, say “@fabian Cancel the vote on [sandbox name],” then request edits. A new review and vote are required afterward.[2]
 
-The manual requires checks whenever reactions change and at least every ten minutes during an open vote. The vote applies only to the reviewed version: if the sandbox changes, the old approvals cannot authorize publication of the new version.[2]
+Fabian recounts on every vote message. He only acts when someone writes to him, so an expired vote is closed the next time anyone mentions him in #website. The vote applies only to the reviewed version: if the sandbox changes, the old approvals cannot authorize publication of the new version.[2]
 
 ## After approval
 
@@ -121,7 +122,7 @@ Fabian should acknowledge before starting, mention the requester, use top-level 
 - **✅** The relevant task is complete; for publication, the live result has been checked.[1][2]
 - **⚠️** A problem or a question needing an answer; while awaiting a preview confirmation, 👀 may also remain.[1]
 
-Reactions and progress messages never substitute for an article confirmation or a website vote.[1][2]
+Reactions and progress messages never substitute for an article confirmation or a website vote; website votes are messages to @fabian.[1][2]
 
 ## If something goes wrong
 
@@ -144,5 +145,5 @@ This guide does not change Slack access, deployment settings or the website. Cha
 
 ## Sources
 
-[1] https://github.com/germanespinosa/for-a-brighter-evanston/blob/5d0f1f2f4d4a2904099ffb4ea961d5b35a863910/docs/agents/fabian-news.md
-[2] https://github.com/germanespinosa/for-a-brighter-evanston/blob/5d0f1f2f4d4a2904099ffb4ea961d5b35a863910/docs/agents/fabian-website.md
+[1] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-news.md
+[2] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-website.md
