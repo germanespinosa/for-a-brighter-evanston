@@ -81,6 +81,20 @@
   </div>
 </section>
 
+<section class="band band--white band--rule" aria-labelledby="nh-title">
+  <div class="container feature">
+    <div class="feature__copy">
+      <p class="tag">{{ h.new_homes.tag }}</p>
+      <h2 class="section-title" id="nh-title">{{ h.new_homes.title }}</h2>
+      <p>{{ h.new_homes.text }}</p>
+      <a class="btn btn--navy btn--lg" href="{{ t.urls.new_homes | relative_url }}">{{ h.new_homes.cta }} <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="feature__media">
+      {% include new-homes-illustration.svg t=h.new_homes %}
+    </figure>
+  </div>
+</section>
+
 <section class="band band--tint" aria-labelledby="asks-title">
   <div class="container">
     <p class="tag">{{ h.asks.tag }}</p>
@@ -94,20 +108,6 @@
       </li>
       {%- endfor %}
     </ol>
-  </div>
-</section>
-
-<section class="band band--white band--rule" aria-labelledby="nh-title">
-  <div class="container feature">
-    <div class="feature__copy">
-      <p class="tag">{{ h.new_homes.tag }}</p>
-      <h2 class="section-title" id="nh-title">{{ h.new_homes.title }}</h2>
-      <p>{{ h.new_homes.text }}</p>
-      <a class="btn btn--navy btn--lg" href="{{ t.urls.new_homes | relative_url }}">{{ h.new_homes.cta }} <span aria-hidden="true">→</span></a>
-    </div>
-    <figure class="feature__media">
-      {% include new-homes-illustration.svg t=h.new_homes %}
-    </figure>
   </div>
 </section>
 
