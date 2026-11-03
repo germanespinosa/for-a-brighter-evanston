@@ -45,7 +45,7 @@ Each language's `index.html` is only front matter (title, description, language,
 }
 ```
 
-`date`, `source`, `url` and `title` are required. `python3 scripts/news_tool.py add entry.json` adds an entry safely (cleans the URL, refuses duplicates, validates the file); `python3 scripts/news_tool.py check` validates the file. The step-by-step procedure for the Fabian agent is in `docs/agents/fabian-add-news-article.md`. The Spanish page falls back to English when a Spanish field is missing. Keep the file valid JSON (commas between items, none after the last).
+`date`, `source`, `url` and `title` are required. `python3 scripts/news_tool.py add entry.json` adds an entry safely (cleans the URL, refuses duplicates, validates the file); `python3 scripts/news_tool.py check` validates the file. The step-by-step procedure for the Fabian agent (adding and removing articles from #news requests) is in `docs/agents/fabian-news.md`. The Spanish page falls back to English when a Spanish field is missing. Keep the file valid JSON (commas between items, none after the last).
 
 ## Code layout
 

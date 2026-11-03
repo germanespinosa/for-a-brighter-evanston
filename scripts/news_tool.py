@@ -18,6 +18,19 @@ Usage (from the repository root):
       refused, the entry is placed at the top of the list, and the file is
       validated before it is saved. Nothing is written if anything fails.
 
+  python3 scripts/news_tool.py search [words...] [--source TEXT]
+                                     [--date YYYY-MM-DD] [--from YYYY-MM-DD]
+                                     [--to YYYY-MM-DD] [--month YYYY-MM]
+      List articles matching ALL the given filters. Words are matched,
+      case-insensitively, against the title, Spanish title, summary, Spanish
+      summary, source and URL. Each match is printed in full (date, source,
+      title, summary, URL) so it can be shown to the user for confirmation.
+
+  python3 scripts/news_tool.py remove <url>
+      Remove the one article whose URL matches (after cleanup), validate the
+      file and save it. Prints the removed entry. Nothing is written if the
+      URL doesn't match exactly one article.
+
 Only the Python standard library is used.
 """
 import json
@@ -150,7 +163,70 @@ def cmd_add(path):
     return 0
 
 
+def show(i, a):
+    print(f"[{i}] {a.get('date')} | {a.get('source')}")
+    print(f"    Title:   {a.get('title')}")
+    print(f"    Summary: {a.get('summary', '(no summary)')}")
+    if a.get("title_es"):
+        print(f"    Título:  {a.get('title_es')}")
+    print(f"    URL:     {a.get('url')}")
+
+
+def cmd_search(args):
+    opts, words, it = {}, [], iter(args)
+    for x in it:
+        if x in ("--source", "--date", "--from", "--to", "--month"):
+            opts[x[2:]] = next(it, "")
+        else:
+            words.append(x.lower())
+    data = load()
+    hits = []
+    for i, a in enumerate(data["articles"]):
+        hay = " ".join(str(a.get(k, "")) for k in ("title", "title_es", "summary", "summary_es", "source", "site", "url")).lower()
+        d = a.get("date", "")
+        if any(w not in hay for w in words):
+            continue
+        if "source" in opts and opts["source"].lower() not in (a.get("source", "") + " " + a.get("site", "")).lower():
+            continue
+        if "date" in opts and d != opts["date"]:
+            continue
+        if "from" in opts and d < opts["from"]:
+            continue
+        if "to" in opts and d > opts["to"]:
+            continue
+        if "month" in opts and not d.startswith(opts["month"]):
+            continue
+        hits.append((i, a))
+    for i, a in hits:
+        show(i, a)
+    print(f"MATCHES: {len(hits)}")
+    return 0 if hits else 1
+
+
+def cmd_remove(url):
+    data = load()
+    key = url_key(url)
+    idx = [i for i, a in enumerate(data["articles"]) if url_key(a.get("url", "")) == key]
+    if len(idx) != 1:
+        print(f"NOT REMOVED: {len(idx)} articles have this URL (need exactly 1)")
+        return 1
+    removed = data["articles"].pop(idx[0])
+    errs = problems_in(data)
+    if errs:
+        print("NOT REMOVED. PROBLEMS:\n- " + "\n- ".join(errs))
+        return 1
+    save(data)
+    print("REMOVED:")
+    show(idx[0], removed)
+    print(f"OK: {len(data['articles'])} articles")
+    return 0
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["search"]:
+        sys.exit(cmd_search(sys.argv[2:]))
+    if sys.argv[1:2] == ["remove"] and len(sys.argv) == 3:
+        sys.exit(cmd_remove(sys.argv[2]))
     args = sys.argv[1:]
     if args[:1] == ["check"] and len(args) == 1:
         sys.exit(cmd_check())
