@@ -91,14 +91,16 @@ Fabian brings the sandbox up to date, checks permitted changes, links, images an
 
 ## Cast your vote
 
-- **Vote by posting a message in #website:** “@fabian vote yes” or “@fabian vote no: [your reason]”. Fabian can’t see Slack reactions, so ✅ or ❌ reactions do not count as votes.[2]
+Fabian’s vote message includes a link to the updated site, a direct link to every changed page, and a short summary of each change, so anyone can review before voting.[2]
+
+- **Vote by posting a message in #website:** “@fabian vote yes” or “@fabian vote no: [your reason]”. Reactions do not count; votes must be messages mentioning @fabian.[2]
 - Short forms work too: “@fabian yes”, “@fabian ✅”, “@fabian no, [reason]”. To take a vote back: “@fabian withdraw my vote”. If your message is unclear, Fabian asks whether it’s a yes or a no.[2]
 - Everyone in #website can vote, including the requester. Each person counts once, using their latest vote; bots do not count. Fabian replies to every vote with the running tally.[2]
 - The update passes as soon as there are **two or more yes votes and zero no votes**. Any no vote blocks publication while it remains; please explain the concern so the group can address it.[2]
 - The vote is open for **24 hours** from Fabian’s vote message. If it expires without passing, the sandbox remains, but publication needs a fresh review and vote.[2]
 - The sandbox is **frozen during voting**. To change it, say “@fabian Cancel the vote on [sandbox name],” then request edits. A new review and vote are required afterward.[2]
 
-Fabian recounts on every vote message. He only acts when someone writes to him, so an expired vote is closed the next time anyone mentions him in #website. The vote applies only to the reviewed version: if the sandbox changes, the old approvals cannot authorize publication of the new version.[2]
+Fabian recounts from the channel on every vote message, so a vote is never lost or counted twice. Votes after the 24-hour deadline don’t count. Fabian posts the closing message at the deadline if a scheduled check is set up, otherwise the next time anyone mentions him in #website. He doesn’t promise reminders he can’t schedule. The vote applies only to the reviewed version: if the sandbox changes, the old approvals cannot authorize publication of the new version.[2]
 
 ## After approval
 
