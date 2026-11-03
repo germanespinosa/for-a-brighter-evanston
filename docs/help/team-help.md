@@ -5,6 +5,20 @@ For a Brighter Evanston • Team guide
 
 Use Slack to request changes; you do not need to edit code or use GitHub. This guide summarizes the repository’s operating manuals, not a certification that every deployment setting or automation is active. The manuals linked at the end are the detailed source of truth.[1][2]
 
+## Start using it now
+
+Post regular messages directly in the relevant Slack channel and mention @fabian, including follow-up confirmations. Do not use threads or the built-in `/help` command.[1][2]
+
+- **Get the guide:** DM `-help`, or post `@fabian -help` in a channel.
+- **Add news — #news:** `@fabian Add this article: [link]`. Review the English/Spanish titles and summaries plus source and publication date; then the requester or German replies `@fabian Yes, publish [article title]`.[1]
+- **Remove news — #news:** `@fabian Remove [article title or link]`. Check the exact match, then the requester or German replies `@fabian Yes, remove [article title]`.[1]
+- **Start website work — #website:** `@fabian Start a website update: [describe the change]`. If a sandbox is already open, the change joins that sandbox; nothing goes live yet.[2]
+- **Request the review and vote — #website:** `@fabian Publish [sandbox name]`. Fabian reviews first, then opens a fresh vote with page links and a clear change summary. Asking to publish is not itself a vote.[2]
+- **Vote — #website:** `@fabian vote yes`, `@fabian vote no: [reason]`, or `@fabian withdraw my vote`. Only messages after the vote opens and before its deadline count; two yes and no no votes permit publication.[2]
+- **Restart voting:** if a vote is still active, say `@fabian cancel the vote`, then `@fabian Publish [sandbox name]`. An already cancelled or expired vote needs a fresh review and vote; old approvals do not carry forward.[2]
+
+For every new request, Fabian reads the current operating manual rather than relying on an older conversation. Reaction-reading capability is never a prerequisite for message-based voting.[2]
+
 ## Quick start
 
 - **Get this guide:** send **`-help`** to Fabian. The latest PDF is kept in the GitHub repository at `docs/help/team-help.pdf`. This is a regular message, not the built-in `/help` command.

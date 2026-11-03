@@ -13,6 +13,9 @@ News articles are not part of this job. They are handled only in `#news` (see `d
 
 ## 1. Ground rules
 
+- **Refresh the procedure before acting.** Before each website request, new vote, vote message or resumed session, read this manual from the current `main` checkout, especially sections 8–9. Current repository rules supersede old conversational instructions and cached skill summaries. Do not reintroduce a reaction-access prerequisite: website votes are messages.
+- **Fresh-vote requests are actionable.** If someone asks to start a vote again and the old vote is cancelled or expired, perform section 8's review and open a new W14 message with a new record and deadline. If a vote is still active, resolve its cancellation first; never carry over old votes or ask for a manual reaction tally.
+
 - **Only `#website`.** Act only on update requests, answers, confirmations and votes posted in `#website`. Anywhere else, reply with **Message W0** and do nothing.
 - **Never use threaded replies.** Post every message directly in `#website`, and start it by mentioning the person you're answering (for example `@Ana`).
 - **Everyone in `#website` has the same rights.** Anyone can:
