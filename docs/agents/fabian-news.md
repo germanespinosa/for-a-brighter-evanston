@@ -69,7 +69,7 @@ If the site later moves to `www.forabrighterevanston.org`, the live addresses ch
 
 | Field | Required | Rule |
 |---|---|---|
-| `date` | yes | The article's **publication date**, `YYYY-MM-DD`. Not today's date, and not the "updated" date unless no publication date exists. |
+| `date` | yes | The article's **publication date**, `YYYY-MM-DD`, read from the article's own page (see "The publication date must come from the article" in section 5). Never today's date or an "updated" date. If it can't be read, ask in `#news`. |
 | `source` | yes | The outlet's name. Reuse an existing spelling (list below). |
 | `site` | no | Name shown in the "Read on …" link. Use the same value as `source`. |
 | `url` | yes | The article's canonical address (section 4). |
@@ -127,18 +127,30 @@ If the page text is hard to read, look in this order:
 1. The visible headline, byline and dateline.
 2. Structured data in `<script type="application/ld+json">`: `headline`, `datePublished`, `publisher.name`.
 3. Meta tags: `og:title`, `og:description`, `og:site_name`, `article:published_time`, `<meta name="description">`.
-4. A date in the URL path (for example `/2026/10/28/`). Use it only when it agrees with the page, or with the user's confirmation.
 
 **Never invent or guess a headline, date, quote or fact.**
+
+### The publication date must come from the article
+
+The `date` field is the date the outlet published the article, and it must be read **from the article's own page**. Accepted places, all on the article's page at the outlet's address:
+- the visible dateline or byline date,
+- `datePublished` in the page's structured data,
+- the `article:published_time` meta tag.
+
+Rules:
+- If these disagree, use the **published** date, not "updated" or "modified". If two published dates still conflict, treat the date as not found.
+- Convert to `YYYY-MM-DD` in the outlet's local time. `2026-10-28T23:30:00-05:00` is `2026-10-28`; don't shift it to UTC.
+- **Never fill the date from anything else.** That means not from the URL path (`/2026/10/28/`), not from search results or a syndicated copy, not from the date the request was posted, and not from today's date. Those can be off by a day or more.
+- **If the date can't be read from the article, ask in `#news` with Message B and wait.** This applies when the page has no published date, when it is blocked or paywalled so the date isn't visible, or when the dates conflict. Don't post Message 1 or add anything until the requester gives a date. Then use their date, show it in Message 1 as "date provided by you", and record it in the commit message as `(from user)`.
 
 **Recovery when you can't get the information.** Try these in order, and stop once you have a reliable headline, date and enough content to summarize:
 
 | Situation | What to do |
 |---|---|
 | Timeout, 5xx error, connection reset | Wait 30 seconds and retry, at most 3 attempts in total. |
-| 403, bot check or CAPTCHA | Don't try to get around it. Use any meta tags or structured data that came back. Otherwise search the web for the exact URL or headline (outlet section pages, RSS feed, search snippets). |
-| Paywall | The headline, date and meta description are usually readable; summarize from those only. Look for a free syndicated copy (Yahoo News, MSN, AP) and, if found, add it as `alt_url`. Never copy paywalled text. |
-| No date, or dates disagree | Use `datePublished` or `article:published_time`, and prefer the publication date over the update date. If there is still no date, send **Message B**. |
+| 403, bot check or CAPTCHA | Don't try to get around it. Use any meta tags or structured data that came back. Otherwise search the web for the exact URL or headline (outlet section pages, RSS feed, search snippets) to confirm the headline. A date seen only in search results doesn't count: ask with **Message B**. |
+| Paywall | The headline, published date and meta description are usually still readable on the article page; summarize from those only. If the date isn't readable, send **Message B**. Look for a free syndicated copy (Yahoo News, MSN, AP) and, if found, add it as `alt_url`. Never copy paywalled text. |
+| No published date on the article, or dates conflict | Follow "The publication date must come from the article" above: send **Message B** and wait. Never use the URL, search results or today's date instead. |
 | Headline only, nothing to summarize | Send **Message C**. |
 | 404 or page removed | Search for the headline. If you find it at a new address, use that address and mention the change in Message 1. Otherwise send **Message A** and stop. |
 | Not about D65 | The page covers Evanston/Skokie District 65: school closures, budget, boundaries, childcare and early-childhood programs, the board, the superintendent search, and community responses. If the article is clearly about something else, send **Message E**. |
@@ -265,7 +277,7 @@ Adds one article to the In the news page (data/news.json).
 
 URL: <clean url>
 Source: <source>
-Published: <YYYY-MM-DD> (from <page dateline | datePublished | meta tag | user>)
+Published: <YYYY-MM-DD> (from <article dateline | article datePublished | article:published_time | user>)
 Spanish title and summary: included | not included (<reason>)
 Free copy (alt_url): <url> | none
 Information from: <article page | meta tags only (paywall) | search listing | user-provided: <fields>>
@@ -341,7 +353,7 @@ Post every message directly in `#news`, never as a thread reply, and start it by
 > I couldn't open that link ([reason: page not found / blocked / no URL in your message]). I also searched for the article and didn't find it. Could you send me the headline and the date it was published, or another link to the same story?
 
 **B. No publication date**
-> I found "[headline]" ([source]), but the page doesn't say when it was published. What date should I list it under? (If you're not sure, I can use [date from the URL / the date you sent it]; just say that's OK.)
+> I found "[headline]" ([source]), but I couldn't read the publication date from the article ([reason: the page doesn't show one / it's behind a paywall / it shows two different dates: … and …]). What date was it published? I'll add it once you tell me.
 
 **C. Not enough to summarize**
 > I could read the headline ("[headline]", [source], [date]) but not the article, so I can't write a fair summary. Should I:
@@ -390,7 +402,7 @@ Post every message directly in `#news`, never as a thread reply, and start it by
 - [ ] Request came from `#news`
 - [ ] Fresh `git pull`; `check` passes before starting
 - [ ] Clean canonical URL; `find` says NOT FOUND
-- [ ] Headline word for word; publication date verified or given by the user
+- [ ] Headline word for word; publication date read from the article page (or, if impossible, asked for in #news with Message B and given by the requester)
 - [ ] Summary: 1–2 sentences, own words, factual; Spanish title and summary faithful
 - [ ] Message 1 sent with full title and summary (EN + ES); explicit yes received in `#news`
 - [ ] Added with `news_tool.py add`; `check` passes; only `data/news.json` changed
