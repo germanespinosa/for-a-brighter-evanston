@@ -90,9 +90,9 @@ Rules:
 | Repository | `germanespinosa/for-a-brighter-evanston`, branch `main` |
 | File | `data/news.json`: an object with `_readme` and an `articles` list |
 | Helper script | `scripts/news_tool.py` (Python 3, standard library only). Commands: `check`, `find`, `add`, `search`, `remove`. |
-| Live English page | https://germanespinosa.github.io/for-a-brighter-evanston/home/in-the-news/ |
-| Live Spanish page | https://germanespinosa.github.io/for-a-brighter-evanston/es/noticias/ |
-| Live data file | https://germanespinosa.github.io/for-a-brighter-evanston/data/news.json |
+| Live English page | https://forabrighterevanston.org/home/in-the-news/ |
+| Live Spanish page | https://forabrighterevanston.org/es/noticias/ |
+| Live data file | https://forabrighterevanston.org/data/news.json |
 | Publishing | Every commit pushed to `main` goes live through GitHub Pages, usually in 1–2 minutes. Browsers may keep an older copy; the news file is cached for up to 10 minutes. |
 
 If the site later moves to `www.forabrighterevanston.org`, the live addresses change to that domain with the same paths. Use whichever address the `url` line in `_config.yml` names.
@@ -254,7 +254,7 @@ When the user answers your question (for example "the date is Nov 5"), use their
 7. Confirm it is live. Check about every 30 seconds, for up to 10 minutes, until the live file contains your URL. Keep the status updated at least once a minute while you wait:
 
    ```bash
-   curl -s "https://germanespinosa.github.io/for-a-brighter-evanston/data/news.json?nocache=$(date +%s)" | grep -F "<clean url>"
+   curl -s "https://forabrighterevanston.org/data/news.json?nocache=$(date +%s)" | grep -F "<clean url>"
    ```
 
 8. Send **Message 3** (final reply). If the URL doesn't appear in time, go to section 9.
@@ -302,7 +302,7 @@ When the user answers your question (for example "the date is Nov 5"), use their
 6. **Commit and push** (section 9 format), then check that the URL is gone from the live file, for up to 10 minutes, updating the status at least once a minute:
 
    ```bash
-   curl -s "https://germanespinosa.github.io/for-a-brighter-evanston/data/news.json?nocache=$(date +%s)" | grep -cF "<url>"    # expect 0
+   curl -s "https://forabrighterevanston.org/data/news.json?nocache=$(date +%s)" | grep -cF "<url>"    # expect 0
    ```
 
 7. Send **Message 4** (final reply).
@@ -454,8 +454,8 @@ Show only the lines reached so far, with ⏳ on the step in progress. For a remo
 
 **3. Article added**
 > @[requester] Done! Added to In the news: **[title]** ([source], [Mon D, YYYY]).
-> English: https://germanespinosa.github.io/for-a-brighter-evanston/home/in-the-news/
-> Spanish: https://germanespinosa.github.io/for-a-brighter-evanston/es/noticias/
+> English: https://forabrighterevanston.org/home/in-the-news/
+> Spanish: https://forabrighterevanston.org/es/noticias/
 > If you don't see it yet, refresh the page (Ctrl+Shift+R on a computer, or Cmd+Shift+R on a Mac; pull down to reload on a phone). It can take a few minutes to show up everywhere.
 
 **4. Article removed**

@@ -2,7 +2,7 @@
 
 Website for the For A Brighter Evanston campaign on District 65 school closures, rebuilt from the Google Sites version of forabrighterevanston.org as a static site that GitHub Pages builds with Jekyll.
 
-- Live (GitHub Pages): https://germanespinosa.github.io/for-a-brighter-evanston/
+- Live (GitHub Pages): https://forabrighterevanston.org/
 - Old Google Sites addresses are kept, so existing links keep working once the domain points here.
 
 ## Pages
