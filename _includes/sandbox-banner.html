@@ -5,6 +5,10 @@
 <div class="sandbox-banner" role="note">
   <div class="container sandbox-banner__inner">
     <p><strong>Preview</strong> of update “{{ site.sandbox_id }}”. This is not the live site. · <span lang="es">Vista previa: no es el sitio publicado.</span></p>
-    <a href="{{ site.live_url | default: '/' }}{{ page.url }}">See this page on the live site</a>
+    {% if page.lang == 'es' %}
+    <a href="{{ site.live_url | default: '/' }}">Visitar el sitio publicado</a>
+    {% else %}
+    <a href="{{ site.live_url | default: '/' }}">Visit the live website</a>
+    {% endif %}
   </div>
 </div>

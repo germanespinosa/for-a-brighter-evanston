@@ -48,6 +48,36 @@
   </div>
 </section>
 
+{% if page.lang == 'en' %}
+<section class="band band--tint" id="voter-poll-fundraiser" aria-labelledby="poll-title">
+  <div class="container cta-band">
+    <div class="cta-band__copy">
+      <p class="eyebrow">Help give our community a voice</p>
+      <h2 class="section-title" id="poll-title">Let's find out what Evanston voters actually think.</h2>
+      <p>Help For a Brighter Evanston cover the $11,000 cost of a professional poll of about 400 District 65 voters. Results are expected before the Nov 9 board meeting.</p>
+    </div>
+    <div class="cta-band__actions">
+      <a class="btn btn--navy btn--lg btn--block" href="https://www.gofundme.com/f/help-give-our-community-a-voice-in-d65s-future">Donate on GoFundMe <span aria-hidden="true">→</span></a>
+      <a class="btn btn--outline-navy btn--block" href="{{ '/home/voter-poll/' | relative_url }}">Read about the poll</a>
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="band band--tint" id="voter-poll-fundraiser" aria-labelledby="poll-title">
+  <div class="container cta-band">
+    <div class="cta-band__copy">
+      <p class="eyebrow">Ayudemos a que nuestra comunidad tenga voz</p>
+      <h2 class="section-title" id="poll-title">Conozcamos lo que realmente piensan los votantes de Evanston.</h2>
+      <p>Ayude a For a Brighter Evanston a cubrir los $11,000 que cuesta una encuesta profesional a unos 400 votantes del Distrito 65. Los resultados se esperan antes de la reunión de la junta del 9 de noviembre.</p>
+    </div>
+    <div class="cta-band__actions">
+      <a class="btn btn--navy btn--lg btn--block" href="https://www.gofundme.com/f/help-give-our-community-a-voice-in-d65s-future">Done en GoFundMe <span aria-hidden="true">→</span></a>
+      <a class="btn btn--outline-navy btn--block" href="{{ '/es/encuesta/' | relative_url }}">Conozca la encuesta</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <section class="band band--gold" aria-labelledby="wtb-title">
   <div class="container cta-band">
     <div class="cta-band__copy">
