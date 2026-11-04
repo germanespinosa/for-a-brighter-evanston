@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title }}{% unless page.is_home %} · For A Brighter Evanston{% endunless %}</title>
+  <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% unless page.is_home %} · For A Brighter Evanston{% endunless %}{% endif %}</title>
   <meta name="description" content="{{ page.description | strip_html | escape }}">
   <meta name="theme-color" content="#13224F">
   {%- if site.sandbox_id %}
@@ -28,8 +28,38 @@
   <meta property="og:locale" content="{% if page.lang == 'es' %}es_US{% else %}en_US{% endif %}">
   <meta name="twitter:card" content="summary_large_image">
 
+  <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="48x48">
+  <link rel="icon" href="{{ '/assets/img/icon-192.png' | relative_url }}" type="image/png" sizes="192x192">
   <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
   <link rel="apple-touch-icon" href="{{ '/assets/img/apple-touch-icon.png' | relative_url }}">
+  {%- if page.is_home %}
+  {%- comment -%} Tells Google the site's name and logo (shown in search results) {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "{{ '/' | absolute_url }}#website",
+        "name": "For A Brighter Evanston",
+        "alternateName": ["For a Brighter Evanston", "forabrighterevanston.org"],
+        "url": "{{ '/' | absolute_url }}",
+        "inLanguage": ["en", "es"],
+        "publisher": { "@id": "{{ '/' | absolute_url }}#organization" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "{{ '/' | absolute_url }}#organization",
+        "name": "For A Brighter Evanston",
+        "url": "{{ '/' | absolute_url }}",
+        "logo": "{{ '/assets/img/logo-512.png' | absolute_url }}",
+        "email": "{{ site.links.email }}",
+        "sameAs": ["{{ site.links.instagram }}"]
+      }
+    ]
+  }
+  </script>
+  {%- endif %}
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
