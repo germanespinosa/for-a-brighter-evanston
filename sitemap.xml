@@ -2,8 +2,14 @@
 layout: null
 ---
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 {%- for p in site.pages %}{% if p.lang and p.url != '/404.html' %}
-  <url><loc>{{ p.url | absolute_url }}</loc></url>
+  <url>
+    <loc>{{ p.url | absolute_url }}</loc>
+    {%- if p.alt_url %}
+    <xhtml:link rel="alternate" hreflang="{{ p.lang }}" href="{{ p.url | absolute_url }}"/>
+    <xhtml:link rel="alternate" hreflang="{% if p.lang == 'en' %}es{% else %}en{% endif %}" href="{{ p.alt_url | absolute_url }}"/>
+    {%- endif %}
+  </url>
 {%- endif %}{% endfor %}
 </urlset>
