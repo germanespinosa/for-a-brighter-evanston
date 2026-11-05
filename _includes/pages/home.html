@@ -21,11 +21,16 @@
       <h1 class="hero__title" id="hero-title">{{ h.h1 }}<br> <mark class="mark">{{ h.h1_mark }}</mark></h1>
       <p class="hero__lead">{{ h.lead }}</p>
 
+      {% if page.lang == 'en' %}
+      <p class="hero__lead"><a class="btn btn--gold btn--lg" id="email-board-primary" href="{{ t.urls.write | relative_url }}">Email the board <span aria-hidden="true">→</span></a></p>
+      {% endif %}
+
       <div class="sig-count" data-signature-count data-src="{{ site.links.signature_count }}" hidden>
         <p class="sig-count__label" id="sig-label">{{ h.sig_label }}</p>
         <p class="sig-count__number" aria-describedby="sig-label" aria-live="polite">0</p>
       </div>
 
+      {% if page.lang == 'en' %}<div class="hero__lead">{% endif %}
       <div class="hero__actions">
         <span class="btn-group">
           <a class="btn btn--gold btn--lg" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.sign_btn }} <span aria-hidden="true">→</span></a>
@@ -33,6 +38,10 @@
         </span>
         <button type="button" class="btn btn--outline-light btn--lg" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
       </div>
+      {% if page.lang == 'en' %}
+      </div>
+      <p class="source-note dialog__fine" id="hero-sources"><span class="text-gold">Sources: <a href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/"><span class="text-gold">RoundTable: revised error of $27.35M over five years [1]</span></a> · <a href="https://www.district65.net/about/budget-finance/financial-sustainability-plan"><span class="text-gold">District 65: proposed school, Head Start and staffing reductions [4]</span></a>.</span></p>
+      {% endif %}
     </div>
 
     {%- if ev.show %}

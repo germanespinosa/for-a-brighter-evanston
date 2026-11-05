@@ -1,41 +1,23 @@
-# Home page hero slideshow. Photos live in assets/img/hero/.
-# `position` is the CSS background-position (which part of the photo stays in view).
-# The first photo shows immediately; the rest rotate every 12 seconds.
-- file: 00.jpg
-  position: "center 40%"
-- file: 01.jpg
-  position: "center 30%"
-- file: 02.jpg
-  position: "68% center"
-- file: 03.jpg
-  position: "62% center"
-- file: 04.jpg
-  position: "70% 40%"
-- file: 05.jpg
-  position: "center 40%"
-- file: 06.jpg
-  position: "center 40%"
-- file: 07.jpg
-  position: "center 40%"
-- file: 08.jpg
-  position: "center 40%"
-- file: 09.jpg
-  position: "center 40%"
-- file: 10.jpg
-  position: "center 40%"
-- file: 11.jpg
-  position: "center 40%"
-- file: 12.jpg
-  position: "center 40%"
-- file: 13.jpg
-  position: "center 40%"
-- file: 14.jpg
-  position: "center 40%"
-- file: 15.jpg
-  position: "center 40%"
-- file: 16.jpg
-  position: "center 40%"
-- file: 17.jpg
-  position: "center 40%"
-- file: 18.jpg
-  position: "center 40%"
+# Home page hero slideshow. Photos by Joerg Metzner, supplied in #website.
+# Web-optimized copies of the ten uploaded photos; originals retained privately.
+# The first photo shows immediately; remaining photos rotate every 12 seconds.
+- file: rally-01.jpg
+  position: "58% 35%"
+- file: rally-09.jpg
+  position: "49% 58%"
+- file: rally-06.jpg
+  position: "53% 52%"
+- file: rally-04.jpg
+  position: "48% 43%"
+- file: rally-03.jpg
+  position: "62% 48%"
+- file: rally-05.jpg
+  position: "62% 62%"
+- file: rally-07.jpg
+  position: "60% 58%"
+- file: rally-10.jpg
+  position: "50% 75%"
+- file: rally-02.jpg
+  position: "62% 42%"
+- file: rally-08.jpg
+  position: "46% 48%"
