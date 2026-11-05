@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-04",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/04/letter-isbe-needs-to-look-into-district-65s-financial-management/",
+      "title": "Letter: ISBE needs to look into District 65’s financial management",
+      "summary": "In a letter to the editor, Joshua Stern says he and Christopher Grohman asked the Illinois State Board of Education to review District 65’s administrative spending reports and the timeliness of its financial reporting, raising questions about compliance with state requirements.",
+      "title_es": "Carta: La ISBE debe examinar la gestión financiera del Distrito 65",
+      "summary_es": "En una carta al editor, Joshua Stern afirma que él y Christopher Grohman pidieron a la Junta de Educación del Estado de Illinois que revisara los informes de gastos administrativos del Distrito 65 y la puntualidad de sus informes financieros, planteando dudas sobre el cumplimiento de los requisitos estatales."
+    },
+    {
       "date": "2026-11-02",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
