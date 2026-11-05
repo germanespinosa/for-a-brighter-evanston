@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-05",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/",
+      "title": "District 65 now says financial projection off by $27.35 million, school closure savings less than previously forecasted",
+      "summary": "District 65 revised its five-year projection error to $27.35 million and lowered projected savings from closing Dewey and Lincolnwood from $2.9 million to $2.3 million. The RoundTable also reports omitted Foster lease payments and parents’ calls to delay the vote.",
+      "title_es": "El Distrito 65 ahora reconoce un error de $27.35 millones en su proyección financiera y menores ahorros por cierres escolares de lo previsto",
+      "summary_es": "El Distrito 65 revisó a $27.35 millones el error en su proyección a cinco años y redujo los ahorros previstos por cerrar Dewey y Lincolnwood de $2.9 millones a $2.3 millones. El RoundTable también informa sobre pagos de arrendamiento de Foster omitidos y pedidos de padres para aplazar la votación."
+    },
+    {
       "date": "2026-11-04",
       "source": "Evanston Now",
       "site": "Evanston Now",
