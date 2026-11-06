@@ -413,7 +413,7 @@ def main():
         for k in ("title", "description"):
             if not isinstance(fm.get(k), str) or not fm[k].strip():
                 blocking.append(f"{label}: {k} must be a nonempty string.")
-        allowed_fm = {"layout", "lang", "title", "description", "alt_url", "share_image", "nav", "css", "scripts", "body_class", "permalink", "is_home"}
+        allowed_fm = {"layout", "lang", "title", "description", "alt_url", "share_title", "share_description", "share_image", "nav", "css", "scripts", "body_class", "permalink", "is_home"}
         extra = set(fm) - allowed_fm
         if extra:
             warnings.append(f"{label}: unusual settings {sorted(extra)}.")
@@ -527,9 +527,10 @@ def main():
             parser = LinkParser()
             parser.feed(html)
             if st == "A":
-                expected = {"og:title": fm.get("title"),
-                            "og:description": re.sub(r"<[^>]*>", "", fm.get("description", ""))
-                            if isinstance(fm.get("description"), str) else None,
+                sharing_description = fm.get("share_description") or fm.get("description", "")
+                expected = {"og:title": fm.get("share_title") or fm.get("title"),
+                            "og:description": re.sub(r"<[^>]*>", "", sharing_description)
+                            if isinstance(sharing_description, str) else None,
                             "twitter:card": "summary_large_image"}
                 image = fm.get("share_image")
                 expected["og:image"] = urljoin(base_url, image.lstrip("/")) if isinstance(image, str) else None

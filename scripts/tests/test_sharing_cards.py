@@ -192,6 +192,23 @@ class SharingCardTests(unittest.TestCase):
             for key, value in metadata.items() if value is not None
         ) + "</head><body>Topic</body></html>").encode()
 
+    def test_sharing_overrides_do_not_require_changing_page_copy(self):
+        self.image()
+        self.page(share_image="/assets/img/topic.png", share_title="Sharing headline",
+                  share_description="Sharing description")
+        with self.server() as (base, routes, requests):
+            routes["/sandbox/check/topic/"] = (200, "text/html", self.rendered_card(
+                base, **{"og:title": "Sharing headline", "og:description": "Sharing description"}))
+            routes["/sandbox/check/assets/img/topic.png"] = (
+                200, "image/png", (self.root / "assets/img/topic.png").read_bytes())
+            code, report = self.check("--url", base)
+        self.assertEqual(code, 0, report)
+        self.assertFalse(any("unusual settings" in item for item in report["warnings"]), report)
+        source = (self.root / "topic/index.html").read_text()
+        self.assertIn('title: "Our topic"', source)
+        self.assertIn('description: "Learn about our topic."', source)
+        self.assertTrue(source.endswith("<p>Topic content</p>\n"))
+
     def test_deployed_new_page_missing_sharing_metadata_is_blocked(self):
         self.image()
         self.page(share_image="/assets/img/topic.png")

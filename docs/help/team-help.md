@@ -109,6 +109,8 @@ Fabian brings the sandbox up to date, checks permitted changes, links, images an
 
 For a new page, review its sharing image, title and description too. These are what the page supplies when someone shares its link. Fabian checks them before and after publication; an app may still show an older cached preview.[2]
 
+Sharing cards can also be updated for existing pages without changing their on-page headlines or text. Fabian should use the approved designs and wording, preserve the rest of the site, and check every affected language version.[2]
+
 ## Cast your vote
 
 For a reliable mention, type @fabian and select Fabian from Slack's suggestions, then add your vote and send it as a new channel message. If acknowledgment is missing, ask Fabian to check the original vote and tally rather than repeatedly sending yes. Seeing a message, counting a vote and publishing the site are different steps; Fabian should say clearly which has happened.
