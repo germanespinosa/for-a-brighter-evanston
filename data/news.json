@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-06",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/06/letter-what-future-superintendent-should-know/",
+      "title": "Letter: What future superintendent should know",
+      "summary": "In a letter to District 65’s future superintendent, members of four parent-led groups urge reconsideration of school closures and boundary changes. They call for an independent financial and operational audit, transparent collaboration and a long-term vision developed with the community.",
+      "title_es": "Carta: Lo que debería saber el futuro superintendente",
+      "summary_es": "En una carta al futuro superintendente del Distrito 65, integrantes de cuatro grupos liderados por padres piden reconsiderar los cierres escolares y los cambios de límites. Solicitan una auditoría financiera y operativa independiente, colaboración transparente y una visión a largo plazo desarrollada con la comunidad."
+    },
+    {
       "date": "2026-11-05",
       "source": "FOIA Gras",
       "site": "FOIA Gras",
