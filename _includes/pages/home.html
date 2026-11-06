@@ -99,6 +99,32 @@
   </div>
 </section>
 
+{% if page.lang == 'en' %}
+<div id="financial-update">
+<section class="band band--white" aria-labelledby="error-title">
+  <div class="container">
+    <p class="eyebrow">The numbers changed. Again.</p>
+    <h2 class="section-title" id="error-title">D65 parents caught a $27 million mistake.</h2>
+    <div class="hero__actions" id="financial-stats">
+      <div class="feature__copy">
+        <h3 class="subhead">$17M → $27.35M</h3>
+        <p>The error D65 first confirmed, then the full five-year figure. Building costs were counted twice.<sup><a href="#financial-source-1" aria-label="Source: Evanston RoundTable, November 5, 2026">[1]</a></sup></p>
+      </div>
+      <div class="feature__copy">
+        <h3 class="subhead">$2.3M a year</h3>
+        <p>Revised savings from closing both Dewey and Lincolnwood, down from $2.9M in October. About $2M once added busing is counted.<sup><a href="#financial-source-1" aria-label="Source: Evanston RoundTable, November 5, 2026">[1]</a></sup></p>
+      </div>
+      <div class="feature__copy">
+        <h3 class="subhead">3 errors in 3 weeks</h3>
+        <p>Building costs counted twice. A required $3.2M yearly payment for Foster left out of the budget. Closure savings overstated. All flagged by parents.<sup><a href="#financial-source-1" aria-label="Source: Evanston RoundTable, November 5, 2026">[1]</a></sup></p>
+      </div>
+    </div>
+    <p id="financial-source-1"><a class="btn btn--navy" href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/">Read the Evanston RoundTable’s reporting on the $27.35M finding <span aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+</div>
+{% else %}
 <section class="band band--white" aria-labelledby="error-title">
   <div class="container">
     <p class="eyebrow">{{ h.error.eyebrow }}</p>
@@ -117,6 +143,7 @@
     </div>
   </div>
 </section>
+{% endif %}
 
 <section class="band band--white band--rule" aria-labelledby="nh-title">
   <div class="container feature">
