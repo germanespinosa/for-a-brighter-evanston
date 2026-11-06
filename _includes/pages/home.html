@@ -46,12 +46,18 @@
 
     {%- if ev.show %}
     <aside class="event-card" aria-labelledby="event-title">
-      <p class="eyebrow">{{ ev[page.lang].eyebrow }}</p>
-      <h2 class="event-card__title" id="event-title">{{ ev[page.lang].title }}</h2>
+      <p class="eyebrow">{% if page.lang == 'en' %}Stand with our teachers{% else %}Apoyemos a nuestros docentes{% endif %}</p>
+      <h2 class="event-card__title" id="event-title">{% if page.lang == 'en' %}Rally alongside DEC{% else %}Concentración junto a DEC{% endif %}</h2>
       <p class="event-card__date">{{ ev[page.lang].date_html }}</p>
-      <p class="event-card__time"><time datetime="{{ ev.start_iso }}">{{ ev[page.lang].time }}</time></p>
+      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">{% if page.lang == 'en' %}4 PM{% else %}4 p. m.{% endif %}</time></p>
+      <p id="rally-invitation">{% if page.lang == 'en' %}Join us alongside DEC, the teachers’ union, to support our teachers.{% else %}Acompáñenos junto a DEC, el sindicato de docentes, para apoyar a nuestros maestros.{% endif %}</p>
+      <p class="event-card__time" id="board-meeting-time">{% if page.lang == 'en' %}Board meeting:{% else %}Reunión de la Junta:{% endif %} <time datetime="{{ ev.start_iso }}">{{ ev[page.lang].time }}</time></p>
       <p class="event-card__place"><span aria-hidden="true">📍</span> {{ ev.location }}</p>
-      {% include calendar-menu.html %}
+      {% if page.lang == 'en' %}
+      {% include calendar-menu.html label="Add board meeting to calendar" %}
+      {% else %}
+      {% include calendar-menu.html label="Agregar reunión al calendario" %}
+      {% endif %}
     </aside>
     {%- endif %}
   </div>

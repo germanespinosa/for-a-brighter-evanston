@@ -7,7 +7,7 @@
 {%- assign start_o = ev.start_iso | url_encode -%}
 {%- assign end_o = ev.end_iso | url_encode -%}
 <details class="cal-menu" data-cal-menu>
-  <summary class="btn btn--navy btn--block">{{ t.calendar.add }} <span aria-hidden="true">▾</span></summary>
+  <summary class="btn btn--navy btn--block">{{ include.label | default: t.calendar.add }} <span aria-hidden="true">▾</span></summary>
   <ul class="cal-menu__list">
     <li><a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text={{ title_q }}&amp;dates={{ ev.start_local }}/{{ ev.end_local }}&amp;ctz=America/Chicago&amp;location={{ loc_q }}" target="_blank" rel="noopener">{{ t.calendar.google }}</a></li>
     <li><a href="{{ '/d65-board-meeting.ics' | relative_url }}" download="d65-board-meeting.ics">{{ t.calendar.apple }}</a></li>
