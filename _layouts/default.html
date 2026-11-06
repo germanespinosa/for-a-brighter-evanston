@@ -1,5 +1,7 @@
 {%- assign t = site.data.i18n[page.lang] -%}
 {%- assign share_image = page.share_image | default: t.home.share_image -%}
+{%- assign share_title = page.share_title | default: page.title -%}
+{%- assign share_description = page.share_description | default: page.description -%}
 <!doctype html>
 <html lang="{{ page.lang }}">
 <head>
@@ -19,14 +21,17 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="For A Brighter Evanston">
-  <meta property="og:title" content="{{ page.title | escape }}">
-  <meta property="og:description" content="{{ page.description | strip_html | escape }}">
+  <meta property="og:title" content="{{ share_title | escape }}">
+  <meta property="og:description" content="{{ share_description | strip_html | escape }}">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
   <meta property="og:image" content="{{ share_image | absolute_url }}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="{% if page.lang == 'es' %}es_US{% else %}en_US{% endif %}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ share_title | escape }}">
+  <meta name="twitter:description" content="{{ share_description | strip_html | escape }}">
+  <meta name="twitter:image" content="{{ share_image | absolute_url }}">
 
   <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="48x48">
   <link rel="icon" href="{{ '/assets/img/icon-192.png' | relative_url }}" type="image/png" sizes="192x192">
