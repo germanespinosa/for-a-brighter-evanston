@@ -14,6 +14,7 @@ News articles are not part of this job. They are handled only in `#news` (see `d
 ## 1. Ground rules
 
 - **Refresh the procedure before acting.** Before each website request, new vote, vote message or resumed session, read this manual from the current `main` checkout, especially sections 8–9. Current repository rules supersede old conversational instructions and cached skill summaries. Do not reintroduce a reaction-access prerequisite: website votes are messages.
+- **Keep the process documented.** Whenever German approves a process change, update this manual, the relevant message patterns/checklists and the team help Markdown/PDF in the same change. Update enforcement and tests when the behavior changes; do not leave the rule only in chat or a local skill. Use the normal authorization requirements for GitHub writes and report saved settings, tested behavior and live activation separately.
 - **Fresh-vote requests are actionable.** If someone asks to start a vote again and the old vote is cancelled or expired, perform section 8's review and open a new W14 message with a new record and deadline. If a vote is still active, resolve its cancellation first; never carry over old votes or ask for a manual reaction tally.
 
 - **Only `#website`.** Act only on update requests, answers, confirmations and votes posted in `#website`. Anywhere else, reply with **Message W0** and do nothing.
@@ -132,7 +133,6 @@ Triggered by a message such as "I want to update the site", "let's add a page ab
 
 Explain this with **Message W11** and suggest asking German:
 
-
 - styles and scripts: `assets/css/`, `assets/js/`. This includes the Write to the Board letter text in `letter-content.js`,
 - site settings and build: `_config.yml`, `CNAME`, `.github/`, `Gemfile`, `robots.txt`, `sitemap.xml`, `favicon.svg`, `404.html`, the `.ics` file,
 - the news list `data/news.json` (that's `#news`),
@@ -157,6 +157,7 @@ lang: en                       # or: es
 alt_url: /es/preguntas/        # the other-language version, if there is one
 title: Frequently asked questions
 description: One sentence for search results and link previews.
+share_image: /assets/img/share-faq-en.jpg  # create this page-specific card with the page
 ---
 <section class="page-hero">
   <div class="container">
@@ -193,6 +194,18 @@ Rules:
   - name files in lowercase with hyphens, for example `assets/img/rally-oct-26.jpg`.
 - **PDFs** go in `assets/files/`, at most 5 MB, linked as `{{ '/assets/files/name.pdf' | relative_url }}`.
 - **Spanish is not required**, but encouraged. When someone adds or changes English content without Spanish, offer to translate it: "Want me to add the Spanish version too?" If you create both, set `alt_url` on each pointing to the other. That makes the English/Español button switch between them.
+
+### Every new page gets its own sharing card
+
+Creating a page includes creating its sharing card—not leaving that as a later request. The card is the image, title and short description supplied when someone shares that page's specific URL.
+
+1. **Create a page-specific image alongside the page.** Use the site's visual style and imagery relevant to that page; do not inherit the generic homepage/New homes image for an unrelated page. Add the new JPG, PNG or WebP asset under `assets/img/` in the same sandbox update. Aim for **1200 × 630 pixels**, clear phone-readable text, useful safe margins and about 500 KB or less; respect the existing media-size limits. Do not put confidential information or unsupported claims in the artwork.
+2. **Set explicit, page-specific metadata.** The page's front matter must contain a nonempty `title`, `description` and `share_image`. `share_image` is a root-relative path such as `/assets/img/share-faq-en.jpg`, not a remote image or the default home card. These fields must describe that page accurately. The shared layout uses them for the Open Graph title, description and image; `seo_title` alone does not set the card title. Ensure any new layout renders the same sharing metadata and large-image card declaration.
+3. **Localize when both page versions exist.** Give English and Spanish pages their own translated titles and descriptions. If artwork contains language-specific text, create a matching image for each language. A language-neutral image may serve both versions of the same page; it must still be specific to that page rather than a site-wide fallback.
+4. **Review the card with the page.** Include an image preview/link and its intended title/description in the sandbox review for each new page/language. Check the image at useful size and on a phone, not just whether a tag exists. Keep the channel explanation short and reader-focused; retain raw checks internally. The normal team vote covers the page and its card together.
+5. **Verify the actual page URL.** Before voting, inspect each deployed new page's rendered sharing metadata, confirm it matches the intended title, description and sandbox image, and fetch that image successfully. Missing or incorrect metadata and missing image assets block readiness. After publication, verify the live URL supplies the same approved card with a live image URL, not a sandbox URL. A successful build or local source check alone is insufficient.
+
+This is a rule for **new pages**. Existing pages are not automatically redesigned or blocked merely because they still use the shared card. Updating their cards is a separate request. Third-party apps may cache earlier previews; correctly deployed metadata cannot guarantee that every app immediately refreshes an already shared link.
 
 ---
 
@@ -288,6 +301,8 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    - **Spanish:** which new or changed content has a Spanish version, and which doesn't.
    - **Visual check:** desktop and phone. Attach 1–3 key screenshots if the platform allows.
    - **Your opinion:** ready to publish, or what you'd change first.
+
+   For every new page, also show the sharing-card image/link and intended title/description, including language variants. Confirm the rendered card matches the reviewed version. Do not start voting if a required new-page card is missing or incorrect.
 
    If the screenshot tool isn't available, say "I couldn't do the visual check" and list what people should look at themselves.
 7. **If there are blocking problems, don't start a vote.** Offer to fix them. Fixes are normal changes (section 6), then you run a new review.
@@ -395,6 +410,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    - If `news untouched` doesn't print: `git reset --hard origin/main`, then **Message W15**. Never publish a change to the news list from `#website`.
    - If the push is rejected because main changed: `git reset --hard origin/main` and repeat this step. That's the same voted version merged onto the newer main, so it doesn't need a new vote.
 4. Wait for the build. Check that each changed page loads on the live site with the new content, using `?nocache=…` URLs.
+   For new pages, also verify the live sharing-card title, description and image against the approved preview, and fetch the live image. Do not report publication verified based only on visible body content or HTTP status.
 5. Remove the sandbox: `git push origin --delete sandbox/<id>`.
 6. Post **Message W20**: live links, who approved, and the refresh reminder. Switch the reaction to ✅.
 
@@ -526,6 +542,7 @@ Post every message directly in `#website`, never in a thread, starting with an a
 > [**Suggestions:** only useful suggestions, otherwise omit.]
 > **Spanish:** [e.g. "New FAQ page has both versions. The home page headline changed in English only."]
 > **Visual check:** [desktop: … / phone: … / "looks consistent with the rest of the site"]
+> [**Sharing preview:** for each new page, image link + intended title and description, with language variants. Omit for updates without new pages unless the cards changed.]
 > **My opinion:** [e.g. "Ready to publish. I'd consider adding the Spanish headline first." / "Not ready: …"]
 > [If ready: "Starting the vote now." / If not: "Want me to fix these?"]
 
@@ -597,12 +614,14 @@ Don't make the summary only a list of file names.
 - [ ] Only allowed files changed; `sandbox_check.py` BLOCKING (0)
 - [ ] Links use `relative_url`; one `<h1>`; images have alt text and a sensible size
 - [ ] Spanish offered when English content was added or changed
+- [ ] Each new page has an explicit page-specific title/description and a new sharing-card asset; text-bearing card artwork localized when needed
 - [ ] Descriptive commit; pushed to `sandbox/<id>`, never to `main`
 - [ ] Sandbox rebuilt; changed pages checked; W5 posted
 
 **Publish**
 - [ ] Sandbox merged with the latest `origin/main` and rebuilt
 - [ ] `sandbox_check.py --url` and `sandbox_screens.py` run; screenshots reviewed
+- [ ] Every new page's sharing-card image and copy included in the review; rendered metadata and image URL verified in the sandbox
 - [ ] W13 review posted with Spanish status, visual check and opinion
 - [ ] No blocking problems → W14 vote posted with the sandbox link, a link to every changed page and a plain-language summary; voted commit recorded
 - [ ] Vote record created at `~/.fabian/website-votes/…` (and scheduled tasks, if available)
@@ -610,3 +629,4 @@ Don't make the summary only a list of file names.
 - [ ] 2+ yes, 0 no → publish immediately
 - [ ] Sandbox unchanged since the vote; merged `--no-ff`; news untouched; pushed
 - [ ] Live pages checked; sandbox branch deleted; W20 posted
+- [ ] New-page sharing cards verified on their exact live URLs against the approved versions

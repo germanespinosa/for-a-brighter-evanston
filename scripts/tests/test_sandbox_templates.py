@@ -1,4 +1,5 @@
 """Real CLI policy checks in disposable Git repositories, never this checkout."""
+import base64
 import json
 from pathlib import Path
 import shutil
@@ -36,6 +37,14 @@ class SandboxTemplateTests(unittest.TestCase):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
 
+    def share_card(self, name):
+        path = f"assets/img/{name}.png"
+        target = self.root / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(base64.b64decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII="))
+        return "/" + path
+
     def check(self):
         self.git("add", "-A")
         self.git("commit", "-qm", "sandbox change")
@@ -68,7 +77,7 @@ class SandboxTemplateTests(unittest.TestCase):
         self.make_baseline()
         self.write("_layouts/article.liquid", "{% include header.html %}<article>{{ content }}</article>")
         self.write("about.html", page.replace("layout: default", "layout: article"))
-        self.write("new.html", page.replace("layout: default", "layout: article"))
+        self.write("new.html", page.replace("layout: default", "layout: article\nshare_image: " + self.share_card("new")))
         code, report = self.check()
         self.assertEqual(code, 0, report)
         self.assertTrue(any("about.html → /about/" in item for item in report["changes"]))
@@ -234,8 +243,9 @@ layout: default
                        '<script src="/assets/js/site.js"></script>{{ content }}')
         self.make_baseline()
         for ext in ("html", "liquid", "md", "markdown"):
+            share_image = self.share_card(f"article-{ext}")
             self.write(f"article-{ext}.html", f"---\nlayout: article-{ext}\nlang: en\n"
-                       "title: Test\ndescription: Test\n---\n<p>Test</p>")
+                       f"share_image: {share_image}\ntitle: Test\ndescription: Test\n---\n<p>Test</p>")
         code, report = self.check()
         self.assertEqual(code, 0, report)
 

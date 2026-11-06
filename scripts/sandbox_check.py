@@ -115,8 +115,59 @@ def parse_front_matter(fm):
         for line in fm.splitlines():
             m = re.match(r"^([A-Za-z_]+):\s*(.*)$", line)
             if m:
-                data[m.group(1)] = m.group(2).strip().strip('"').strip("'")
+                value = m.group(2).strip()
+                quoted = re.fullmatch(r'''('(?:[^']|'')*'|"(?:[^"\\]|\\.)*")(?:\s+#.*)?''', value)
+                if quoted:
+                    value = quoted.group(1)
+                try:
+                    value = json.loads(value)
+                except (ValueError, TypeError):
+                    if value.startswith("'") and value.endswith("'"):
+                        value = value[1:-1].replace("''", "'")
+                    else:
+                        value = re.split(r"\s+#", value, maxsplit=1)[0].strip()
+                        # Do not turn YAML booleans, collections or complex
+                        # values into apparently valid metadata strings.
+                        if (not value or value.lower() in {"null", "~", "true", "false", "yes", "no", "on", "off"}
+                                or value.startswith(('"', "'", "[", "{", "|", ">", "&", "*", "!"))
+                                or re.fullmatch(r"[-+]?\d[\d.eExXa-fA-F_:+-]*", value)):
+                            value = None
+                data[m.group(1)] = value
     return data if isinstance(data, dict) else {}
+
+
+def generic_share_images(base):
+    """Reject both previous and current configured home fallbacks."""
+    images = set()
+    for lang in ("en", "es"):
+        path = f"_data/i18n/{lang}.yml"
+        current = ROOT / path
+        for text in (git_show(base, path), current.read_text(encoding="utf-8") if current.is_file() else None):
+            if text:
+                # This also works without PyYAML; only the scalar is needed.
+                for value in re.findall(r"^\s*share_image:\s*(.+)$", text, re.M):
+                    image = parse_front_matter("share_image: " + value).get("share_image")
+                    if isinstance(image, str):
+                        images.add(image)
+    return images
+
+
+def share_image_problem(image, added_files, generic_images):
+    if not isinstance(image, str) or not image.strip():
+        return "must be a nonempty local image path for this page"
+    if (not re.fullmatch(r"/assets/img/[A-Za-z0-9_./-]+", image)
+            or any(part in ("", ".", "..") for part in image[1:].split("/"))
+            or Path(image).suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}):
+        return "must be a safe /assets/img/ JPG, JPEG, PNG or WebP path (no external URLs or traversal)"
+    if image in generic_images:
+        return "must be page-specific, not the generic home sharing card"
+    path = image[1:]
+    target = ROOT / path
+    if any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file():
+        return "must refer to a regular local image file, not a missing file, directory or symlink"
+    if path not in added_files or not git("ls-tree", "HEAD", "--", path).startswith(("100644 ", "100755 ")):
+        return "must refer to an image tracked and added with this update, not a pre-existing asset"
+    return None
 
 
 def key_paths(obj, prefix=""):
@@ -161,12 +212,26 @@ class LinkParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.links = []
+        self.metadata = {}
+        self.in_head = False
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == "head":
+            self.in_head = True
+        if tag == "meta" and self.in_head:
+            key = a.get("property") or a.get("name")
+            if key:
+                self.metadata.setdefault(key, []).append(a.get("content", ""))
         for attr in ("href", "src"):
             if a.get(attr) and tag in ("a", "img", "link", "script", "source"):
                 self.links.append((tag, a[attr]))
+
+    def handle_endtag(self, tag):
+        if tag == "head":
+            self.in_head = False
+
+    handle_startendtag = handle_starttag
 
 
 class TemplateSafetyParser(HTMLParser):
@@ -210,6 +275,18 @@ def fetch(url, method="GET"):
         return e.code, ""
     except Exception as e:  # network errors
         return 0, str(e)
+
+
+def fetch_sharing_image(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "fabian-sandbox-check"})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as response:
+            mime = response.headers.get_content_type()
+            return response.status, mime, bool(response.read(1))
+    except urllib.error.HTTPError as error:
+        return error.code, "", False
+    except Exception:
+        return 0, "", False
 
 
 def main():
@@ -284,7 +361,11 @@ def main():
                     warnings.append(f"{path} was deleted from the live site's files; check nothing still uses it.")
                 changes.append(f"File deleted: {path}")
                 continue
-            size = (ROOT / path).stat().st_size
+            target = ROOT / path
+            if target.is_symlink() or not target.is_file():
+                blocking.append(f"{path}: media must be a regular file, not a symlink or missing file.")
+                continue
+            size = target.stat().st_size
             if size > MEDIA_MAX_BYTES:
                 blocking.append(f"{path} is {size/1048576:.1f} MB; the limit is 5 MB. Resize or compress it.")
             elif size > MEDIA_WARN_BYTES and ext in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
@@ -307,6 +388,8 @@ def main():
 
     # ---- pages
     all_pages = set(git("ls-files").splitlines())
+    added_files = {path for status, path in entries if status == "A"}
+    generic_images = generic_share_images(args.base) if any(st == "A" for *_, st in changed_pages) else set()
     for path, fm, body, status in changed_pages:
         label = f"{path}"
         if fm is None or not fm:
@@ -328,13 +411,17 @@ def main():
         if fm.get("lang") not in ("en", "es"):
             blocking.append(f"{label}: lang must be \"en\" or \"es\" (found {fm.get('lang')!r}).")
         for k in ("title", "description"):
-            if not str(fm.get(k, "")).strip():
-                blocking.append(f"{label}: missing {k}.")
+            if not isinstance(fm.get(k), str) or not fm[k].strip():
+                blocking.append(f"{label}: {k} must be a nonempty string.")
         allowed_fm = {"layout", "lang", "title", "description", "alt_url", "share_image", "nav", "css", "scripts", "body_class", "permalink", "is_home"}
         extra = set(fm) - allowed_fm
         if extra:
             warnings.append(f"{label}: unusual settings {sorted(extra)}.")
         if status == "A":
+            problem = share_image_problem(fm.get("share_image"), added_files, generic_images)
+            if problem:
+                blocking.append(f"{label}: share_image {problem}.")
+            warnings.append(f"{label}: include the sharing card in review; check page-specific visual relevance, localized English/Spanish title and description, and localized image text. A language-neutral image may be shared; 1200×630 is recommended. This check cannot verify visual meaning or platform caches.")
             for k in ("css", "scripts", "nav", "is_home"):
                 if k in fm:
                     blocking.append(f"{label}: new pages can't set {k!r}; that changes how the site works.")
@@ -439,6 +526,21 @@ def main():
                 continue
             parser = LinkParser()
             parser.feed(html)
+            if st == "A":
+                expected = {"og:title": fm.get("title"),
+                            "og:description": re.sub(r"<[^>]*>", "", fm.get("description", ""))
+                            if isinstance(fm.get("description"), str) else None,
+                            "twitter:card": "summary_large_image"}
+                image = fm.get("share_image")
+                expected["og:image"] = urljoin(base_url, image.lstrip("/")) if isinstance(image, str) else None
+                for key, value in expected.items():
+                    if not value or parser.metadata.get(key) != [value]:
+                        blocking.append(f"{url}: {key} is missing, duplicated or does not match the page sharing settings (expected {value!r}).")
+                if not share_image_problem(image, added_files, generic_images):
+                    image_url = expected["og:image"]
+                    image_status, mime, has_content = fetch_sharing_image(image_url)
+                    if image_status != 200 or not mime.startswith("image/") or not has_content:
+                        blocking.append(f"{url}: sharing image {image_url} must load with image MIME and nonempty content (HTTP {image_status}, MIME {mime!r}).")
             for tag, link in parser.links:
                 full = urljoin(url, link)
                 parts = urlsplit(full)

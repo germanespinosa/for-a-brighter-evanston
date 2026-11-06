@@ -82,6 +82,7 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 ## What you can request
 
 - New pages and changes to ordinary page content.[2]
+- Every new page includes its own sharing card: a relevant image, page-specific title and short description. Fabian prepares these with the page and shows them in the preview review. English and Spanish versions get matching copy and, when the artwork has text, matching images. The team vote covers the page and card together; existing pages are not changed automatically.[2]
 - New or updated templates: the shared building blocks that arrange page sections, headers, menus and footers. These need **no extra permission from German**. They follow the same sandbox, review and team vote as other website updates.[2]
 - Supported text changes on built-in pages, such as home-page wording, next-meeting information and news-page labels.[2]
 - Images in JPG, PNG, WebP or GIF format, and PDF documents up to 5 MB. Fabian should resize photos and strip location metadata before adding them.[2]
@@ -105,6 +106,8 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 When the sandbox is ready, post: **“@fabian Publish [sandbox name]”** or **“@fabian Let’s vote on [sandbox name].”** This requests a review and vote; it does not bypass either step.[2]
 
 Fabian brings the sandbox up to date, checks permitted changes, links, images and language coverage, and checks desktop and phone layouts. The review lists changes, blocking problems, suggestions, Spanish status, visual findings and Fabian’s recommendation. If a visual check cannot be completed, that limitation must be disclosed. Blocking problems must be fixed before voting.[2]
+
+For a new page, review its sharing image, title and description too. These are what the page supplies when someone shares its link. Fabian checks them before and after publication; an app may still show an older cached preview.[2]
 
 ## Cast your vote
 
