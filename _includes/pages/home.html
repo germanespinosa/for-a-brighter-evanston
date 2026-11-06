@@ -40,8 +40,8 @@
       </div>
       {% if page.lang == 'en' %}
       </div>
-      <p class="source-note dialog__fine" id="hero-sources"><span class="text-gold">Sources: <a href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/"><span class="text-gold">RoundTable: revised error of $27.35M over five years [1]</span></a> · <a href="https://www.district65.net/about/budget-finance/financial-sustainability-plan"><span class="text-gold">District 65: proposed school, Head Start and staffing reductions [4]</span></a>.</span></p>
       {% endif %}
+      <p class="source-note dialog__fine" id="hero-sources"><span class="text-gold">{% if page.lang == 'en' %}Sources: <a href="https://evanstonroundtable.com/2026/11/06/district-65-board-will-not-vote-on-budget-plan-monday/"><span class="text-gold">RoundTable: vote postponed [2]</span></a> · <a href="https://www.district65.net/about/board-of-education/board-meetings"><span class="text-gold">D65: meeting calendar [3]</span></a>.{% else %}Fuentes: <a href="https://evanstonroundtable.com/2026/11/06/district-65-board-will-not-vote-on-budget-plan-monday/"><span class="text-gold">RoundTable: votación aplazada [2]</span></a> · <a href="https://www.district65.net/about/board-of-education/board-meetings"><span class="text-gold">D65: calendario de reuniones [3]</span></a>.{% endif %}</span></p>
     </div>
 
     {%- if ev.show %}
