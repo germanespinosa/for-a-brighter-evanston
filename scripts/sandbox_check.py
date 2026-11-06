@@ -27,6 +27,7 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit
@@ -43,6 +44,8 @@ TEXT_DATA_FILES = {
 MEDIA_DIRS = ("assets/img/", "assets/files/")
 MEDIA_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf"}
 PAGE_EXT = {".html", ".md"}
+TEMPLATE_DIRS = ("_includes/", "_layouts/")
+TEMPLATE_EXT = {".html", ".liquid", ".md", ".markdown"}
 STRUCTURAL_PREFIXES = (
     "_layouts/", "_includes/", "_plugins/", "_sass/", "assets/css/", "assets/js/",
     ".github/", "scripts/", "docs/", "data/", "sandbox/",
@@ -166,6 +169,38 @@ class LinkParser(HTMLParser):
                 self.links.append((tag, a[attr]))
 
 
+class TemplateSafetyParser(HTMLParser):
+    """Inspect source HTML without banning ordinary template Liquid or head tags."""
+
+    def __init__(self):
+        super().__init__()
+        self.hazards = []
+
+    def handle_starttag(self, tag, attrs):
+        unsafe_tag = tag in {"script", "style", "iframe", "object", "embed",
+                             "frame", "frameset", "applet", "form", "base"}
+        unsafe_attr = any(
+            name.startswith("on") or
+            "javascript:" in re.sub(r"[\s\x00-\x20]+", "", value or "").lower()
+            for name, value in attrs
+        )
+        if unsafe_tag or unsafe_attr:
+            self.hazards.append(self.get_starttag_text())
+
+    handle_startendtag = handle_starttag
+
+
+def template_hazards(text):
+    parser = TemplateSafetyParser()
+    parser.feed(text)
+    parser.close()
+    # Compare whole script/style blocks, not counts of opening tags: replacing
+    # a legacy script's body must not pass just because its tag stayed the same.
+    blocks = re.finditer(r"<\s*(script|style)\b[^>]*>.*?(?:</\s*\1\s*>|\Z)",
+                         text, re.I | re.S)
+    return Counter(parser.hazards + [m.group(0) for m in blocks])
+
+
 def fetch(url, method="GET"):
     req = urllib.request.Request(url, method=method, headers={"User-Agent": "fabian-sandbox-check"})
     try:
@@ -214,6 +249,19 @@ def main():
 
         if path == "data/news.json":
             blocking.append("The news list (data/news.json) was changed. News is managed only in #news; this change must be removed.")
+            continue
+        if path.startswith(TEMPLATE_DIRS) and ext in TEMPLATE_EXT:
+            if status == "D":
+                blocking.append(f"{path} was deleted. Templates may be added or updated, not deleted.")
+                continue
+            if (ROOT / path).is_symlink() or git("ls-tree", "HEAD", "--", path).startswith("120000 "):
+                blocking.append(f"{path}: template symlinks aren't allowed.")
+                continue
+            text = (ROOT / path).read_text(encoding="utf-8")
+            if template_hazards(text) - template_hazards(git_show(args.base, path) or ""):
+                blocking.append(f"{path}: adds or modifies unsafe HTML or executable code, which isn't allowed in templates.")
+            changes.append(f"Template {verb}: {path}")
+            warnings.append(f"{path}: check all affected English and Spanish rendered pages in the sandbox; a template is not a standalone route.")
             continue
         if path in STRUCTURAL_FILES or path.startswith(STRUCTURAL_PREFIXES) or path.startswith("."):
             blocking.append(f"{path} was {verb}. It's part of the site's structure, which #website updates can't change.")
@@ -264,8 +312,19 @@ def main():
         if fm is None or not fm:
             blocking.append(f"{label}: missing the page settings block (front matter between --- lines).")
             continue
-        if fm.get("layout") != "default":
-            blocking.append(f"{label}: layout must be \"default\" (found {fm.get('layout')!r}).")
+        layout = fm.get("layout")
+        layout_paths = []
+        if isinstance(layout, str) and re.fullmatch(r"[A-Za-z0-9_-]+(?:/[A-Za-z0-9_-]+)*", layout):
+            layout_paths = [f"_layouts/{layout}{ext}" for ext in sorted(TEMPLATE_EXT)
+                            if f"_layouts/{layout}{ext}" in all_pages]
+        if not layout_paths:
+            blocking.append(f"{label}: layout {layout!r} must name an existing HTML, Liquid or Markdown layout (no traversal or file extensions).")
+        for layout_path in layout_paths:
+            target = ROOT / layout_path
+            if target.is_symlink() or git("ls-tree", "HEAD", "--", layout_path).startswith("120000 "):
+                blocking.append(f"{label}: layout {layout!r} is a symlink, which isn't allowed.")
+            elif template_hazards(target.read_text(encoding="utf-8")) - template_hazards(git_show(args.base, layout_path) or ""):
+                blocking.append(f"{label}: layout {layout!r} adds or modifies unsafe HTML or executable code.")
         if fm.get("lang") not in ("en", "es"):
             blocking.append(f"{label}: lang must be \"en\" or \"es\" (found {fm.get('lang')!r}).")
         for k in ("title", "description"):
@@ -282,7 +341,7 @@ def main():
         base_text = git_show(args.base, path)
         if base_text is not None:
             base_fm = parse_front_matter(split_front_matter(base_text)[0])
-            for k in ("css", "scripts", "nav", "is_home", "permalink", "layout", "lang"):
+            for k in ("css", "scripts", "nav", "is_home", "permalink", "lang"):
                 if base_fm.get(k) != fm.get(k):
                     blocking.append(f"{label}: the {k!r} setting was changed; that's structural.")
 

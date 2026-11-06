@@ -64,6 +64,8 @@ To stop a pending addition or removal, say “cancel” or “stop.” To restor
 
 # 2. Request a website update
 
+**A clear channel for the whole team.** Every website message should be brief and have a purpose: your request, preview links, understandable review findings, votes or results. Routine checks, technical details, internal learning notices and run-redirection tips stay behind the scenes. Brief “still working” updates remain, and Fabian should clearly explain any blocker or decision that needs your attention. Replies stay in the main channel, never in threads.
+
 ## Start or join a sandbox
 
 **Example request in #website**
@@ -80,10 +82,11 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 ## What you can request
 
 - New pages and changes to ordinary page content.[2]
+- New or updated templates: the shared building blocks that arrange page sections, headers, menus and footers. These need **no extra permission from German**. They follow the same sandbox, review and team vote as other website updates.[2]
 - Supported text changes on built-in pages, such as home-page wording, next-meeting information and news-page labels.[2]
 - Images in JPG, PNG, WebP or GIF format, and PDF documents up to 5 MB. Fabian should resize photos and strip location metadata before adding them.[2]
 
-**Ask German about structural changes:** overall design, styling, templates, navigation-menu changes, site/build settings, scripts, forms or embeds, and deleting published pages. A new page can be linked from existing page text but cannot be added to the main menu through this workflow. The Write to the Board letter text is also outside the permitted content-editing workflow because it lives in a script.[2]
+**Changes that still need separate authorization:** stylesheet or script files, site/build settings, unsafe forms or embeds, and deleting published pages or existing templates. Adding or updating a template—including moving homepage sections or changing a shared menu—is part of the normal team workflow, not an exception. Shared changes must be checked on all affected pages, in English and Spanish and on phones and desktops, before voting. The Write to the Board letter text is still outside this workflow because it lives in a script.[2]
 
 **Useful follow-ups in #website**
 
@@ -104,6 +107,8 @@ When the sandbox is ready, post: **“@fabian Publish [sandbox name]”** or **�
 Fabian brings the sandbox up to date, checks permitted changes, links, images and language coverage, and checks desktop and phone layouts. The review lists changes, blocking problems, suggestions, Spanish status, visual findings and Fabian’s recommendation. If a visual check cannot be completed, that limitation must be disclosed. Blocking problems must be fixed before voting.[2]
 
 ## Cast your vote
+
+For a reliable mention, type @fabian and select Fabian from Slack's suggestions, then add your vote and send it as a new channel message. If acknowledgment is missing, ask Fabian to check the original vote and tally rather than repeatedly sending yes. Seeing a message, counting a vote and publishing the site are different steps; Fabian should say clearly which has happened.
 
 Fabian’s vote message includes a link to the updated site, a direct link to every changed page, and a short summary of each change, so anyone can review before voting.[2]
 

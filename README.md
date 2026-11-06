@@ -73,6 +73,8 @@ Fabian builds proposed changes in a sandbox branch `sandbox/<id>`. The site is b
 
 Changes go live only after Fabian's validation report and a vote in #website. People vote by posting **@fabian vote yes** or **@fabian vote no: [reason]**; reactions don't count. Each person's latest vote counts, the requester included. The update publishes as soon as it has at least 2 yes and no no votes. The vote closes 24 hours after Fabian's vote message. Fabian keeps the tally in a vote record and recounts from the channel each time. See `docs/agents/fabian-website.md`.
 
+People may add or update shared templates in `_includes/` and `_layouts/` through this same process, with **no extra permission from German**. This includes section ordering and shared header/menu/footer changes. Shared edits must be checked on every affected page, in both languages. Build settings, stylesheet/script files, unsafe code and deletion of existing pages or templates remain outside this permission.
+
 Checks used before a vote:
 - `python3 scripts/sandbox_check.py --base origin/main [--url <sandbox url>]`: what may change, page settings, unsafe code, Spanish coverage, broken links.
 - `python3 scripts/sandbox_screens.py --sandbox <sandbox url> --live <site url> <paths…>`: desktop and phone screenshots, layout problems. Needs Playwright.

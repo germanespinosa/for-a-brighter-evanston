@@ -2,11 +2,11 @@
   ".github/workflows/pages.yml": "359f9ee1c1e538312fc3bf08d97a2b1897a8c549bd6cf96456bb3191f2eb3d17",
   ".github/workflows/sandbox-trigger.yml": "0b93e8f88d3fb43516441c9521f14b025287a9e6c70e58d8d19ead24d98a7aff",
   "docs/agents/fabian-news.md": "4f6abbeb7664f86b360d84bbc2be43df1f097c21a464d0b45a277f4b609c170d",
-  "docs/agents/fabian-website.md": "19c26cb4708f02f6a4c9a9e200095e46fd2bae8e415a77ecf998dd14acb99e48",
-  "docs/help/team-help.md": "005ebc82736edba1afaf18c57f0c89c714032b7923beebd7230306790be2c41d",
-  "docs/help/team-help.pdf": "a062350a418fea9393571fed09ccad5f71e86381449e163f1a1bdec31be7486c",
+  "docs/agents/fabian-website.md": "075c31dc5c7a06b2b9ed81e223ccec423d8d9cd7d9a2ca81787d5077e5ed2f37",
+  "docs/help/team-help.md": "365176734bce9d08799d975e0ad41dc4947cbe026b26bff8ff76d475c89a20de",
+  "docs/help/team-help.pdf": "d7a0d9ba9d56f6f078e2348a8ad8e8fea3ab6e0598da015e7070388bcd58ab9f",
   "scripts/build_help_pdf.py": "c9294df828882de0c22ef28291cabe7a35ac3ef232c51d54d8e2e5fea52f034a",
   "scripts/news_tool.py": "90855011b7d2486e48145cfca8e194eaa3c22dbb814e6342fd5d248d1e6a7c52",
-  "scripts/sandbox_check.py": "87dd89475dce43df92c3d39e23150735fb886e8985905c1835d25f33fead5008",
+  "scripts/sandbox_check.py": "76ae53742c1a70cde50f8d87e9818f6fa1c0a1fc15c21279e24c8ec808748ebb",
   "scripts/sandbox_screens.py": "99e5eea36c4aa9bc4ede68821644a63025579232c1c7084a953c94d336c4cd2d"
 }
