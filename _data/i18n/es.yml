@@ -46,13 +46,13 @@ calendar:
   office: Outlook (trabajo o escuela)
 
 home:
-  title: "Firme la carta: Una voz real sobre los cierres de escuelas del D65"
-  description: Un error de 17 millones de dólares. Corregir el presupuesto, proteger nuestras escuelas y construir el plan entre todos. Firme la carta abierta a la junta del D65.
+  title: "Votación de la Junta del D65 aplazada"
+  description: "La votación del lunes sobre el plan de sostenibilidad financiera se aplazó. La Junta se reunirá el lunes 9 de noviembre a las 5 p. m. para continuar el debate. Se prevé una votación el 16 de noviembre."
   share_image: "/assets/img/share-home-es-75b5134b2c.jpg"
   photo_credit: Foto de Joerg Metzner
-  h1: Un error de 17 millones de dólares.
-  h1_mark: Decisiones que podrían afectar a generaciones.
-  lead: Corregir el presupuesto. Proteger nuestras escuelas. Construir el plan entre todos.
+  h1: "Votación de la Junta del D65"
+  h1_mark: "Aplazada."
+  lead: "La votación del lunes sobre el plan de sostenibilidad financiera se aplazó. La Junta se reunirá el lunes 9 de noviembre a las 5 p. m. para continuar el debate. Se prevé una votación el 16 de noviembre."
   sig_label: ¡Firmas y seguimos sumando!
   sign_btn: Firmar la carta
   share_btn: Compartir la carta
@@ -102,12 +102,12 @@ home:
     text:
       a: "Firmé la carta abierta que pide a la junta del D65 dar a los residentes una voz real sobre el cierre propuesto de Dewey y Lincolnwood. "
       b: "Ya firmaron {n} vecinos de Evanston. "
-      c: "Se prevé que la junta vote el 9 de noviembre. Agregue su nombre: "
+      c: "La votación se aplazó. La Junta se reúne el 9 de noviembre. Agregue su nombre: "
       fb: Mensaje copiado. Péguelo en su publicación de Facebook.
       fbNo: Facebook solo comparte el enlace. Copie el texto primero si quiere incluirlo.
       igDl: La imagen está lista abajo y el texto está copiado para la descripción.
       big: ["Firmé", "la carta."]
       sub: Cada residente de Evanston merece una voz real sobre los cierres de escuelas que propone el D65.
       cnt: Ya firmaron {n} vecinos. Agregue su nombre.
-      cta: "Votación prevista: 9 de noviembre"
+      cta: "Reunión 9 nov. · voto aplazado"
       png: firme-la-carta.png

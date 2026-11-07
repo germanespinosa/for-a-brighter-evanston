@@ -40,18 +40,24 @@
       </div>
       {% if page.lang == 'en' %}
       </div>
-      <p class="source-note dialog__fine" id="hero-sources"><span class="text-gold">Sources: <a href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/"><span class="text-gold">RoundTable: revised error of $27.35M over five years [1]</span></a> · <a href="https://www.district65.net/about/budget-finance/financial-sustainability-plan"><span class="text-gold">District 65: proposed school, Head Start and staffing reductions [4]</span></a>.</span></p>
       {% endif %}
+      <p class="source-note dialog__fine" id="hero-sources"><span class="text-gold">{% if page.lang == 'en' %}Sources: <a href="https://evanstonroundtable.com/2026/11/06/district-65-board-will-not-vote-on-budget-plan-monday/"><span class="text-gold">RoundTable: vote postponed [2]</span></a> · <a href="https://www.district65.net/about/board-of-education/board-meetings"><span class="text-gold">D65: meeting calendar [3]</span></a>.{% else %}Fuentes: <a href="https://evanstonroundtable.com/2026/11/06/district-65-board-will-not-vote-on-budget-plan-monday/"><span class="text-gold">RoundTable: votación aplazada [2]</span></a> · <a href="https://www.district65.net/about/board-of-education/board-meetings"><span class="text-gold">D65: calendario de reuniones [3]</span></a>.{% endif %}</span></p>
     </div>
 
     {%- if ev.show %}
     <aside class="event-card" aria-labelledby="event-title">
-      <p class="eyebrow">{{ ev[page.lang].eyebrow }}</p>
-      <h2 class="event-card__title" id="event-title">{{ ev[page.lang].title }}</h2>
+      <p class="eyebrow">{% if page.lang == 'en' %}Stand with our teachers{% else %}Apoyemos a nuestros docentes{% endif %}</p>
+      <h2 class="event-card__title" id="event-title">{% if page.lang == 'en' %}Rally alongside DEC{% else %}Concentración junto a DEC{% endif %}</h2>
       <p class="event-card__date">{{ ev[page.lang].date_html }}</p>
-      <p class="event-card__time"><time datetime="{{ ev.start_iso }}">{{ ev[page.lang].time }}</time></p>
+      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">{% if page.lang == 'en' %}4 PM{% else %}4 p. m.{% endif %}</time></p>
+      <p id="rally-invitation">{% if page.lang == 'en' %}Join us alongside DEC, the teachers’ union, to support our teachers.{% else %}Acompáñenos junto a DEC, el sindicato de docentes, para apoyar a nuestros maestros.{% endif %}</p>
+      <p class="event-card__time" id="board-meeting-time">{% if page.lang == 'en' %}Board meeting:{% else %}Reunión de la Junta:{% endif %} <time datetime="{{ ev.start_iso }}">{{ ev[page.lang].time }}</time></p>
       <p class="event-card__place"><span aria-hidden="true">📍</span> {{ ev.location }}</p>
-      {% include calendar-menu.html %}
+      {% if page.lang == 'en' %}
+      {% include calendar-menu.html label="Add board meeting to calendar" %}
+      {% else %}
+      {% include calendar-menu.html label="Agregar reunión al calendario" %}
+      {% endif %}
     </aside>
     {%- endif %}
   </div>

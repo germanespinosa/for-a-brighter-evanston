@@ -45,13 +45,13 @@ calendar:
   office: Outlook (work or school)
 
 home:
-  title: "D65’s $17M error is now $27M. Vote no on Monday."
-  description: "This plan would close Dewey and Lincolnwood, cut Head Start and eliminate more than 200 jobs. And it rests on numbers that keep changing. Tell the board to VOTE NO on Nov 9."
+  title: "D65 Board Vote Postponed"
+  description: "Monday’s vote on the financial sustainability plan has been postponed. The board will still meet Monday, November 9 at 5 PM to continue the discussion. A vote is now anticipated November 16."
   share_image: "/assets/img/share-home-en-202a113c41.jpg"
   photo_credit: Photo by Joerg Metzner
-  h1: D65’s $17M error is now $27M.
-  h1_mark: Vote no on Monday.
-  lead: "This plan would close Dewey and Lincolnwood, cut Head Start and eliminate more than 200 jobs. And it rests on numbers that keep changing. Tell the board to VOTE NO on Nov 9."
+  h1: "D65 Board Vote"
+  h1_mark: "Postponed."
+  lead: "Monday’s vote on the financial sustainability plan has been postponed. The board will still meet Monday, November 9 at 5 PM to continue the discussion. A vote is now anticipated November 16."
   sig_label: Signatures and counting!
   sign_btn: Sign the letter
   share_btn: Share the letter
@@ -101,12 +101,12 @@ home:
     text:
       a: "I signed the open letter asking the D65 board to give residents a real say on the proposed closures of Dewey and Lincolnwood. "
       b: "{n} Evanston neighbors have signed so far. "
-      c: "The board is expected to vote Nov. 9. Add your name: "
+      c: "The vote has been postponed. The board still meets Nov. 9. Add your name: "
       fb: Message copied. Paste it into your Facebook post.
       fbNo: Facebook only shares the link. Copy the text first if you want to include it.
       igDl: Image ready below, and the text is copied for your caption.
       big: ["I signed", "the letter."]
       sub: Every Evanston resident deserves a real say on D65’s proposed school closures.
       cnt: "{n} neighbors have signed. Add your name."
-      cta: D65 board vote expected Nov. 9
+      cta: "Meeting Nov. 9 · vote postponed"
       png: sign-the-letter.png
