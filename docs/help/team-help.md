@@ -109,6 +109,8 @@ When the sandbox is ready, post: **“@fabian Publish [sandbox name]”** or **�
 
 Fabian brings the sandbox up to date, checks permitted changes, links, images and language coverage, and checks desktop and phone layouts. The review lists changes, blocking problems, suggestions, Spanish status, visual findings and Fabian’s recommendation. If a visual check cannot be completed, that limitation must be disclosed. Blocking problems must be fixed before voting.[2]
 
+**Fabian also owns the page-organization check before every vote.** He checks clear page titles and headings, understandable navigation and link labels, working links between important pages, and English/Spanish connections. He keeps the sitemap—the page list supplied to search engines—synchronized as pages change, and checks the live list after publication. Missing important links or an incorrect page list must be fixed before voting. This helps Google understand the site but does not guarantee that Google displays subpage shortcuts.[2]
+
 For a new page, review its sharing image, title and description too. These are what the page supplies when someone shares its link. Fabian checks them before and after publication; an app may still show an older cached preview.[2]
 
 Sharing cards can also be updated for existing pages without changing their on-page headlines or text. Fabian should use the approved designs and wording, preserve the rest of the site, and check every affected language version.[2]

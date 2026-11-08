@@ -302,19 +302,30 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    - Do images load, have sensible sizes and alt text?
    - Is the text clear, free of obvious typos, consistent with the site's tone, and is the Spanish faithful to the English?
    - Do links go where they say, and are internal links pointing to the sandbox, not the live site?
-6. Post the review, **Message W13**:
+6. **Mandatory title, navigation and sitemap check — Fabian owns this before every vote.** This is not a task to hand back to the requester or Search Console owner.
+   - **Inventory:** identify the intended public pages in both languages from the proposed site, not just the changed-file list. Keep a private checklist of their URLs, titles, main headings, incoming links, canonical addresses and language counterparts. Exclude error pages, assets and preview-only material from the indexable-page inventory.
+   - **Clear titles and headings:** inspect the rendered browser title and main heading of every new or affected page. They must be informative, relevant, compact and distinguish the page's purpose. Check the homepage identifies For a Brighter Evanston; don't substitute an unrelated topic, obsolete wording or repeated generic titles. Sharing-card overrides alone do not establish that the browser title or visible heading is correct.
+   - **Discoverable pages:** follow real links from each language's homepage/navigation to important pages and through relevant related pages. New or important pages must not be orphans reachable only by pasting their URL. Check menu labels and link text describe the destination; do not add every page to the main menu automatically when a clear contextual link is more appropriate. Preserve a logical, usable hierarchy and avoid redundant content or duplicate destinations.
+   - **Working links and languages:** open those destinations, verify successful responses, matching page content, sandbox-relative preview links, and working English/Spanish switches. Check shared navigation on desktop and phone when affected. Record the tested paths privately; do not treat a screenshot or a list of source links as proof the navigation works.
+   - **Sitemap synchronization:** keep the site's generated `sitemap.xml` aligned with the intended public page inventory whenever pages are added, renamed, redirected or removed. Verify valid XML, unique absolute canonical production URLs, English/Spanish coverage and valid language-alternate links. Exclude `/sandbox/`, errors, assets, broken/redirected/noncanonical destinations and pages intentionally excluded from indexing. Ensure `robots.txt` still advertises the canonical sitemap and does not unintentionally block public pages.
+   - **Preview versus live:** before voting, verify the proposed page inventory and sitemap generation/template or actual candidate build output cover every intended final route. The public live sitemap must continue to describe the current published site until publication; never add unpublished preview URLs to it. This deployment removes the preview's own sitemap, so don't mistake its expected absence for a broken live sitemap or claim a deployed candidate sitemap was inspected when only source generation was checked. Recheck actual live XML and URL coverage after publication.
+   - **Gate:** missing important links, unclear/misleading affected titles, broken destinations/language switches, or an out-of-sync sitemap are blocking findings. Fix and rerun this check before W14. If the check cannot be completed, mark it unverified and do not open the vote. Keep detailed evidence private and give the team one succinct result in W13.
+
+   These are website-side requirements supporting navigation and Google's understanding of the site, not a promise of Google sitelinks. Do not block a vote merely because Google has not indexed a page or displayed sitelinks; crawling, indexing, and sitelink selection remain Google's decisions. Guidance: https://developers.google.com/search/docs/appearance/sitelinks and https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap .
+7. Post the review, **Message W13**:
    - **Changes:** a plain list.
    - **Blocking problems:** must be fixed before a vote.
    - **Warnings and suggestions.**
    - **Spanish:** which new or changed content has a Spanish version, and which doesn't.
    - **Visual check:** desktop and phone. Attach 1–3 key screenshots if the platform allows.
+   - **Titles, navigation and sitemap:** one plain-language readiness result; name only problems needing action.
    - **Your opinion:** ready to publish, or what you'd change first.
 
    For every new page, also show the sharing-card image/link and intended title/description, including language variants. Confirm the rendered card matches the reviewed version. Do not start voting if a required new-page card is missing or incorrect.
 
    If the screenshot tool isn't available, say "I couldn't do the visual check" and list what people should look at themselves.
-7. **If there are blocking problems, don't start a vote.** Offer to fix them. Fixes are normal changes (section 6), then you run a new review.
-8. **If there are none, start the vote right away** with **Message W14**: the sandbox link, a direct link to every changed page and a plain-language summary of each change. Start it even if you have suggestions. Suggestions are for people to weigh. Record the sandbox's current commit:
+8. **If there are blocking problems, don't start a vote.** Offer to fix them. Fixes are normal changes (section 6), then you run a new review. This includes the title/navigation/sitemap gate above.
+9. **If there are none, start the vote right away** with **Message W14**: the sandbox link, a direct link to every changed page and a plain-language summary of each change. Start it even if you have suggestions. Suggestions are for people to weigh. Record the sandbox's current commit:
 
    ```bash
    git rev-parse sandbox/<id>      # the voted version; keep it with the vote message
@@ -419,6 +430,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    - If the push is rejected because main changed: `git reset --hard origin/main` and repeat this step. That's the same voted version merged onto the newer main, so it doesn't need a new vote.
 4. Wait for the build. Check that each changed page loads on the live site with the new content, using `?nocache=…` URLs.
    For new pages, also verify the live sharing-card title, description and image against the approved preview, and fetch the live image. Do not report publication verified based only on visible body content or HTTP status.
+   Fetch the live sitemap and compare it with the approved final public-page inventory, including both languages and alternate links; verify listed destinations and navigation paths. If it is stale, incomplete or incorrect, resolve the discrepancy and verify again before reporting completion. Never insert the temporary sandbox URLs into the live sitemap.
 5. Remove the sandbox: `git push origin --delete sandbox/<id>`.
 6. Post **Message W20**: live links, who approved, and the refresh reminder. Switch the reaction to ✅.
 
@@ -550,6 +562,7 @@ Post every message directly in `#website`, never in a thread, starting with an a
 > [**Suggestions:** only useful suggestions, otherwise omit.]
 > **Spanish:** [e.g. "New FAQ page has both versions. The home page headline changed in English only."]
 > **Visual check:** [desktop: … / phone: … / "looks consistent with the rest of the site"]
+> **Pages and links:** [Titles, navigation and page list checked; ready. / Not ready: concise actionable issue.]
 > [**Sharing preview:** for each new page, image link + intended title and description, with language variants. Omit for updates without new pages unless the cards changed.]
 > **My opinion:** [e.g. "Ready to publish. I'd consider adding the Spanish headline first." / "Not ready: …"]
 > [If ready: "Starting the vote now." / If not: "Want me to fix these?"]
@@ -629,6 +642,8 @@ Don't make the summary only a list of file names.
 **Publish**
 - [ ] Sandbox merged with the latest `origin/main` and rebuilt
 - [ ] `sandbox_check.py --url` and `sandbox_screens.py` run; screenshots reviewed
+- [ ] Fabian completed the mandatory rendered-title, heading, navigation and internal-link check; important pages reachable in both languages; no unresolved blockers
+- [ ] Proposed public-page inventory and sitemap generation synchronized; canonical URLs and language alternates checked; no unpublished preview URLs in the live sitemap
 - [ ] Every new page's sharing-card image and copy included in the review; rendered metadata and image URL verified in the sandbox
 - [ ] W13 review posted with Spanish status, visual check and opinion
 - [ ] No blocking problems → W14 vote posted with the sandbox link, a link to every changed page and a plain-language summary; voted commit recorded
@@ -637,4 +652,5 @@ Don't make the summary only a list of file names.
 - [ ] 2+ yes, 0 no → publish immediately
 - [ ] Sandbox unchanged since the vote; merged `--no-ff`; news untouched; pushed
 - [ ] Live pages checked; sandbox branch deleted; W20 posted
+- [ ] Actual live sitemap matches the approved published-page inventory, both languages, canonical routes and valid alternate links; navigation paths rechecked
 - [ ] New-page sharing cards verified on their exact live URLs against the approved versions
