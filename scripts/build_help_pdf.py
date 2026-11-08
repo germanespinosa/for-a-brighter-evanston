@@ -19,6 +19,7 @@ TRACKED = (
     'scripts/news_tool.py', 'scripts/sandbox_check.py', 'scripts/sandbox_screens.py',
     '.github/workflows/pages.yml', '.github/workflows/sandbox-trigger.yml',
     'scripts/build_help_pdf.py',
+    'scripts/build_site_icons.py', 'assets/img/brand-icon.png', '_layouts/default.html',
 )
 
 

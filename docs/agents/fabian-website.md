@@ -213,6 +213,12 @@ For a batch of approved replacement cards, verify the exact selected image bytes
 
 ## 6. Make changes
 
+### Shared site icon and Google search
+
+The small emblem in browser tabs and beside Google search results is the **site icon (favicon)**, not a page's sharing card. All pages using the shared layout must reference consistent sizes/formats of the approved organization emblem. Preserve the supplied artwork and its full square composition; do not substitute a generic star, recolor it or crop it. Generate variants with `python3 scripts/build_site_icons.py` from `assets/img/brand-icon.png`; keep the ICO, PNG, SVG fallback and Apple touch icon consistent, and verify the organization-logo asset too. Use stable icon URLs and inspect the decoded sizes and actual served bytes on every declared icon path. The homepage and icon must be crawlable by Googlebot/Googlebot-Image.
+
+Google chooses one favicon per hostname, so the same icon represents English and Spanish routes. The website can make the emblem available correctly; it cannot guarantee that Google displays it or updates immediately. Allow several days to several weeks for recrawling/processing. An authorized Search Console owner can use URL Inspection on the canonical homepage and request indexing; do not claim this happened unless actually performed. Verify all published page icon declarations and preserve their sharing metadata, visible content and functionality. Follow the normal authorization rules for changes to icon assets and layout; a bounded direct-publish exception does not change the general vote process.
+
 While the update is **OPEN** (not during a vote):
 
 1. Acknowledge (**Message W4**), react 👀, and start typing.

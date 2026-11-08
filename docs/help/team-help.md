@@ -81,6 +81,8 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 
 ## What you can request
 
+**Site icon:** the small emblem in browser tabs and Google results is shared across the website, including both languages. It is separate from each page's sharing card. Google controls when its search results refresh and does not guarantee that an icon appears; a Search Console owner can request a homepage recrawl.[2]
+
 - New pages and changes to ordinary page content.[2]
 - Every new page includes its own sharing card: a relevant image, page-specific title and short description. Fabian prepares these with the page and shows them in the preview review. English and Spanish versions get matching copy and, when the artwork has text, matching images. The team vote covers the page and card together; existing pages are not changed automatically.[2]
 - New or updated templates: the shared building blocks that arrange page sections, headers, menus and footers. These need **no extra permission from German**. They follow the same sandbox, review and team vote as other website updates.[2]
