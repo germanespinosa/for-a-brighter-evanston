@@ -13,6 +13,7 @@ Post regular messages directly in the relevant Slack channel and mention @fabian
 - **Add news — #news:** `@fabian Add this article: [link]`. Review the English/Spanish titles and summaries plus source and publication date; then the requester or German replies `@fabian Yes, publish [article title]`.[1]
 - **Remove news — #news:** `@fabian Remove [article title or link]`. Check the exact match, then the requester or German replies `@fabian Yes, remove [article title]`.[1]
 - **Start website work — #website:** `@fabian Start a website update: [describe the change]`. If a sandbox is already open, the change joins that sandbox; nothing goes live yet.[2]
+- **Build a page from a mockup — #website:** `@fabian Build this page from the attached mockup.` Fabian copies its text exactly and asks you for anything missing, like a `[day of the event]`.[2]
 - **Request the review and vote — #website:** `@fabian Publish [sandbox name]`. Fabian reviews first, then opens a fresh vote with page links and a clear change summary. Asking to publish is not itself a vote.[2]
 - **Vote — #website:** `@fabian vote yes`, `@fabian vote no: [reason]`, or `@fabian withdraw my vote`. Only messages after the vote opens and before its deadline count; two yes and no no votes permit publication.[2]
 - **Restart voting:** if a vote is still active, say `@fabian cancel the vote`, then `@fabian Publish [sandbox name]`. An already cancelled or expired vote needs a fresh review and vote; old approvals do not carry forward.[2]
@@ -100,6 +101,22 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 > @fabian Add the Spanish version too.
 
 > @fabian Undo the last change.
+
+## Build or update a page from a mockup
+
+A mockup is a file showing what a page should look like, such as an HTML page, an image or a PDF.
+
+**Example request in #website**
+
+> @fabian Please build a new rally page from the attached mockup.
+
+1. **Say it's a mockup.** Fabian never assumes a shared file is a mockup. If your message doesn't say so, he asks whether to build from it, add it to the page as it is, or keep it just for reference.[2]
+2. **Agree what matters.** Fabian lists what he sees: the text, the layout, the style, the pictures, the links and buttons, and the Spanish. He says how he'll use each one. By default he follows the layout with the site's own style; pictures are used only if you confirm they're final and send the original files. Tell him what to change.[2]
+3. **Fill in what's missing.** Fabian lists every gap in the mockup in one message, for example `[day of the event]`, “TBD”, sample text or a button with no destination. He never fills a gap by guessing or from other pages. He may suggest an answer, but uses it only if you say yes. The update can't go to a vote until every gap is filled.[2]
+4. **The text is copied exactly.** Every word, number, capital letter and punctuation mark from the mockup appears on the page as written. Fabian doesn't fix typos on his own; he asks you. Text the site needs that the mockup doesn't have, such as the page's description for search results, is labeled as written by Fabian so you can change it. A checking tool confirms the page matches the mockup before you see the preview.[2]
+5. **Review and vote as usual.** The preview, Spanish offer, sharing card, review and team vote work the same as for any other update.[2]
+
+**Tips:** send the original file rather than a screenshot of it. Mark anything not final with brackets, like `[photo of the rally]`. If the mockup has its own menu or footer, that's ignored unless you ask for a menu change.
 
 # 3. Review, vote and publish website changes
 
