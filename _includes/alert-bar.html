@@ -4,8 +4,8 @@
 <aside class="alert-bar" aria-label="{{ ev[page.lang].eyebrow }}">
   <div class="container alert-bar__inner">
     <p class="alert-bar__text">
-      <span class="alert-bar__long">{{ ev[page.lang].bar_long }}</span>
-      <span class="alert-bar__short" aria-hidden="true">{{ ev[page.lang].bar_short }}</span>
+      <span class="alert-bar__long">{% if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}{% if page.lang == 'es' %}LA JUNTA VOTA EL 16 DE NOV. · CONCENTRACIÓN EL LUNES 9 DE NOV. · <span class="rp-s063">4 P. M.</span> · 1500 MCDANIEL AVE.{% else %}THE BOARD VOTES NOV. 16 · RALLY MONDAY, NOV. 9 · <span class="rp-s063">4 P.M.</span> · 1500 MCDANIEL AVE.{% endif %}{% else %}{{ ev[page.lang].bar_long }}{% endif %}</span>
+      <span class="alert-bar__short" aria-hidden="true">{% if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}{% if page.lang == 'es' %}LA JUNTA VOTA EL 16 DE NOV. · CONCENTRACIÓN EL LUNES 9 DE NOV. · <span class="rp-s063">4 P. M.</span> · 1500 MCDANIEL AVE.{% else %}THE BOARD VOTES NOV. 16 · RALLY MONDAY, NOV. 9 · <span class="rp-s063">4 P.M.</span> · 1500 MCDANIEL AVE.{% endif %}{% else %}{{ ev[page.lang].bar_short }}{% endif %}</span>
     </p>
     <a class="alert-bar__link" href="{{ ev.details_url }}" target="_blank" rel="noopener">{{ t.nav.details }}</a>
   </div>
