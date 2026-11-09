@@ -164,7 +164,7 @@ div.release-poll { line-height:normal; }
  .release-poll .rp-headline { max-width:none; }
 }
 @media (max-width:1099px) {
- .release-poll .rp-headline { width:auto;font-size:clamp(40px,4.6vw,56px); }
+ .release-poll .rp-headline { width:auto;font-size:clamp(40px,3.9vw,56px); }
 }
 @media (max-width:900px) {
  .release-poll .site-nav { margin-inline:0;max-width:100%;overflow:visible; }
@@ -172,39 +172,40 @@ div.release-poll { line-height:normal; }
  .release-poll .site-header__bar, .release-poll .site-header__actions { flex-wrap:wrap; }
  .release-poll .site-nav .two-col { gap:12px 32px; }
 }
+@media (max-width:1000px) {
+ .release-poll .rp-headline { font-size:42px; }
+ .release-poll .rp-hero-callout { padding:28px; }
+ .release-poll .rp-three > * { padding:24px; }
+ .release-poll .rp-s041 { gap:32px; }
+ .release-poll .rp-s080 { gap:32px; }
+}
+/* Phone layout: the site's existing poll-page phone patterns, unchanged. */
 @media (max-width:760px) {
- .release-poll section > .rp-container { padding:56px 20px;gap:32px; }
+ .release-poll section > .rp-container { padding:56px 24px;gap:32px; }
  .release-poll .rp-findings > .rp-container { padding-bottom:40px; }
  .release-poll .rp-s006 { display:inline-block;padding:7px 0;margin:-7px 0; }
- .release-poll .rp-s009 { font-size:18px; }
  .release-poll .rp-headline { font-size:clamp(33px,8.6vw,48px);line-height:1.18; }
- .release-poll .rp-s013 { font-size:18px; }
- .release-poll .rp-hero-callout { padding:26px; }
- .release-poll .rp-s021 { font-size:96px; }
- .release-poll .rp-s022 { font-size:24px; }
- .release-poll .rp-three > * { padding:24px; }
- .release-poll .rp-s036 { font-size:56px; }
+ .release-poll .rp-hero-callout { padding:28px; }
+ .release-poll .rp-s021 { font-size:104px; }
+ .release-poll .rp-s042, .release-poll .rp-s045, .release-poll .rp-s049, .release-poll .rp-s081, .release-poll .rp-s087, .release-poll .rp-s100 { flex-basis:100%; }
  .release-poll .rp-s043 { font-size:128px; }
- .release-poll .rp-s044 { font-size:20px; }
- .release-poll .rp-s042, .release-poll .rp-s045 { flex-basis:100%; }
- .release-poll .rp-label-row { flex-wrap:wrap;gap:4px 16px; }
- .release-poll .rp-trust h2 { font-size:32px; }
- .release-poll .rp-path h2 { font-size:30px; }
- .release-poll .rp-s081, .release-poll .rp-s087, .release-poll .rp-s100 { flex-basis:100%; }
- .release-poll .rp-s087 { padding:24px; }
- .release-poll .rp-s091 { flex-wrap:wrap;align-items:flex-end; }
- .release-poll .rp-s091 > span:first-child { flex:1 1 180px; }
- .release-poll .rp-s086 { font-size:16px;padding:16px 20px; }
- .release-poll .rp-s101 { font-size:30px; }
- .release-poll .rp-s103 { flex-basis:100%; }
- .release-poll .rp-funding { padding:22px 20px; }
- .release-poll .rp-s115, .release-poll .rp-s119 { padding:24px; }
- .release-poll .rp-hero .rp-s002 { width:360px;height:360px;right:-150px;top:-130px; }
+ .release-poll .rp-label-row { flex-wrap:wrap;gap:8px 16px; }
+ .release-poll .rp-trust .rp-label-row { flex-direction:column; }
+ .release-poll .rp-trust h2 { font-size:36px; }
+ .release-poll .rp-path h2 { font-size:32px; }
+ .release-poll .rp-support .rp-label-row > span:first-child { flex:1 1 200px; }
+ .release-poll .rp-support .rp-label-row > span:last-child { font-size:36px;flex-shrink:0; }
+ .release-poll .rp-s014:not(.rp-hero-actions) { gap:12px; }
+ .release-poll .rp-s103 { min-width:0;flex-basis:100%; }
+ .release-poll .rp-s115, .release-poll .rp-s119 { padding:28px; }
 }
 @media (max-width:360px) {
- .release-poll section > .rp-container { padding-inline:16px; }
+ .release-poll section > .rp-container { padding-inline:18px; }
  .release-poll .rp-headline { font-size:32px; }
  .release-poll .rp-hero-callout { padding:22px; }
- .release-poll .rp-s021 { font-size:84px; }
+ .release-poll .rp-three > * { padding:22px; }
  .release-poll .rp-s043 { font-size:112px; }
+ .release-poll .rp-support { padding:24px; }
+ .release-poll .rp-s115, .release-poll .rp-s119 { padding:24px; }
+ .release-poll .rp-trust h2 { font-size:32px; }
 }
