@@ -18,15 +18,15 @@ start_utc: 20261109T230000Z
 end_utc: 20261110T020000Z
 
 en:
-  bar_long: "Vote postponed · D65 Board Meeting · Monday, November 9 · 5 PM · 1500 McDaniel Ave, Evanston"
-  bar_short: "Board Meeting · Mon, Nov 9 · 5 PM"
+  bar_long: "THE BOARD VOTES NOV. 16 · RALLY MONDAY, NOV. 9 · 4 P.M. · 1500 MCDANIEL AVE."
+  bar_short: "THE BOARD VOTES NOV. 16 · RALLY MONDAY, NOV. 9 · 4 P.M. · 1500 MCDANIEL AVE."
   eyebrow: "Meeting still scheduled"
   title: "D65 Board Meeting"
   date_html: Monday,<br>November 9
   time: 5 PM
 es:
-  bar_long: "Votación aplazada · Reunión de la Junta del D65 · lunes 9 de noviembre · 5 p. m. · 1500 McDaniel Ave, Evanston"
-  bar_short: "Reunión D65 · lun 9 nov · 5 p. m."
+  bar_long: "LA JUNTA VOTA EL 16 DE NOV. · CONCENTRACIÓN EL LUNES 9 DE NOV. · 4 P. M. · 1500 MCDANIEL AVE."
+  bar_short: "LA JUNTA VOTA EL 16 DE NOV. · CONCENTRACIÓN EL LUNES 9 DE NOV. · 4 P. M. · 1500 MCDANIEL AVE."
   eyebrow: "La reunión sigue en pie"
   title: "Reunión de la Junta del D65"
   date_html: Lunes,<br>9 de noviembre
