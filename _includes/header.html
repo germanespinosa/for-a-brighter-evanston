@@ -19,13 +19,17 @@
   </div>
   <div class="container">
     <nav class="site-nav" aria-label="{{ t.nav.label }}">
+      <div class="two-col">
       <ul class="site-nav__list">
-        {% if page.lang == 'en' %}<li><a href="{{ '/home/voter-poll/' | relative_url }}">The Poll</a></li><li><a href="{{ '/home/a-brighter-path-forward/' | relative_url }}">A Brighter Path Forward</a></li>{% else %}<li><a href="{{ '/es/encuesta/' | relative_url }}">La encuesta</a></li><li><a href="{{ '/es/un-camino-mejor/' | relative_url }}">Un camino hacia un futuro mejor</a></li>{% endif %}
+        {% if page.lang == 'en' %}<li><a href="{{ '/home/voter-poll/' | relative_url }}">The Poll</a></li><li><a href="{{ '/home/a-brighter-path-forward/' | relative_url }}">A Brighter Path Forward</a></li>{% else %}<li><a href="{{ '/es/encuesta/' | relative_url }}">La encuesta</a></li><li><a href="{{ '/es/un-camino-mejor/' | relative_url }}"><span>Un camino hacia<br>un futuro mejor</span></a></li>{% endif %}
+      </ul>
+      <ul class="site-nav__list">
         <li><a href="{{ t.urls.write | relative_url }}"{% if page.nav == 'write' %} aria-current="page"{% endif %}>{{ t.nav.write }}</a></li>
         <li><a href="{{ t.urls.news | relative_url }}"{% if page.nav == 'news' %} aria-current="page"{% endif %}>{{ t.nav.news }}</a></li>
         <li><button type="button" class="site-nav__button" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button></li>
         <li><a class="site-nav__icon" href="{{ site.links.instagram }}" target="_blank" rel="noopener" aria-label="{{ t.nav.instagram }}" title="{{ t.nav.instagram }}">{% include icons/instagram.svg %}</a></li>
       </ul>
+      </div>
     </nav>
   </div>
 </header>
