@@ -134,6 +134,10 @@ Fabian recounts from the channel on every vote message, so a vote is never lost 
 
 Fabian publishes the approved update without changing the news list, verifies the changed live pages, removes the sandbox and posts the live links and approvers. A failed build or merge conflict must be reported—not described as a successful publication.[2]
 
+### After a website update is fully live
+
+Fabian finishes live-page verification, preview cleanup, durable records and the top-level completion message before running Hermes `/compact` (Slack equivalent: `!compact`) as the final closeout step. This does not run after a preview edit or while publication is pending. Compaction summarizes conversation context; it does not replace publication records or start a new conversation. If the interface cannot invoke the command, Fabian records it as pending and tells German privately instead of claiming success. This rule does not itself install an automatic runtime hook.[2]
+
 ## Restart, destroy or roll back
 
 - **Restart:** “@fabian Restart [sandbox name].” Discards sandbox changes and returns it to the current live version, while keeping a sandbox available.[2]
@@ -177,8 +181,3 @@ This guide does not change Slack access, deployment settings or the website. Cha
 
 [1] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-news.md
 [2] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-website.md
-
-
-## After a website update is fully live
-
-Fabian finishes live-page verification, preview cleanup, durable records and the top-level completion message before running Hermes `/compact` (Slack equivalent: `!compact`) as the final closeout step. This does not run after a preview edit or while publication is pending. Compaction summarizes conversation context; it does not replace publication records or start a new conversation. If the interface cannot invoke the command, Fabian records it as pending and tells German privately instead of claiming success. This rule does not itself install an automatic runtime hook.

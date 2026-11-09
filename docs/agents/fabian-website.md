@@ -80,7 +80,7 @@ git ls-remote --heads origin 'refs/heads/sandbox/*'   # is a sandbox open, and w
 - Share preview/live links, what visibly changed, language coverage, concise review findings, voting instructions and tallies, and verified results. Include all information needed for an informed vote, but don't repeat the review verbatim in the vote announcement.
 - Always explain meaningful delays, important blockers, missing verification and decisions needing a person's input in plain language. Quiet communication must not hide errors, approval requests or safety limitations.
 - Post the final result as a **new top-level message**, with the useful links. Include a short refresh reminder only when helpful.
-- Keep typing indicators and request reactions: 👀 when starting, ⏳ while working, ✅ when done, ⚠️ for a problem or while waiting for an answer. A reaction acknowledges handling; it is not itself a vote or proof of publication.
+- Use request reactions: 👀 when starting, ⏳ while working, ✅ when done, ⚠️ for a problem or while waiting for an answer. A reaction acknowledges handling; it is not itself a vote or proof of publication. Slack doesn't show a typing indicator for bots in channels, so don't rely on one; the reactions and the status message are how people see you're working.
 
 ### What stays internal
 
@@ -209,19 +209,21 @@ This is a rule for **new pages**. Existing pages are not automatically redesigne
 
 For a batch of approved replacement cards, verify the exact selected image bytes and route/language mapping before applying them. Use new asset filenames, preserve page bodies and unrelated settings, check the rendered cards and unchanged main content in a preview, and repeat those checks on the live URLs after authorized publication. Do not regenerate different artwork under an earlier approval. A direct-publish exception from German applies only to its explicitly authorized update; it does not change the normal team-vote rule.
 
----
-
-## 6. Make changes
-
 ### Shared site icon and Google search
 
 The small emblem in browser tabs and beside Google search results is the **site icon (favicon)**, not a page's sharing card. All pages using the shared layout must reference consistent sizes/formats of the approved organization emblem. Preserve the supplied artwork and its full square composition; do not substitute a generic star, recolor it or crop it. Generate variants with `python3 scripts/build_site_icons.py` from `assets/img/brand-icon.png`; keep the ICO, PNG, SVG fallback and Apple touch icon consistent, and verify the organization-logo asset too. Use stable icon URLs and inspect the decoded sizes and actual served bytes on every declared icon path. The homepage and icon must be crawlable by Googlebot/Googlebot-Image.
 
 Google chooses one favicon per hostname, so the same icon represents English and Spanish routes. The website can make the emblem available correctly; it cannot guarantee that Google displays it or updates immediately. Allow several days to several weeks for recrawling/processing. An authorized Search Console owner can use URL Inspection on the canonical homepage and request indexing; do not claim this happened unless actually performed. Verify all published page icon declarations and preserve their sharing metadata, visible content and functionality. Follow the normal authorization rules for changes to icon assets and layout; a bounded direct-publish exception does not change the general vote process.
 
+---
+
+## 6. Make changes
+
+### Steps
+
 While the update is **OPEN** (not during a vote):
 
-1. Acknowledge (**Message W4**), react 👀, and start typing.
+1. Acknowledge (**Message W4**) and react 👀.
 2. Make sure you understand the request. If it's ambiguous, ask one short question first.
 3. If it includes something not allowed (section 5), say so with **Message W11** and do only the allowed part, if that still makes sense.
 4. Apply the change on the sandbox branch:
@@ -307,7 +309,7 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    - **Clear titles and headings:** inspect the rendered browser title and main heading of every new or affected page. They must be informative, relevant, compact and distinguish the page's purpose. Check the homepage identifies For a Brighter Evanston; don't substitute an unrelated topic, obsolete wording or repeated generic titles. Sharing-card overrides alone do not establish that the browser title or visible heading is correct.
    - **Discoverable pages:** follow real links from each language's homepage/navigation to important pages and through relevant related pages. New or important pages must not be orphans reachable only by pasting their URL. Check menu labels and link text describe the destination; do not add every page to the main menu automatically when a clear contextual link is more appropriate. Preserve a logical, usable hierarchy and avoid redundant content or duplicate destinations.
    - **Working links and languages:** open those destinations, verify successful responses, matching page content, sandbox-relative preview links, and working English/Spanish switches. Check shared navigation on desktop and phone when affected. Record the tested paths privately; do not treat a screenshot or a list of source links as proof the navigation works.
-   - **Sitemap synchronization:** keep the site's generated `sitemap.xml` aligned with the intended public page inventory whenever pages are added, renamed, redirected or removed. Verify valid XML, unique absolute canonical production URLs, English/Spanish coverage and valid language-alternate links. Exclude `/sandbox/`, errors, assets, broken/redirected/noncanonical destinations and pages intentionally excluded from indexing. Ensure `robots.txt` still advertises the canonical sitemap and does not unintentionally block public pages.
+   - **Sitemap synchronization:** keep the site's generated `sitemap.xml` aligned with the intended public page inventory whenever pages are added, renamed, redirected or removed. The sitemap is built automatically from every page that has `lang` in its settings, so a correctly set-up page is listed without editing `sitemap.xml`; your job is to verify the result. Leaving a public page out of the sitemap means editing `sitemap.xml`, which is a restricted file (section 5): treat it as a blocker that needs German's authorization. Verify valid XML, unique absolute canonical production URLs, English/Spanish coverage and valid language-alternate links. Exclude `/sandbox/`, errors, assets, broken/redirected/noncanonical destinations and pages intentionally excluded from indexing. Ensure `robots.txt` still advertises the canonical sitemap and does not unintentionally block public pages.
    - **Preview versus live:** before voting, verify the proposed page inventory and sitemap generation/template or actual candidate build output cover every intended final route. The public live sitemap must continue to describe the current published site until publication; never add unpublished preview URLs to it. This deployment removes the preview's own sitemap, so don't mistake its expected absence for a broken live sitemap or claim a deployed candidate sitemap was inspected when only source generation was checked. Recheck actual live XML and URL coverage after publication.
    - **Gate:** missing important links, unclear/misleading affected titles, broken destinations/language switches, or an out-of-sync sitemap are blocking findings. Fix and rerun this check before W14. If the check cannot be completed, mark it unverified and do not open the vote. Keep detailed evidence private and give the team one succinct result in W13.
 
