@@ -77,6 +77,7 @@ People may add or update shared templates in `_includes/` and `_layouts/` throug
 
 Checks used before a vote:
 - `python3 scripts/sandbox_check.py --base origin/main [--url <sandbox url>]`: what may change, page settings, unsafe code, Spanish coverage, broken links.
+- `python3 scripts/mockup_check.py extract|placeholders|compare …`: for pages built from a mockup, extracts the mockup's text, lists missing information, and checks the built page copies the text verbatim.
 - `python3 scripts/sandbox_screens.py --sandbox <sandbox url> --live <site url> <paths…>`: desktop and phone screenshots, layout problems. Needs Playwright.
 
 GitHub Pages must be set to **Settings → Pages → Source: GitHub Actions**.
