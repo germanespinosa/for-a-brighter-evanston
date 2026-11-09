@@ -33,6 +33,7 @@ import sys
 import urllib.error
 import urllib.request
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit
@@ -271,15 +272,27 @@ def template_hazards(text):
     return Counter(parser.hazards + [m.group(0) for m in blocks])
 
 
-def fetch(url, method="GET"):
+def fetch(url, method="GET", timeout=20):
     req = urllib.request.Request(url, method=method, headers={"User-Agent": "fabian-sandbox-check"})
     try:
-        with urllib.request.urlopen(req, timeout=20) as r:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.status, (r.read().decode("utf-8", "replace") if method == "GET" else "")
     except urllib.error.HTTPError as e:
         return e.code, ""
     except Exception as e:  # network errors
         return 0, str(e)
+
+
+LINK_WORKERS = 16  # same-site link checks run this many at a time
+LINK_TIMEOUT = 10
+
+
+def link_status(url):
+    """HTTP status of one same-site link (HEAD, falling back to GET on 405)."""
+    c, _ = fetch(url, method="HEAD", timeout=LINK_TIMEOUT)
+    if c == 405:
+        c, _ = fetch(url, timeout=LINK_TIMEOUT)
+    return c
 
 
 def fetch_sharing_image(url):
@@ -869,10 +882,14 @@ def main():
         status, _ = fetch(base_url)
         if status != 200:
             blocking.append(f"The sandbox home page {base_url} doesn't load (HTTP {status}). Wait for the build, or check the build status.")
+        # Load all changed pages at once, then check every unique same-site
+        # link at once; messages are reported in the same order as before.
+        page_urls = [urljoin(base_url, page_url(path, fm).lstrip("/")) for path, fm, body, st in changed_pages]
+        with ThreadPoolExecutor(max_workers=LINK_WORKERS) as pool:
+            fetched = list(pool.map(fetch, page_urls))
         checked = set()
-        for path, fm, body, st in changed_pages:
-            url = urljoin(base_url, page_url(path, fm).lstrip("/"))
-            code, html = fetch(url)
+        to_check = []  # (page url, tag, link, full url) in report order
+        for (path, fm, body, st), url, (code, html) in zip(changed_pages, page_urls, fetched):
             if code != 200:
                 blocking.append(f"{url} doesn't load (HTTP {code}).")
                 continue
@@ -902,13 +919,16 @@ def main():
                 checked.add(full)
                 if parts.netloc != urlsplit(base_url).netloc:
                     continue  # outside links aren't checked
-                c, _ = fetch(full.split("#")[0], method="HEAD")
-                if c == 405:
-                    c, _ = fetch(full.split("#")[0])
-                if c >= 400 or c == 0:
-                    blocking.append(f"{url}: broken {'image' if tag == 'img' else 'link'} → {link} (HTTP {c}).")
-                elif "/sandbox/" in base_url and "/sandbox/" not in parts.path and tag in ("a", "img"):
-                    warnings.append(f"{url}: {tag} {link} points to the live site instead of the sandbox.")
+                to_check.append((url, tag, link, full))
+        targets = sorted({full.split("#")[0] for _, _, _, full in to_check})
+        with ThreadPoolExecutor(max_workers=LINK_WORKERS) as pool:
+            statuses = dict(zip(targets, pool.map(link_status, targets)))
+        for url, tag, link, full in to_check:
+            c = statuses[full.split("#")[0]]
+            if c >= 400 or c == 0:
+                blocking.append(f"{url}: broken {'image' if tag == 'img' else 'link'} → {link} (HTTP {c}).")
+            elif "/sandbox/" in base_url and "/sandbox/" not in urlsplit(full).path and tag in ("a", "img"):
+                warnings.append(f"{url}: {tag} {link} points to the live site instead of the sandbox.")
 
     report = {"blocking": blocking, "warnings": warnings, "spanish": spanish, "changes": changes, "notes": notes}
     if args.json:

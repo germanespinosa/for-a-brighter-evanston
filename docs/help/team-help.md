@@ -133,7 +133,7 @@ A mockup is a file showing what a page should look like, such as an HTML page, a
 
 When the sandbox is ready, post: **“@fabian Publish [sandbox name]”** or **“@fabian Let’s vote on [sandbox name].”** This requests a review and vote; it does not bypass either step.[2]
 
-Fabian brings the sandbox up to date, checks permitted changes, links, images and language coverage, and checks desktop and phone layouts. The review lists changes, blocking problems, suggestions, Spanish status, visual findings and Fabian’s recommendation. If a visual check cannot be completed, that limitation must be disclosed. Blocking problems must be fixed before voting.[2]
+Fabian brings the sandbox up to date, checks permitted changes, links, images and language coverage, and checks desktop and phone layouts. These checks run at the same time, so this part of the review usually takes seconds rather than minutes; Fabian’s own reading of the results and screenshots still takes longer. The review lists changes, blocking problems, suggestions, Spanish status, visual findings and Fabian’s recommendation. If a visual check cannot be completed, that limitation must be disclosed. Blocking problems must be fixed before voting.[2]
 
 **Fabian also owns the page-organization check before every vote.** He checks clear page titles and headings, understandable navigation and link labels, working links between important pages, and English/Spanish connections. He keeps the sitemap—the page list supplied to search engines—synchronized as pages change, and checks the live list after publication. Missing important links or an incorrect page list must be fixed before voting. This helps Google understand the site but does not guarantee that Google displays subpage shortcuts.[2]
 

@@ -17,15 +17,20 @@ when the page already exists there) and reports:
 Look at the screenshots yourself as well; this catches mechanical problems,
 not whether something looks good.
 
+Pages load several at a time (--jobs, default 6). A page counts as ready once
+it has loaded, its fonts are in and its visible images have finished, instead
+of waiting for the network to go fully quiet.
+
 Needs Playwright:  pip install playwright && python3 -m playwright install chromium
 """
 import argparse
+import asyncio
 import json
 import sys
 from pathlib import Path
 
 try:
-    from playwright.sync_api import sync_playwright
+    from playwright.async_api import async_playwright
 except ImportError:
     print("Playwright isn't installed. Run: pip install playwright && python3 -m playwright install chromium")
     sys.exit(2)
@@ -66,52 +71,80 @@ PROBE = r"""
 """
 
 
+READY = r"""
+async () => {
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  const imgs = [...document.images].filter(i => i.loading !== 'lazy' && !i.complete);
+  await Promise.all(imgs.map(i => new Promise(r => { i.addEventListener('load', r, {once: true}); i.addEventListener('error', r, {once: true}); })));
+}
+"""
+
+SCREENS = ((1280, "desktop"), (390, "phone"))
+
+
+async def shoot(ctx, sem, out, label, path, which, base):
+    async with sem:
+        page = await ctx.new_page()
+        errors = []
+        page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+        page.on("pageerror", lambda e: errors.append(str(e)))
+        url = base + path
+        try:
+            resp = await page.goto(url, wait_until="load", timeout=45000)
+            code = resp.status if resp else 0
+        except Exception as e:
+            code, errors = 0, errors + [str(e)]
+        name = f"{which}-{label}-{path.strip('/').replace('/', '_') or 'home'}.png"
+        item = {"page": path, "version": which, "screen": label, "status": code, "screenshot": str(out / name)}
+        if code == 200:
+            try:
+                await asyncio.wait_for(page.evaluate(READY), 10)
+            except Exception:
+                pass  # take the screenshot anyway; broken images are reported by PROBE
+            await page.wait_for_timeout(300)
+            await page.screenshot(path=str(out / name), full_page=True)
+            item.update(await page.evaluate(PROBE))
+        item["consoleErrors"] = errors[:5]
+        await page.close()
+        return item
+
+
+async def run(args, out, sb, live):
+    sem = asyncio.Semaphore(max(1, args.jobs))
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        jobs = []
+        contexts = []
+        for width, label in SCREENS:
+            ctx = await browser.new_context(viewport={"width": width, "height": 900 if width > 600 else 800},
+                                            is_mobile=width < 600, has_touch=width < 600)
+            contexts.append(ctx)
+            for path in args.paths:
+                path = "/" + path.lstrip("/")
+                for which, base in (("sandbox", sb), ("live", live)):
+                    if base:
+                        jobs.append(shoot(ctx, sem, out, label, path, which, base))
+        items = await asyncio.gather(*jobs)  # same order as the jobs list
+        for ctx in contexts:
+            await ctx.close()
+        await browser.close()
+    # new page: nothing to compare with
+    return [i for i in items if not (i["version"] == "live" and i["status"] == 404)]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--sandbox", required=True)
     ap.add_argument("--live")
     ap.add_argument("--out", default="/tmp/sandbox-shots")
+    ap.add_argument("--jobs", type=int, default=6, help="pages loaded at the same time (default 6)")
     ap.add_argument("paths", nargs="+")
     args = ap.parse_args()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     sb = args.sandbox.rstrip("/")
     live = args.live.rstrip("/") if args.live else None
-    results = []
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        for width, label in ((1280, "desktop"), (390, "phone")):
-            ctx = browser.new_context(viewport={"width": width, "height": 900 if width > 600 else 800},
-                                      is_mobile=width < 600, has_touch=width < 600)
-            for path in args.paths:
-                path = "/" + path.lstrip("/")
-                for which, base in (("sandbox", sb), ("live", live)):
-                    if not base:
-                        continue
-                    page = ctx.new_page()
-                    errors = []
-                    page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
-                    page.on("pageerror", lambda e: errors.append(str(e)))
-                    url = base + path
-                    try:
-                        resp = page.goto(url, wait_until="networkidle", timeout=45000)
-                        code = resp.status if resp else 0
-                    except Exception as e:
-                        code, errors = 0, errors + [str(e)]
-                    name = f"{which}-{label}-{path.strip('/').replace('/', '_') or 'home'}.png"
-                    item = {"page": path, "version": which, "screen": label, "status": code, "screenshot": str(out / name)}
-                    if code == 200:
-                        page.wait_for_timeout(600)
-                        page.screenshot(path=str(out / name), full_page=True)
-                        item.update(page.evaluate(PROBE))
-                    item["consoleErrors"] = errors[:5]
-                    page.close()
-                    if which == "live" and code == 404:
-                        continue  # new page: nothing to compare with
-                    results.append(item)
-            ctx.close()
-        browser.close()
+    results = asyncio.run(run(args, out, sb, live))
 
     problems = []
     for r in results:
