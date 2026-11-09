@@ -519,13 +519,23 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
 
    Any other conflict, including one in `team-help.md` or a manual: run `git merge --abort` and post **Message W15**. German has to look at it.
 3. Wait for the sandbox build to finish (the sandbox shows the latest version).
-4. Run the checks:
+4. Run the checks **all at once, in one shell call**. They don't depend on each other, so start them together and wait for all of them; then read the three outputs. This takes about 10–15 seconds instead of about a minute.
 
    ```bash
-   python3 scripts/sandbox_check.py --base origin/main --url https://forabrighterevanston.org/sandbox/<id>/
+   mkdir -p /tmp/review-<id>
+   python3 scripts/sandbox_check.py --base origin/main --url https://forabrighterevanston.org/sandbox/<id>/ \
+       > /tmp/review-<id>/rules.txt 2>&1 &
    python3 scripts/sandbox_screens.py --sandbox https://forabrighterevanston.org/sandbox/<id>/ \
-       --live https://forabrighterevanston.org/ --out /tmp/sandbox-shots/<id> <each changed page's URL path, plus its other-language version>
+       --live https://forabrighterevanston.org/ --out /tmp/sandbox-shots/<id> <each changed page's URL path, plus its other-language version> \
+       > /tmp/review-<id>/screens.json 2>&1 &
+   # Only for pages built from a mockup (one line per mockup page):
+   python3 scripts/mockup_check.py compare <mockup file or corrected .txt> https://forabrighterevanston.org/sandbox/<id>/<page path>/ \
+       --fills /tmp/mockup-<id>-fills.json > /tmp/review-<id>/mockup-<page>.txt 2>&1 &
+   wait
+   cat /tmp/review-<id>/*.txt; python3 -c "import json;print(*json.load(open('/tmp/review-<id>/screens.json'))['problems'],sep='\n')"
    ```
+
+   Both scripts already work in parallel inside: `sandbox_check.py` checks links about 16 at a time, and `sandbox_screens.py` loads about 6 pages at a time (`--jobs` changes that). The exit codes no longer show in this form; read the outputs: `RESULT:` in `rules.txt`, `problems` in `screens.json`, and the verdict line of each mockup report. If `screens.json` isn't JSON (Playwright error), rerun that one script on its own.
 
    For text changes in `_data/…` files, include the pages that show that text: home `/` and `/es/`, `/home/new-homes/`, `/home/in-the-news/`, and so on. For templates, explicitly identify every affected rendered page and check its links and assets, language coverage, and desktop/phone screenshots. A shared header, menu, footer or base layout can affect the entire site; do not assume a template-only diff means there are no pages to check.
 5. **Look at the screenshots yourself**, desktop and phone, next to the live version when the page already existed. Judge:
@@ -902,7 +912,7 @@ Don't make the summary only a list of file names.
 **Publish**
 - [ ] Sandbox merged with the latest `origin/main` and rebuilt
 - [ ] Sandbox-only styling/model permission not mistaken for publication approval; copy/resource/publication holds resolved before voting
-- [ ] `sandbox_check.py --url` and `sandbox_screens.py` run; screenshots reviewed
+- [ ] `sandbox_check.py --url`, `sandbox_screens.py` (and `mockup_check.py compare` for mockup pages) run together in one call; outputs read; screenshots reviewed
 - [ ] Fabian completed the mandatory rendered-title, heading, navigation and internal-link check; important pages reachable in both languages; no unresolved blockers
 - [ ] Proposed public-page inventory and sitemap generation synchronized; canonical URLs and language alternates checked; no unpublished preview URLs in the live sitemap
 - [ ] Every new page's sharing-card image and copy included in the review; rendered metadata and image URL verified in the sandbox
