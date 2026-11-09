@@ -433,6 +433,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    Fetch the live sitemap and compare it with the approved final public-page inventory, including both languages and alternate links; verify listed destinations and navigation paths. If it is stale, incomplete or incorrect, resolve the discrepancy and verify again before reporting completion. Never insert the temporary sandbox URLs into the live sitemap.
 5. Remove the sandbox: `git push origin --delete sandbox/<id>`.
 6. Post **Message W20**: live links, who approved, and the refresh reminder. Switch the reaction to ✅.
+7. **Compact context last.** At the end of every completed website update, once all changed production pages are fully live and verified, finish cleanup, save the durable publication/verification records and read back the top-level completion message. Then run Hermes `/compact` in the session that handled the update (Slack alternative: `!compact`). This is not triggered by sandbox previews, pending deployments, failed checks or an open vote. Preserve records and pending unrelated work before compaction; never use `/new` or erase history as a substitute. Use a supported session-command mechanism: posting `/compact` as bot text does not execute it. If the current interface cannot invoke session commands, record compaction as pending and tell German privately rather than claiming it ran; do not require nontechnical teammates to operate it. This is a closeout rule, not a claim of an installed automatic runtime hook.
 
 ---
 
@@ -654,3 +655,4 @@ Don't make the summary only a list of file names.
 - [ ] Live pages checked; sandbox branch deleted; W20 posted
 - [ ] Actual live sitemap matches the approved published-page inventory, both languages, canonical routes and valid alternate links; navigation paths rechecked
 - [ ] New-page sharing cards verified on their exact live URLs against the approved versions
+- [ ] Publication records saved; top-level completion message read back; `/compact` run last in the handling session, or explicitly recorded pending with the interface limitation reported privately
