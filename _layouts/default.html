@@ -76,6 +76,12 @@
   {%- if page.css %}
   <link rel="stylesheet" href="{{ page.css | prepend: '/assets/css/' | relative_url }}">
   {%- endif %}
+  {%- if page.is_home or page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}
+  {%- unless page.is_home %}
+  <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
+  {%- endunless %}
+  <link rel="stylesheet" href="{{ '/assets/css/new-homes.css' | relative_url }}">
+  {%- endif %}
 </head>
 <body class="{{ page.body_class }}">
   <a class="skip-link" href="#main">{{ t.nav.skip }}</a>
