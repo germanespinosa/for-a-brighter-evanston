@@ -53,49 +53,123 @@ home:
   description: "Monday’s vote on the financial sustainability plan has been postponed. The board will still meet Monday, November 9 at 5 PM to continue the discussion. A vote is now anticipated November 16."
   share_image: "/assets/img/share-home-en-202a113c41.jpg"
   photo_credit: Photo by Joerg Metzner
-  h1: "D65 Board Vote"
-  h1_mark: "Postponed."
-  lead: "Monday’s vote on the financial sustainability plan has been postponed. The board will still meet Monday, November 9 at 5 PM to continue the discussion. A vote is now anticipated November 16."
-  sig_label: Signatures and counting!
+  photo_alt: "Families and kids at a For a Brighter Evanston rally holding signs reading Our schools, Our voice, Our choice, next to a tiger mascot"
+  hero:
+    eyebrow: "The board votes Nov. 16."
+    h1: "Closing two schools only buys"
+    h1_mark: "one year."
+    h1_mark2: "But there's a brighter path forward."
+    lead: "District 65’s plan would close two schools, and the money still runs out. Voters want a long-term plan before any school closes. Our model shows a path that keeps schools open."
+    options_btn: See the options
+    email_btn: Email the board
+  sig_label: Signatures and counting
   sign_btn: Sign the letter
-  share_btn: Share the letter
-  wtb:
-    eyebrow: Add your voice
-    title: Write to the School Board.
-    text: Pick the issue that matters most to you. We draft the letter, you send it from your own email. It takes about two minutes.
-    cta: Click here to write to the Board
-    comment: How to sign up for public comment
-  error:
-    eyebrow: The $17 million error
-    title: Capital spending was counted twice.
-    text: "Community members identified a $17 million error in District 65’s five-year financial projections: capital spending had been counted twice."
-    sources_html: "Sources: <a href=\"https://evanstonroundtable.com/2026/10/25/district-65-financial-projections-error/\" target=\"_blank\" rel=\"noopener\">Evanston RoundTable</a> · <a href=\"https://patch.com/illinois/evanston/district-65-corrects-17m-projection-error-budget-cuts-still-advance\" target=\"_blank\" rel=\"noopener\">Patch</a> (D65’s CFO confirmed capital needs were double-counted)."
-    why_title: Why independent review matters
-    why_1: That correction does not erase the district’s financial challenges. It does underscore why community expertise, transparent calculations, and independent review must be part of the process before schools close and programs are cut.
-    why_2: Evanston and Skokie deserve a financially sustainable plan that protects students, strengthens neighborhood schools, and earns the community’s trust.
-  asks:
-    tag: Vote no on the current proposal
-    title: "Put a moratorium on school closures until:"
+  event:
+    eyebrow: Stand with our teachers
+    date: "Monday, Nov. 9"
+    rally_time: "4 p.m."
+    rally: Rally with our teachers
+    meeting_time: "5 p.m."
+    meeting: Board meeting.
+    place: "1500 McDaniel Ave., Evanston"
+    calendar: Add to calendar
+  problem:
+    eyebrow: The problem
+    title: "D65 needs a referendum."
+    title_mark: "Voters aren’t there yet."
+    text: "Every plan that keeps D65 on solid ground for the long term includes a referendum, the district’s included. An independent poll of 665 Evanston voters shows they aren’t ready to say yes, and closing schools pushes them further away."
+    c1_label: A referendum today
+    c1_big: "41%"
+    c1_text: would oppose a referendum today.
+    c1_aria: 41 percent oppose
+    c2_label: If Dewey and Lincolnwood close
+    c2_big: "4 to 1"
+    c2_text: "less likely to vote yes, not more."
+    c2_less: "41% less likely"
+    c2_more: "11% more likely"
+    c3_label: "The original Oct. 13 plan"
+    c3_big: "65%"
+    c3_text: "oppose D65’s original budget plan."
+    c3_aria: "Oppose 65 percent, support 21 percent"
+    c3_note: "Only 21% support it."
+    source: "Public Policy Polling, 665 registered Evanston voters, Nov. 4–5, 2026."
+    poll_btn: Learn more about the poll
+    poll_url: /home/voter-poll/
+  statement:
+    title: "Closing schools doesn’t fix the budget."
+    title_mark: "And it sinks the referendum that would."
+    text: "The district’s plan doesn’t fix the budget: closing two schools buys one year. Every long-term fix needs a referendum, and voters aren’t there. 41% would vote no today, and closing schools makes it worse, nearly 4 to 1."
+    text_bold: "D65 has to rebuild trust first, with a long-term plan and real community buy-in. Then ask."
+  bandaid:
+    eyebrow: The District’s plan
+    title: "It’s a band-aid, not a long-term plan."
+    p1: "Closing two schools saves about $2.3 million a year by the district’s own latest estimate, about 1% of D65’s budget. On the district’s own path, reserves run out in FY34 instead of FY33."
+    p2: "That’s one year, in exchange for two schools, new boundaries, new bus routes, learning loss and a massive amount of disruption."
+    chart_label: When reserves run out
+    open_label: Schools stay open
+    open_year: FY33
+    close_label: Close two schools
+    close_year: FY34
+    chart_note: "Two schools for"
+    chart_note_mark: "one more year."
+    big: "$27M"
+    error_text: "And the plan rests on numbers that keep moving. Parents caught a $27 million error, and the forecast changed three times in three weeks."
+    error_bold: "Don’t vote on a plan built on a $27 million error."
+    source: "Source: RoundTable reporting on the $27.35M five-year error and revised savings"
+  options:
+    eyebrow: A brighter path forward
+    title: "There are better options."
+    title2: "Let’s work on them together."
+    text: "Our financial model starts from the district’s own projections and fixes the errors parents found. It shows a path with financial “levers” that keeps all schools open and keeps reserves above the board’s 90-day safety line every year through 2037. It has room to spare, so it still holds even if some pieces fall short."
     items:
-      - title: Independent review
-        text: Corrected financial projections and savings estimates are independently reviewed and publicly explained.
-      - title: Real alternatives
-        text: Credible alternatives—including administrative and other spending reductions—are compared.
-      - title: Student impacts
-        text: Student impacts on learning, bilingual education, special education, child care, and safe access to school are verified and discussed.
-      - title: A shared plan
-        text: Families, educators, the district, and city leaders have a meaningful opportunity to shape the path forward.
-  new_homes:
-    tag: New homes, farther schools
-    title: 932 new homes are coming. The closure plan sends their kids farther away.
-    text: Five developments near Dewey and Lincolnwood are approved, in approval or under construction. Under D65’s proposed boundaries, every one is assigned to a farther school, and the district’s forecast doesn’t count them.
-    cta: See the five developments
-    svg_label: "Illustration: new apartment buildings, the nearby school marked closed, and a child walking a longer path to a farther school, 1.2 miles on average."
-    svg_homes: New homes
-    svg_closed: CLOSED
-    svg_school: Neighborhood school
-    svg_far: Farther school
-    svg_walk: average walk, today vs. proposed
+      - title: Spend carefully
+        text: "Create an efficient central office and prioritize student-facing positions. Engage in honest and fair conversations about compensation and benefits."
+      - title: Use what already exists
+        text: "Sell the Kingsley and Bessie Rhodes properties and work with the city to return TIF money to schools."
+      - title: "Ask voters, with a plan they trust"
+        text: "A 2028 referendum similar to the one Evanston passed in 2017, asked only after a long-term plan with spending limits and independent oversight is in place."
+    chart_title: "Ending reserves, $ millions"
+    legend_base: Base
+    legend_int: Interventions + SACC
+    legend_open: Both Schools Open + SACC
+    chart1_title: "1 · The District’s plan, adjusted for errors"
+    chart1_alt: "Chart 1, the District’s plan adjusted for errors: reserves reach zero in FY30 (Base), FY33 (Both Schools Open) and FY34 (Interventions). Closing schools moves the line one year."
+    chart1_caption_html: "Reserves reach zero in <strong>FY30</strong> (Base), <strong>FY33</strong> (Both Schools Open) and <strong class=\"hm-rust\">FY34</strong> (Interventions). Closing schools moves the line one year."
+    chart2_title: "2 · The same scenarios with all levers on"
+    chart2_alt: "Chart 2, the same scenarios with all levers on: Interventions ends near $240M and Both Schools Open above $215M. Base stays solvent through FY37."
+    chart2_caption_html: "Interventions ends near <strong class=\"hm-rust\">$240M</strong>, Both Schools Open above <strong>$215M</strong>. Even Base stays solvent through FY37."
+    note_bold: Model projections.
+    note: "Different vertical scales. The district’s published projections stop at FY32."
+    model_link: "See the model and assumptions →"
+    disclaimer: "Don’t take our word for it. Review the model, explore the assumptions, and check the math. These are model projections, contingent on the proposed measures and assumptions, not guaranteed outcomes."
+    explore_btn: Explore a brighter path forward
+  act:
+    title: "Scrap this plan."
+    title_mark: "Let’s build a better one together."
+    text: "Voters said a long-term financial plan with clear spending limits (38%, more than double the next answer) is needed to earn their support. Two-thirds want the board to hold off on closing schools until it has one. The board deserves a better proposal. So do our kids."
+    email_label: Do this first
+    email_title: "Email the board. Ask them to vote no on Nov. 16."
+    email_btn: Email the board
+    show_label: "Monday, Nov. 9"
+    show_title: Show up
+    show_text: "Rally at 4 p.m. to support our teachers, then head to the 5 p.m. board meeting at the Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave."
+    sign_label: Add your name
+    sign_title: Sign our demand letter
+    sign_text: "Join hundreds of neighbors calling on the board to give residents a real say before any school closes."
+    sign_btn: Sign the letter
+    share_label: Anytime
+    share_title: Share
+    share_text: "Send a brighter path forward to a neighbor who thinks closing schools is the only option."
+    copy_btn: Copy link
+    copied: Link copied
+    share_email: Share by email
+    share_sms: Share by text message
+    share_fb: Share on Facebook
+    share_ig: Share on Instagram
+    share_subject: "A brighter path forward for D65"
+    share_message: "Closing two schools only buys one year. There’s a brighter path forward for D65: "
+  next:
+    text: New homes and neighborhood schools
   share:
     title: Share the letter
     lead: Choose where to share it.

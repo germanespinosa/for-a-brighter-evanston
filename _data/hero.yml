@@ -1,23 +1,7 @@
-# Home page hero slideshow. Photos by Joerg Metzner, supplied in #website.
-# Web-optimized copies of the ten uploaded photos; originals retained privately.
-# The first photo shows immediately; remaining photos rotate every 12 seconds.
+# Home page hero photo (Photo by Joerg Metzner, supplied in #website).
+# The first entry is shown in the hero and preloaded by _layouts/default.html.
+# Alt text and credit live in _data/i18n/<lang>.yml (home.photo_alt, home.photo_credit).
 - file: rally-01.jpg
-  position: "58% 35%"
-- file: rally-09.jpg
-  position: "49% 58%"
-- file: rally-06.jpg
-  position: "53% 52%"
-- file: rally-04.jpg
-  position: "48% 43%"
-- file: rally-03.jpg
-  position: "62% 48%"
-- file: rally-05.jpg
-  position: "62% 62%"
-- file: rally-07.jpg
-  position: "60% 58%"
-- file: rally-10.jpg
-  position: "50% 75%"
-- file: rally-02.jpg
-  position: "62% 42%"
-- file: rally-08.jpg
-  position: "46% 48%"
+  position: "55% 40%"
+  width: 1600
+  height: 1067

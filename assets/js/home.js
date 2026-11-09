@@ -1,39 +1,8 @@
-/* Home page behavior: hero slideshow, live signature count, share dialog. */
+/* Home page behavior: live signature count, copy-link button, share dialog. */
 (function () {
   'use strict';
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ---------- Hero slideshow ---------- */
-  (function slideshow() {
-    var slides = Array.prototype.slice.call(document.querySelectorAll('.hero__slide'));
-    if (slides.length < 2) return;
-    var current = 0;
-    var INTERVAL = 12000;
-
-    function load(i) {
-      var s = slides[i];
-      if (s && !s.style.backgroundImage) s.style.backgroundImage = "url('" + s.getAttribute('data-src') + "')";
-    }
-    function show(next) {
-      load(next);
-      slides[current].classList.remove('is-active');
-      var el = slides[next];
-      el.style.animation = 'none';
-      void el.offsetWidth;             // restart the slow zoom
-      el.style.animation = '';
-      el.classList.add('is-active');
-      current = next;
-      load((next + 1) % slides.length); // preload the one after
-    }
-    load(1);
-    var timer = setInterval(function () { show((current + 1) % slides.length); }, INTERVAL);
-    // Save data and battery: pause while the tab is hidden
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) { clearInterval(timer); timer = null; }
-      else if (!timer) timer = setInterval(function () { show((current + 1) % slides.length); }, INTERVAL);
-    });
-  })();
 
   /* ---------- Live signature count (Google Apps Script, JSONP) ---------- */
   var count = 0;
@@ -71,6 +40,37 @@
     }
     load();
     setInterval(function () { if (!document.hidden) load(); }, 60000);
+  })();
+
+  /* ---------- "Copy link" in the Share card ---------- */
+  (function copyLink() {
+    var box = document.querySelector('[data-hm-share]');
+    if (!box) return;
+    var btn = box.querySelector('[data-hm-copy]');
+    var label = box.querySelector('[data-hm-copy-label]');
+    var status = box.querySelector('[data-hm-copy-status]');
+    var url = box.getAttribute('data-url');
+    var original = label.textContent;
+    function done() {
+      label.textContent = box.getAttribute('data-copied');
+      status.textContent = box.getAttribute('data-copied');
+      clearTimeout(done.t);
+      done.t = setTimeout(function () { label.textContent = original; status.textContent = ''; }, 3000);
+    }
+    function fallback() {
+      var x = document.createElement('textarea');
+      x.value = url; x.setAttribute('readonly', ''); x.setAttribute('aria-hidden', 'true');
+      x.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(x); x.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      x.remove(); btn.focus();
+      if (ok) done(); else window.prompt(original, url);
+    }
+    btn.addEventListener('click', function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, fallback);
+      } else fallback();
+    });
   })();
 
   /* ---------- Share dialog ---------- */

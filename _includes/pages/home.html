@@ -1,199 +1,231 @@
 {%- comment -%}
   Home page template, shared by / (English) and /es/ (Spanish).
   Text comes from _data/i18n/<lang>.yml (the `home:` section).
-  The meeting card comes from _data/event.yml; hero photos from _data/hero.yml.
+  The rally/meeting card comes from _data/event.yml; the hero photo from _data/hero.yml.
+  Styles: assets/css/home.css (hm- classes). Behavior: assets/js/home.js.
 {%- endcomment -%}
 {%- assign t = site.data.i18n[page.lang] -%}
 {%- assign h = t.home -%}
 {%- assign ev = site.data.event -%}
+{%- assign photo = site.data.hero[0] -%}
+{%- capture arrow -%}<svg class="hm-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>{%- endcapture -%}
+{%- capture share_url -%}{{ h.share.site_path | absolute_url }}{%- endcapture -%}
+{%- if page.lang == 'es' -%}{%- assign options_url = '/es/opciones/' -%}{%- else -%}{%- assign options_url = '/home/options/' -%}{%- endif -%}
 
-<section class="hero" aria-labelledby="hero-title">
-  <div class="hero__media" aria-hidden="true">
-    {%- for photo in site.data.hero %}
-    <div class="hero__slide{% if forloop.first %} is-active{% endif %}" style="background-position: {{ photo.position }};{% if forloop.first %} background-image: url('{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}');{% endif %}" data-src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}"></div>
-    {%- endfor %}
-  </div>
-  <div class="hero__overlay" aria-hidden="true"></div>
-  <p class="hero__credit">{{ h.photo_credit }}</p>
+<div class="hm">
 
-  <div class="container hero__inner">
-    <div class="hero__copy">
-      <h1 class="hero__title" id="hero-title">{{ h.h1 }}<br> <mark class="mark">{{ h.h1_mark }}</mark></h1>
-      <p class="hero__lead">{{ h.lead }}</p>
-
-      {% if page.lang == 'en' %}
-      <p class="hero__lead"><a class="btn btn--gold btn--lg" id="email-board-primary" href="{{ t.urls.write | relative_url }}">Email the board <span aria-hidden="true">→</span></a></p>
-      {% endif %}
-
-      <div class="sig-count" data-signature-count data-src="{{ site.links.signature_count }}" hidden>
-        <p class="sig-count__label" id="sig-label">{{ h.sig_label }}</p>
-        <p class="sig-count__number" aria-describedby="sig-label" aria-live="polite">0</p>
+<section class="hm-hero" aria-labelledby="hero-title">
+  <div class="hm-wrap hm-hero__inner">
+    <div class="hm-hero__copy">
+      <p class="hm-eyebrow hm-eyebrow--gold">{{ h.hero.eyebrow }}</p>
+      <h1 class="hm-hero__title" id="hero-title">{{ h.hero.h1 }} <mark class="hm-mark">{{ h.hero.h1_mark }}</mark><br><mark class="hm-mark">{{ h.hero.h1_mark2 }}</mark></h1>
+      <p class="hm-hero__lead">{{ h.hero.lead }}</p>
+      <div class="hm-hero__ctas">
+        <a class="hm-btn hm-btn--gold hm-btn--lg" href="#options">{{ h.hero.options_btn }} {{ arrow }}</a>
+        <a class="hm-btn hm-btn--ghost hm-btn--lg" href="{{ t.urls.write | relative_url }}">{{ h.hero.email_btn }} {{ arrow }}</a>
       </div>
-
-      {% if page.lang == 'en' %}<div class="hero__lead">{% endif %}
-      <div class="hero__actions">
-        <span class="btn-group">
-          <a class="btn btn--gold btn--lg" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.sign_btn }} <span aria-hidden="true">→</span></a>
-          <button type="button" class="btn btn--gold btn--lg btn--icon" data-dialog-open="share-dialog" aria-haspopup="dialog" aria-label="{{ h.share_btn }}" title="{{ h.share_btn }}">{% include icons/share.svg %}</button>
-        </span>
-        <button type="button" class="btn btn--outline-light btn--lg" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
+      <div class="hm-sig">
+        <div class="sig-count hm-sig__count" data-signature-count data-src="{{ site.links.signature_count }}" hidden>
+          <p class="sig-count__number hm-sig__number" aria-describedby="sig-label" aria-live="polite">0</p>
+          <p class="sig-count__label hm-sig__label" id="sig-label">{{ h.sig_label }}</p>
+        </div>
+        <div class="hm-sig__actions">
+          <a class="hm-btn hm-btn--white" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.sign_btn }}</a>
+          <button type="button" class="hm-linkbtn" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
+        </div>
       </div>
-      {% if page.lang == 'en' %}
-      </div>
-      {% endif %}
-      <p class="source-note dialog__fine" id="hero-sources"><span class="text-gold">{% if page.lang == 'en' %}Sources: <a href="https://evanstonroundtable.com/2026/11/06/district-65-board-will-not-vote-on-budget-plan-monday/"><span class="text-gold">RoundTable: vote postponed [2]</span></a> · <a href="https://www.district65.net/about/board-of-education/board-meetings"><span class="text-gold">D65: meeting calendar [3]</span></a>.{% else %}Fuentes: <a href="https://evanstonroundtable.com/2026/11/06/district-65-board-will-not-vote-on-budget-plan-monday/"><span class="text-gold">RoundTable: votación aplazada [2]</span></a> · <a href="https://www.district65.net/about/board-of-education/board-meetings"><span class="text-gold">D65: calendario de reuniones [3]</span></a>.{% endif %}</span></p>
     </div>
 
-    {%- if ev.show %}
-    <aside class="event-card" aria-labelledby="event-title">
-      {% if page.lang == 'en' %}
-      <p class="eyebrow">STAND WITH OUR TEACHERS</p>
-      <h2 class="event-card__date" id="event-title">Monday, Nov. 9</h2>
-      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">4 p.m.</time> Rally with our teachers</p>
-      <p class="event-card__time" id="board-meeting-time"><time datetime="{{ ev.start_iso }}">5 p.m.</time> Board meeting.</p>
-      <p class="event-card__place"><span aria-hidden="true">📍</span> 1500 McDaniel Ave., Evanston</p>
-      {% include calendar-menu.html label="Add to calendar" %}
-      {% else %}
-      <p class="eyebrow">APOYEMOS A NUESTROS DOCENTES</p>
-      <h2 class="event-card__date" id="event-title">Lunes, 9 de nov.</h2>
-      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">4 p. m.</time> Concentración con nuestros docentes</p>
-      <p class="event-card__time" id="board-meeting-time"><time datetime="{{ ev.start_iso }}">5 p. m.</time> Reunión de la Junta.</p>
-      <p class="event-card__place"><span aria-hidden="true">📍</span> 1500 McDaniel Ave., Evanston</p>
-      {% include calendar-menu.html label="Agregar al calendario" %}
-      {% endif %}
-    </aside>
-    {%- endif %}
-  </div>
-</section>
-
-{% if page.lang == 'en' %}
-<section class="band band--tint" id="the-problem" aria-labelledby="home-poll-title">
-  <div class="container">
-    <p class="eyebrow">The problem</p>
-    <h2 class="section-title" id="home-poll-title">D65 needs a referendum.<br><mark class="mark">Voters aren’t there yet.</mark></h2>
-    <p>Every plan that keeps D65 on solid ground for the long term includes a referendum, the district’s included. An independent poll of 665 Evanston voters shows they aren’t ready to say yes, and closing schools pushes them further away.</p>
-    <ul class="stat-grid" data-three-part="poll-statistics">
-      <li><picture><img src="{{ '/assets/img/home-poll-summary-referendum-2895a69792.png' | relative_url }}" alt="A REFERENDUM TODAY. 41% would oppose a referendum today." width="768" height="615" loading="lazy"></picture></li>
-      <li><picture><img src="{{ '/assets/img/home-poll-summary-closures-0ceb0fa646.png' | relative_url }}" alt="IF DEWEY AND LINCOLNWOOD CLOSE. 4 to 1 less likely to vote yes, not more. 41% less likely; 11% more likely." width="768" height="615" loading="lazy"></picture></li>
-      <li><picture><img src="{{ '/assets/img/home-poll-summary-original-plan-95f8cc9751.png' | relative_url }}" alt="THE ORIGINAL OCT. 13 PLAN. 65% oppose D65’s original budget plan. Only 21% support it." width="768" height="615" loading="lazy"></picture></li>
-    </ul>
-    <div class="two-col">
-      <p class="source-note"><a href="{{ '/assets/files/poll-full-results-nov-2026.pdf' | relative_url }}">Public Policy Polling, 665 registered Evanston voters, Nov. 4–5, 2026.</a></p>
-      <p><a class="btn btn--navy" href="{{ '/home/voter-poll/' | relative_url }}">Learn more about the poll <span aria-hidden="true">→</span></a></p>
-    </div>
-  </div>
-</section>
-{% else %}
-<section class="band band--tint" id="the-problem" aria-labelledby="home-poll-title">
-  <div class="container">
-    <p class="eyebrow">El problema</p>
-    <h2 class="section-title" id="home-poll-title">D65 necesita un referéndum.<br><mark class="mark">Los votantes aún no están listos.</mark></h2>
-    <p>Todos los planes que mantienen a D65 financieramente estable a largo plazo incluyen un referéndum, también el del Distrito. Una encuesta independiente a 665 votantes de Evanston muestra que aún no están listos para votar sí, y cerrar escuelas los aleja aún más.</p>
-    <ul class="stat-grid" data-three-part="poll-statistics">
-      <li><picture><img src="{{ '/assets/img/home-poll-summary-referendum-es-e15a517460.png' | relative_url }}" alt="UN REFERÉNDUM HOY. El 41% se opondría hoy a un referéndum." width="768" height="615" loading="lazy"></picture></li>
-      <li><picture><img src="{{ '/assets/img/home-poll-summary-closures-es-a24d0d713c.png' | relative_url }}" alt="SI CIERRAN DEWEY Y LINCOLNWOOD. 4 a 1: menos disposición a votar sí, no más. 41% menos disposición; 11% más disposición." width="768" height="615" loading="lazy"></picture></li>
-      <li><picture><img src="{{ '/assets/img/home-poll-summary-original-plan-es-f75ec97d36.png' | relative_url }}" alt="EL PLAN ORIGINAL DEL 13 DE OCTUBRE. El 65% se opone al plan presupuestario original de D65. Solo el 21% lo apoya." width="768" height="615" loading="lazy"></picture></li>
-    </ul>
-    <div class="two-col">
-      <p class="source-note"><a href="{{ '/assets/files/poll-full-results-nov-2026.pdf' | relative_url }}">Public Policy Polling, 665 votantes registrados de Evanston, 4–5 de nov. de 2026.</a></p>
-      <p><a class="btn btn--navy" href="{{ '/es/encuesta/' | relative_url }}">Más información sobre la encuesta <span aria-hidden="true">→</span></a></p>
-    </div>
-  </div>
-</section>
-{% endif %}
-
-<section class="band band--gold" aria-labelledby="wtb-title">
-  <div class="container cta-band">
-    <div class="cta-band__copy">
-      <p class="eyebrow eyebrow--ink">{{ h.wtb.eyebrow }}</p>
-      <h2 class="section-title" id="wtb-title">{{ h.wtb.title }}</h2>
-      <p>{{ h.wtb.text }}</p>
-    </div>
-    <div class="cta-band__actions">
-      <a class="btn btn--navy btn--lg btn--block" href="{{ t.urls.write | relative_url }}">{{ h.wtb.cta }} <span aria-hidden="true">→</span></a>
-      <a class="btn btn--outline-navy btn--block" href="{{ site.links.board_meetings }}" target="_blank" rel="noopener">{{ h.wtb.comment }}</a>
+    <div class="hm-hero__media">
+      <figure class="hm-photo">
+        <img src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}" alt="{{ h.photo_alt }}" width="{{ photo.width }}" height="{{ photo.height }}" style="object-position: {{ photo.position }};" fetchpriority="high">
+        <figcaption class="hm-photo__credit">{{ h.photo_credit }}</figcaption>
+      </figure>
+      {%- if ev.show %}
+      <aside class="hm-event" aria-labelledby="event-title">
+        <p class="hm-eyebrow hm-eyebrow--blue hm-event__eyebrow">{{ h.event.eyebrow }}</p>
+        <h2 class="hm-event__date" id="event-title">{{ h.event.date }}</h2>
+        <p class="hm-event__times"><b><time datetime="2026-11-09T16:00:00-06:00">{{ h.event.rally_time }}</time></b> {{ h.event.rally }}<br><b><time datetime="{{ ev.start_iso }}">{{ h.event.meeting_time }}</time></b> {{ h.event.meeting }}</p>
+        <p class="hm-event__place"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>{{ h.event.place }}</p>
+        {% include calendar-menu.html label=h.event.calendar %}
+      </aside>
+      {%- endif %}
     </div>
   </div>
 </section>
 
-{% if page.lang == 'en' %}
-<div id="financial-update">
-<section class="band band--white" aria-labelledby="error-title">
-  <div class="container">
-    <p class="eyebrow">The numbers changed. Again.</p>
-    <h2 class="section-title" id="error-title">D65 parents caught a $27 million mistake.</h2>
-    <div class="hero__actions" id="financial-stats">
-      <div class="feature__copy">
-        <h3 class="subhead">$17M → $27.35M</h3>
-        <p>The error D65 first confirmed, then the full five-year figure. Building costs were counted twice.<sup><a href="#financial-source-1" aria-label="Source: Evanston RoundTable, November 5, 2026">[1]</a></sup></p>
-      </div>
-      <div class="feature__copy">
-        <h3 class="subhead">$2.3M a year</h3>
-        <p>Revised savings from closing both Dewey and Lincolnwood, down from $2.9M in October. About $2M once added busing is counted.<sup><a href="#financial-source-1" aria-label="Source: Evanston RoundTable, November 5, 2026">[1]</a></sup></p>
-      </div>
-      <div class="feature__copy">
-        <h3 class="subhead">3 errors in 3 weeks</h3>
-        <p>Building costs counted twice. A required $3.2M yearly payment for Foster left out of the budget. Closure savings overstated. All flagged by parents.<sup><a href="#financial-source-1" aria-label="Source: Evanston RoundTable, November 5, 2026">[1]</a></sup></p>
-      </div>
+<section class="hm-section hm-section--cream" id="the-problem" aria-labelledby="problem-title">
+  <div class="hm-wrap">
+    <p class="hm-eyebrow">{{ h.problem.eyebrow }}</p>
+    <h2 class="hm-h2" id="problem-title">{{ h.problem.title }} <mark class="hm-mark">{{ h.problem.title_mark }}</mark></h2>
+    <p class="hm-intro">{{ h.problem.text }}</p>
+    <div class="hm-grid3">
+      <article class="hm-card hm-poll">
+        <h3 class="hm-eyebrow">{{ h.problem.c1_label }}</h3>
+        <p class="hm-poll__big">{{ h.problem.c1_big }}</p>
+        <p class="hm-poll__text">{{ h.problem.c1_text }}</p>
+        <div class="hm-bar" role="img" aria-label="{{ h.problem.c1_aria }}"><span class="hm-bar__fill hm-bg-orange" style="width: 41%"></span></div>
+      </article>
+      <article class="hm-card hm-card--navy hm-poll">
+        <h3 class="hm-eyebrow hm-eyebrow--gold">{{ h.problem.c2_label }}</h3>
+        <p class="hm-poll__big hm-text-gold">{{ h.problem.c2_big }}</p>
+        <p class="hm-poll__text">{{ h.problem.c2_text }}</p>
+        <div class="hm-poll__rows">
+          <div class="hm-poll__row"><span class="hm-poll__swatch hm-bg-orange" style="width: 41%" aria-hidden="true"></span><span class="hm-poll__rowtext">{{ h.problem.c2_less }}</span></div>
+          <div class="hm-poll__row hm-poll__row--muted"><span class="hm-poll__swatch hm-bg-mist" style="width: 11%" aria-hidden="true"></span><span class="hm-poll__rowtext">{{ h.problem.c2_more }}</span></div>
+        </div>
+      </article>
+      <article class="hm-card hm-poll">
+        <h3 class="hm-eyebrow">{{ h.problem.c3_label }}</h3>
+        <p class="hm-poll__big">{{ h.problem.c3_big }}</p>
+        <p class="hm-poll__text">{{ h.problem.c3_text }}</p>
+        <div class="hm-bar hm-bar--split" role="img" aria-label="{{ h.problem.c3_aria }}"><span class="hm-bar__fill hm-bg-orange" style="width: 65%"></span><span class="hm-bar__fill hm-bg-navy" style="width: 21%"></span></div>
+        <p class="hm-poll__note">{{ h.problem.c3_note }}</p>
+      </article>
     </div>
-    <p id="financial-source-1"><a class="btn btn--navy" href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/">Read the Evanston RoundTable’s reporting on the $27.35M finding <span aria-hidden="true">→</span></a></p>
-  </div>
-</section>
-
-</div>
-{% else %}
-<section class="band band--white" aria-labelledby="error-title">
-  <div class="container">
-    <p class="eyebrow">{{ h.error.eyebrow }}</p>
-    <h2 class="section-title" id="error-title">{{ h.error.title }}</h2>
-    <div class="two-col">
-      <div>
-        <p class="big-number" aria-hidden="true">$17M</p>
-        <p>{{ h.error.text }}</p>
-        <p class="source-note">{{ h.error.sources_html }}</p>
-      </div>
-      <div>
-        <h3 class="subhead">{{ h.error.why_title }}</h3>
-        <p>{{ h.error.why_1 }}</p>
-        <p>{{ h.error.why_2 }}</p>
-      </div>
+    <div class="hm-foot">
+      <p class="hm-foot__text"><a href="{{ '/assets/files/poll-full-results-nov-2026.pdf' | relative_url }}">{{ h.problem.source }}</a></p>
+      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ h.problem.poll_url | relative_url }}">{{ h.problem.poll_btn }} {{ arrow }}</a>
     </div>
   </div>
 </section>
-{% endif %}
 
-<section class="band band--white band--rule" aria-labelledby="nh-title">
-  <div class="container feature">
-    <div class="feature__copy">
-      <p class="tag">{{ h.new_homes.tag }}</p>
-      <h2 class="section-title" id="nh-title">{{ h.new_homes.title }}</h2>
-      <p>{{ h.new_homes.text }}</p>
-      <a class="btn btn--navy btn--lg" href="{{ t.urls.new_homes | relative_url }}">{{ h.new_homes.cta }} <span aria-hidden="true">→</span></a>
-    </div>
-    <figure class="feature__media">
-      {% include new-homes-illustration.svg t=h.new_homes %}
-    </figure>
+<section class="hm-section hm-section--navy" aria-labelledby="statement-title">
+  <div class="hm-wrap hm-statement">
+    <h2 class="hm-statement__title" id="statement-title">{{ h.statement.title }} <mark class="hm-mark">{{ h.statement.title_mark }}</mark></h2>
+    <p class="hm-statement__text">{{ h.statement.text }} <b>{{ h.statement.text_bold }}</b></p>
   </div>
 </section>
 
-<section class="band band--tint" aria-labelledby="asks-title">
-  <div class="container">
-    <p class="tag">{{ h.asks.tag }}</p>
-    <h2 class="section-title" id="asks-title">{{ h.asks.title }}</h2>
-    <ol class="ask-grid">
-      {%- for item in h.asks.items %}
-      <li class="ask-card">
-        <span class="ask-card__num" aria-hidden="true">{{ forloop.index }}</span>
-        <h3 class="ask-card__title">{{ item.title }}</h3>
-        <p>{{ item.text }}</p>
+<section class="hm-section hm-section--white" aria-labelledby="bandaid-title">
+  <div class="hm-wrap">
+    <div class="hm-bandaid">
+      <div class="hm-bandaid__copy">
+        <p class="hm-eyebrow">{{ h.bandaid.eyebrow }}</p>
+        <h2 class="hm-h2 hm-h2--xl" id="bandaid-title">{{ h.bandaid.title }}</h2>
+        <p class="hm-body">{{ h.bandaid.p1 }}</p>
+        <p class="hm-body">{{ h.bandaid.p2 }}</p>
+      </div>
+      <div class="hm-bandaid__side">
+        <div class="hm-runout">
+          <h3 class="hm-eyebrow hm-runout__label">{{ h.bandaid.chart_label }}</h3>
+          <div class="hm-runout__rows">
+            <div>
+              <p class="hm-runout__row"><span>{{ h.bandaid.open_label }}</span><span class="hm-runout__year">{{ h.bandaid.open_year }}</span></p>
+              <div class="hm-runout__track" aria-hidden="true"><span class="hm-bg-navy" style="width: 60%"></span></div>
+            </div>
+            <div>
+              <p class="hm-runout__row"><span>{{ h.bandaid.close_label }}</span><span class="hm-runout__year">{{ h.bandaid.close_year }}</span></p>
+              <div class="hm-runout__track" aria-hidden="true"><span class="hm-bg-navy" style="width: 60%"></span><span class="hm-bg-orange" style="width: 10%"></span></div>
+            </div>
+          </div>
+          <p class="hm-runout__note">{{ h.bandaid.chart_note }} <mark class="hm-mark">{{ h.bandaid.chart_note_mark }}</mark></p>
+        </div>
+        <div class="hm-error">
+          <p class="hm-error__big">{{ h.bandaid.big }}</p>
+          <p class="hm-error__text">{{ h.bandaid.error_text }} <b>{{ h.bandaid.error_bold }}</b></p>
+        </div>
+      </div>
+    </div>
+    <p class="hm-source"><a href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/" target="_blank" rel="noopener">{{ h.bandaid.source }}</a></p>
+  </div>
+</section>
+
+<section class="hm-section hm-section--cream" id="options" aria-labelledby="options-title">
+  <div class="hm-wrap">
+    <p class="hm-eyebrow">{{ h.options.eyebrow }}</p>
+    <h2 class="hm-h2" id="options-title">{{ h.options.title }} <br>{{ h.options.title2 }}</h2>
+    <p class="hm-intro hm-intro--wide">{{ h.options.text }}</p>
+    <ol class="hm-grid3 hm-levers">
+      {%- for item in h.options.items %}
+      <li class="hm-card hm-lever">
+        <span class="hm-lever__num" aria-hidden="true">{{ forloop.index | prepend: '0' }}</span>
+        <h3 class="hm-lever__title">{{ item.title }}</h3>
+        <p class="hm-lever__text">{{ item.text }}</p>
       </li>
       {%- endfor %}
     </ol>
+
+    <figure class="hm-card hm-charts">
+      <figcaption class="hm-charts__head">
+        <span class="hm-charts__title">{{ h.options.chart_title }}</span>
+        <span class="hm-legend">
+          <span class="hm-legend__item"><span class="hm-legend__key hm-legend__key--base" aria-hidden="true"></span>{{ h.options.legend_base }}</span>
+          <span class="hm-legend__item"><span class="hm-legend__key hm-legend__key--int" aria-hidden="true"></span>{{ h.options.legend_int }}</span>
+          <span class="hm-legend__item"><span class="hm-legend__key hm-legend__key--open" aria-hidden="true"></span>{{ h.options.legend_open }}</span>
+        </span>
+      </figcaption>
+      <div class="hm-charts__row">
+        <div class="hm-chart">
+          <h3 class="hm-chart__title">{{ h.options.chart1_title }}</h3>
+          <img src="{{ '/assets/img/options-chart-district.png' | relative_url }}" alt="{{ h.options.chart1_alt }}" width="456" height="198" loading="lazy">
+          <p class="hm-chart__caption">{{ h.options.chart1_caption_html }}</p>
+        </div>
+        <div class="hm-chart">
+          <h3 class="hm-chart__title">{{ h.options.chart2_title }}</h3>
+          <img src="{{ '/assets/img/options-chart-levers.png' | relative_url }}" alt="{{ h.options.chart2_alt }}" width="450" height="196" loading="lazy">
+          <p class="hm-chart__caption">{{ h.options.chart2_caption_html }}</p>
+        </div>
+      </div>
+      <p class="hm-charts__note"><b>{{ h.options.note_bold }}</b> {{ h.options.note }} <a href="{{ options_url | relative_url }}">{{ h.options.model_link }}</a></p>
+    </figure>
+    <div class="hm-foot hm-foot--wide">
+      <p class="hm-foot__text">{{ h.options.disclaimer }}</p>
+      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ options_url | relative_url }}">{{ h.options.explore_btn }} {{ arrow }}</a>
+    </div>
   </div>
 </section>
 
-{%- comment -%} Share dialog (opened by the share button next to "Sign the letter") {%- endcomment -%}
-{%- capture share_url -%}{{ h.share.site_path | absolute_url }}{%- endcapture -%}
+<section class="hm-section hm-section--navy hm-act" id="act" aria-labelledby="act-title">
+  <svg class="hm-act__sun" width="420" height="420" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><circle cx="100" cy="100" r="44" fill="#D9B96E"/><g stroke="#D9B96E" stroke-width="7" stroke-linecap="round"><line x1="100" y1="8" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="192"/><line x1="8" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="192" y2="100"/><line x1="35" y1="35" x2="58" y2="58"/><line x1="142" y1="142" x2="165" y2="165"/><line x1="35" y1="165" x2="58" y2="142"/><line x1="142" y1="58" x2="165" y2="35"/></g></svg>
+  <div class="hm-wrap hm-act__inner">
+    <h2 class="hm-act__title" id="act-title">{{ h.act.title }} <br><mark class="hm-mark">{{ h.act.title_mark }}</mark></h2>
+    <p class="hm-act__lead">{{ h.act.text }}</p>
+    <div class="hm-act__grid">
+      <div class="hm-step hm-step--gold">
+        <p class="hm-step__label">{{ h.act.email_label }}</p>
+        <h3 class="hm-step__title hm-step__title--grow">{{ h.act.email_title }}</h3>
+        <a class="hm-btn hm-btn--navy hm-step__btn" href="{{ t.urls.write | relative_url }}">{{ h.act.email_btn }}</a>
+      </div>
+      <div class="hm-step">
+        <p class="hm-step__label">{{ h.act.show_label }}</p>
+        <h3 class="hm-step__title">{{ h.act.show_title }}</h3>
+        <p class="hm-step__text">{{ h.act.show_text }}</p>
+      </div>
+      <div class="hm-step">
+        <p class="hm-step__label">{{ h.act.sign_label }}</p>
+        <h3 class="hm-step__title">{{ h.act.sign_title }}</h3>
+        <p class="hm-step__text">{{ h.act.sign_text }}</p>
+        <a class="hm-btn hm-btn--gold hm-step__btn" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.act.sign_btn }}</a>
+      </div>
+      <div class="hm-step" data-hm-share data-url="{{ share_url }}" data-copied="{{ h.act.copied }}">
+        <p class="hm-step__label">{{ h.act.share_label }}</p>
+        <h3 class="hm-step__title">{{ h.act.share_title }}</h3>
+        <p class="hm-step__text">{{ h.act.share_text }}</p>
+        <button type="button" class="hm-btn hm-btn--gold hm-step__btn" data-hm-copy><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span data-hm-copy-label>{{ h.act.copy_btn }}</span></button>
+        <span class="hm-visually-hidden" role="status" aria-live="polite" data-hm-copy-status></span>
+        <div class="hm-share">
+          {%- capture share_msg -%}{{ h.act.share_message }}{{ share_url }}{%- endcapture %}
+          <a class="hm-share__btn" href="mailto:?subject={{ h.act.share_subject | url_encode | replace: '+', '%20' }}&amp;body={{ share_msg | url_encode | replace: '+', '%20' }}" aria-label="{{ h.act.share_email }}" title="{{ h.act.share_email }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 7l9 6 9-6"/></svg></a>
+          <a class="hm-share__btn" href="sms:?&amp;body={{ share_msg | url_encode | replace: '+', '%20' }}" aria-label="{{ h.act.share_sms }}" title="{{ h.act.share_sms }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></a>
+          <a class="hm-share__btn" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_encode }}" target="_blank" rel="noopener" aria-label="{{ h.act.share_fb }}" title="{{ h.act.share_fb }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V10H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/></svg></a>
+          <button type="button" class="hm-share__btn" data-dialog-open="share-dialog" aria-haspopup="dialog" aria-label="{{ h.act.share_ig }}" title="{{ h.act.share_ig }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<a class="hm-next" href="{{ t.urls.new_homes | relative_url }}">
+  <span class="hm-wrap hm-next__inner">
+    <span class="hm-next__text">{{ h.next.text }}</span>
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </span>
+</a>
+
+</div>
+
+{%- comment -%} Share dialog (opened by the Instagram button in the Share card): Facebook, X, and a downloadable Instagram image {%- endcomment -%}
 <dialog class="dialog" id="share-dialog" aria-labelledby="share-title" data-share data-url="{{ share_url }}">
   <button type="button" class="dialog__close" data-dialog-close aria-label="{{ t.updates.close }}">{% include icons/close.svg %}</button>
   <h2 class="dialog__title" id="share-title">{{ h.share.title }}</h2>
