@@ -46,6 +46,14 @@
 
     {%- if ev.show %}
     <aside class="event-card" aria-labelledby="event-title">
+      {% if page.lang == 'en' %}
+      <p class="eyebrow">STAND WITH OUR TEACHERS</p>
+      <h2 class="event-card__date" id="event-title">Monday, Nov. 9</h2>
+      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">4 p.m.</time> Rally with our teachers</p>
+      <p class="event-card__time" id="board-meeting-time"><time datetime="{{ ev.start_iso }}">5 p.m.</time> Board meeting.</p>
+      <p class="event-card__place"><span aria-hidden="true">📍</span> 1500 McDaniel Ave., Evanston</p>
+      {% include calendar-menu.html label="Add to calendar" %}
+      {% else %}
       <p class="eyebrow">{% if page.lang == 'en' %}Stand with our teachers{% else %}Apoyemos a nuestros docentes{% endif %}</p>
       <h2 class="event-card__title" id="event-title">{% if page.lang == 'en' %}Rally alongside DEC{% else %}Concentración junto a DEC{% endif %}</h2>
       <p class="event-card__date">{{ ev[page.lang].date_html }}</p>
@@ -57,6 +65,7 @@
       {% include calendar-menu.html label="Add board meeting to calendar" %}
       {% else %}
       {% include calendar-menu.html label="Agregar reunión al calendario" %}
+      {% endif %}
       {% endif %}
     </aside>
     {%- endif %}
