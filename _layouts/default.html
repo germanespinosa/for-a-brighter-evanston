@@ -76,7 +76,7 @@
   {%- if page.css %}
   <link rel="stylesheet" href="{{ page.css | prepend: '/assets/css/' | relative_url }}">
   {%- endif %}
-  {%- if page.is_home or page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}
+  {%- if page.is_home or page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' or page.url == '/home/a-brighter-path-forward/' or page.url == '/es/un-camino-mejor/' %}
   {%- unless page.is_home %}
   <link rel="stylesheet" href="{{ '/assets/css/home.css' | relative_url }}">
   {%- endunless %}
