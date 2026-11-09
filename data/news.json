@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-09",
+      "source": "ABC News",
+      "site": "ABC News",
+      "url": "https://abcnews.com/US/wireStory/school-closures-accelerating-us-financial-pain-lies-ahead-137966299",
+      "title": "School closures are accelerating in US, but more financial pain lies ahead",
+      "summary": "An Associated Press and Hechinger Report story examines school closures amid declining enrollment and financial pressures. It describes families’ experiences in Vallejo, California, and research indicating that closures may yield less financial relief than districts expect.",
+      "title_es": "Se aceleran los cierres de escuelas en Estados Unidos, pero se avecinan mayores dificultades financieras",
+      "summary_es": "Un reportaje de Associated Press y The Hechinger Report examina los cierres escolares en medio de la disminución de la matrícula y las presiones financieras. Describe las experiencias de familias en Vallejo, California, e investigaciones que indican que los cierres pueden generar menos alivio financiero del que esperan los distritos."
+    },
+    {
       "date": "2026-11-08",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
