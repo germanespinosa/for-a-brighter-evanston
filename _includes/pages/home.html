@@ -54,18 +54,12 @@
       <p class="event-card__place"><span aria-hidden="true">📍</span> 1500 McDaniel Ave., Evanston</p>
       {% include calendar-menu.html label="Add to calendar" %}
       {% else %}
-      <p class="eyebrow">{% if page.lang == 'en' %}Stand with our teachers{% else %}Apoyemos a nuestros docentes{% endif %}</p>
-      <h2 class="event-card__title" id="event-title">{% if page.lang == 'en' %}Rally alongside DEC{% else %}Concentración junto a DEC{% endif %}</h2>
-      <p class="event-card__date">{{ ev[page.lang].date_html }}</p>
-      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">{% if page.lang == 'en' %}4 PM{% else %}4 p. m.{% endif %}</time></p>
-      <p id="rally-invitation">{% if page.lang == 'en' %}Join us alongside DEC, the teachers’ union, to support our teachers.{% else %}Acompáñenos junto a DEC, el sindicato de docentes, para apoyar a nuestros maestros.{% endif %}</p>
-      <p class="event-card__time" id="board-meeting-time">{% if page.lang == 'en' %}Board meeting:{% else %}Reunión de la Junta:{% endif %} <time datetime="{{ ev.start_iso }}">{{ ev[page.lang].time }}</time></p>
-      <p class="event-card__place"><span aria-hidden="true">📍</span> {{ ev.location }}</p>
-      {% if page.lang == 'en' %}
-      {% include calendar-menu.html label="Add board meeting to calendar" %}
-      {% else %}
-      {% include calendar-menu.html label="Agregar reunión al calendario" %}
-      {% endif %}
+      <p class="eyebrow">APOYEMOS A NUESTROS DOCENTES</p>
+      <h2 class="event-card__date" id="event-title">Lunes, 9 de nov.</h2>
+      <p class="event-card__time" id="rally-time"><time datetime="2026-11-09T16:00:00-06:00">4 p. m.</time> Concentración con nuestros docentes</p>
+      <p class="event-card__time" id="board-meeting-time"><time datetime="{{ ev.start_iso }}">5 p. m.</time> Reunión de la Junta.</p>
+      <p class="event-card__place"><span aria-hidden="true">📍</span> 1500 McDaniel Ave., Evanston</p>
+      {% include calendar-menu.html label="Agregar al calendario" %}
       {% endif %}
     </aside>
     {%- endif %}
@@ -90,15 +84,19 @@
   </div>
 </section>
 {% else %}
-<section class="band band--tint" id="voter-poll-fundraiser" aria-labelledby="poll-title">
-  <div class="container cta-band">
-    <div class="cta-band__copy">
-      <p class="eyebrow">Gracias a nuestros vecinos</p>
-      <h2 class="section-title" id="poll-title">Gracias por apoyar la encuesta del Distrito 65.</h2>
-      <p>La recaudación de fondos para la encuesta ya cerró. Agradecemos sus contribuciones y su ayuda para que nuestra comunidad tenga voz. Compartiremos todos los resultados y los registros financieros a medida que estén disponibles.</p>
-    </div>
-    <div class="cta-band__actions">
-      <a class="btn btn--navy btn--lg btn--block" href="{{ '/es/encuesta/' | relative_url }}">Novedades de la encuesta <span aria-hidden="true">→</span></a>
+<section class="band band--tint" id="the-problem" aria-labelledby="home-poll-title">
+  <div class="container">
+    <p class="eyebrow">El problema</p>
+    <h2 class="section-title" id="home-poll-title">D65 necesita un referéndum.<br><mark class="mark">Los votantes aún no están listos.</mark></h2>
+    <p>Todos los planes que mantienen a D65 financieramente estable a largo plazo incluyen un referéndum, también el del Distrito. Una encuesta independiente a 665 votantes de Evanston muestra que aún no están listos para votar sí, y cerrar escuelas los aleja aún más.</p>
+    <ul class="stat-grid" data-three-part="poll-statistics">
+      <li><picture><img src="{{ '/assets/img/home-poll-summary-referendum-es-e15a517460.png' | relative_url }}" alt="UN REFERÉNDUM HOY. El 41% se opondría hoy a un referéndum." width="768" height="615" loading="lazy"></picture></li>
+      <li><picture><img src="{{ '/assets/img/home-poll-summary-closures-es-a24d0d713c.png' | relative_url }}" alt="SI CIERRAN DEWEY Y LINCOLNWOOD. 4 a 1: menos disposición a votar sí, no más. 41% menos disposición; 11% más disposición." width="768" height="615" loading="lazy"></picture></li>
+      <li><picture><img src="{{ '/assets/img/home-poll-summary-original-plan-es-f75ec97d36.png' | relative_url }}" alt="EL PLAN ORIGINAL DEL 13 DE OCTUBRE. El 65% se opone al plan presupuestario original de D65. Solo el 21% lo apoya." width="768" height="615" loading="lazy"></picture></li>
+    </ul>
+    <div class="two-col">
+      <p class="source-note"><a href="{{ '/assets/files/poll-full-results-nov-2026.pdf' | relative_url }}">Public Policy Polling, 665 votantes registrados de Evanston, 4–5 de nov. de 2026.</a></p>
+      <p><a class="btn btn--navy" href="{{ '/es/encuesta/' | relative_url }}">Más información sobre la encuesta <span aria-hidden="true">→</span></a></p>
     </div>
   </div>
 </section>
