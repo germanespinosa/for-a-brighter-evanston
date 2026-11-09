@@ -7,12 +7,16 @@ switch_short: ES
 
 urls:
   home: /
+  poll: /home/voter-poll/
+  path: /home/options/
   write: /home/write-to-the-board-issue/
   news: /home/in-the-news/
   new_homes: /home/new-homes/
 
 nav:
   label: Main
+  poll: The Poll
+  path: A Brighter Path Forward
   write: Write to the Board
   news: In the news
   updates: Get updates

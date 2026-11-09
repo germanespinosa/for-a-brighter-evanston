@@ -18,15 +18,16 @@ start_utc: 20261109T230000Z
 end_utc: 20261110T020000Z
 
 en:
+  # Yellow bar: written in sentence case, shown in capitals by CSS.
   bar_long: "Board vote anticipated Nov. 16 · Rally Monday, Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
-  bar_short: "Board vote anticipated Nov. 16 · Rally Monday, Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
+  bar_short: "Vote Nov. 16 · Rally Mon., Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
   eyebrow: "Meeting still scheduled"
   title: "D65 Board Meeting"
   date_html: Monday,<br>November 9
   time: 5 PM
 es:
-  bar_long: "Board vote anticipated Nov. 16 · Rally Monday, Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
-  bar_short: "Board vote anticipated Nov. 16 · Rally Monday, Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
+  bar_long: "Se espera la votación de la junta el 16 de nov. · Concentración el lunes 9 de nov. · 4 p. m. · 1500 McDaniel Ave."
+  bar_short: "Votación 16 de nov. · Concentración lun. 9 de nov. · 4 p. m. · 1500 McDaniel Ave."
   eyebrow: "La reunión sigue en pie"
   title: "Reunión de la Junta del D65"
   date_html: Lunes,<br>9 de noviembre

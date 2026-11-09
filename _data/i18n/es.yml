@@ -8,12 +8,16 @@ switch_short: EN
 
 urls:
   home: /es/
+  poll: /es/encuesta/
+  path: /es/opciones/
   write: /es/escriba-a-la-junta-issue/
   news: /es/noticias/
   new_homes: /es/nuevas-viviendas/
 
 nav:
   label: Principal
+  poll: La encuesta
+  path: Un camino mejor
   write: Escribe a la Junta
   news: Noticias
   updates: Recibir noticias
