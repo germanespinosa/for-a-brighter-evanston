@@ -41,7 +41,7 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 1. **W10**, react 👀.
 2. One step: merge `origin/main` into the sandbox and push. If the only conflicts are the generated help PDF and `reviewed-sources.json`, rebuild them; any other conflict → abort and **W15** (section 8, step 2).
-3. After the rebuild, run `sandbox_check.py --url …` and `sandbox_screens.py …` (plus `mockup_check.py compare` for mockup pages). Look at the screenshots yourself.
+3. After the rebuild, run `sandbox_check.py --url …`, `sandbox_screens.py …` (and `mockup_check.py compare` for mockup pages) **together in one shell call** (`… & … & wait`, section 8 step 4), then read all the outputs. Look at the screenshots yourself.
 4. Do the title, navigation and sitemap check (section 8, step 6), and verify new-page sharing cards.
 5. Post **W13**. Any blocking problem → no vote; offer fixes.
 6. Ready → post **W14** (sandbox link, a link to every changed page, plain summary). Record the voted commit and create the vote record (section 9). Schedule the deadline check if you can.
