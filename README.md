@@ -71,6 +71,8 @@ Fabian builds proposed changes in a sandbox branch `sandbox/<id>`. The site is b
 - the live site at `/`,
 - the one open sandbox at `/sandbox/<id>/`, with a preview banner, hidden from search engines, and always showing the live news list.
 
+Fabian works from short task cards (`docs/agents/fabian-website-cards.md`) backed by the full manual (`docs/agents/fabian-website.md`), and rereads only what changed since he last read them.
+
 Changes go live only after Fabian's validation report and a vote in #website. People vote by posting **@fabian vote yes** or **@fabian vote no: [reason]**; reactions don't count. Each person's latest vote counts, the requester included. The update publishes as soon as it has at least 2 yes and no no votes. The vote closes 24 hours after Fabian's vote message. Fabian keeps the tally in a vote record and recounts from the channel each time. See `docs/agents/fabian-website.md`.
 
 People may add or update shared templates in `_includes/` and `_layouts/` through this same process, with **no extra permission from German**. This includes section ordering and shared header/menu/footer changes. Shared edits must be checked on every affected page, in both languages. Build settings, stylesheet/script files, unsafe code and deletion of existing pages or templates remain outside this permission.
