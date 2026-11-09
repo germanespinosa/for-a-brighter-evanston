@@ -21,7 +21,12 @@ Exit code: 0 = no blocking problems, 1 = blocking problems, 2 = usage error.
 Uses only the Python standard library (PyYAML is used for YAML if present).
 """
 import argparse
+import hashlib
 import json
+import os
+import stat
+import zipfile
+import xml.etree.ElementTree as ET
 import re
 import subprocess
 import sys
@@ -289,14 +294,248 @@ def fetch_sharing_image(url):
         return 0, "", False
 
 
+# These identity bindings enforce German's explicit same-class delegation;
+# display names and content embedded in uploads are never authorization.
+SCOPED_AUTHORIZERS = {"U0CE2G08ZRC", "U0CE4NY7KC2"}
+SCOPED_CSS = {
+    "assets/css/release-home.css": (["/", "/es/"], ".release-home"),
+    "assets/css/release-poll.css": (["/home/voter-poll/", "/es/encuesta/"], ".release-poll"),
+    "assets/css/release-path.css": (["/home/a-brighter-path-forward/", "/es/un-camino-mejor/"], ".release-path"),
+}
+SCOPED_WORKBOOK = "assets/files/d65-financial-model-v4.xlsx"
+
+
+def load_scoped_approval(filename, sandbox_url=None):
+    """Read an operator-created private record, never an uploaded authority claim."""
+    if not filename:
+        return {"css": [], "workbooks": []}
+    path = Path(filename).absolute()
+    root = ROOT.resolve()
+    if any(p.is_symlink() for p in (path, *path.parents)) or path.resolve().is_relative_to(root):
+        raise ValueError("approval must be a private non-symlink file outside the repository")
+    info = path.stat()
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077:
+        raise ValueError("approval must be an operator-owned regular file with mode 0600 or stricter")
+    record = json.loads(path.read_text(encoding="utf-8"))
+    branch = git("branch", "--show-current").strip()
+    sandbox = record.get("sandbox_id")
+    if (record.get("version") != 1 or record.get("purpose") != "sandbox-review"
+            or not isinstance(sandbox, str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,39}", sandbox)
+            or branch != "sandbox/" + sandbox):
+        raise ValueError("approval purpose/version or sandbox branch does not match")
+    if sandbox_url and (urlsplit(sandbox_url).scheme != "https" or
+                        urlsplit(sandbox_url).netloc != "forabrighterevanston.org" or
+                        urlsplit(sandbox_url).path.rstrip("/") != "/sandbox/" + sandbox):
+        raise ValueError("approval sandbox does not match deployed URL")
+    source = record.get("source", {})
+    if (record.get("authorizer_id") not in SCOPED_AUTHORIZERS or
+            source.get("channel_id") != "C0CEMKENSQ1" or
+            not re.fullmatch(r"[0-9]+\.[0-9]{6}", str(source.get("message_ts", "")))):
+        raise ValueError("approval needs an authorized human's original #website message provenance")
+    css, workbooks = record.get("css"), record.get("workbooks")
+    if not isinstance(css, list) or not isinstance(workbooks, list) or not (css or workbooks):
+        raise ValueError("approval must list exact CSS or workbook assets")
+    seen = set()
+    for item in css:
+        key = item.get("path")
+        if key not in SCOPED_CSS or key in seen:
+            raise ValueError("approval contains an unapproved or duplicate CSS path")
+        routes, scope = SCOPED_CSS[key]
+        if item.get("routes") != routes or item.get("scope") != scope:
+            raise ValueError("approval CSS routes/scope do not match the exact permitted pages")
+        seen.add(key)
+    for item in workbooks:
+        if (item.get("path") != SCOPED_WORKBOOK or item["path"] in seen or
+                not re.fullmatch(r"[a-f0-9]{64}", str(item.get("sha256", "")))):
+            raise ValueError("approval contains an unapproved workbook path or invalid SHA-256")
+        seen.add(item["path"])
+    return record
+
+
+# One explicit German authorization for the delegation-maintenance bundle only.
+# This is deliberately independent of SCOPED_AUTHORIZERS and asset approvals.
+MAINTENANCE_FILES = frozenset({
+    "docs/agents/fabian-website.md", "docs/help/team-help.md",
+    "docs/help/team-help.pdf", "docs/help/reviewed-sources.json",
+    "scripts/sandbox_check.py", "scripts/tests/test_scoped_approval.py",
+})
+
+
+def load_maintenance_approval(filename, sandbox_url=None):
+    """Validate a trusted private record against exact committed AND working bytes."""
+    if not filename:
+        return {}
+    path = Path(filename).absolute()
+    if (any(p.is_symlink() for p in (path, *path.parents))
+            or path.resolve().is_relative_to(ROOT.resolve())):
+        raise ValueError("maintenance approval must be a private non-symlink file outside the repository")
+    # Validate the opened descriptor, not just a pathname stat before reading.
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "r", encoding="utf-8") as stream:
+        info = os.fstat(stream.fileno())
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
+                or stat.S_IMODE(info.st_mode) != 0o600):
+            raise ValueError("maintenance approval must be operator-owned, regular and mode 0600")
+        record = json.load(stream)
+    if (not isinstance(record, dict)
+            or set(record) != {"version", "purpose", "sandbox_id", "authorizer_id", "source", "files"}
+            or type(record["version"]) is not int or record["version"] != 1
+            or record["purpose"] != "delegation-maintenance"
+            or record["sandbox_id"] != "poll-model-release"
+            or git("branch", "--show-current").strip() != "sandbox/poll-model-release"):
+        raise ValueError("maintenance approval schema/purpose or exact sandbox branch does not match")
+    if (record["authorizer_id"] != "U0CE2G08ZRC" or record["source"] != {
+            "channel_id": "C0CEMKENSQ1", "message_ts": "1794230153.839529"}):
+        raise ValueError("maintenance requires German's exact original #website authorization; Kerstin cannot approve it")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/poll-model-release" or url.query or url.fragment):
+            raise ValueError("maintenance approval sandbox does not match deployed URL")
+    files = record["files"]
+    approved = {}
+    if not isinstance(files, list):
+        raise ValueError("maintenance files must list the exact fixed inventory")
+    for item in files:
+        if (not isinstance(item, dict) or set(item) != {"path", "sha256"}
+                or not isinstance(item["path"], str) or item["path"] not in MAINTENANCE_FILES
+                or item["path"] in approved
+                or not isinstance(item["sha256"], str)
+                or not re.fullmatch(r"[a-f0-9]{64}", item["sha256"])):
+            raise ValueError("maintenance contains invalid/duplicate file inventory or SHA-256")
+        approved[item["path"]] = item["sha256"]
+    if set(approved) != MAINTENANCE_FILES:
+        raise ValueError("maintenance requires exactly the six reviewed files")
+    for name, digest in approved.items():
+        target = ROOT / name
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or target.stat().st_mode & 0o111
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")):
+            raise ValueError(f"{name}: maintenance requires regular non-executable committed files; no deletions")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if (hashlib.sha256(committed).hexdigest() != digest
+                or hashlib.sha256(target.read_bytes()).hexdigest() != digest):
+            raise ValueError(f"{name}: maintenance SHA-256 must match both committed revision and working bytes")
+    return approved
+
+
+def scoped_css_problem(text, scope):
+    """Conservative CSS subset: scoped selectors, declarations, media/supports only.
+
+    No escape syntax, fetches, imports, global keyframes or executable legacy CSS.
+    This is a safety boundary, not a complete CSS parser or visual review.
+    """
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    if re.search(r"\\|url\s*\(|@import|expression\s*\(|javascript|behavior\s*:|-moz-binding|<", text, re.I):
+        return "CSS contains escapes, external resources or unsafe syntax"
+    # Mask strings so quoted braces cannot change the structural parser.
+    text = re.sub(r'''"[^"\n]*"|'[^'\n]*' ''', '"value"', text, flags=re.X)
+
+    def scoped_selector(selector):
+        selector = selector.strip()
+        if not re.match(re.escape(scope) + r"(?=[\s.#:\[>]|$)", selector) or "||" in selector:
+            return False
+        # Remove attribute/function interiors before finding the first combinator.
+        # A sibling of the wrapper escapes scope; siblings of its descendants do not.
+        tail = selector[len(scope):]
+        previous = None
+        while tail != previous:
+            previous = tail
+            tail = re.sub(r"\([^()]*\)|\[[^\[\]]*\]", "", tail)
+        combinator = re.search(r"[\s>+~]", tail)
+        return not combinator or not tail[combinator.start():].lstrip().startswith(("+", "~"))
+
+    def rules(source):
+        while source.strip():
+            opening = source.find("{")
+            if opening < 0:
+                return False
+            head = source[:opening].strip()
+            depth, end = 1, opening + 1
+            while end < len(source) and depth:
+                depth += (source[end] == "{") - (source[end] == "}")
+                end += 1
+            if depth:
+                return False
+            body = source[opening + 1:end - 1]
+            source = source[end:]
+            if head.startswith("@"):
+                if not re.fullmatch(r"@(media|supports)\b[^{};]+", head, re.I) or not rules(body):
+                    return False
+            else:
+                if not head or any(not scoped_selector(s) for s in head.split(",")) or "{" in body or "}" in body:
+                    return False
+        return True
+
+    return None if rules(text) else "every CSS selector must start with the approved page scope; only media/supports nesting is allowed"
+
+
+def workbook_problem(target):
+    """Inspect OOXML without executing formulas, resaving or trusting its extension."""
+    try:
+        with zipfile.ZipFile(target) as archive:
+            entries = archive.infolist()
+            names = [entry.filename for entry in entries]
+            if len(names) != len(set(names)) or sum(e.file_size for e in entries) > 100 * 1024 * 1024:
+                return "duplicate ZIP entries or excessive expanded workbook size"
+            for entry in entries:
+                name = entry.filename.lower()
+                if (not entry.is_dir() and not name.endswith(".rels")
+                        and Path(name).suffix not in {".xml", ".png", ".jpg", ".jpeg", ".gif", ".emf", ".wmf"}
+                        and not re.fullmatch(r"xl/printersettings/printersettings[0-9]+\.bin", name)):
+                    return "unsupported packaged binary or executable file"
+                if (name.startswith("/") or ".." in name.split("/") or "\\" in name or entry.flag_bits & 1
+                        or re.search(r"vba|macrosheet|dialogsheet|activex|embedding|externallink|customui", name)):
+                    return "macros, embedded code/objects, external workbooks or unsafe ZIP entries"
+                if name.endswith((".xml", ".rels")):
+                    content = archive.read(entry)
+                    if b"<!DOCTYPE" in content.upper() or b"<!ENTITY" in content.upper():
+                        return "unsafe XML declarations"
+                    tree = ET.fromstring(content)
+                    for node in tree.iter():
+                        if ("macroenabled" in str(node.attrib).lower() or "vbaproject" in str(node.attrib).lower()
+                                or node.attrib.get("TargetMode", "").lower() == "external"):
+                            return "macro-enabled content or external relationships"
+                        if node.tag.rsplit("}", 1)[-1] == "f" and re.search(
+                                r"\[|\||\b(?:WEBSERVICE|RTD|CALL|EXEC|REGISTER(?:\.ID)?)\s*\(", node.text or "", re.I):
+                            return "external or executable formula"
+            if not {"[Content_Types].xml", "xl/workbook.xml", "_rels/.rels"}.issubset(names):
+                return "not an OOXML workbook"
+            content_types = archive.read("[Content_Types].xml")
+            if b"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" not in content_types:
+                return "not a macro-free XLSX workbook"
+    except (OSError, zipfile.BadZipFile, ET.ParseError, RuntimeError, ValueError):
+        return "invalid or unreadable XLSX archive"
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--base", default="origin/main", help="what the sandbox is compared to (default origin/main)")
     ap.add_argument("--url", help="deployed sandbox address, e.g. https://forabrighterevanston.org/sandbox/faq-page/")
+    ap.add_argument("--approval-file", help="operator-owned private sandbox-review authorization JSON, outside the repository")
+    ap.add_argument("--maintenance-approval-file", help="separate German-only private delegation-maintenance authorization JSON")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    try:
+        approved_maintenance = load_maintenance_approval(args.maintenance_approval_file, args.url)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        approved_maintenance = {}
+        blocking.append(f"Invalid maintenance approval: {error}")
+    if approved_maintenance:
+        notes.append("German-only delegation-maintenance approval loaded for six exact files in this sandbox only; no live publication authorization. Team review/vote and copy/resource holds remain.")
+    try:
+        approval = load_scoped_approval(args.approval_file, args.url)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError) as error:
+        approval = {"css": [], "workbooks": []}
+        blocking.append(f"Invalid scoped approval: {error}")
+    approved_css = {item["path"]: item for item in approval["css"]}
+    approved_workbooks = {item["path"]: item for item in approval["workbooks"]}
+    if args.approval_file and (approved_css or approved_workbooks):
+        notes.append("Scoped sandbox-review approval loaded; no live publication authorization. Team review/vote and all other holds remain.")
 
     try:
         diff = git("diff", "--name-status", "-M", f"{args.base}...HEAD")
@@ -324,6 +563,38 @@ def main():
         ext = Path(path).suffix.lower()
         verb = {"A": "added", "M": "changed", "D": "deleted"}.get(status, "changed")
 
+        if path in approved_maintenance:
+            if status not in {"A", "M"}:
+                blocking.append(f"{path}: maintenance authorizes additions/updates only, never deletion or type changes.")
+            else:
+                changes.append(f"German-authorized delegation maintenance {verb}: {path}")
+            continue
+        if path in approved_css or path in approved_workbooks:
+            target = ROOT / path
+            if (status not in {"A", "M"} or any(p.is_symlink() for p in (target, *target.parents))
+                    or not target.is_file() or not git("ls-tree", "HEAD", "--", path).startswith("100644 ")):
+                blocking.append(f"{path}: scoped assets must be regular, non-executable files; deletion is not authorized.")
+                continue
+            if git("diff", "HEAD", "--", path):
+                blocking.append(f"{path}: scoped asset differs from the committed revision; commit before validation.")
+                continue
+            if target.stat().st_size > MEDIA_MAX_BYTES:
+                blocking.append(f"{path}: scoped asset exceeds the 5 MB limit.")
+                continue
+            if path in approved_css:
+                try:
+                    problem = scoped_css_problem(target.read_text(encoding="utf-8"), approved_css[path]["scope"])
+                except UnicodeError:
+                    problem = "CSS must be UTF-8 text"
+                warnings.append(f"{path}: verify the stylesheet is loaded only on its approved routes and its scope wrapper exists only there; review both languages on desktop/phone.")
+            else:
+                problem = workbook_problem(target)
+                if hashlib.sha256(target.read_bytes()).hexdigest() != approved_workbooks[path]["sha256"]:
+                    problem = "workbook SHA-256 does not match the unchanged supplied file"
+            if problem:
+                blocking.append(f"{path}: {problem}.")
+            changes.append(f"Scoped sandbox-review asset {verb}: {path}")
+            continue
         if path == "data/news.json":
             blocking.append("The news list (data/news.json) was changed. News is managed only in #news; this change must be removed.")
             continue

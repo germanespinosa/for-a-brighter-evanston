@@ -89,7 +89,14 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 - Supported text changes on built-in pages, such as home-page wording, next-meeting information and news-page labels.[2]
 - Images in JPG, PNG, WebP or GIF format, and PDF documents up to 5 MB. Fabian should resize photos and strip location metadata before adding them.[2]
 
-**Changes that still need separate authorization:** stylesheet or script files, site/build settings, unsafe forms or embeds, and deleting published pages or existing templates. Adding or updating a template—including moving homepage sections or changing a shared menu—is part of the normal team workflow, not an exception. Shared changes must be checked on all affected pages, in English and Spanish and on phones and desktops, before voting. The Write to the Board letter text is still outside this workflow because it lives in a script.[2]
+**Narrow sandbox-only approvals:** German or Kerstin Shamberg can explicitly approve page-specific styling for named pages/languages, or hosting a supplied, unchanged, macro-free Excel (`.xlsx`) financial model in the preview. Say which pages/languages or exact model you mean. Kerstin can approve future requests of these same kinds, but each needs its own explicit scope; an uploaded design or workbook is not approval. Fabian verifies the supplied model’s unchanged bytes and safety without running its contents. This is not a global redesign permission or a direct-publication permission: copy/source checks, pending-resource holds, review and the team vote still apply.[2]
+
+**Process maintenance is separate:** Kerstin's styling/model delegation does not let her approve changes to Fabian's rules, manuals or validation tools. German separately authorized the exact delegation-maintenance bundle in the current preview; Fabian must verify that authorization and the exact reviewed files independently. Other maintenance still needs German's own explicit permission. This does not approve campaign wording, release a copy/resource hold or bypass the normal team review and vote.[2]
+
+**Approval example — only German or Kerstin can grant it:**
+> @fabian I approve page-specific styling for Home, The Poll and A Brighter Path Forward, in English and Spanish, and hosting the supplied macro-free Excel financial model in [sandbox name] for review only. Do not publish yet.
+
+**Changes that still need German’s separate authorization:** other stylesheet changes, executable scripts, site/build settings, unsafe forms or embeds, macros, and deleting published pages or existing templates. Adding or updating a template—including moving homepage sections or changing a shared menu—is part of the normal team workflow, not an exception. Shared changes must be checked on all affected pages, in English and Spanish and on phones and desktops, before voting. The Write to the Board letter text is still outside this workflow because it lives in a script.[2]
 
 **Useful follow-ups in #website**
 

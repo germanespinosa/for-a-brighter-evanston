@@ -1,15 +1,15 @@
 {
   ".github/workflows/pages.yml": "359f9ee1c1e538312fc3bf08d97a2b1897a8c549bd6cf96456bb3191f2eb3d17",
   ".github/workflows/sandbox-trigger.yml": "0b93e8f88d3fb43516441c9521f14b025287a9e6c70e58d8d19ead24d98a7aff",
-  "_layouts/default.html": "5e3c6c3fd15577614ed7f6dd733cc8502d03f01e17dff1443a1e2510ddf37b61",
+  "_layouts/default.html": "a49d2e29bd83f88a863f4ad772dc70efe6811faad10cbb9c3bae4240373e5c54",
   "assets/img/brand-icon.png": "db5a5a96da2b984d9b68bca04ce682bbf72e84f6ffb5f3e6db93b81b6defddad",
   "docs/agents/fabian-news.md": "4f6abbeb7664f86b360d84bbc2be43df1f097c21a464d0b45a277f4b609c170d",
-  "docs/agents/fabian-website.md": "f98fdc33efdd9736861e2a49907dff892490ea21357069639e0f9a1cd708a683",
-  "docs/help/team-help.md": "91ec794dda335183b0b0cfb53ed46710908867fad89de4e849299b7fbf0d926f",
-  "docs/help/team-help.pdf": "8f101b24fdbb60d2a3d172cb1673646f99dc7c6c23a4103deae1c78e82c213e2",
+  "docs/agents/fabian-website.md": "250716e4717aa4b1dfb5df47b3709745269725efbf15119e3551356bd65b9b2d",
+  "docs/help/team-help.md": "280969b27e638c5cb7bc8c8ca2d72849bd0e75ac19a666f6e53ae72ae918e483",
+  "docs/help/team-help.pdf": "98d902c36156bcd4deebc199d9f0fa021d892eda4ab147960f2d1ef7d4528945",
   "scripts/build_help_pdf.py": "68670bee2d2456e878a9dccf444a55069a0a650a38f4c95d0848f6bd5817b1c8",
   "scripts/build_site_icons.py": "79c2541a4ac57f6dca20157ac5e6d45018633092e7e702228d67524ef9dea262",
   "scripts/news_tool.py": "90855011b7d2486e48145cfca8e194eaa3c22dbb814e6342fd5d248d1e6a7c52",
-  "scripts/sandbox_check.py": "536d52f11a9007bd1e9e16a899194e520783f8b3f9ecb09b6f8cebf511a44abe",
+  "scripts/sandbox_check.py": "652f7f682de8f9cc7bc4276224998fe7940a1a1617bbcaa55043ee969b77ce2e",
   "scripts/sandbox_screens.py": "99e5eea36c4aa9bc4ede68821644a63025579232c1c7084a953c94d336c4cd2d"
 }

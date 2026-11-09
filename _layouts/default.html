@@ -82,8 +82,15 @@
   {%- endunless %}
   <link rel="stylesheet" href="{{ '/assets/css/new-homes.css' | relative_url }}">
   {%- endif %}
+  {%- if page.is_home %}
+  <link rel="stylesheet" href="{{ '/assets/css/release-home.css' | relative_url }}">
+  {%- elsif page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}
+  <link rel="stylesheet" href="{{ '/assets/css/release-poll.css' | relative_url }}">
+  {%- elsif page.url == '/home/a-brighter-path-forward/' or page.url == '/es/un-camino-mejor/' %}
+  <link rel="stylesheet" href="{{ '/assets/css/release-path.css' | relative_url }}">
+  {%- endif %}
 </head>
-<body class="{{ page.body_class }}">
+<body class="{{ page.body_class }}{% if page.is_home %} release-home{% elsif page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %} release-poll{% elsif page.url == '/home/a-brighter-path-forward/' or page.url == '/es/un-camino-mejor/' %} release-path{% endif %}">
   <a class="skip-link" href="#main">{{ t.nav.skip }}</a>
   {%- if site.sandbox_id %}
   {% include sandbox-banner.html %}
