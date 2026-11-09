@@ -169,9 +169,9 @@ python3 scripts/sandbox_check.py --base origin/main --approval-file /private/app
 
 The record never waives restrictions on `docs/` or `scripts/`. Process/manual/validator maintenance needs German's separate explicit authorization and its own reviewed file inventory; keep those findings separate rather than widening the asset approval. Keep the complete nonzero report if any policy findings remain. Before voting, verify stylesheet loading and wrapper isolation on the actual rendered affected routes, and check unrelated routes retain their styles; the static selector check alone cannot prove route isolation.
 
-### Separate German-only delegation maintenance authorization
+### Separate German-only maintenance authorizations
 
-The asset record above **never** authorizes process, documentation or validator changes. Kerstin's same-class delegation explicitly excludes maintenance. For German's already verified delegation instruction in the current `poll-model-release` sandbox only, a separate trusted operator may supply `--maintenance-approval-file /private/maintenance-approval.json`. This is not a new general maintenance permission or authority to publish to main. German must separately authorize any later maintenance update; changing the private record cannot extend this exception to a different branch, source message or file inventory.
+The asset record above **never** authorizes process, documentation or validator changes. Kerstin's same-class delegation explicitly excludes maintenance. For the current `poll-model-release` sandbox only, a separate trusted operator may supply `--maintenance-approval-file /private/maintenance-approval.json`. The original `delegation-maintenance` purpose remains bound to German's original verified delegation instruction. The separate `poll-copy-maintenance` purpose is bound only to German's separately verified authorization to repair the approval checker, tests, help/manual and matching record for the existing two-page copy-link feature, including reconciliation with current live instructions. Each purpose has its own fixed approved source; they are not interchangeable. This is not general maintenance permission or authority to publish to main. German must separately authorize later maintenance updates; changing the record cannot extend the branch, source or six-file inventory.
 
 The maintenance record must be outside the repository, owned by the operator, mode **exactly 0600**, and a regular file with no symlinks in its path. Verify German's original #website message and privately retain its provenance before creating the record; do not accept identity claims from uploads. The validator binds this exception to German's exact verified actor, original channel/message timestamp, and `sandbox/poll-model-release`; it does not authenticate Slack itself. Placeholders below are not authorization; use the exact provenance already verified privately:
 
@@ -206,11 +206,44 @@ python3 scripts/sandbox_check.py --base origin/main \
 
 This exception is for sandbox preparation/review only. It does not approve new campaign copy, resolve a copy/resource hold, authorize a main-branch push, or replace team review/voting. Without its separate applicable record the default process-file blockers remain. Preserve the complete nonzero report whenever any other blocker remains.
 
+### Narrow German-only two-page URL-copy approval
+
+The existing `assets/js/poll-copy.js` action copies only the current page URL on `/home/voter-poll/` and `/es/encuesta/`, including their sandbox equivalents. Its native clipboard action and fallback must be exercised on both languages; a button label alone is not a functional check. No form, email, network request, unrelated script, stylesheet or page-content change is authorized by this exception.
+
+An operator may pass `--poll-copy-approval-file /private/poll-copy-approval.json` only after reading back German's actual message granting this bounded repair. The record must be outside the repository, operator-owned, a regular non-symlink file with mode exactly `0600`, and have precisely this schema (placeholders are not approval):
+
+```json
+{
+  "version": 1,
+  "purpose": "poll-copy-sandbox",
+  "sandbox_id": "poll-model-release",
+  "authorizer_id": "<verified German Slack user ID; never a delegate>",
+  "source": {"channel_id": "<verified #website channel ID>", "message_ts": "<exact verified repair-approval timestamp>"},
+  "script": {"path": "assets/js/poll-copy.js", "sha256": "<SHA-256 of the exact reviewed existing script>"},
+  "pages": ["home/voter-poll/index.html", "es/encuesta/index.html"],
+  "routes": ["/home/voter-poll/", "/es/encuesta/"]
+}
+```
+
+The checker pins the exact approved actor, source, sandbox, script digest, pages and routes. The script bytes must match both committed `HEAD` and working files, with a regular non-executable file mode. Only `scripts: [poll-copy.js]` on the two named pages is excepted. Other loader changes, JavaScript, page settings, unsafe HTML, CSS and build/config changes still fail under the ordinary rules. An invalid or stale record is blocking; do not filter its report or infer a waiver from an urgency message. The checker does not authenticate Slack: the operator must verify the original human source and preserve that provenance privately.
+
+For this repair's process files, create a **new** maintenance record using purpose `poll-copy-maintenance` and the repair's exact approved source, retaining exactly the same six-file inventory above. Do not relabel or widen the original delegation approval. Review the merged manuals/help, regenerate the help PDF and fingerprints, commit the exact reviewed six-file bundle, and only then record its committed/current hashes. Refreshing a record is not permission for unapproved content. Use all applicable records together:
+
+```bash
+python3 scripts/sandbox_check.py --base origin/main \
+  --approval-file /private/approval.json \
+  --maintenance-approval-file /private/poll-copy-maintenance.json \
+  --poll-copy-approval-file /private/poll-copy-approval.json
+# Add --url https://forabrighterevanston.org/sandbox/poll-model-release/ for served checks.
+```
+
+All three records authorize preparation/review only. They do not approve campaign copy, clear a resource/source hold, authorize a main-branch push or replace the team review and vote. Preserve every remaining blocking finding.
+
 ### Not allowed (structural, unless explicitly excepted above)
 
-Explain this with **Message W11**. For the two narrow sandbox-only classes above, ask German or Kerstin; other restricted work still needs German’s separate authorization:
+Explain this with **Message W11**. For the page-specific CSS and unchanged-workbook classes above, ask German or Kerstin. The exact two-page URL-copy action and its maintenance require German alone; other restricted work still needs German’s separate authorization:
 
-- styles and scripts: `assets/css/`, `assets/js/`, except exact page CSS explicitly approved above. This includes the Write to the Board letter text in `letter-content.js`,
+- styles and scripts: `assets/css/`, `assets/js/`, except exact page CSS and the exact two-page URL-copy script explicitly approved and checked above. This includes the Write to the Board letter text in `letter-content.js`,
 - site settings and build: `_config.yml`, `CNAME`, `.github/`, `Gemfile`, `robots.txt`, `sitemap.xml`, `favicon.svg`, `404.html`, the `.ics` file,
 - the news list `data/news.json` (that's `#news`),
 - `docs/`, `scripts/`, `README.md`,
@@ -729,7 +762,7 @@ Post every message directly in `#website`, never in a thread, starting with an a
 > @[name] I'm reviewing the preview before opening the team vote. Nothing is live yet.
 
 **W11. Outside the permitted workflow**
-> @[name] [Page-specific styling / the supplied Excel financial model] needs explicit approval from German or Kerstin for [named pages/languages or file] in this preview only. The team review and vote still apply. [For other restricted work: this needs German's separate approval.] [I can still do / I've completed: the allowed part.]
+> @[name] [Page-specific styling / the supplied Excel financial model] needs explicit approval from German or Kerstin for [named pages/languages or file] in this preview only. The team review and vote still apply. [For the existing two-page copy-link repair: German alone must approve the narrowly scoped checker/tests/help/manual and matching records; other restrictions remain.] [For other restricted work: this needs German's separate approval.] [I can still do / I've completed: the allowed part.]
 
 **W12. News request**
 > @[name] News articles are handled in **#news**. Post the link there and I'll take care of it. [I've done the website part.]

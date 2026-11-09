@@ -352,7 +352,11 @@ def load_scoped_approval(filename, sandbox_url=None):
     return record
 
 
-# One explicit German authorization for the delegation-maintenance bundle only.
+# Distinct German authorizations; neither grants general structural delegation.
+MAINTENANCE_SOURCES = {
+    "delegation-maintenance": "1794230153.839529",
+    "poll-copy-maintenance": "1794242873.127109",
+}
 # This is deliberately independent of SCOPED_AUTHORIZERS and asset approvals.
 MAINTENANCE_FILES = frozenset({
     "docs/agents/fabian-website.md", "docs/help/team-help.md",
@@ -380,12 +384,12 @@ def load_maintenance_approval(filename, sandbox_url=None):
     if (not isinstance(record, dict)
             or set(record) != {"version", "purpose", "sandbox_id", "authorizer_id", "source", "files"}
             or type(record["version"]) is not int or record["version"] != 1
-            or record["purpose"] != "delegation-maintenance"
+            or not isinstance(record["purpose"], str) or record["purpose"] not in MAINTENANCE_SOURCES
             or record["sandbox_id"] != "poll-model-release"
             or git("branch", "--show-current").strip() != "sandbox/poll-model-release"):
         raise ValueError("maintenance approval schema/purpose or exact sandbox branch does not match")
     if (record["authorizer_id"] != "U0CE2G08ZRC" or record["source"] != {
-            "channel_id": "C0CEMKENSQ1", "message_ts": "1794230153.839529"}):
+            "channel_id": "C0CEMKENSQ1", "message_ts": MAINTENANCE_SOURCES[record["purpose"]]}):
         raise ValueError("maintenance requires German's exact original #website authorization; Kerstin cannot approve it")
     if sandbox_url:
         url = urlsplit(sandbox_url)
@@ -418,6 +422,64 @@ def load_maintenance_approval(filename, sandbox_url=None):
                 or hashlib.sha256(target.read_bytes()).hexdigest() != digest):
             raise ValueError(f"{name}: maintenance SHA-256 must match both committed revision and working bytes")
     return approved
+
+
+POLL_COPY_SCRIPT = "assets/js/poll-copy.js"
+POLL_COPY_SHA256 = "e1ea7d637919e39bd28e4d67ccd7091a804832ab3658114695d504ebc7444d32"
+POLL_COPY_PAGES = ["home/voter-poll/index.html", "es/encuesta/index.html"]
+POLL_COPY_ROUTES = ["/home/voter-poll/", "/es/encuesta/"]
+
+
+def unique_json_fields(pairs):
+    record = {}
+    for key, value in pairs:
+        if key in record:
+            raise ValueError("duplicate approval field: " + key)
+        record[key] = value
+    return record
+
+
+def load_poll_copy_approval(filename, sandbox_url=None):
+    """One immutable clipboard script, two existing pages, German's exact consent."""
+    if not filename:
+        return {}
+    path = Path(filename).absolute()
+    if (any(p.is_symlink() for p in (path, *path.parents))
+            or path.resolve().is_relative_to(ROOT.resolve())):
+        raise ValueError("poll-copy approval must be a private non-symlink file outside the repository")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "r", encoding="utf-8") as stream:
+        info = os.fstat(stream.fileno())
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
+                or stat.S_IMODE(info.st_mode) != 0o600):
+            raise ValueError("poll-copy approval must be operator-owned, regular and mode 0600")
+        record = json.load(stream, object_pairs_hook=unique_json_fields)
+    expected = {
+        "version": 1, "purpose": "poll-copy-sandbox", "sandbox_id": "poll-model-release",
+        "authorizer_id": "U0CE2G08ZRC",
+        "source": {"channel_id": "C0CEMKENSQ1", "message_ts": "1794242873.127109"},
+        "script": {"path": POLL_COPY_SCRIPT, "sha256": POLL_COPY_SHA256},
+        "pages": POLL_COPY_PAGES, "routes": POLL_COPY_ROUTES,
+    }
+    if (not isinstance(record, dict) or record != expected or type(record.get("version")) is not int
+            or git("branch", "--show-current").strip() != "sandbox/poll-model-release"):
+        raise ValueError("poll-copy approval must match the exact schema, German authorization, digest and sandbox branch")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/poll-model-release" or url.query or url.fragment):
+            raise ValueError("poll-copy approval sandbox does not match deployed URL")
+    target = ROOT / POLL_COPY_SCRIPT
+    if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+            or target.stat().st_mode & 0o111
+            or not git("ls-tree", "HEAD", "--", POLL_COPY_SCRIPT).startswith("100644 ")):
+        raise ValueError("poll-copy requires a regular non-executable 100644 committed script; no deletions")
+    committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{POLL_COPY_SCRIPT}"],
+                               check=True, capture_output=True).stdout
+    if (hashlib.sha256(committed).hexdigest() != POLL_COPY_SHA256
+            or hashlib.sha256(target.read_bytes()).hexdigest() != POLL_COPY_SHA256):
+        raise ValueError("poll-copy SHA-256 must match both committed revision and working bytes")
+    return record
 
 
 def scoped_css_problem(text, scope):
@@ -515,18 +577,26 @@ def main():
     ap.add_argument("--base", default="origin/main", help="what the sandbox is compared to (default origin/main)")
     ap.add_argument("--url", help="deployed sandbox address, e.g. https://forabrighterevanston.org/sandbox/faq-page/")
     ap.add_argument("--approval-file", help="operator-owned private sandbox-review authorization JSON, outside the repository")
-    ap.add_argument("--maintenance-approval-file", help="separate German-only private delegation-maintenance authorization JSON")
+    ap.add_argument("--maintenance-approval-file", help="separate German-only private delegation-maintenance or poll-copy-maintenance authorization JSON")
+    ap.add_argument("--poll-copy-approval-file", help="German-only private hash-bound poll-copy-sandbox authorization JSON")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    try:
+        poll_copy_approval = load_poll_copy_approval(args.poll_copy_approval_file, args.url)
+        if poll_copy_approval:
+            notes.append("German-only poll-copy-sandbox approval loaded for the immutable script and two exact page loaders; no live publication authorization. Team review/vote and all other holds remain.")
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        poll_copy_approval = {}
+        blocking.append(f"Invalid poll-copy approval: {error}")
     try:
         approved_maintenance = load_maintenance_approval(args.maintenance_approval_file, args.url)
     except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
         approved_maintenance = {}
         blocking.append(f"Invalid maintenance approval: {error}")
     if approved_maintenance:
-        notes.append("German-only delegation-maintenance approval loaded for six exact files in this sandbox only; no live publication authorization. Team review/vote and copy/resource holds remain.")
+        notes.append("German-only fixed-inventory maintenance approval loaded for six exact files in this sandbox only; no live publication authorization. Team review/vote and copy/resource holds remain.")
     try:
         approval = load_scoped_approval(args.approval_file, args.url)
     except (OSError, ValueError, TypeError, AttributeError, KeyError) as error:
@@ -563,11 +633,18 @@ def main():
         ext = Path(path).suffix.lower()
         verb = {"A": "added", "M": "changed", "D": "deleted"}.get(status, "changed")
 
+        if poll_copy_approval and path == POLL_COPY_SCRIPT:
+            base_mode = git("ls-tree", args.base, "--", path)
+            if status not in {"A", "M"} or (base_mode and not base_mode.startswith("100644 ")):
+                blocking.append(f"{path}: poll-copy authorizes no deletion, type or mode changes.")
+            else:
+                changes.append(f"German-authorized poll-copy script {verb}: {path}")
+            continue
         if path in approved_maintenance:
             if status not in {"A", "M"}:
                 blocking.append(f"{path}: maintenance authorizes additions/updates only, never deletion or type changes.")
             else:
-                changes.append(f"German-authorized delegation maintenance {verb}: {path}")
+                changes.append(f"German-authorized fixed-inventory maintenance {verb}: {path}")
             continue
         if path in approved_css or path in approved_workbooks:
             target = ROOT / path
@@ -701,6 +778,10 @@ def main():
             base_fm = parse_front_matter(split_front_matter(base_text)[0])
             for k in ("css", "scripts", "nav", "is_home", "permalink", "lang"):
                 if base_fm.get(k) != fm.get(k):
+                    if (k == "scripts" and poll_copy_approval and path in POLL_COPY_PAGES
+                            and base_fm.get(k) in (None, []) and fm.get(k) == ["poll-copy.js"]
+                            and page_url(path, fm) == POLL_COPY_ROUTES[POLL_COPY_PAGES.index(path)]):
+                        continue
                     blocking.append(f"{label}: the {k!r} setting was changed; that's structural.")
 
         # Only flag what this update introduced (existing pages may use includes by design)

@@ -465,5 +465,276 @@ class MaintenanceApprovalTests(ApprovalFixture):
                 checker.load_maintenance_approval(str(self.maintenance), url)
 
 
+POLL_SCRIPT = 'assets/js/poll-copy.js'
+POLL_DIGEST = 'e1ea7d637919e39bd28e4d67ccd7091a804832ab3658114695d504ebc7444d32'
+POLL_PAGES = ['home/voter-poll/index.html', 'es/encuesta/index.html']
+POLL_ROUTES = ['/home/voter-poll/', '/es/encuesta/']
+
+
+class PollCopyApprovalTests(ApprovalFixture):
+    def setUp(self):
+        super().setUp()
+        self.write('_layouts/default.html', '{{ content }}')
+        for path, lang in zip(POLL_PAGES, ('en', 'es')):
+            self.write(path, '---\nlayout: default\nlang: ' + lang + '\ntitle: Poll\ndescription: Poll description\n---\n<p>Poll</p>')
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'existing poll pages')
+        self.git('tag', '-f', 'baseline')
+        target = self.root / POLL_SCRIPT
+        target.parent.mkdir(parents=True)
+        # Use the reviewed checkout bytes, never synthetic code with an invented hash.
+        target.write_bytes((CHECKER.parent.parent / POLL_SCRIPT).read_bytes())
+        self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(), POLL_DIGEST)
+        for path in POLL_PAGES:
+            page = self.root / path
+            page.write_text(page.read_text().replace('layout: default', 'layout: default\nscripts: [poll-copy.js]'))
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'reviewed clipboard feature')
+        self.poll_record: dict = dict(version=1, purpose='poll-copy-sandbox', sandbox_id='poll-model-release',
+                                authorizer_id='U0CE2G08ZRC',
+                                source=dict(channel_id='C0CEMKENSQ1', message_ts='1794242873.127109'),
+                                script=dict(path=POLL_SCRIPT, sha256=POLL_DIGEST),
+                                pages=POLL_PAGES.copy(), routes=POLL_ROUTES.copy())
+        self.poll_approval = Path(self.temp.name) / 'poll-copy.json'
+
+    def poll_check(self, record=True, write_record=True):
+        argv = [sys.executable, str(self.root / 'scripts/sandbox_check.py'), '--base', 'baseline', '--json']
+        if record:
+            if write_record:
+                self.poll_approval.write_text(json.dumps(self.poll_record))
+                self.poll_approval.chmod(0o600)
+            argv += ['--poll-copy-approval-file', str(self.poll_approval)]
+        result = subprocess.run(argv, capture_output=True, text=True)
+        self.assertEqual(result.stderr, '')
+        return result.returncode, json.loads(result.stdout)
+
+    def test_exact_german_clipboard_feature_is_allowed(self):
+        code, report = self.poll_check()
+        self.assertEqual(code, 0, report)
+        self.assertTrue(any('poll-copy-sandbox' in n for n in report['notes']))
+
+
+    def test_missing_approval_keeps_script_and_loaders_blocked(self):
+        code, report = self.poll_check(record=False)
+        self.assertEqual(code, 1)
+        self.assertTrue(any(POLL_SCRIPT in b for b in report['blocking']))
+        for page in POLL_PAGES:
+            self.assertTrue(any(page in b and 'scripts' in b for b in report['blocking']))
+
+    def test_exact_schema_actor_source_paths_and_digest_are_required(self):
+        original = json.loads(json.dumps(self.poll_record))
+        mutations = [
+            ('authorizer_id', 'U0CE4NY7KC2'), ('authorizer_id', 'German'),
+            ('authorizer_id', 'UOTHER'), ('version', True), ('version', '1'),
+            ('purpose', 'sandbox-review'), ('purpose', 'live-publication'),
+            ('sandbox_id', 'other'), ('extra', True),
+            ('source', None), ('source', {}),
+            ('source', dict(channel_id='OTHER', message_ts='1794242873.127109')),
+            ('source', dict(channel_id='C0CEMKENSQ1', message_ts='1794230153.839529')),
+            ('source', dict(channel_id='C0CEMKENSQ1', message_ts='1794242873.127109', extra=True)),
+            ('script', dict(path='assets/js/other.js', sha256=POLL_DIGEST)),
+            ('script', dict(path='../poll-copy.js', sha256=POLL_DIGEST)),
+            ('script', dict(path=POLL_SCRIPT, sha256='0' * 64)),
+            ('script', dict(path=POLL_SCRIPT, sha256=POLL_DIGEST, extra=True)),
+            ('pages', POLL_PAGES + [POLL_PAGES[0]]), ('pages', POLL_PAGES[::-1]),
+            ('pages', ['foreign/index.html']), ('routes', ['/foreign/']),
+        ]
+        for key, value in mutations:
+            with self.subTest(key=key, value=value):
+                self.poll_record = dict(original, **{key: value})
+                code, report = self.poll_check()
+                self.assertEqual(code, 1, report)
+                self.assertTrue(any('Invalid poll-copy approval' in b for b in report['blocking']))
+        for key in original:
+            with self.subTest(missing=key):
+                self.poll_record = original.copy()
+                del self.poll_record[key]
+                self.assertEqual(self.poll_check()[0], 1)
+
+    def test_duplicate_fields_and_malformed_records_are_rejected(self):
+        self.assertEqual(self.poll_check()[0], 0)
+        valid = json.dumps(self.poll_record)
+        for content in ('{bad', '[]', valid.replace('"version": 1', '"version": 1, "version": 1'),
+                        valid.replace('"path":', '"path": "ignored", "path":'),
+                        valid.replace('"channel_id":', '"channel_id": "ignored", "channel_id":')):
+            with self.subTest(content=content):
+                self.poll_approval.write_text(content)
+                self.assertEqual(self.poll_check(write_record=False)[0], 1)
+        self.poll_approval.write_bytes(b'\xff')
+        self.assertEqual(self.poll_check(write_record=False)[0], 1)
+
+    def test_wrong_branch_is_rejected(self):
+        self.git('checkout', '-qb', 'sandbox/other')
+        self.assertEqual(self.poll_check()[0], 1)
+
+    def test_working_and_head_script_drift_cannot_mint_a_new_digest(self):
+        target = self.root / POLL_SCRIPT
+        approved = target.read_bytes()
+        target.write_bytes(approved + b'\n// unreviewed\n')
+        self.assertEqual(self.poll_check()[0], 1)
+        self.git('add', POLL_SCRIPT)
+        self.git('commit', '-qm', 'unreviewed script')
+        target.write_bytes(approved)
+        self.assertEqual(self.poll_check()[0], 1)  # working-only restoration cannot hide HEAD drift
+        self.poll_record['script']['sha256'] = hashlib.sha256(approved + b'\n// unreviewed\n').hexdigest()
+        self.assertEqual(self.poll_check()[0], 1)
+
+    def test_script_working_and_committed_modes_symlinks_and_deletion(self):
+        target = self.root / POLL_SCRIPT
+        approved = target.read_bytes()
+        target.chmod(0o755)
+        self.assertEqual(self.poll_check()[0], 1)
+        self.git('add', POLL_SCRIPT)
+        self.git('commit', '-qm', 'executable script')
+        target.chmod(0o644)
+        self.assertEqual(self.poll_check()[0], 1)
+        self.git('add', POLL_SCRIPT)
+        self.git('commit', '-qm', 'regular script')
+        other = Path(self.temp.name) / 'script.js'
+        other.write_bytes(approved)
+        target.unlink()
+        target.symlink_to(other)
+        self.assertEqual(self.poll_check()[0], 1)
+        self.git('add', POLL_SCRIPT)
+        self.git('commit', '-qm', 'symlink script')
+        target.unlink()
+        target.write_bytes(approved)
+        self.assertEqual(self.poll_check()[0], 1)
+        target.unlink()
+        self.git('add', POLL_SCRIPT)
+        self.git('commit', '-qm', 'deleted script')
+        self.assertEqual(self.poll_check()[0], 1)
+
+    def test_private_record_permissions_location_symlinks_and_regular_file(self):
+        self.assertEqual(self.poll_check()[0], 0)
+        for mode in (0o644, 0o400, 0o700, 0o000):
+            with self.subTest(mode=mode):
+                self.poll_approval.chmod(mode)
+                self.assertEqual(self.poll_check(write_record=False)[0], 1)
+        self.poll_approval.chmod(0o600)
+        original = self.poll_approval.with_suffix('.original')
+        self.poll_approval.rename(original)
+        self.poll_approval.symlink_to(original)
+        self.assertEqual(self.poll_check(write_record=False)[0], 1)
+        self.poll_approval.unlink()
+        self.poll_approval.mkdir(mode=0o600)
+        self.assertEqual(self.poll_check(write_record=False)[0], 1)
+        self.poll_approval = self.root / 'private.json'
+        self.assertEqual(self.poll_check()[0], 1)
+
+    def test_wrong_owner_and_exact_optional_deployed_url(self):
+        self.assertEqual(self.poll_check()[0], 0)
+        import importlib.util
+        import os
+        from unittest.mock import patch
+        spec = importlib.util.spec_from_file_location('poll_copy_checker', self.root / 'scripts/sandbox_check.py')
+        assert spec is not None and spec.loader is not None
+        checker = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(checker)
+        with patch.object(checker.os, 'getuid', return_value=os.getuid() + 1):
+            with self.assertRaisesRegex(ValueError, 'operator-owned'):
+                checker.load_poll_copy_approval(self.poll_approval)
+        for suffix in ('', '/'):
+            self.assertTrue(checker.load_poll_copy_approval(self.poll_approval,
+                'https://forabrighterevanston.org/sandbox/poll-model-release' + suffix))
+        for url in ('https://forabrighterevanston.org/',
+                    'http://forabrighterevanston.org/sandbox/poll-model-release/',
+                    'https://evil.invalid/sandbox/poll-model-release/',
+                    'https://forabrighterevanston.org/sandbox/other/',
+                    'https://forabrighterevanston.org/sandbox/poll-model-release/?x=1',
+                    'https://forabrighterevanston.org/sandbox/poll-model-release/#x'):
+            with self.subTest(url=url), self.assertRaisesRegex(ValueError, 'deployed URL'):
+                checker.load_poll_copy_approval(self.poll_approval, url)
+
+    def test_base_executable_mode_change_is_not_authorized(self):
+        # Even restoration to 100644 cannot waive a mode change from live.
+        self.git('update-index', '--chmod=+x', POLL_SCRIPT)
+        self.git('commit', '-qm', 'executable baseline')
+        self.git('tag', '-f', 'baseline')
+        self.git('update-index', '--chmod=-x', POLL_SCRIPT)
+        self.git('commit', '-qm', 'regular mode restoration')
+        code, report = self.poll_check()
+        self.assertEqual(code, 1, report)
+        self.assertTrue(any('mode changes' in b for b in report['blocking']))
+
+    def test_approval_cannot_replace_an_existing_foreign_loader(self):
+        target = self.root / POLL_PAGES[0]
+        approved = target.read_text()
+        target.write_text(approved.replace('[poll-copy.js]', '[other.js]'))
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'other loader baseline')
+        self.git('tag', '-f', 'baseline')
+        target.write_text(approved)
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'replace other loader')
+        code, report = self.poll_check()
+        self.assertEqual(code, 1, report)
+        self.assertTrue(any('scripts' in b for b in report['blocking']))
+
+    def test_symlink_parents_and_fifo_records_are_rejected(self):
+        import os
+        self.assertEqual(self.poll_check()[0], 0)
+        link = Path(self.temp.name) / 'linked-dir'
+        link.symlink_to(self.temp.name, target_is_directory=True)
+        self.poll_approval = link / 'poll-copy.json'
+        self.assertEqual(self.poll_check(write_record=False)[0], 1)
+        self.poll_approval = Path(self.temp.name) / 'fifo'
+        os.mkfifo(self.poll_approval, 0o600)
+        self.assertEqual(self.poll_check(write_record=False)[0], 1)
+
+    def test_extra_script_and_other_structural_settings_stay_blocked(self):
+        target = self.root / POLL_PAGES[0]
+        original = target.read_text()
+        for replacement in ('scripts: [poll-copy.js, evil.js]', 'scripts: [evil.js]',
+                            'scripts: [poll-copy.js]\ncss: [evil.css]',
+                            'scripts: [poll-copy.js]\nnav: false',
+                            'scripts: [poll-copy.js]\nis_home: true',
+                            'scripts: [poll-copy.js]\npermalink: /foreign/'):
+            with self.subTest(replacement=replacement):
+                target.write_text(original.replace('scripts: [poll-copy.js]', replacement))
+                self.assertEqual(self.poll_check()[0], 1)
+
+    def test_foreign_page_cannot_load_reviewed_script(self):
+        self.write('foreign/index.html', '---\nlayout: default\nlang: en\ntitle: Foreign\ndescription: Foreign page\n---\n<p>Other</p>')
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'existing foreign page')
+        self.git('tag', '-f', 'baseline')
+        target = self.root / 'foreign/index.html'
+        target.write_text(target.read_text().replace('layout: default', 'layout: default\nscripts: [poll-copy.js]'))
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'foreign loader')
+        code, report = self.poll_check()
+        self.assertEqual(code, 1)
+        self.assertTrue(any('foreign/index.html' in b and 'scripts' in b for b in report['blocking']))
+
+    def test_unsafe_html_other_js_css_docs_and_build_stay_blocked(self):
+        restricted = ('assets/js/evil.js', 'assets/css/evil.css', 'docs/extra.md', '_config.yml', '.github/workflows/build.yml')
+        for path in restricted:
+            self.write(path, 'unapproved')
+        target = self.root / POLL_PAGES[0]
+        target.write_text(target.read_text() + '<script>alert(1)</script>')
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'restricted changes')
+        code, report = self.poll_check()
+        self.assertEqual(code, 1)
+        for path in restricted:
+            self.assertTrue(any(path in b for b in report['blocking']), report)
+        self.assertTrue(any('script> tag' in b for b in report['blocking']), report)
+
+
+class PollCopyMaintenanceTests(MaintenanceApprovalTests):
+    def setUp(self):
+        super().setUp()
+        self.maintenance_record['purpose'] = 'poll-copy-maintenance'
+        self.maintenance_record['source']['message_ts'] = '1794242873.127109'
+
+    def test_new_purpose_cannot_relabel_original_permission(self):
+        self.maintenance_record['source']['message_ts'] = '1794230153.839529'
+        self.assertEqual(self.maintenance_check()[0], 1)
+        self.maintenance_record['purpose'] = 'delegation-maintenance'
+        self.maintenance_record['source']['message_ts'] = '1794242873.127109'
+        self.assertEqual(self.maintenance_check()[0], 1)
+
+
 if __name__ == '__main__':
     unittest.main()
