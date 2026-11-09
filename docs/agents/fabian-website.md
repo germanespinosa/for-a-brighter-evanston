@@ -13,8 +13,29 @@ News articles are not part of this job. They are handled only in `#news` (see `d
 
 ## 1. Ground rules
 
-- **Refresh the procedure before acting.** Before each website request, new vote, vote message or resumed session, read this manual from the current `main` checkout, especially sections 8–9. Current repository rules supersede old conversational instructions and cached skill summaries. Do not reintroduce a reaction-access prerequisite: website votes are messages.
-- **Keep the process documented.** Whenever German approves a process change, update this manual, the relevant message patterns/checklists and the team help Markdown/PDF in the same change. Update enforcement and tests when the behavior changes; do not leave the rule only in chat or a local skill. Use the normal authorization requirements for GitHub writes and report saved settings, tested behavior and live activation separately.
+- **Check for manual updates before acting; reread only what changed.** These documents are long, so don't reread them in full before every message. Instead, before each website request, new vote, vote message or resumed session, run this quick check (it takes about a second):
+
+  ```bash
+  cd for-a-brighter-evanston && git fetch -q origin
+  git rev-parse origin/main                           # the current version
+  cat ~/.fabian/manual-read.json 2>/dev/null          # the version you last read, if any
+  git diff --stat <last-read commit> origin/main -- docs/agents/fabian-website.md docs/agents/fabian-website-cards.md
+  ```
+
+  - **Nothing changed, and you still have the documents in this session:** act on what you know; don't reread.
+  - **Something changed:** read just the changes (`git diff <last-read commit> origin/main -- docs/agents/fabian-website.md docs/agents/fabian-website-cards.md`), plus any section around them you need for context.
+  - **New session, after a compaction, or no record yet:** read `docs/agents/fabian-website-cards.md` in full, then the reference sections the task needs (each card names them). Read a whole section before acting on it.
+
+  After reading, save the version: `{"commit": "<origin/main commit>", "read_at": "<time>"}` in `~/.fabian/manual-read.json`. The check itself is never skipped. Current repository rules always supersede old conversational instructions and cached skill summaries. Do not reintroduce a reaction-access prerequisite: website votes are messages.
+- **Use the quick cards.** `docs/agents/fabian-website-cards.md` has one short card per task (start, change, mockup, restart/destroy, review, vote message, publish). Follow the card and open the reference sections it names when the situation needs them. If a card and this manual disagree, this manual wins: follow it and tell German privately so the card can be fixed. When German approves a process change, update the affected card in the same change.
+- **Work in few, larger steps.** Each separate command costs a pause, so:
+  - keep one clone and `git fetch`, rather than cloning again;
+  - run all the commands for one step in a single shell call (`set -e`, then the commands in order) instead of one call per command;
+  - print only what you need to decide: summary and `RESULT:` lines, not full outputs;
+  - don't repeat a check whose result can't have changed since you ran it in the same step.
+
+  This changes how you run the work, not what must be checked; every check, confirmation and progress update in this manual still applies.
+- **Keep the process documented.** Whenever German approves a process change, update this manual, the affected quick card, the relevant message patterns/checklists and the team help Markdown/PDF in the same change. Update enforcement and tests when the behavior changes; do not leave the rule only in chat or a local skill. Use the normal authorization requirements for GitHub writes and report saved settings, tested behavior and live activation separately.
 - **Fresh-vote requests are actionable.** If someone asks to start a vote again and the old vote is cancelled or expired, perform section 8's review and open a new W14 message with a new record and deadline. If a vote is still active, resolve its cancellation first; never carry over old votes or ask for a manual reaction tally.
 
 - **Only `#website`.** Act only on update requests, answers, confirmations and votes posted in `#website`. Anywhere else, reply with **Message W0** and do nothing.

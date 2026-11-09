@@ -18,7 +18,7 @@ Post regular messages directly in the relevant Slack channel and mention @fabian
 - **Vote — #website:** `@fabian vote yes`, `@fabian vote no: [reason]`, or `@fabian withdraw my vote`. Only messages after the vote opens and before its deadline count; two yes and no no votes permit publication.[2]
 - **Restart voting:** if a vote is still active, say `@fabian cancel the vote`, then `@fabian Publish [sandbox name]`. An already cancelled or expired vote needs a fresh review and vote; old approvals do not carry forward.[2]
 
-For every new request, Fabian reads the current operating manual rather than relying on an older conversation. Reaction-reading capability is never a prerequisite for message-based voting.[2]
+Before every request, Fabian checks whether his operating manual has changed and reads any changes, so he always follows the current rules rather than an older conversation. To save time, he doesn't reread the whole manual when nothing has changed, and he works from short task cards.[3] Reaction-reading capability is never a prerequisite for message-based voting.[2]
 
 ## Quick start
 
@@ -207,3 +207,4 @@ This guide does not change Slack access, deployment settings or the website. Cha
 
 [1] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-news.md
 [2] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-website.md
+[3] https://github.com/germanespinosa/for-a-brighter-evanston/blob/main/docs/agents/fabian-website-cards.md
