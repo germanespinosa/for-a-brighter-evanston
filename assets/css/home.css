@@ -141,6 +141,23 @@
   .hero__actions .btn-group .btn:first-child { flex: 1; }
 }
 
+/* ---------- Homepage poll summary only ---------- */
+#the-problem .stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 28px 0;
+  padding: 0;
+  list-style: none;
+}
+#the-problem .stat-grid > li { min-width: 0; }
+#the-problem .stat-grid picture { display: block; }
+#the-problem .stat-grid img { width: 100%; height: auto; }
+@media (max-width: 700px) {
+  #the-problem .stat-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  #the-problem .stat-grid > li { width: 100%; max-width: 400px; justify-self: center; }
+}
+
 /* ---------- Write to the Board band ---------- */
 .cta-band {
   display: flex;
