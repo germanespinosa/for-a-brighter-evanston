@@ -1,160 +1,251 @@
 ---
 layout: "default"
 lang: "en"
+alt_url: "/es/opciones/"
 title: "Options"
 description: "There are better options. Check our math."
 share_image: "/assets/img/share-options-nov2026.png"
+css: options.css
+body_class: "page-options"
 ---
-<section class="band band--white">
-  <div class="container two-col">
-    <div>
-      <nav aria-label="Breadcrumb"><a href="{{ '/' | relative_url }}">Home</a> › A Brighter Path Forward</nav>
-      <p class="tag">→ A BRIGHTER PATH FORWARD<br>FINANCIAL MODEL</p>
-      <h1 class="page-hero__title">There are better options. <span class="mark">Check our math.</span></h1>
-      <p>We rebuilt D65’s budget projections from the district’s own numbers. Our model shows a path that keeps schools open and keeps reserves above the board’s 90-day safety line every year through 2037.</p>
-      <p><a class="btn btn--navy btn--lg" href="{{ '/assets/files/d65-financial-model-v4.xlsx' | relative_url }}" download>↓ Download the full model (spreadsheet)</a></p>
-      <p><a href="{{ '/assets/files/model-executive-summary-nov-2026.pdf' | relative_url }}">Executive summary (PDF) →</a></p>
-    </div>
-    <aside>
-      <img src="{{ '/assets/img/options-v2-hero-card.png' | relative_url }}" alt="" aria-hidden="true" width="720" height="650">
-      <div class="visually-hidden">
-      <div class="container">
-        <p class="eyebrow eyebrow--gold">WITH EVERY LEVER ON</p>
-        <p class="page-hero__title text-gold">10 <span class="subhead">of 10 years</span></p>
-        <p><strong>above the board’s 90-day safety line,</strong> FY28 through FY37, with both schools open.</p>
-        <p>Model projection, not a guaranteed outcome.</p>
-      </div>
-      </div>
-    </aside>
-  </div>
-</section>
-<section class="band band--tint">
-  <div class="container two-col">
-    <div>
-      <p class="eyebrow">THE BOTTOM LINE</p>
-      <h2 class="section-title">D65 can’t close its way out of this. <span class="mark">It needs voters, and closures are losing them.</span></h2>
-      <p><strong>Closing two schools saves about $2.3 million a year,</strong> about 1% of the district’s roughly $180 million budget. That’s the district’s latest estimate, down from $2.9 million in October, and added busing brings it closer to $2 million. Our model also adds the costs of about 14 additional positions that the district identified as dependent on the school closures on October 26.</p>
-      <p><strong>On the district’s own path, the closures buy one year.</strong> Reserves run out in FY34 with the closures and FY33 without them. The structural gap stays. We counted the closure savings generously ($3.3 million a year, including about 14 positions the district tied to the closures), and they still buy only one year.</p>
-      <p><strong>There’s another route.</strong> A package of savings and revenue keeps schools open and keeps reserves above the board’s 90-day policy every year through FY37.</p>
-    </div>
-    <div>
-      <img src="{{ '/assets/img/options-v2-bottom-cards.png' | relative_url }}" alt="" aria-hidden="true" width="720" height="900" loading="lazy">
-      <div class="visually-hidden">
-      <div class="band band--white"><div class="container"><p class="section-title">$2.3M</p><p>a year saved by closing two schools, <strong>about 1% of the budget</strong></p></div></div>
-      <div class="band band--white"><div class="container"><p class="section-title">1 year</p><p>is all it buys: reserves run out in <strong>FY34 instead of FY33</strong></p></div></div>
-      <div class="band band--navy"><div class="container"><p class="eyebrow eyebrow--gold">OUR ASK</p><p class="subhead">Vote no on Nov. 16, and work through these options in public before any building closes.</p></div></div>
+{%- capture icon_down -%}<svg class="op-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>{%- endcapture -%}
+{%- capture icon_arrow -%}<svg class="op-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>{%- endcapture -%}
+{%- capture sun -%}<svg viewBox="0 0 200 200" aria-hidden="true" focusable="false"><circle cx="100" cy="100" r="44"/><g stroke-width="7" stroke-linecap="round"><line x1="100" y1="8" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="192"/><line x1="8" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="192" y2="100"/><line x1="35" y1="35" x2="58" y2="58"/><line x1="142" y1="142" x2="165" y2="165"/><line x1="35" y1="165" x2="58" y2="142"/><line x1="142" y1="58" x2="165" y2="35"/></g></svg>{%- endcapture -%}
+{%- assign model_xlsx = '/assets/files/d65-financial-model-v4.xlsx' | relative_url -%}
+{%- assign summary_pdf = '/assets/files/model-executive-summary-nov-2026.pdf' | relative_url -%}
+{%- assign poll_url = '/home/voter-poll/' | relative_url -%}
+
+<section class="op-hero">
+  <div class="op-sun op-sun--hero">{{ sun }}</div>
+  <div class="op-wrap op-hero__inner">
+    <div class="op-hero__main">
+      <nav class="op-breadcrumb" aria-label="Breadcrumb"><a href="{{ '/' | relative_url }}">Home</a> <span aria-hidden="true">›</span> <span>A Brighter Path Forward</span></nav>
+      <p class="op-badge-row">
+        <span class="op-badge"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D9B96E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 5.5l6.5 6.5-6.5 6.5"/></svg>A Brighter Path Forward</span>
+        <span class="op-eyebrow">Financial model</span>
+      </p>
+      <h1 class="op-h1">There are better options. <span class="op-mark">Check our math.</span></h1>
+      <p class="op-lede">We rebuilt D65’s budget projections from the district’s own numbers. Our model shows a path that keeps schools open and keeps reserves above the board’s 90-day safety line every year through 2037.</p>
+      <div class="op-hero__actions">
+        <a class="op-btn op-btn--navy" href="{{ model_xlsx }}" download>{{ icon_down }}Download the full model (spreadsheet)</a>
+        <a class="op-btn op-btn--outline" href="{{ summary_pdf }}">Executive summary (PDF) {{ icon_arrow }}</a>
       </div>
     </div>
-  </div>
-</section>
-<section class="band band--white">
-  <div class="container">
-    <p class="eyebrow">WHAT THE MODEL SHOWS</p>
-    <h2 class="section-title">Same district numbers.<br>Two very different outcomes.</h2>
-    <p>Compare the corrected projections with the same scenarios after pulling the financial levers below.</p>
-    <picture aria-hidden="true">
-      <source media="(max-width: 1050px)" srcset="{{ '/assets/img/options-v2-reserve-phone.png' | relative_url }}">
-      <img src="{{ '/assets/img/options-v2-reserve-desktop.png' | relative_url }}" alt="" width="2240" height="931" loading="lazy">
-    </picture>
-    <div class="visually-hidden">
-    <h3 class="subhead">Ending reserves, $ millions</h3>
-    <p>Base · Interventions + SACC · Both Schools Open + SACC</p>
-    <div class="two-col">
-      <figure>
-        <h3 class="subhead">1 · The District's plan, adjusted for errors</h3>
-        <img src="{{ '/assets/img/options-chart-district.png' | relative_url }}" width="456" height="198" alt="Line chart of ending reserves in millions from FY27 to FY37. The vertical axis is labeled 100, 0, -100, -200, -300 and -400; the horizontal axis is labeled FY27, FY29, FY31, FY33, FY35 and FY37. The dashed Base line, orange Interventions + SACC line and navy Both Schools Open + SACC line all decline. Base reaches zero in FY30, Both Schools Open in FY33 and Interventions in FY34.">
-        <figcaption>Reserves reach zero in FY30 (Base), FY33 (Both Schools Open) and FY34 (Interventions). Closing schools moves the line one year.</figcaption>
-      </figure>
-      <figure>
-        <h3 class="subhead">2 · The same scenarios with all levers on</h3>
-        <img src="{{ '/assets/img/options-chart-levers.png' | relative_url }}" width="450" height="196" alt="Line chart of ending reserves in millions from FY27 to FY37 with all levers on. The vertical axis is labeled 300, 200, 100 and 0; the horizontal axis is labeled FY27, FY29, FY31, FY33, FY35 and FY37. The orange Interventions + SACC and navy Both Schools Open + SACC lines rise to approximately $240 million and above $215 million, respectively. The dashed Base line ends above zero in FY37.">
-        <figcaption>Interventions ends near $240M, Both Schools Open above $215M. Even Base stays solvent through FY37.</figcaption>
-      </figure>
-    </div>
-    <p><strong>Model projections.</strong> Different vertical scales. Lines join saved annual balances; not observed results or audited forecasts.</p>
-    </div>
-    <div class="band band--tint"><div class="container"><p class="eyebrow">TRY IT YOURSELF</p><p>With every lever on, D65 never runs out and stays above the safety line all ten years. Without a referendum, the money lasts through 2037 but dips below the safety line after FY33. That’s why the model includes a referendum.</p><a class="btn btn--navy" href="{{ '/assets/files/d65-financial-model-v4.xlsx' | relative_url }}" download>↓ Download the full model (spreadsheet)</a></div></div>
-  </div>
-</section>
-<section class="band band--tint">
-  <div class="container">
-    <p class="eyebrow">THE LEVERS</p>
-    <h2 class="section-title">What’s in the model</h2>
-    <p>Every financial lever on one scale, largest first. Each bar shows what the lever adds a year once it’s in place.</p>
-    <picture aria-hidden="true">
-      <source media="(max-width: 1050px)" srcset="{{ '/assets/img/options-v2-levers-phone.png' | relative_url }}">
-      <img src="{{ '/assets/img/options-v2-levers-desktop.png' | relative_url }}" alt="" width="2240" height="1700" loading="lazy">
-    </picture>
-    <div class="visually-hidden">
-    <p>Ask voters, with a plan they trust · Spend carefully · Use what already exists</p>
-    <table>
-      <thead><tr><th scope="col">LEVER</th><th scope="col">SIZE, PER YEAR</th><th scope="col">WHAT IT TAKES</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Operating referendum<br>from FY30</th><td>$17M<br><meter min="0" max="17" value="17" aria-label="Operating referendum: $17 million per year"></meter></td><td><strong>NEEDS VOTER APPROVAL</strong><br>Nov. 2028. If packaged with the capital referendum, would be similar to 2017 referendum size adjusted for inflation.</td></tr>
-        <tr><th scope="row">Capital referendum<br>from FY30 · bonds replace yearly building transfers</th><td>$7.97M<br><meter min="0" max="17" value="7.97" aria-label="Capital referendum: $7.97 million per year"></meter></td><td><strong>NEEDS VOTER APPROVAL</strong><br>Together with the operating referendum, the levy is about $22M in FY30.</td></tr>
-        <tr><th scope="row">Sustainable salary growth<br>by FY32</th><td>~$4.9M<br><meter min="0" max="17" value="4.9" aria-label="Sustainable salary growth: about $4.9 million per year"></meter></td><td><strong>NEEDS BARGAINING</strong><br>Raises would still be comparable to other local districts.</td></tr>
-        <tr><th scope="row">Sustainable benefit growth<br>by FY32</th><td>~$3.2M<br><meter min="0" max="17" value="3.2" aria-label="Sustainable benefit growth: about $3.2 million per year"></meter></td><td>Benefits are rising about 10% a year in the district’s plan.</td></tr>
-        <tr><th scope="row">Teacher retirement savings<br>by FY32</th><td>$2.8M<br><meter min="0" max="17" value="2.8" aria-label="Teacher retirement savings: $2.8 million per year"></meter></td><td>About 12 teachers retire each year and are replaced at lower pay.</td></tr>
-        <tr><th scope="row">West Evanston TIF extension for Foster debt<br>from FY31</th><td>$2.75M<br><meter min="0" max="17" value="2.75" aria-label="West Evanston TIF extension for Foster debt: $2.75 million per year"></meter></td><td><strong>NEEDS STATE LAW CHANGE</strong><br>State legislative approval.</td></tr>
-        <tr><th scope="row">Leaner central office<br>by FY32</th><td>~$2.2M<br><meter min="0" max="17" value="2.2" aria-label="Leaner central office: about $2.2 million per year"></meter></td><td>14 administrator and non-union support positions, phased in. No teaching positions.</td></tr>
-        <tr><th scope="row">TIF money returning to schools<br>from FY29</th><td>~$0.8M<br><meter min="0" max="17" value="0.8" aria-label="TIF money returning to schools: about $0.8 million per year"></meter></td><td>Dempster-Dodge closing early (City recommends end of 2027) and Howard-Ridge expiring at the end of 2028.</td></tr>
-      </tbody>
-    </table>
-    <p class="eyebrow">ONE TIME</p>
-    <table>
-      <tbody><tr><th scope="row">Sale of Kingsley and Bessie Rhodes<br>FY28 only</th><td>$9M</td><td>Midpoint of the district’s estimates. The administration advises using proceeds for buildings only; our model counts it toward operations.</td></tr></tbody>
-    </table>
-    <p class="subhead">The package clears the safety line by a wide margin, so it can absorb some pieces falling short.</p>
+    <div class="op-hero-card">
+      <p class="op-eyebrow op-eyebrow--gold">With every lever on</p>
+      <p class="op-hero-card__stat"><span class="op-hero-card__num">10</span> <span class="op-hero-card__of">of 10 years</span></p>
+      <p class="op-hero-card__text"><b>above the board’s 90-day safety line,</b> <br>FY28 through FY37, with both schools open.</p>
+      <p class="op-hero-card__note">Model projection, not a guaranteed outcome.</p>
     </div>
   </div>
 </section>
-<section class="band band--navy">
-  <div class="container two-col">
-    <div>
-      <p class="eyebrow eyebrow--gold">WHY A REFERENDUM, AND WHY A PLAN COMES FIRST</p>
-      <h2 class="section-title">Trust first.<br><span class="mark">Referendum second.</span></h2>
-      <p>Every path that keeps D65 above the safety line for the long term includes a referendum, the district’s plan included. An independent poll shows a referendum would fail today (28% for, 41% against), and closing schools makes it harder to pass. Voters said what would change their minds: a long-term financial plan with clear spending limits. Our model shows how to give them that first, then ask.</p>
+
+<section class="op-band op-band--cream">
+  <div class="op-wrap op-split op-split--top">
+    <div class="op-split__main">
+      <p class="op-eyebrow">The bottom line</p>
+      <h2 class="op-h2 op-h2--lg">D65 can’t close its way out of this. <span class="op-mark">It needs voters, and closures are losing them.</span></h2>
+      <p class="op-body"><b>Closing two schools saves about $2.3 million a year,</b> about 1% of the district’s roughly $180 million budget. That’s the district’s latest estimate, down from $2.9 million in October, and added busing brings it closer to $2 million. Our model also adds the costs of about 14 additional positions that the district identified as dependent on the school closures on October 26.</p>
+      <p class="op-body"><b>On the district’s own path, the closures buy one year.</b> Reserves run out in FY34 with the closures and FY33 without them. The structural gap stays. We counted the closure savings generously ($3.3 million a year, including about 14 positions the district tied to the closures), and they still buy only one year.</p>
+      <p class="op-body"><b>There’s another route.</b> A package of savings and revenue keeps schools open and keeps reserves above the board’s 90-day policy every year through FY37.</p>
     </div>
-    <div><picture aria-hidden="true">
-      <source media="(max-width: 1050px)" srcset="{{ '/assets/img/options-v2-poll-phone.png' | relative_url }}">
-      <img src="{{ '/assets/img/options-v2-poll-desktop.png' | relative_url }}" alt="" width="1000" height="300" loading="lazy">
-    </picture><div class="visually-hidden"><p class="eyebrow eyebrow--gold">A REFERENDUM TODAY</p><p><strong>28% for　 31% unsure　 41% against</strong></p></div><a class="btn btn--gold" href="{{ '/home/voter-poll/' | relative_url }}">See what voters said →</a></div>
+    <div class="op-split__side op-stats">
+      <div class="op-stat">
+        <p class="op-stat__num">$2.3M</p>
+        <p class="op-stat__text">a year saved by closing two schools, <br><b>about 1% of the budget</b></p>
+      </div>
+      <div class="op-stat">
+        <p class="op-stat__num">1 year</p>
+        <p class="op-stat__text">is all it buys: reserves run out in <b>FY34 instead of FY33</b></p>
+      </div>
+      <div class="op-stat op-stat--navy">
+        <p class="op-eyebrow op-eyebrow--gold">Our ask</p>
+        <p class="op-stat__ask">Vote no on Nov. 16, and work through these options in public before any building closes.</p>
+      </div>
+    </div>
   </div>
 </section>
-<section class="band band--white">
-  <div class="container two-col">
-    <div>
-      <p class="eyebrow">METHODOLOGY</p>
-      <h2 class="section-title">How we built the model</h2>
-      <p>We started from the district’s projections (dated Aug. 26, released Oct. 13), which run through FY32, and extended each line to FY37 at its FY32 growth rate. We looked at what savings would be reversed from the district’s Interventions scenario if both schools were left open, which included the district’s $2.3 million in claimed savings plus some additional positions identified on October 26, to create three total scenarios: Base (No Action), Interventions, and Both Schools Open. Then we made a few corrections in every scenario.</p>
-      <ul>
-        <li><strong>Capital spending.</strong> We corrected the $27 million error D65 has acknowledged in its building budget (capital spending counted twice), using D65’s own figure of $7.97M a year.</li>
-        <li><strong>Foster lease debt.</strong> We added $3.2M a year the projections left out. This adds cost.</li>
-        <li><strong>Missing revenue.</strong> We added the Ryan Field ticket surcharge ($250,000 a year from FY28) and Five-Fifths TIF revenue sharing (about $358,000 a year).</li>
-        <li><strong>SACC.</strong> Kept in every scenario, as D65 decided on Nov. 5.</li>
+
+<section class="op-band op-band--white">
+  <div class="op-wrap">
+    <p class="op-eyebrow">What the model shows</p>
+    <h2 class="op-h2 op-h2--xl op-h2--tight">Same district numbers. <br>Two very different outcomes.</h2>
+    <p class="op-body op-intro">Compare the corrected projections with the same scenarios after pulling the financial levers below.</p>
+
+    <div class="op-panel">
+      <div class="op-panel__head">
+        <h3 class="op-panel__title">Ending reserves, $ millions</h3>
+        <ul class="op-legend" aria-label="Chart legend">
+          <li><span class="op-key op-key--dash" aria-hidden="true"></span>Base</li>
+          <li><span class="op-key op-key--rust" aria-hidden="true"></span>Interventions + SACC</li>
+          <li><span class="op-key op-key--navy" aria-hidden="true"></span>Both Schools Open + SACC</li>
+        </ul>
+      </div>
+      <div class="op-charts">
+        <figure class="op-chart">
+          <h4 class="op-chart__title">1 · The District's plan, adjusted for errors</h4>
+          <img src="{{ '/assets/img/options-chart-district.png' | relative_url }}" width="456" height="198" loading="lazy" alt="Line chart of ending reserves in millions from FY27 to FY37. The vertical axis is labeled 100, 0, -100, -200, -300 and -400; the horizontal axis is labeled FY27, FY29, FY31, FY33, FY35 and FY37. The dashed Base line, orange Interventions + SACC line and navy Both Schools Open + SACC line all decline. Base reaches zero in FY30, Both Schools Open in FY33 and Interventions in FY34.">
+          <figcaption>Reserves reach zero in <b class="op-c-base">FY30</b> (Base), <b>FY33</b> (Both Schools Open) and <b class="op-c-rust">FY34</b> (Interventions). Closing schools moves the line one year.</figcaption>
+        </figure>
+        <figure class="op-chart">
+          <h4 class="op-chart__title">2 · The same scenarios with all levers on</h4>
+          <img src="{{ '/assets/img/options-chart-levers.png' | relative_url }}" width="450" height="196" loading="lazy" alt="Line chart of ending reserves in millions from FY27 to FY37 with all levers on. The vertical axis is labeled 300, 200, 100 and 0; the horizontal axis is labeled FY27, FY29, FY31, FY33, FY35 and FY37. The orange Interventions + SACC and navy Both Schools Open + SACC lines rise to approximately $240 million and above $215 million, respectively. The dashed Base line ends above zero in FY37.">
+          <figcaption>Interventions ends near <b class="op-c-rust">$240M</b>, Both Schools Open above <b>$215M</b>. Even Base stays solvent through FY37.</figcaption>
+        </figure>
+      </div>
+      <p class="op-panel__note"><b>Model projections.</b> Different vertical scales. Lines join saved annual balances; not observed results or audited forecasts.</p>
+    </div>
+
+    <div class="op-try">
+      <div class="op-try__text">
+        <p class="op-eyebrow">Try it yourself</p>
+        <p class="op-body">With every lever on, D65 never runs out and stays above the safety line all ten years. Without a referendum, the money lasts through 2037 but dips below the safety line after FY33. That’s why the model includes a referendum.</p>
+      </div>
+      <a class="op-btn op-btn--navy op-btn--display" href="{{ model_xlsx }}" download>{{ icon_down }}Download the full model (spreadsheet)</a>
+    </div>
+  </div>
+</section>
+
+<section class="op-band op-band--cream" id="options">
+  <div class="op-wrap">
+    <p class="op-eyebrow">The levers</p>
+    <h2 class="op-h2 op-h2--xl op-h2--tight">What’s in the model</h2>
+    <p class="op-body op-intro op-intro--sm">Every financial lever on one scale, largest first. Each bar shows what the lever adds a year once it’s in place.</p>
+
+    <ul class="op-legend op-legend--levers" aria-label="Bar colors">
+      <li><span class="op-swatch op-swatch--voters" aria-hidden="true"></span>Ask voters, with a plan they trust</li>
+      <li><span class="op-swatch op-swatch--spend" aria-hidden="true"></span>Spend carefully</li>
+      <li><span class="op-swatch op-swatch--exists" aria-hidden="true"></span>Use what already exists</li>
+    </ul>
+
+    <div class="op-levers-box">
+      <table class="op-levers" role="table">
+        <caption class="visually-hidden">Financial levers in the model, largest first</caption>
+        <thead role="rowgroup">
+          <tr role="row"><th scope="col" role="columnheader">Lever</th><th scope="col" role="columnheader">Size, per year</th><th scope="col" role="columnheader">What it takes</th></tr>
+        </thead>
+        <tbody role="rowgroup">
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Operating referendum</span> <span class="op-lever__when">from FY30</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--voters" style="width:80%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Ask voters: </span>$17M</span></div></td>
+            <td role="cell" class="op-lever__takes"><span class="op-req">Needs voter approval</span><br>Nov. 2028. If packaged with the capital referendum, would be similar to 2017 referendum size adjusted for inflation.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Capital referendum</span> <span class="op-lever__when">from FY30 · bonds replace yearly building transfers</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--voters" style="width:37.5%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Ask voters: </span>$7.97M</span></div></td>
+            <td role="cell" class="op-lever__takes"><span class="op-req">Needs voter approval</span><br>Together with the operating referendum, the levy is about $22M in FY30.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Sustainable salary growth</span> <span class="op-lever__when">by FY32</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--spend" style="width:23.1%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Spend carefully: </span>~$4.9M</span></div></td>
+            <td role="cell" class="op-lever__takes"><span class="op-req">Needs bargaining</span><br>Raises would still be comparable to other local districts.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Sustainable benefit growth</span> <span class="op-lever__when">by FY32</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--spend" style="width:15.1%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Spend carefully: </span>~$3.2M</span></div></td>
+            <td role="cell" class="op-lever__takes">Benefits are rising about 10% a year in the district’s plan.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Teacher retirement savings</span> <span class="op-lever__when">by FY32</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--spend" style="width:13.2%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Spend carefully: </span>$2.8M</span></div></td>
+            <td role="cell" class="op-lever__takes">About 12 teachers retire each year and are replaced at lower pay.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">West Evanston TIF extension for Foster debt</span> <span class="op-lever__when">from FY31</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--exists" style="width:12.9%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Use what already exists: </span>$2.75M</span></div></td>
+            <td role="cell" class="op-lever__takes"><span class="op-req">Needs state law change</span><br>State legislative approval.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Leaner central office</span> <span class="op-lever__when">by FY32</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--spend" style="width:10.4%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Spend carefully: </span>~$2.2M</span></div></td>
+            <td role="cell" class="op-lever__takes">14 administrator and non-union support positions, phased in. No teaching positions.</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">TIF money returning to schools</span> <span class="op-lever__when">from FY29</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--exists" style="width:3.8%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Use what already exists: </span>~$0.8M</span></div></td>
+            <td role="cell" class="op-lever__takes">Dempster-Dodge closing early (City recommends end of 2027) and Howard-Ridge expiring at the end of 2028.</td>
+          </tr>
+        </tbody>
+        <tbody role="rowgroup" class="op-levers__onetime">
+          <tr role="row" class="op-levers__group"><th scope="colgroup" colspan="3" role="columnheader">One time</th></tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="op-lever__name">Sale of Kingsley and Bessie Rhodes</span> <span class="op-lever__when">FY28 only</span></th>
+            <td role="cell"><div class="op-bar"><span class="op-bar__fill op-bar__fill--onetime" style="width:42.4%" aria-hidden="true"></span><span class="op-bar__val"><span class="visually-hidden">Use what already exists, one time: </span>$9M</span></div></td>
+            <td role="cell" class="op-lever__takes">Midpoint of the district’s estimates. The administration advises using proceeds for buildings only; our model counts it toward operations.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="op-closer">The package clears the safety line by a wide margin, so it can absorb some pieces falling short.</p>
+  </div>
+</section>
+
+<section class="op-band op-band--deep">
+  <div class="op-wrap op-split op-split--center">
+    <div class="op-split__main">
+      <p class="op-eyebrow op-eyebrow--gold">Why a referendum, and why a plan comes first</p>
+      <h2 class="op-h2 op-h2--xl op-h2--trust">Trust first. <br><span class="op-mark">Referendum second.</span></h2>
+      <p class="op-body op-body--light">Every path that keeps D65 above the safety line for the long term includes a referendum, the district’s plan included. An independent poll shows a referendum would fail today (28% for, 41% against), and closing schools makes it harder to pass. Voters said what would change their minds: a long-term financial plan with clear spending limits. Our model shows how to give them that first, then ask.</p>
+    </div>
+    <div class="op-split__side op-poll">
+      <div class="op-poll__card">
+        <p class="op-eyebrow op-eyebrow--gold">A referendum today</p>
+        <div class="op-poll__bar" aria-hidden="true"><span style="width:28%" class="op-poll__for"></span><span style="width:31%" class="op-poll__unsure"></span><span style="width:41%" class="op-poll__against"></span></div>
+        <p class="op-poll__labels"><span><b>28%</b> for</span> <span><b>31%</b> unsure</span> <span><b>41%</b> against</span></p>
+      </div>
+      <a class="op-poll__link" href="{{ poll_url }}">See what voters said <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section class="op-band op-band--white">
+  <div class="op-wrap op-split op-split--method">
+    <div class="op-split__main">
+      <p class="op-eyebrow">Methodology</p>
+      <h2 class="op-h2 op-h2--md">How we built the model</h2>
+      <p class="op-body op-body--17">We started from the district’s projections (dated Aug. 26, released Oct. 13), which run through FY32, and extended each line to FY37 at its FY32 growth rate. We looked at what savings would be reversed from the district’s Interventions scenario if both schools were left open, which included the district’s $2.3 million in claimed savings plus some additional positions identified on October 26, to create three total scenarios: Base (No Action), Interventions, and Both Schools Open. Then we made a few corrections in every scenario.</p>
+      <ul class="op-fixes">
+        <li><b>Capital spending.</b> <span>We corrected the $27 million error D65 has acknowledged in its building budget (capital spending counted twice), using D65’s own figure of $7.97M a year.</span></li>
+        <li><b>Foster lease debt.</b> <span>We added $3.2M a year the projections left out. This adds cost.</span></li>
+        <li><b>Missing revenue.</b> <span>We added the Ryan Field ticket surcharge ($250,000 a year from FY28) and Five-Fifths TIF revenue sharing (about $358,000 a year).</span></li>
+        <li><b>SACC.</b> <span>Kept in every scenario, as D65 decided on Nov. 5.</span></li>
       </ul>
-      <p>Fiscal years end in June (FY34 is the 2033–34 school year). The board’s policy is to keep at least 90 days of spending in reserve.</p>
+      <p class="op-small">Fiscal years end in June (FY34 is the 2033–34 school year). The board’s policy is to keep at least 90 days of spending in reserve.</p>
     </div>
-    <aside class="band band--navy"><div class="container">
-      <h2 class="section-title">What we’re upfront about</h2>
+    <aside class="op-split__side op-upfront">
+      <h2 class="op-h2 op-h2--sm">What we’re upfront about</h2>
       <ul>
         <li>The referendum, TIF changes, building sales, salary and benefit growth, and retirement savings are our proposals and estimates, not approved district figures. The building sale is a one-time step to bridge to 2028 in place of borrowing, and most of it (about $8 million of $9 million) could cover building costs the district now pays from operations.</li>
         <li>We have open questions for the district, including what busing students from closed schools would cost (we estimate $240,000 a year) and whether the 41 closure-related positions are cut or moved.</li>
         <li>The model works on yearly balances, so it can’t show cash timing within a year.</li>
       </ul>
-    </div></aside>
+    </aside>
   </div>
 </section>
-<section class="band band--tint">
-  <div class="container two-col">
-    <div><h2 class="section-title">Check our math</h2><p>The model is available. Download the spreadsheet, switch any lever on or off, and change any assumption.</p><p><strong>Found something we got wrong? Tell us at <a href="mailto:forabrighterevanston@gmail.com">forabrighterevanston@gmail.com</a>, and we’ll fix it in public.</strong></p></div>
-    <div><p><a class="btn btn--navy" href="{{ '/assets/files/d65-financial-model-v4.xlsx' | relative_url }}" download>↓ Download the full model (spreadsheet)</a></p><p><a class="btn btn--outline-navy" href="{{ '/assets/files/model-executive-summary-nov-2026.pdf' | relative_url }}">Executive summary (PDF)</a></p></div>
+
+<section class="op-band op-band--cream op-band--check">
+  <div class="op-wrap op-split op-split--check">
+    <div class="op-split__main">
+      <h2 class="op-h2 op-h2--md">Check our math</h2>
+      <p class="op-body">The model is available. Download the spreadsheet, switch any lever on or off, and change any assumption.</p>
+      <p class="op-check__fix">Found something we got wrong? Tell us at <a href="mailto:forabrighterevanston@gmail.com">forabrighterevanston@gmail.com</a>, and we’ll fix it in public.</p>
+    </div>
+    <div class="op-split__side op-check__actions">
+      <a class="op-tile op-tile--navy" href="{{ model_xlsx }}" download><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D9B96E" stroke-width="2.2" aria-hidden="true" focusable="false"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>Download the full model (spreadsheet)</a>
+      <a class="op-tile" href="{{ summary_pdf }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#36558A" stroke-width="2" aria-hidden="true" focusable="false"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg>Executive summary (PDF)</a>
+    </div>
   </div>
 </section>
-<section class="band band--navy">
-  <div class="container container--narrow">
-    <h2 class="section-title">The board deserves a better proposal. <span class="mark">So do our kids.</span></h2>
-    <p>Ask the board to vote no on Nov. 16 and work through these options with the community before any school closes.</p>
-    <p><a class="btn btn--gold" href="{{ '/home/write-to-the-board-issue/' | relative_url }}">Email the board →</a> <a class="btn btn--outline-light" href="{{ '/home/voter-poll/' | relative_url }}">See what voters said →</a></p>
+
+<section class="op-cta">
+  <div class="op-sun op-sun--cta">{{ sun }}</div>
+  <div class="op-cta__inner">
+    <h2 class="op-cta__title">The board deserves a better proposal. <span class="op-mark">So do our kids.</span></h2>
+    <p class="op-cta__text">Ask the board to vote no on Nov. 16 and work through these options with the community before any school closes.</p>
+    <div class="op-cta__actions">
+      <a class="op-btn op-btn--gold op-btn--display" href="{{ '/home/write-to-the-board-issue/' | relative_url }}">Email the board {{ icon_arrow }}</a>
+      <a class="op-btn op-btn--outline-light op-btn--display" href="{{ poll_url }}">See what voters said {{ icon_arrow }}</a>
+    </div>
   </div>
 </section>
