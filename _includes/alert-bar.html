@@ -4,8 +4,8 @@
 <aside class="alert-bar" aria-label="{{ ev[page.lang].eyebrow }}">
   <div class="container alert-bar__inner">
     <p class="alert-bar__text">
-      <span class="alert-bar__long">{{ ev[page.lang].bar_long }}</span>
-      <span class="alert-bar__short" aria-hidden="true">{{ ev[page.lang].bar_short }}</span>
+      <span class="alert-bar__long">{% if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}{% if page.lang == 'es' %}VOTACIÓN DE LA JUNTA · LUNES, 16 DE NOVIEMBRE · [TIME] · [LOCATION]{% else %}BOARD VOTE · MONDAY, NOV. 16 · [TIME] · [LOCATION]{% endif %}{% else %}{{ ev[page.lang].bar_long }}{% endif %}</span>
+      <span class="alert-bar__short" aria-hidden="true">{% if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}{% if page.lang == 'es' %}VOTACIÓN DE LA JUNTA · LUNES, 16 DE NOVIEMBRE · [TIME] · [LOCATION]{% else %}BOARD VOTE · MONDAY, NOV. 16 · [TIME] · [LOCATION]{% endif %}{% else %}{{ ev[page.lang].bar_short }}{% endif %}</span>
     </p>
     <a class="alert-bar__link" href="{{ ev.details_url }}" target="_blank" rel="noopener">{{ t.nav.details }}</a>
   </div>
