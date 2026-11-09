@@ -287,7 +287,17 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    git push origin sandbox/<id>
    ```
 
-   If the merge has conflicts, run `git merge --abort` and post **Message W15**. German has to look at it.
+   If the only conflicts are in the generated help files `docs/help/team-help.pdf` and `docs/help/reviewed-sources.json`, rebuild them instead of stopping. They are produced from `docs/help/team-help.md` and the manuals, so the rebuilt versions are correct for the merged text:
+
+   ```bash
+   git checkout --ours docs/help/team-help.pdf docs/help/reviewed-sources.json
+   python3 scripts/build_help_pdf.py && python3 scripts/build_help_pdf.py --check
+   git add docs/help/team-help.pdf docs/help/reviewed-sources.json
+   git commit --no-edit
+   git push origin sandbox/<id>
+   ```
+
+   Any other conflict, including one in `team-help.md` or a manual: run `git merge --abort` and post **Message W15**. German has to look at it.
 3. Wait for the sandbox build to finish (the sandbox shows the latest version).
 4. Run the checks:
 
