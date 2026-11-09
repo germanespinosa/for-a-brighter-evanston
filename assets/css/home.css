@@ -153,7 +153,11 @@
 #the-problem .stat-grid > li { min-width: 0; }
 #the-problem .stat-grid picture { display: block; }
 #the-problem .stat-grid img { width: 100%; height: auto; }
+#the-problem .two-col { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; }
+#the-problem .two-col > p { margin: 0; min-width: 0; }
+#the-problem .two-col > p:last-child { flex-shrink: 0; }
 @media (max-width: 700px) {
+  #the-problem .two-col { flex-direction: column; align-items: flex-start; }
   #the-problem .stat-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   #the-problem .stat-grid > li { width: 100%; max-width: 400px; justify-self: center; }
 }
