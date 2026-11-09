@@ -50,49 +50,123 @@ home:
   description: "La votación del lunes sobre el plan de sostenibilidad financiera se aplazó. La Junta se reunirá el lunes 9 de noviembre a las 5 p. m. para continuar el debate. Se prevé una votación el 16 de noviembre."
   share_image: "/assets/img/share-home-es-75b5134b2c.jpg"
   photo_credit: Foto de Joerg Metzner
-  h1: "Votación de la Junta del D65"
-  h1_mark: "Aplazada."
-  lead: "La votación del lunes sobre el plan de sostenibilidad financiera se aplazó. La Junta se reunirá el lunes 9 de noviembre a las 5 p. m. para continuar el debate. Se prevé una votación el 16 de noviembre."
-  sig_label: ¡Firmas y seguimos sumando!
+  photo_alt: "Familias y niños en una concentración de For a Brighter Evanston con carteles que dicen Our schools, Our voice, Our choice, junto a la mascota de un tigre"
+  hero:
+    eyebrow: "La Junta vota el 16 de nov."
+    h1: "Cerrar dos escuelas solo compra"
+    h1_mark: "un año."
+    h1_mark2: "Pero hay un camino mejor."
+    lead: "El plan del Distrito 65 cerraría dos escuelas, y aun así el dinero se acaba. Los votantes quieren un plan de largo plazo antes de que cierre cualquier escuela. Nuestro modelo muestra un camino que mantiene las escuelas abiertas."
+    options_btn: Vea las opciones
+    email_btn: Escriba a la Junta
+  sig_label: Firmas y seguimos sumando
   sign_btn: Firmar la carta
-  share_btn: Compartir la carta
-  wtb:
-    eyebrow: Haz escuchar tu voz
-    title: Escribe a la Junta Escolar.
-    text: Elige el tema que más te importa. Nosotros preparamos la carta y tú la envías desde tu correo. Toma unos dos minutos.
-    cta: Haz clic aquí para escribir a la Junta
-    comment: Cómo inscribirse para hacer un comentario público
-  error:
-    eyebrow: El error de 17 millones
-    title: Los gastos de capital se contaron dos veces.
-    text: "Miembros de la comunidad identificaron un error de 17 millones de dólares en las proyecciones financieras a cinco años del Distrito 65: los gastos de capital se habían contabilizado dos veces."
-    sources_html: "Fuentes: <a href=\"https://evanstonroundtable.com/2026/10/25/district-65-financial-projections-error/\" target=\"_blank\" rel=\"noopener\">Evanston RoundTable</a> · <a href=\"https://patch.com/illinois/evanston/district-65-corrects-17m-projection-error-budget-cuts-still-advance\" target=\"_blank\" rel=\"noopener\">Patch</a> (el director financiero del D65 confirmó que se contaron dos veces las necesidades de capital)."
-    why_title: Por qué importa una revisión independiente
-    why_1: Esta corrección no elimina los desafíos financieros del distrito. Sin embargo, demuestra por qué es fundamental incorporar los conocimientos de la comunidad, cálculos transparentes y una revisión independiente antes de cerrar escuelas y recortar programas.
-    why_2: Evanston y Skokie merecen un plan financieramente sostenible que proteja a los estudiantes, fortalezca las escuelas de nuestros vecindarios y se gane la confianza de la comunidad.
-  asks:
-    tag: Vota no a la propuesta actual
-    title: "Exige una suspensión de los cierres de escuelas hasta que:"
+  event:
+    eyebrow: Apoyemos a nuestros docentes
+    date: "Lunes, 9 de nov."
+    rally_time: "4 p. m."
+    rally: Concentración con nuestros docentes
+    meeting_time: "5 p. m."
+    meeting: Reunión de la Junta.
+    place: "1500 McDaniel Ave., Evanston"
+    calendar: Agregar al calendario
+  problem:
+    eyebrow: El problema
+    title: "D65 necesita un referéndum."
+    title_mark: "Los votantes aún no están listos."
+    text: "Todos los planes que mantienen a D65 financieramente estable a largo plazo incluyen un referéndum, también el del Distrito. Una encuesta independiente a 665 votantes de Evanston muestra que aún no están listos para votar sí, y cerrar escuelas los aleja aún más."
+    c1_label: Un referéndum hoy
+    c1_big: "41%"
+    c1_text: se opondría hoy a un referéndum.
+    c1_aria: 41 por ciento en contra
+    c2_label: Si cierran Dewey y Lincolnwood
+    c2_big: "4 a 1"
+    c2_text: "menos disposición a votar sí, no más."
+    c2_less: "41% menos disposición"
+    c2_more: "11% más disposición"
+    c3_label: "El plan original del 13 de octubre"
+    c3_big: "65%"
+    c3_text: "se opone al plan presupuestario original de D65."
+    c3_aria: "65 por ciento en contra, 21 por ciento a favor"
+    c3_note: "Solo el 21% lo apoya."
+    source: "Public Policy Polling, 665 votantes registrados de Evanston, 4–5 de nov. de 2026."
+    poll_btn: Más información sobre la encuesta
+    poll_url: /es/encuesta/
+  statement:
+    title: "Cerrar escuelas no arregla el presupuesto."
+    title_mark: "Y hunde el referéndum que sí lo arreglaría."
+    text: "El plan del Distrito no arregla el presupuesto: cerrar dos escuelas compra un año. Toda solución de largo plazo necesita un referéndum, y los votantes aún no están listos. El 41% votaría no hoy, y cerrar escuelas lo empeora, casi 4 a 1."
+    text_bold: "D65 primero tiene que reconstruir la confianza, con un plan de largo plazo y un verdadero respaldo de la comunidad. Después, pedir el voto."
+  bandaid:
+    eyebrow: El plan del Distrito
+    title: "Es un parche, no un plan de largo plazo."
+    p1: "Cerrar dos escuelas ahorra unos $2,3 millones al año según la estimación más reciente del propio Distrito, alrededor del 1% del presupuesto de D65. En el propio escenario del Distrito, las reservas se agotan en FY34 en vez de FY33."
+    p2: "Es un año, a cambio de dos escuelas, nuevos límites escolares, nuevas rutas de autobús, pérdida de aprendizaje y una enorme cantidad de trastornos."
+    chart_label: Cuándo se agotan las reservas
+    open_label: Las escuelas siguen abiertas
+    open_year: FY33
+    close_label: Cerrar dos escuelas
+    close_year: FY34
+    chart_note: "Dos escuelas por"
+    chart_note_mark: "un año más."
+    big: "$27M"
+    error_text: "Y el plan se basa en cifras que no dejan de cambiar. Padres y madres detectaron un error de $27 millones, y el pronóstico cambió tres veces en tres semanas."
+    error_bold: "No se debe votar un plan basado en un error de $27 millones."
+    source: "Fuente: reportaje del RoundTable sobre el error de $27,35 millones en cinco años y los ahorros revisados (en inglés)"
+  options:
+    eyebrow: Un camino hacia un futuro mejor
+    title: "Hay mejores opciones."
+    title2: "Trabajemos en ellas juntos."
+    text: "Nuestro modelo financiero parte de las propias proyecciones del Distrito y corrige los errores que detectaron padres y madres. Muestra un camino con “palancas” financieras que mantiene todas las escuelas abiertas y las reservas por encima de la línea de seguridad de 90 días de la Junta cada año hasta 2037. Tiene margen de sobra, así que se sostiene aunque algunas piezas no alcancen lo previsto."
     items:
-      - title: Revisión independiente
-        text: Las proyecciones financieras corregidas y las estimaciones de ahorro sean revisadas de manera independiente y explicadas públicamente.
-      - title: Alternativas reales
-        text: Se comparen alternativas viables, incluidas reducciones de gastos administrativos y otros gastos.
-      - title: Impacto en los estudiantes
-        text: Se evalúen y discutan las consecuencias para el aprendizaje, la educación bilingüe, la educación especial, el cuidado infantil y el acceso seguro a las escuelas.
-      - title: Un plan compartido
-        text: Las familias, los educadores, el distrito y los líderes municipales tengan una oportunidad real de participar en las decisiones.
-  new_homes:
-    tag: Nuevas viviendas, escuelas más lejos
-    title: Se vienen 932 viviendas nuevas. El plan de cierres aleja la escuela de sus niños.
-    text: Cinco desarrollos cerca de Dewey y Lincolnwood están aprobados, en aprobación o en construcción. Con los límites que propone el D65, a todos se les asigna una escuela más lejana, y el pronóstico del distrito no los cuenta.
-    cta: Vea los cinco desarrollos
-    svg_label: "Ilustración: edificios de viviendas nuevas, la escuela cercana marcada como cerrada y un niño que camina un trayecto más largo hasta una escuela más lejana, 1.2 millas en promedio."
-    svg_homes: Viviendas nuevas
-    svg_closed: CERRADA
-    svg_school: Escuela del barrio
-    svg_far: Escuela más lejos
-    svg_walk: caminata promedio, hoy vs. propuesta
+      - title: Gastar con cuidado
+        text: "Crear una oficina central eficiente y dar prioridad a los puestos que atienden directamente a los estudiantes. Entablar conversaciones honestas y justas sobre salarios y beneficios."
+      - title: Usar lo que ya existe
+        text: "Vender las propiedades de Kingsley y Bessie Rhodes y trabajar con la Ciudad para que el dinero del TIF vuelva a las escuelas."
+      - title: "Pedir apoyo a los votantes con un plan confiable"
+        text: "Un referéndum en 2028 similar al que Evanston aprobó en 2017, que se plantee solo después de contar con un plan de largo plazo con límites al gasto y supervisión independiente."
+    chart_title: "Reservas finales, en millones de $"
+    legend_base: Base
+    legend_int: Intervenciones + SACC
+    legend_open: Ambas escuelas abiertas + SACC
+    chart1_title: "1 · El plan del Distrito, corregido"
+    chart1_alt: "Gráfica 1, el plan del Distrito corregido: las reservas llegan a cero en FY30 (Base), FY33 (Ambas escuelas abiertas) y FY34 (Intervenciones). Cerrar escuelas mueve la línea un año."
+    chart1_caption_html: "Las reservas llegan a cero en <strong>FY30</strong> (Base), <strong>FY33</strong> (Ambas escuelas abiertas) y <strong class=\"hm-rust\">FY34</strong> (Intervenciones). Cerrar escuelas mueve la línea un año."
+    chart2_title: "2 · Los mismos escenarios con todas las palancas activadas"
+    chart2_alt: "Gráfica 2, los mismos escenarios con todas las palancas activadas: Intervenciones termina cerca de $240 millones y Ambas escuelas abiertas, por encima de $215 millones. Base se mantiene solvente hasta FY37."
+    chart2_caption_html: "Intervenciones termina cerca de <strong class=\"hm-rust\">$240M</strong> y Ambas escuelas abiertas, por encima de <strong>$215M</strong>. Incluso Base se mantiene solvente hasta FY37."
+    note_bold: Proyecciones del modelo.
+    note: "Escalas verticales diferentes. Las proyecciones publicadas del Distrito llegan hasta FY32."
+    model_link: "Vea el modelo y los supuestos →"
+    disclaimer: "No nos crea solo a nosotros. Revise el modelo, explore los supuestos y verifique los cálculos. Son proyecciones del modelo, que dependen de las medidas y los supuestos propuestos, no resultados garantizados."
+    explore_btn: Explore un camino hacia un futuro mejor
+  act:
+    title: "Descartemos este plan."
+    title_mark: "Construyamos uno mejor juntos."
+    text: "Los votantes dijeron que, para ganar su apoyo, hace falta un plan financiero de largo plazo con límites claros al gasto (38%, más del doble de la siguiente respuesta). Dos tercios quieren que la Junta no cierre escuelas hasta tenerlo. La Junta merece una propuesta mejor. Nuestros hijos también."
+    email_label: Haga esto primero
+    email_title: "Escriba a la Junta. Pídale que vote no el 16 de nov."
+    email_btn: Escriba a la Junta
+    show_label: "Lunes, 9 de nov."
+    show_title: Asista
+    show_text: "Concentración a las 4 p. m. para apoyar a nuestros docentes y, luego, reunión de la Junta a las 5 p. m. en el Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave."
+    sign_label: Agregue su nombre
+    sign_title: Firme nuestra carta de demandas
+    sign_text: "Súmese a cientos de vecinos que piden a la Junta dar a los residentes una voz real antes de cerrar cualquier escuela."
+    sign_btn: Firmar la carta
+    share_label: En cualquier momento
+    share_title: Comparta
+    share_text: "Envíe un camino hacia un futuro mejor a un vecino que crea que cerrar escuelas es la única opción."
+    copy_btn: Copiar enlace
+    copied: Enlace copiado
+    share_email: Compartir por correo electrónico
+    share_sms: Compartir por mensaje de texto
+    share_fb: Compartir en Facebook
+    share_ig: Compartir en Instagram
+    share_subject: "Un camino mejor para D65"
+    share_message: "Cerrar dos escuelas solo compra un año. Hay un camino mejor para D65: "
+  next:
+    text: Nuevas viviendas y escuelas de barrio
   share:
     title: Compartir la carta
     lead: Elija dónde compartirla.
