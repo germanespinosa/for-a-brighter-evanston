@@ -260,6 +260,26 @@ python3 scripts/sandbox_check.py --base origin/main \
 
 All three records authorize preparation/review only. They do not approve campaign copy, clear a resource/source hold, authorize a main-branch push or replace the team review and vote. Preserve every remaining blocking finding.
 
+### Narrow owner-approved removal in `nov16-meeting`
+
+German separately authorized removing only `home/poll-results/index.html`, `es/resultados-encuesta/index.html`, `home/a-brighter-path-forward/index.html`, and `es/un-camino-mejor/index.html`, and approved the bounded checker, test and documentation maintenance necessary to represent that permission. These are the older Poll Results and A Brighter Path Forward pages, not the current Poll or Options pages. This permission is limited to this sandbox and these four paths; it does not authorize any other page deletion, silently weaken the default rules, or permit live publication without the normal review and team vote.
+
+Verify both original human messages in `#website` and keep their provenance and two distinct operator-owned, non-symlink, mode-0600 JSON approval records outside the repository. Both use exactly `version`, `purpose`, `sandbox_id`, `authorizer_id`, `source`, `checkout`, `base_commit`, `head_commit` and `files`. Set version to 1, the sandbox to `nov16-meeting`, the authorizer and source to the original verified human/channel/message, the checkout to the resolved sandbox checkout, and base and head to the full current commit IDs. Each file entry has exactly `path` and a lowercase SHA-256 `sha256`; never copy the actual private records into the repository.
+
+- Deletion record, purpose `nov16-page-deletion`: the four exact paths above and hashes of their bytes at `origin/main`. All four must be committed deletions with no additional deletion or staged/working reappearance.
+- Maintenance record, purpose `nov16-checker-maintenance`: hashes of the exact committed and working bytes of `scripts/sandbox_check.py`, `scripts/tests/test_page_deletion_approval.py`, `docs/agents/fabian-website.md`, `docs/agents/fabian-website-cards.md`, `docs/help/team-help.md`, `docs/help/team-help.pdf`, and `docs/help/reviewed-sources.json`. This cannot authorize other process changes.
+
+Finish the changes, help rebuild and tests, then commit before generating the records, so `head_commit` binds the reviewed revision. Record the original messages privately; verify all hashes, base, branch and the freshly fetched expected GitHub remote. The checker cannot attest its own code: independently compare the reviewed committed and working checker SHA-256 with an operator-owned record before running it. Run the normal validator with both records:
+
+```bash
+python3 scripts/sandbox_check.py --base origin/main \
+  --deletion-approval-file /private/deletion.json \
+  --nov16-maintenance-approval-file /private/maintenance.json
+# Add --url https://forabrighterevanston.org/sandbox/nov16-meeting/ after deployment.
+```
+
+Missing, stale, insecure or mismatched records block. If base, checkout or HEAD changes, reverify and regenerate the records. Verify the deployed sandbox revision and independently check each deleted route is absent; the normal URL checker does not fetch deleted pages. Other holds and the normal team review/vote remain. Before publication, independently verify current remote main, the exact voted sandbox revision, approved checker and maintenance file bytes, and the merge tree and exact four deleted files against the reviewed base. If main has materially drifted, stop and review again rather than reusing stale approvals. After publication, verify all four missing production URLs and the current pages and sitemap.
+
 ### Not allowed (structural, unless explicitly excepted above)
 
 Explain this with **Message W11**. For the page-specific CSS and unchanged-workbook classes above, ask German or Kerstin. The exact two-page URL-copy action and its maintenance require German alone; other restricted work still needs German’s separate authorization:
@@ -534,6 +554,8 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    wait
    cat /tmp/review-<id>/*.txt; python3 -c "import json;print(*json.load(open('/tmp/review-<id>/screens.json'))['problems'],sep='\n')"
    ```
+
+   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes.
 
    Both scripts already work in parallel inside: `sandbox_check.py` checks links about 16 at a time, and `sandbox_screens.py` loads about 6 pages at a time (`--jobs` changes that). The exit codes no longer show in this form; read the outputs: `RESULT:` in `rules.txt`, `problems` in `screens.json`, and the verdict line of each mockup report. If `screens.json` isn't JSON (Playwright error), rerun that one script on its own.
 

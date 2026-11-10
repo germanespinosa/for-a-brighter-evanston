@@ -443,6 +443,126 @@ POLL_COPY_PAGES = ["home/voter-poll/index.html", "es/encuesta/index.html"]
 POLL_COPY_ROUTES = ["/home/voter-poll/", "/es/encuesta/"]
 
 
+NOV16_PAGES = frozenset({
+    "home/poll-results/index.html", "es/resultados-encuesta/index.html",
+    "home/a-brighter-path-forward/index.html", "es/un-camino-mejor/index.html",
+})
+NOV16_MAINTENANCE_FILES = frozenset({
+    "scripts/sandbox_check.py", "scripts/tests/test_page_deletion_approval.py",
+    "docs/agents/fabian-website.md", "docs/agents/fabian-website-cards.md",
+    "docs/help/team-help.md", "docs/help/team-help.pdf", "docs/help/reviewed-sources.json",
+})
+NOV16_PROVENANCE_DIGESTS = {
+    "nov16-page-deletion": "d4588736ee5c89890031e4790ed1b86469fbe44e494f3c7783fb69c86a32730a",
+    "nov16-checker-maintenance": "87fd6aace394248871cd3bf2d3af9ce9a5e3abcc567160dd973ed79997daf0c6",
+}
+
+
+def load_nov16_record(filename, purpose, base, sandbox_url):
+    path = Path(filename).absolute()
+    if (any(p.is_symlink() for p in (path, *path.parents))
+            or path.resolve().is_relative_to(ROOT.resolve())):
+        raise ValueError("approval must be a private non-symlink file outside the checkout")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "r", encoding="utf-8") as stream:
+        info = os.fstat(stream.fileno())
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
+                or stat.S_IMODE(info.st_mode) != 0o600):
+            raise ValueError("approval must be operator-owned, regular and mode 0600")
+        record = json.load(stream, object_pairs_hook=unique_json_fields)
+    keys = {"version", "purpose", "sandbox_id", "authorizer_id", "source",
+            "checkout", "base_commit", "head_commit", "files"}
+    if (not isinstance(record, dict) or set(record) != keys
+            or type(record["version"]) is not int or record["version"] != 1
+            or record["purpose"] != purpose or record["sandbox_id"] != "nov16-meeting"
+            or not isinstance(record["authorizer_id"], str)
+            or not isinstance(record["source"], dict)
+            or set(record["source"]) != {"channel_id", "message_ts"}
+            or not all(isinstance(value, str) for value in record["source"].values())
+            or hashlib.sha256(json.dumps({"authorizer_id": record["authorizer_id"], "source": record["source"]},
+                                         sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+               != NOV16_PROVENANCE_DIGESTS.get(purpose)
+            or record["checkout"] != str(ROOT.resolve())
+            or git("branch", "--show-current").strip() != "sandbox/nov16-meeting"
+            or base != "origin/main"):
+        raise ValueError("approval schema, source, checkout, base or sandbox does not match")
+    base_commit = git("rev-parse", "--verify", "origin/main^{commit}").strip()
+    head_commit = git("rev-parse", "--verify", "HEAD^{commit}").strip()
+    if (record["base_commit"] != base_commit or record["head_commit"] != head_commit
+            or git("merge-base", "origin/main", "HEAD").strip() != base_commit):
+        raise ValueError("approval must bind the current base, HEAD and merge base")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/nov16-meeting" or url.query or url.fragment):
+            raise ValueError("approval sandbox does not match deployed URL")
+    return record
+
+
+def nov16_inventory(record, allowed):
+    files = record["files"]
+    approved = {}
+    if not isinstance(files, list):
+        raise ValueError("approval needs the exact file inventory")
+    for item in files:
+        if (not isinstance(item, dict) or set(item) != {"path", "sha256"}
+                or not isinstance(item["path"], str) or item["path"] not in allowed
+                or item["path"] in approved or not isinstance(item["sha256"], str)
+                or not re.fullmatch(r"[a-f0-9]{64}", item["sha256"])):
+            raise ValueError("invalid or duplicate approval inventory or SHA-256")
+        approved[item["path"]] = item["sha256"]
+    if set(approved) != allowed:
+        raise ValueError("approval needs the exact file inventory")
+    return approved
+
+
+def load_nov16_deletion_approval(filename, base, sandbox_url):
+    if not filename:
+        return set()
+    record = load_nov16_record(filename, "nov16-page-deletion", base, sandbox_url)
+    approved = nov16_inventory(record, NOV16_PAGES)
+    diff = git("diff", "--no-renames", "--name-status", "-z", "origin/main...HEAD").split("\0")
+    entries = list(zip(diff[0::2], diff[1::2]))
+    if {name for status, name in entries if status == "D"} != NOV16_PAGES:
+        raise ValueError("approval requires exactly the four deletions, with no other deletions")
+    if any((status, name) not in entries for name in NOV16_PAGES for status in ("D",)):
+        raise ValueError("approved pages must be committed deletions")
+    for name, digest in approved.items():
+        target = ROOT / name
+        if (any(p.is_symlink() for p in (target, *target.parents)) or os.path.lexists(target)
+                or git("ls-tree", "HEAD", "--", name)
+                or not git("ls-tree", "origin/main", "--", name).startswith("100644 ")
+                or git("diff", "--cached", "--name-only", "HEAD", "--", name)):
+            raise ValueError(f"{name}: expected a committed deletion with no staged or working reappearance")
+        content = subprocess.run(["git", "-C", str(ROOT), "show", f"origin/main:{name}"],
+                                 check=True, capture_output=True).stdout
+        if hashlib.sha256(content).hexdigest() != digest:
+            raise ValueError(f"{name}: base SHA-256 does not match")
+    return set(approved)
+
+
+def load_nov16_maintenance_approval(filename, base, sandbox_url):
+    if not filename:
+        return {}
+    record = load_nov16_record(filename, "nov16-checker-maintenance", base, sandbox_url)
+    approved = nov16_inventory(record, NOV16_MAINTENANCE_FILES)
+    for name, digest in approved.items():
+        target = ROOT / name
+        base_mode = git("ls-tree", "origin/main", "--", name)
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or target.stat().st_mode & 0o111
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                or (base_mode and not base_mode.startswith("100644 "))
+                or git("diff", "--cached", "--name-only", "HEAD", "--", name)):
+            raise ValueError(f"{name}: maintenance requires unchanged-index regular non-executable files")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if (hashlib.sha256(committed).hexdigest() != digest
+                or hashlib.sha256(target.read_bytes()).hexdigest() != digest):
+            raise ValueError(f"{name}: maintenance SHA-256 must match committed and working bytes")
+    return approved
+
+
 def unique_json_fields(pairs):
     record = {}
     for key, value in pairs:
@@ -592,10 +712,26 @@ def main():
     ap.add_argument("--approval-file", help="operator-owned private sandbox-review authorization JSON, outside the repository")
     ap.add_argument("--maintenance-approval-file", help="separate German-only private delegation-maintenance or poll-copy-maintenance authorization JSON")
     ap.add_argument("--poll-copy-approval-file", help="German-only private hash-bound poll-copy-sandbox authorization JSON")
+    ap.add_argument("--deletion-approval-file", help="German-only private exact nov16 page-deletion authorization JSON")
+    ap.add_argument("--nov16-maintenance-approval-file", help="German-only private exact nov16 checker-maintenance authorization JSON")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    try:
+        approved_deletions = load_nov16_deletion_approval(args.deletion_approval_file, args.base, args.url)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        approved_deletions = set()
+        blocking.append(f"Invalid page-deletion approval: {error}")
+    if approved_deletions:
+        notes.append("German authorized only these four sandbox page deletions; team review/vote and other holds remain.")
+    try:
+        nov16_maintenance = load_nov16_maintenance_approval(args.nov16_maintenance_approval_file, args.base, args.url)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        nov16_maintenance = {}
+        blocking.append(f"Invalid nov16 maintenance approval: {error}")
+    if nov16_maintenance:
+        notes.append("German-only nov16 fixed-inventory checker maintenance approval; no publication authorization.")
     try:
         poll_copy_approval = load_poll_copy_approval(args.poll_copy_approval_file, args.url)
         if poll_copy_approval:
@@ -653,7 +789,7 @@ def main():
             else:
                 changes.append(f"German-authorized poll-copy script {verb}: {path}")
             continue
-        if path in approved_maintenance:
+        if path in approved_maintenance or path in nov16_maintenance:
             if status not in {"A", "M"}:
                 blocking.append(f"{path}: maintenance authorizes additions/updates only, never deletion or type changes.")
             else:
@@ -736,6 +872,9 @@ def main():
 
         if ext in PAGE_EXT and not path.startswith("_"):
             if status == "D":
+                if path in approved_deletions:
+                    changes.append(f"German-authorized page deletion: {path}")
+                    continue
                 blocking.append(f"The page {path} was deleted. Deleting published pages breaks existing links; ask German.")
                 continue
             text = (ROOT / path).read_text(encoding="utf-8")
