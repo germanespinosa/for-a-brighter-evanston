@@ -49,13 +49,13 @@ calendar:
   office: Outlook (work or school)
 
 home:
-  title: "D65 Board Vote Postponed"
-  description: "Monday’s vote on the financial sustainability plan has been postponed. The board will still meet Monday, November 9 at 5 PM to continue the discussion. A vote is now anticipated November 16."
+  title: "D65 Board Meeting November 16"
+  description: "The District 65 board meets Monday, November 16 at 6 PM. A vote is anticipated."
   share_image: "/assets/img/share-home-en-202a113c41.jpg"
   photo_credit: Photo by Joerg Metzner
   photo_alt: "Families and kids at a For a Brighter Evanston rally holding signs reading Our schools, Our voice, Our choice, next to a tiger mascot"
   hero:
-    eyebrow: "The board votes Nov. 16."
+    eyebrow: "A board vote is anticipated Nov. 16."
     h1: "Closing two schools only buys"
     h1_mark: "one year."
     h1_mark2: "But there's a brighter path forward."
@@ -65,11 +65,11 @@ home:
   sig_label: Signatures and counting
   sign_btn: Sign the letter
   event:
-    eyebrow: Stand with our teachers
-    date: "Monday, Nov. 9"
+    eyebrow: Vote anticipated
+    date: "Monday, Nov. 16"
     rally_time: "4 p.m."
     rally: Rally with our teachers
-    meeting_time: "5 p.m."
+    meeting_time: "6 p.m."
     meeting: Board meeting.
     place: "1500 McDaniel Ave., Evanston"
     calendar: Add to calendar
@@ -150,9 +150,9 @@ home:
     email_label: Do this first
     email_title: "Email the board. Ask them to vote no on Nov. 16."
     email_btn: Email the board
-    show_label: "Monday, Nov. 9"
+    show_label: "Monday, Nov. 16"
     show_title: Show up
-    show_text: "Rally at 4 p.m. to support our teachers, then head to the 5 p.m. board meeting at the Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave."
+    show_text: "Attend the 6 p.m. board meeting at the Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave. A vote is anticipated."
     sign_label: Add your name
     sign_title: Sign our demand letter
     sign_text: "Join hundreds of neighbors calling on the board to give residents a real say before any school closes."
@@ -179,12 +179,12 @@ home:
     text:
       a: "I signed the open letter asking the D65 board to give residents a real say on the proposed closures of Dewey and Lincolnwood. "
       b: "{n} Evanston neighbors have signed so far. "
-      c: "The vote has been postponed. The board still meets Nov. 9. Add your name: "
+      c: "A board vote is anticipated Nov. 16. Add your name: "
       fb: Message copied. Paste it into your Facebook post.
       fbNo: Facebook only shares the link. Copy the text first if you want to include it.
       igDl: Image ready below, and the text is copied for your caption.
       big: ["I signed", "the letter."]
       sub: Every Evanston resident deserves a real say on D65’s proposed school closures.
       cnt: "{n} neighbors have signed. Add your name."
-      cta: "Meeting Nov. 9 · vote postponed"
+      cta: "Meeting Nov. 16 · vote anticipated"
       png: sign-the-letter.png

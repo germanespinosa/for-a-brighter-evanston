@@ -50,13 +50,13 @@ calendar:
   office: Outlook (trabajo o escuela)
 
 home:
-  title: "Votación de la Junta del D65 aplazada"
-  description: "La votación del lunes sobre el plan de sostenibilidad financiera se aplazó. La Junta se reunirá el lunes 9 de noviembre a las 5 p. m. para continuar el debate. Se prevé una votación el 16 de noviembre."
+  title: "Reunión de la Junta del D65 el 16 de noviembre"
+  description: "La Junta del Distrito 65 se reúne el lunes 16 de noviembre a las 6 p. m. Se prevé una votación."
   share_image: "/assets/img/share-home-es-75b5134b2c.jpg"
   photo_credit: Foto de Joerg Metzner
   photo_alt: "Familias y niños en una concentración de For a Brighter Evanston con carteles que dicen Our schools, Our voice, Our choice, junto a la mascota de un tigre"
   hero:
-    eyebrow: "La Junta vota el 16 de nov."
+    eyebrow: "Se prevé una votación de la Junta el 16 de nov."
     h1: "Cerrar dos escuelas solo compra"
     h1_mark: "un año."
     h1_mark2: "Pero hay un camino mejor."
@@ -66,11 +66,11 @@ home:
   sig_label: Firmas y seguimos sumando
   sign_btn: Firmar la carta
   event:
-    eyebrow: Apoyemos a nuestros docentes
-    date: "Lunes, 9 de nov."
+    eyebrow: Se prevé una votación
+    date: "Lunes, 16 de nov."
     rally_time: "4 p. m."
     rally: Concentración con nuestros docentes
-    meeting_time: "5 p. m."
+    meeting_time: "6 p. m."
     meeting: Reunión de la Junta.
     place: "1500 McDaniel Ave., Evanston"
     calendar: Agregar al calendario
@@ -151,9 +151,9 @@ home:
     email_label: Haga esto primero
     email_title: "Escriba a la Junta. Pídale que vote no el 16 de nov."
     email_btn: Escriba a la Junta
-    show_label: "Lunes, 9 de nov."
+    show_label: "Lunes, 16 de nov."
     show_title: Asista
-    show_text: "Concentración a las 4 p. m. para apoyar a nuestros docentes y, luego, reunión de la Junta a las 5 p. m. en el Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave."
+    show_text: "Asista a la reunión de la Junta a las 6 p. m. en el Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave. Se prevé una votación."
     sign_label: Agregue su nombre
     sign_title: Firme nuestra carta de demandas
     sign_text: "Súmese a cientos de vecinos que piden a la Junta dar a los residentes una voz real antes de cerrar cualquier escuela."
@@ -180,12 +180,12 @@ home:
     text:
       a: "Firmé la carta abierta que pide a la junta del D65 dar a los residentes una voz real sobre el cierre propuesto de Dewey y Lincolnwood. "
       b: "Ya firmaron {n} vecinos de Evanston. "
-      c: "La votación se aplazó. La Junta se reúne el 9 de noviembre. Agregue su nombre: "
+      c: "Se prevé una votación de la Junta el 16 de noviembre. Agregue su nombre: "
       fb: Mensaje copiado. Péguelo en su publicación de Facebook.
       fbNo: Facebook solo comparte el enlace. Copie el texto primero si quiere incluirlo.
       igDl: La imagen está lista abajo y el texto está copiado para la descripción.
       big: ["Firmé", "la carta."]
       sub: Cada residente de Evanston merece una voz real sobre los cierres de escuelas que propone el D65.
       cnt: Ya firmaron {n} vecinos. Agregue su nombre.
-      cta: "Reunión 9 nov. · voto aplazado"
+      cta: "Reunión 16 nov. · votación prevista"
       png: firme-la-carta.png
