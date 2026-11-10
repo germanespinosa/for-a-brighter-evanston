@@ -6,29 +6,29 @@ show: true
 calendar_title: D65 Board Meeting
 location: 1500 McDaniel Ave, Evanston, IL 60201
 location_short: 1500 McDaniel Ave, Evanston
-details_url: https://www.district65.net/about/board-of-education/board-meetings
+details_url: https://www.district65.net/about/calendar/event-details/~occur-id/10994441
 
 # Times in Chicago local time (used by Google Calendar and Outlook links)
-start_local: 20261109T170000
-end_local: 20261109T200000
-start_iso: "2026-11-09T17:00:00-06:00"
-end_iso: "2026-11-09T20:00:00-06:00"
+start_local: 20261116T180000
+end_local: 20261116T200000
+start_iso: "2026-11-16T18:00:00-06:00"
+end_iso: "2026-11-16T20:00:00-06:00"
 # Same times in UTC (used by the .ics file)
-start_utc: 20261109T230000Z
-end_utc: 20261110T020000Z
+start_utc: 20261117T000000Z
+end_utc: 20261117T020000Z
 
 en:
   # Yellow bar: written in sentence case, shown in capitals by CSS.
-  bar_long: "Board vote anticipated Nov. 16 · Rally Monday, Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
-  bar_short: "Vote Nov. 16 · Rally Mon., Nov. 9 · 4 p.m. · 1500 McDaniel Ave."
-  eyebrow: "Meeting still scheduled"
+  bar_long: "D65 board meeting · Vote anticipated · Monday, Nov. 16 · 6 p.m. · 1500 McDaniel Ave."
+  bar_short: "Board meeting · Vote anticipated · Mon., Nov. 16 · 6 p.m."
+  eyebrow: "Vote anticipated"
   title: "D65 Board Meeting"
-  date_html: Monday,<br>November 9
-  time: 5 PM
+  date_html: Monday,<br>November 16
+  time: 6 PM
 es:
-  bar_long: "Se espera la votación de la junta el 16 de nov. · Concentración el lunes 9 de nov. · 4 p. m. · 1500 McDaniel Ave."
-  bar_short: "Votación 16 de nov. · Concentración lun. 9 de nov. · 4 p. m. · 1500 McDaniel Ave."
-  eyebrow: "La reunión sigue en pie"
+  bar_long: "Reunión de la Junta del D65 · Se prevé una votación · lunes 16 de nov. · 6 p. m. · 1500 McDaniel Ave."
+  bar_short: "Reunión de la Junta · Se prevé votación · lun. 16 de nov. · 6 p. m."
+  eyebrow: "Se prevé una votación"
   title: "Reunión de la Junta del D65"
-  date_html: Lunes,<br>9 de noviembre
-  time: 5 p. m.
+  date_html: Lunes,<br>16 de noviembre
+  time: 6 p. m.

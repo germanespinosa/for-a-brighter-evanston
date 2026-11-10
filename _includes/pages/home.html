@@ -45,7 +45,7 @@
       <aside class="hm-event" aria-labelledby="event-title">
         <p class="hm-eyebrow hm-eyebrow--blue hm-event__eyebrow">{{ h.event.eyebrow }}</p>
         <h2 class="hm-event__date" id="event-title">{{ h.event.date }}</h2>
-        <p class="hm-event__times"><b><time datetime="2026-11-09T16:00:00-06:00">{{ h.event.rally_time }}</time></b> {{ h.event.rally }}<br><b><time datetime="{{ ev.start_iso }}">{{ h.event.meeting_time }}</time></b> {{ h.event.meeting }}</p>
+        <p class="hm-event__times"><b><time datetime="{{ ev.start_iso }}">{{ h.event.meeting_time }}</time></b> {{ h.event.meeting }}</p>
         <p class="hm-event__place"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>{{ h.event.place }}</p>
         {% include calendar-menu.html label=h.event.calendar %}
       </aside>

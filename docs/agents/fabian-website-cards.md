@@ -20,7 +20,7 @@ How and when to read these documents (the fingerprint check) is in reference sec
 1. **W4**, react 👀. Vote running → **W17** instead, stop.
 2. Unclear request → ask one short question first. Restricted part → **W11**, and do only the allowed part (section 5, including its narrow exceptions).
 3. A file came with the request and might be a mockup → Card C first.
-4. One step: edit, commit (section 10 format), run `scripts/sandbox_check.py --base origin/main` (must be BLOCKING 0), push. Batch requests that arrive close together into one push.
+4. One step: edit, commit (section 10 format), run `scripts/sandbox_check.py --base origin/main` (must be BLOCKING 0), push. For the specifically approved four-page removal in `nov16-meeting`, use the separate bounded deletion and maintenance records described in section 5; they do not authorize other removals. Batch requests that arrive close together into one push.
 5. When the preview has rebuilt, open each changed page once, then post **W5**.
 6. New page? It also needs its own sharing card (section 5) and the Spanish offer.
 
