@@ -11,6 +11,7 @@ Post regular messages directly in the relevant Slack channel and mention @fabian
 
 - **Get the guide:** DM `-help`, or post `@fabian -help` in a channel.
 - **Add news — #news:** `@fabian Add this article: [link]`. Review the English/Spanish titles and summaries plus source and publication date; then the requester or German replies `@fabian Yes, publish [article title]`.[1]
+- **News suggestions — #news (planned):** `add 1, 3` selects items from a numbered suggestions list; each still needs its own preview and approval.[1]
 - **Remove news — #news:** `@fabian Remove [article title or link]`. Check the exact match, then the requester or German replies `@fabian Yes, remove [article title]`.[1]
 - **Start website work — #website:** `@fabian Start a website update: [describe the change]`. If a sandbox is already open, the change joins that sandbox; nothing goes live yet.[2]
 - **Build a page from a mockup — #website:** `@fabian Build this page from the attached mockup.` Fabian copies its text exactly and asks you for anything missing, like a `[day of the event]`.[2]
@@ -29,6 +30,12 @@ Before every request, Fabian checks whether his operating manual has changed and
 - **Use top-level messages, never threads.** Keep follow-up answers and confirmations in the relevant channel and identify the article or sandbox when there could be confusion.[1][2]
 
 # 1. Add or remove news articles
+
+## Daily news suggestions (planned)
+
+The intended workflow is for Fabian to search for District 65 news every day at **10:00 a.m. Chicago time** and post a numbered list in #news of articles not already on In the news. The schedule and message routing must be set up and verified separately; this guide does not establish that they are active.[1]
+
+To select items, reply in #news with a top-level message such as **`add 1, 3`** (or **`@fabian add 1, 3`**) and identify the suggestions list if there could be confusion. Fabian should handle your selections in the order requested, one at a time, using the usual add workflow. Selecting numbers does not approve publication: review each full English/Spanish preview separately, and the requester or German must explicitly approve that exact item before it is published. If you decline a preview, Fabian should ask whether to continue with the next selection or cancel the remaining list, and wait for your answer. You can stop the whole list at any time.[1]
 
 ## Add an article
 
@@ -199,7 +206,7 @@ Reactions and progress messages never substitute for an article confirmation or 
 
 ## Administrator readiness checklist
 
-Before relying on the workflow for the whole team, verify that the intended requesters are authorized, Fabian receives messages in both channels, and the sandbox builds and voting checks operate as documented. GitHub Pages must use **GitHub Actions** as its build/deployment source for the sandbox workflow; merging the files alone does not establish that setup is complete.[2]
+Before relying on the workflow for the whole team, verify that the intended requesters are authorized, Fabian receives messages in both channels, and the sandbox builds and voting checks operate as documented. For daily news suggestions, also verify the Chicago-time schedule, #news delivery and selection routing separately. GitHub Pages must use **GitHub Actions** as its build/deployment source for the sandbox workflow; merging the files alone does not establish that setup is complete.[1][2]
 
 This guide does not change Slack access, deployment settings or the website. Changes to Fabian’s user-facing functionality require a review of this guide and a regenerated PDF in the same update.
 
