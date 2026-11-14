@@ -104,7 +104,7 @@ window.LETTER_CONTENT = {
         ],
         "facts": [
           "D65 proposes closing Dewey and Lincolnwood at the end of the 2026–27 school year.",
-          "D65 describes November 9 as a plan vote, with closure hearings and later final action still to follow.",
+          "The board is expected to vote on the plan on November 16, with closure hearings and any final closure decision to follow.",
           "The district proposes retaining both school sites and exploring a potential November 2028 bond referendum.",
           "The community demand letter calls for comparison of multiple sustainable options, including maintaining the current school footprint."
         ],
@@ -177,38 +177,6 @@ window.LETTER_CONTENT = {
           "Please overlay proposed boundaries with approved housing projects, affordable housing, and actual walking routes, and publish the findings.",
           "Please reconcile city growth assumptions and district enrollment forecasts, including realistic estimates for family-sized housing.",
           "Please support a closure moratorium until alternatives and citywide student impacts are verified and discussed with affected communities."
-        ]
-      },
-      {
-        "title": "School Age Child Care (SACC)",
-        "desc": "Keep reliable, affordable care for working families.",
-        "topic": "School Age Child Care",
-        "closures": false,
-        "subjects": [
-          "Keep SACC accessible to working families",
-          "Protect reliable school-age childcare",
-          "Show the childcare plan before ending SACC",
-          "Working families need affordable care",
-          "Do not leave families without childcare"
-        ],
-        "concerns": [
-          "Families need dependable care to maintain work schedules.",
-          "An alternative is only workable if families can afford it and secure a place.",
-          "Children with disabilities need care that can meet their needs.",
-          "Changing schools and childcare at the same time could compound disruption.",
-          "Families should not have to make employment decisions without clear information about future care."
-        ],
-        "facts": [
-          "D65 proposes closing its School Age Child Care program at the end of the 2026–27 school year.",
-          "SACC closure is listed separately from the proposed elementary school closures.",
-          "The demand letter calls for disclosure of transition costs and credible alternatives.",
-          "The demand letter requests meaningful participation from communities across Evanston and Skokie."
-        ],
-        "asks": [
-          "Please reject SACC closure as presented and evaluate options to maintain affordable, accessible care.",
-          "Please publish replacement capacity, fees, subsidies, hours, locations, and disability supports before any SACC closure decision.",
-          "Please work with families, SACC staff, the city, and potential providers to compare sustainable service options.",
-          "Please require a funded continuity plan so every currently served family has a realistic care option before district services end."
         ]
       },
       {
@@ -392,7 +360,7 @@ window.LETTER_CONTENT = {
         ],
         "facts": [
           "El D65 propone cerrar Dewey y Lincolnwood al final del año escolar 2026–27.",
-          "El D65 describe la votación del 9 de noviembre como una votación sobre el plan, a la que todavía seguirían audiencias sobre los cierres y una decisión final posterior.",
+          "Se espera que la Junta vote sobre el plan el 16 de noviembre; después seguirían audiencias sobre los cierres y cualquier decisión final al respecto.",
           "El distrito propone conservar ambos terrenos escolares y estudiar un posible referéndum de bonos en noviembre de 2028.",
           "La carta de demandas de la comunidad pide comparar varias opciones sostenibles, incluida la de mantener todas las escuelas actuales."
         ],
@@ -465,38 +433,6 @@ window.LETTER_CONTENT = {
           "Les pido que superpongan los límites propuestos con los proyectos de vivienda aprobados, la vivienda asequible y las rutas reales a pie, y que publiquen los resultados.",
           "Les pido que concilien las suposiciones de crecimiento de la ciudad con los pronósticos de matrícula del distrito, con estimaciones realistas para viviendas familiares.",
           "Les pido que apoyen una moratoria sobre los cierres hasta que las alternativas y su impacto en los estudiantes de toda la ciudad estén verificados y se hayan discutido con las comunidades afectadas."
-        ]
-      },
-      {
-        "title": "Cuidado infantil escolar (SACC)",
-        "desc": "Mantener un cuidado confiable y asequible para familias que trabajan.",
-        "topic": "el cuidado infantil escolar (SACC)",
-        "closures": false,
-        "subjects": [
-          "Mantengan SACC al alcance de las familias que trabajan",
-          "Protejan un cuidado infantil escolar confiable",
-          "Muestren el plan de cuidado infantil antes de cerrar SACC",
-          "Las familias que trabajan necesitan cuidado asequible",
-          "No dejen a las familias sin cuidado infantil"
-        ],
-        "concerns": [
-          "Las familias necesitan un cuidado confiable para mantener sus horarios de trabajo.",
-          "Una alternativa solo funciona si las familias pueden pagarla y conseguir un lugar.",
-          "Los niños con discapacidades necesitan un cuidado que pueda atender sus necesidades.",
-          "Cambiar de escuela y de cuidado infantil al mismo tiempo podría agravar los trastornos.",
-          "Las familias no deberían tener que tomar decisiones de empleo sin información clara sobre el cuidado futuro."
-        ],
-        "facts": [
-          "El D65 propone cerrar su programa de cuidado infantil escolar (SACC) al final del año escolar 2026–27.",
-          "El cierre de SACC aparece por separado de los cierres de escuelas primarias propuestos.",
-          "La carta de demandas pide que se den a conocer los costos de transición y alternativas creíbles.",
-          "La carta de demandas pide una participación significativa de comunidades de todo Evanston y Skokie."
-        ],
-        "asks": [
-          "Les pido que rechacen el cierre de SACC tal como está propuesto y evalúen opciones para mantener un cuidado asequible y accesible.",
-          "Les pido que publiquen la capacidad de reemplazo, las tarifas, los subsidios, los horarios, los lugares y los apoyos para discapacidades antes de cualquier decisión sobre SACC.",
-          "Les pido que trabajen con las familias, el personal de SACC, la ciudad y posibles proveedores para comparar opciones de servicio sostenibles.",
-          "Les pido que exijan un plan de continuidad con fondos para que cada familia atendida hoy tenga una opción de cuidado realista antes de que terminen los servicios del distrito."
         ]
       },
       {
