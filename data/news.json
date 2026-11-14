@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-09",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/11/09/city/d65-parent-groups-consider-future-work-amid-cost-cutting-conversations/",
+      "title": "D65 parent groups consider future work amid cost-cutting conversations",
+      "summary": "District 65 parent and community groups describe their work on school-closure alternatives, financial analysis and community engagement. Members discuss plans to participate in the superintendent search and school board elections as the district considers budget cuts.",
+      "title_es": "Grupos de padres del D65 consideran su trabajo futuro en medio de conversaciones sobre recortes",
+      "summary_es": "Grupos de padres y miembros de la comunidad del Distrito 65 describen su trabajo sobre alternativas al cierre de escuelas, análisis financiero y participación comunitaria. Sus integrantes hablan de participar en la búsqueda de superintendente y las elecciones de la junta escolar mientras el distrito considera recortes presupuestarios."
+    },
+    {
       "date": "2026-11-12",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
