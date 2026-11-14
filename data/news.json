@@ -3,6 +3,16 @@
   "articles": [
     {
       "date": "2026-11-11",
+      "source": "Chicago Tribune",
+      "site": "Chicago Tribune",
+      "url": "https://www.chicagotribune.com/2026/11/11/math-error-evanston-district-65s-grows/",
+      "title": "As math error in Evanston District 65’s budget grows to $27 million, parents, Board cast doubt",
+      "summary": "District 65’s financial projection error grew to $27 million, and parents and board members raised doubts. The district’s chief financial officer says the correction does not remove the need to address the budget crisis.",
+      "title_es": "Al crecer a $27 millones el error de cálculo en el presupuesto del Distrito 65 de Evanston, padres y miembros de la junta expresan dudas",
+      "summary_es": "El error en las proyecciones financieras del Distrito 65 creció a $27 millones, y padres y miembros de la junta expresaron dudas. El director financiero del distrito dice que la corrección no elimina la necesidad de afrontar la crisis presupuestaria."
+    },
+    {
+      "date": "2026-11-11",
       "source": "The Daily Northwestern",
       "site": "The Daily Northwestern",
       "url": "https://dailynorthwestern.com/2026/11/11/lateststories/d65-community-members-urge-board-to-vote-against-comprehensive-plan/",
