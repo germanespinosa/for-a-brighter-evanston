@@ -3,6 +3,16 @@
   "articles": [
     {
       "date": "2026-11-09",
+      "source": "NBC Chicago",
+      "site": "NBC Chicago",
+      "url": "https://www.nbcchicago.com/news/local/evanston-skokie-community-fights-to-keep-schools-open-amid-district-financial-woes/4014491/",
+      "title": "Evanston-Skokie community fights to keep schools open amid district financial woes",
+      "summary": "Parents, students and other community members spoke against the possible closure of Dewey and Lincolnwood at a District 65 board meeting. The district delayed a vote on whether to begin public hearings on the closures.",
+      "title_es": "La comunidad de Evanston-Skokie lucha por mantener abiertas las escuelas ante las dificultades financieras del distrito",
+      "summary_es": "Padres, estudiantes y otros miembros de la comunidad hablaron contra el posible cierre de Dewey y Lincolnwood en una reunión de la junta del Distrito 65. El distrito aplazó la votación sobre si iniciar audiencias públicas acerca de los cierres."
+    },
+    {
+      "date": "2026-11-09",
       "source": "ABC7 Chicago",
       "site": "ABC7 Chicago",
       "url": "https://abc7chicago.com/post/evanston-skokie-district-65-delays-vote-budget-plan-could-lead-dewey-lincolnwood-elementary-school-closures/20028013/",
