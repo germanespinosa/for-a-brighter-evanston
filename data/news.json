@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-10",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/11/10/city/d65-educators-families-protest-proposed-closures-financial-errors/",
+      "title": "D65 educators, families protest proposed closures, financial errors",
+      "summary": "Families and educators rallied against District 65’s proposed school closures and early childhood cuts ahead of the Nov. 9 board meeting. Participants questioned financial projection errors and called for greater transparency and consideration of alternatives.",
+      "title_es": "Educadores y familias del D65 protestan contra los cierres propuestos y los errores financieros",
+      "summary_es": "Familias y educadores se manifestaron contra los cierres escolares y recortes a la primera infancia propuestos por el Distrito 65 antes de la reunión de la junta del 9 de noviembre. Los participantes cuestionaron los errores en las proyecciones financieras y pidieron mayor transparencia y consideración de alternativas."
+    },
+    {
       "date": "2026-11-09",
       "source": "NBC Chicago",
       "site": "NBC Chicago",
