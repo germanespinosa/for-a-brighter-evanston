@@ -12,12 +12,18 @@ from unittest.mock import patch
 
 CHECKER = Path(__file__).resolve().parents[1] / 'sandbox_check.py'
 BASE_PIN = '5b14e14d977916a937effef74dcc5cb91122efe3'
-SOURCE_PIN = 'bc9277282b1d04b591ea17cc1bff381a8aca297a059677365fe50a7860b1d7f8'
+SOURCE_PIN = 'c216bf944d4b60ba8f9c3cc12f71e619021f68cba249e547ff453e50c0d1aa30'
+MAINTENANCE_SOURCE_PIN = '26ffb965db9260b8afff15da6faf7bc1da000b4aab1de5915da82038806a88c1'
 SOURCE = {'authorizer_id': 'DELEGATE_FIXTURE', 'source': {
     'date': {'authorizer_id': 'OWNER_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE',
              'message_ts': 'approval-fixture', 'question_ts': 'question-fixture'},
     'delegation': {'authorizer_id': 'OWNER_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE', 'message_ts': 'delegation-fixture'},
-    'removal': {'authorizer_id': 'DELEGATE_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE', 'message_ts': 'removal-fixture'}}}
+    'removal': {'authorizer_id': 'DELEGATE_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE', 'message_ts': 'removal-fixture'},
+    'confirmation': {'authorizer_id': 'DELEGATE_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE', 'message_ts': 'post-delegation-fixture'}}}
+MAINTENANCE_SOURCE = {'authorizer_id': 'DELEGATE_FIXTURE', 'source': {
+    'delegation': copy.deepcopy(SOURCE['source']['delegation']),
+    'maintenance': {'authorizer_id': 'DELEGATE_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE',
+                    'message_ts': 'maintenance-approval-fixture', 'question_ts': 'maintenance-question-fixture'}}}
 JS = 'assets/js/letter-content.js'
 MAINTENANCE = ('scripts/sandbox_check.py', 'scripts/tests/test_letter_vote_approval.py',
                'docs/agents/fabian-website.md', 'docs/agents/fabian-website-cards.md',
@@ -40,7 +46,8 @@ class LetterVoteApprovalTests(unittest.TestCase):
         self.git('config', 'user.email', 'test@example.test')
         self.git('config', 'user.name', 'Test')
         fake = hashlib.sha256(json.dumps(SOURCE, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
-        text = CHECKER.read_text().replace(SOURCE_PIN, fake)
+        maintenance_fake = hashlib.sha256(json.dumps(MAINTENANCE_SOURCE, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        text = CHECKER.read_text().replace(SOURCE_PIN, fake).replace(MAINTENANCE_SOURCE_PIN, maintenance_fake)
         self.write('scripts/sandbox_check.py', text.encode())
         realroot = Path(__file__).resolve().parents[2]
         baseline = subprocess.run(['git', '-C', str(realroot), 'show', f'{BASE_PIN}:{JS}'],
@@ -84,7 +91,7 @@ class LetterVoteApprovalTests(unittest.TestCase):
 
     def record(self, purpose, paths):
         return {'version': 1, 'purpose': purpose, 'sandbox_id': 'letter-vote-nov16',
-                **copy.deepcopy(SOURCE), 'checkout': str(self.root.resolve()),
+                **copy.deepcopy(SOURCE if purpose == 'letter-vote-copy' else MAINTENANCE_SOURCE), 'checkout': str(self.root.resolve()),
                 'base_commit': self.base, 'head_commit': self.git('rev-parse', 'HEAD').strip(),
                 'files': [{'path': p, 'sha256': hashlib.sha256((self.root / p).read_bytes()).hexdigest()}
                           for p in paths]}
@@ -109,6 +116,18 @@ class LetterVoteApprovalTests(unittest.TestCase):
         code, report = self.check()
         self.assertEqual(code, 0, report)
 
+    def test_content_provenance_does_not_authorize_maintenance(self):
+        self.records[1]['source'] = copy.deepcopy(SOURCE['source'])
+        code, report = self.check()
+        self.assertEqual(code, 1, report)
+        self.assertTrue(any('Invalid letter-vote-maintenance approval' in x for x in report['blocking']), report)
+
+    def test_delegate_maintenance_is_not_mislabeled_as_owner_authorized(self):
+        code, report = self.check()
+        self.assertEqual(code, 0, report)
+        self.assertTrue(any('Delegate-authorized fixed-inventory maintenance' in x for x in report['changes']), report)
+        self.assertFalse(any('German-authorized fixed-inventory maintenance' in x for x in report['changes']), report)
+
     def test_bilingual_sacc_removal_with_date_is_accepted_only_when_exact(self):
         self.assertNotIn(b'SACC', (self.root / JS).read_bytes())
         code, report = self.check()
@@ -118,7 +137,7 @@ class LetterVoteApprovalTests(unittest.TestCase):
         self.assertEqual(self.check()[0], 0)
         for i in (0, 1):
             original = copy.deepcopy(self.records[i])
-            for component in ('date', 'delegation', 'removal'):
+            for component in original['source']:
                 for field in original['source'][component]:
                     with self.subTest(record=i, component=component, field=field):
                         self.records[i] = copy.deepcopy(original)
@@ -311,6 +330,40 @@ class LetterVoteApprovalTests(unittest.TestCase):
         code, report = self.check()
         self.assertEqual(code, 1, report)
         self.assertTrue(any('baseline SHA-256' in x for x in report['blocking']), report)
+
+
+    def test_publication_guard_rejects_advanced_remote_even_if_ancestor(self):
+        manual = (Path(__file__).resolve().parents[2] / 'docs/agents/fabian-website.md').read_text()
+        self.assertIn('core.hooksPath=<private-hook-dir>', manual)
+        folder = self.root.parent
+        remote, repo, hooks = folder / 'lease-remote.git', folder / 'lease-work', folder / 'lease-hooks'
+        subprocess.run(['git', 'init', '--bare', '-q', str(remote)], check=True)
+        subprocess.run(['git', 'init', '-q', '-b', 'main', str(repo)], check=True)
+        def run(*args, check=True):
+            return subprocess.run(['git', '-C', str(repo), *args], check=check, capture_output=True, text=True)
+        run('config', 'user.email', 'fixture@example.test')
+        run('config', 'user.name', 'Fixture')
+        run('remote', 'add', 'origin', str(remote))
+        run('commit', '--allow-empty', '-qm', 'base')
+        base = run('rev-parse', 'HEAD').stdout.strip()
+        run('push', '-q', 'origin', 'HEAD:refs/heads/main')
+        run('commit', '--allow-empty', '-qm', 'intermediate')
+        run('push', '-q', 'origin', 'HEAD:refs/heads/main')
+        run('commit', '--allow-empty', '-qm', 'voted merge candidate')
+        self.assertEqual(run('push', '--dry-run', 'origin', 'HEAD:refs/heads/main').returncode, 0)
+        hooks.mkdir()
+        hook = hooks / 'pre-push'
+        hook.write_text('#!/bin/sh\ncount=0\nwhile read local_ref local_oid remote_ref remote_oid; do\n  count=$((count + 1))\n  [ "$remote_ref" = refs/heads/main ] && [ "$remote_oid" = "$FABIAN_EXPECTED_MAIN" ] || exit 1\ndone\n[ "$count" -eq 1 ]\n')
+        hook.chmod(0o700)
+        env = dict(os.environ, FABIAN_EXPECTED_MAIN=base)
+        guarded = subprocess.run(['git', '-C', str(repo), '-c', f'core.hooksPath={hooks}', 'push', 'origin', 'HEAD:refs/heads/main'], env=env, capture_output=True, text=True)
+        self.assertNotEqual(guarded.returncode, 0, guarded.stderr)
+        actual = subprocess.check_output(['git', '--git-dir', str(remote), 'rev-parse', 'refs/heads/main'], text=True).strip()
+        self.assertEqual(actual, run('rev-parse', 'HEAD^').stdout.strip())
+        env['FABIAN_EXPECTED_MAIN'] = actual
+        allowed = subprocess.run(['git', '-C', str(repo), '-c', f'core.hooksPath={hooks}', 'push', 'origin', 'HEAD:refs/heads/main'], env=env, capture_output=True, text=True)
+        self.assertEqual(allowed.returncode, 0, allowed.stderr)
+        self.assertEqual(subprocess.check_output(['git', '--git-dir', str(remote), 'rev-parse', 'refs/heads/main'], text=True).strip(), run('rev-parse', 'HEAD').stdout.strip())
 
 
 if __name__ == '__main__':

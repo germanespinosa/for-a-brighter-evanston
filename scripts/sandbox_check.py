@@ -563,9 +563,9 @@ def load_nov16_maintenance_approval(filename, base, sandbox_url):
     return approved
 
 
-# Bind the original date approval, owner delegation and delegate removal request.
-# The older date-only approval cannot authorize this expanded scope.
-LETTER_VOTE_SOURCE_DIGEST = "bc9277282b1d04b591ea17cc1bff381a8aca297a059677365fe50a7860b1d7f8"
+# Separate provenance pins: content is not permission for process maintenance.
+LETTER_VOTE_SOURCE_DIGEST = "c216bf944d4b60ba8f9c3cc12f71e619021f68cba249e547ff453e50c0d1aa30"
+LETTER_VOTE_MAINTENANCE_SOURCE_DIGEST = "26ffb965db9260b8afff15da6faf7bc1da000b4aab1de5915da82038806a88c1"
 LETTER_VOTE_BASE = "5b14e14d977916a937effef74dcc5cb91122efe3"
 LETTER_VOTE_BASE_SHA256 = "090694a356a8020db6d7d5df48d22e180b2b5a51a3ce2db66caab83d8e695b32"
 LETTER_VOTE_SCRIPT = "assets/js/letter-content.js"
@@ -589,6 +589,13 @@ LETTER_VOTE_REMOVALS = (
 def load_letter_vote_approval(filename, purpose, base, sandbox_url):
     if not filename:
         return {}
+    provenance = {
+        "letter-vote-copy": ({"date", "delegation", "removal", "confirmation"}, LETTER_VOTE_SOURCE_DIGEST),
+        "letter-vote-maintenance": ({"delegation", "maintenance"}, LETTER_VOTE_MAINTENANCE_SOURCE_DIGEST),
+    }
+    if purpose not in provenance:
+        raise ValueError("unknown letter approval purpose")
+    source_keys, source_digest = provenance[purpose]
     path = Path(filename).absolute()
     if (any(p.is_symlink() for p in (path, *path.parents))
             or path.resolve().is_relative_to(ROOT.resolve())):
@@ -606,9 +613,9 @@ def load_letter_vote_approval(filename, purpose, base, sandbox_url):
             or type(record["version"]) is not int or record["version"] != 1
             or record["purpose"] != purpose or record["sandbox_id"] != "letter-vote-nov16"
             or not isinstance(record["authorizer_id"], str) or not isinstance(record["source"], dict)
-            or set(record["source"]) != {"date", "delegation", "removal"}
+            or set(record["source"]) != source_keys
             or hashlib.sha256(json.dumps({"authorizer_id": record["authorizer_id"], "source": record["source"]},
-                                         sort_keys=True, separators=(",", ":")).encode()).hexdigest() != LETTER_VOTE_SOURCE_DIGEST
+                                         sort_keys=True, separators=(",", ":")).encode()).hexdigest() != source_digest
             or record["checkout"] != str(ROOT.resolve())
             or git("branch", "--show-current").strip() != "sandbox/letter-vote-nov16"
             or base != "origin/main"):
@@ -930,7 +937,8 @@ def main():
             if status not in {"A", "M"}:
                 blocking.append(f"{path}: maintenance authorizes additions/updates only, never deletion or type changes.")
             else:
-                changes.append(f"German-authorized fixed-inventory maintenance {verb}: {path}")
+                authorizer = "Delegate" if path in letter_maintenance else "German"
+                changes.append(f"{authorizer}-authorized fixed-inventory maintenance {verb}: {path}")
             continue
         if path in approved_css or path in approved_workbooks:
             target = ROOT / path

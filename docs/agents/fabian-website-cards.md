@@ -40,7 +40,7 @@ How and when to read these documents (the fingerprint check) is in reference sec
 ## Card E: "publish" / "let's vote" (review before every vote)
 
 1. **W10**, react 👀.
-2. One step: merge `origin/main` into the sandbox and push. If the only conflicts are the generated help PDF and `reviewed-sources.json`, rebuild them; any other conflict → abort and **W15** (section 8, step 2).
+2. Ordinary updates: merge `origin/main` into the sandbox and push. If only the generated help PDF and `reviewed-sources.json` conflict, rebuild them; any other conflict → abort and **W15**. For `letter-vote-nov16`, instead obey section 5's pinned-base and reviewed-byte gates; drift means stop, not automatic merge or rebuild (section 8, step 2).
 3. After the rebuild, run `sandbox_check.py --url …`, `sandbox_screens.py …` (and `mockup_check.py compare` for mockup pages) **together in one shell call** (`… & … & wait`, section 8 step 4), then read all the outputs. Look at the screenshots yourself.
 4. Do the title, navigation and sitemap check (section 8, step 6), and verify new-page sharing cards.
 5. Post **W13**. Any blocking problem → no vote; offer fixes.
@@ -58,8 +58,8 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 1. Post "✅ Approved by [names]. Publishing…".
 2. The sandbox must still be the voted commit; otherwise **W19**, stop.
-3. One step: merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**.
-4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4).
+3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes; stop on drift or rejected push, never retry on a newer base with the old approvals.
+4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4). For `letter-vote-nov16`, byte-compare the fetched live letter script against the voted blob (section 5).
 5. Delete the sandbox branch, post **W20**, react ✅. Save the records, then `/compact` last (section 9, step 7).
 
 ## Card H: anything else
