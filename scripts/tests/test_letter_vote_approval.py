@@ -11,10 +11,13 @@ import unittest
 from unittest.mock import patch
 
 CHECKER = Path(__file__).resolve().parents[1] / 'sandbox_check.py'
-BASE_PIN = '628c7adb15cf0954dda06902aa759619d4560fa0'
-SOURCE_PIN = '690df753b4f402d88e31d98f3713693a7b615bcf34009ab3a8c7afde74559a1e'
-SOURCE = {'authorizer_id': 'OWNER_FIXTURE', 'source': {'channel_id': 'CHANNEL_FIXTURE',
-          'message_ts': 'approval-fixture', 'question_ts': 'question-fixture'}}
+BASE_PIN = '5b14e14d977916a937effef74dcc5cb91122efe3'
+SOURCE_PIN = 'bc9277282b1d04b591ea17cc1bff381a8aca297a059677365fe50a7860b1d7f8'
+SOURCE = {'authorizer_id': 'DELEGATE_FIXTURE', 'source': {
+    'date': {'authorizer_id': 'OWNER_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE',
+             'message_ts': 'approval-fixture', 'question_ts': 'question-fixture'},
+    'delegation': {'authorizer_id': 'OWNER_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE', 'message_ts': 'delegation-fixture'},
+    'removal': {'authorizer_id': 'DELEGATE_FIXTURE', 'channel_id': 'CHANNEL_FIXTURE', 'message_ts': 'removal-fixture'}}}
 JS = 'assets/js/letter-content.js'
 MAINTENANCE = ('scripts/sandbox_check.py', 'scripts/tests/test_letter_vote_approval.py',
                'docs/agents/fabian-website.md', 'docs/agents/fabian-website-cards.md',
@@ -58,6 +61,12 @@ class LetterVoteApprovalTests(unittest.TestCase):
         for before, after in CHANGES:
             self.assertEqual(baseline.count(before.encode()), 1)
             baseline = baseline.replace(before.encode(), after.encode())
+        for title in (b'School Age Child Care (SACC)', b'Cuidado infantil escolar (SACC)'):
+            marker = b'      {\n        "title": "' + title + b'",'
+            self.assertEqual(baseline.count(marker), 1)
+            start = baseline.index(marker)
+            end = baseline.index(b'\n      },\n', start) + len(b'\n      },\n')
+            baseline = baseline[:start] + baseline[end:]
         self.write(JS, baseline)
         self.git('add', '-A')
         self.git('commit', '-qm', 'approved copy and maintenance')
@@ -99,6 +108,48 @@ class LetterVoteApprovalTests(unittest.TestCase):
         self.assertEqual(self.check((False, True))[0], 1)
         code, report = self.check()
         self.assertEqual(code, 0, report)
+
+    def test_bilingual_sacc_removal_with_date_is_accepted_only_when_exact(self):
+        self.assertNotIn(b'SACC', (self.root / JS).read_bytes())
+        code, report = self.check()
+        self.assertEqual(code, 0, report)
+
+    def test_each_independent_provenance_component_is_required(self):
+        self.assertEqual(self.check()[0], 0)
+        for i in (0, 1):
+            original = copy.deepcopy(self.records[i])
+            for component in ('date', 'delegation', 'removal'):
+                for field in original['source'][component]:
+                    with self.subTest(record=i, component=component, field=field):
+                        self.records[i] = copy.deepcopy(original)
+                        self.records[i]['source'][component][field] = 'wrong'
+                        self.assertEqual(self.check()[0], 1)
+                self.records[i] = copy.deepcopy(original)
+                del self.records[i]['source'][component]
+                self.assertEqual(self.check()[0], 1)
+            self.records[i] = original
+
+    def test_one_sacc_language_restored_is_rejected_with_fresh_hashes(self):
+        base = subprocess.run(['git', '-C', str(self.root), 'show', f'{self.base}:{JS}'],
+                              check=True, capture_output=True).stdout
+        for title in (b'School Age Child Care (SACC)', b'Cuidado infantil escolar (SACC)'):
+            target = self.root / JS
+            original = target.read_bytes()
+            marker = b'      {\n        "title": "' + title + b'",'
+            start = base.index(marker)
+            end = base.index(b'\n      },\n', start) + len(b'\n      },\n')
+            anchor = b'      {\n        "title": "' + (b'TWI and bilingual parent participation' if title.startswith(b'School') else b'TWI y participaci')
+            self.assertEqual(original.count(anchor), 1)
+            target.write_bytes(original.replace(anchor, base[start:end] + anchor, 1))
+            self.commit('restore one SACC language')
+            self.assertEqual(self.check()[0], 1)
+            self.git('reset', '--hard', 'HEAD~1')
+            self.update_records()
+
+    def test_date_only_legacy_provenance_never_authorizes_expanded_copy(self):
+        self.records[0]['authorizer_id'] = 'OWNER_FIXTURE'
+        self.records[0]['source'] = copy.deepcopy(SOURCE['source']['date'])
+        self.assertEqual(self.check()[0], 1)
 
     def test_ignored_untracked_javascript_cannot_bypass_exact_scope(self):
         self.git('config', 'core.excludesFile', str(Path(self.temp.name) / 'ignore'))
@@ -151,7 +202,7 @@ class LetterVoteApprovalTests(unittest.TestCase):
         self.commit('extra executable code')
         code, report = self.check()
         self.assertEqual(code, 1, report)
-        self.assertTrue(any('exactly the two' in x for x in report['blocking']), report)
+        self.assertTrue(any('exactly the approved' in x for x in report['blocking']), report)
 
     def test_one_substitution_only_is_not_authorized(self):
         target = self.root / JS

@@ -563,10 +563,10 @@ def load_nov16_maintenance_approval(filename, base, sandbox_url):
     return approved
 
 
-# This separate authorization binds both the answer and its precise question;
-# only its digest is public. The private record carries the provenance itself.
-LETTER_VOTE_SOURCE_DIGEST = "690df753b4f402d88e31d98f3713693a7b615bcf34009ab3a8c7afde74559a1e"
-LETTER_VOTE_BASE = "628c7adb15cf0954dda06902aa759619d4560fa0"
+# Bind the original date approval, owner delegation and delegate removal request.
+# The older date-only approval cannot authorize this expanded scope.
+LETTER_VOTE_SOURCE_DIGEST = "bc9277282b1d04b591ea17cc1bff381a8aca297a059677365fe50a7860b1d7f8"
+LETTER_VOTE_BASE = "5b14e14d977916a937effef74dcc5cb91122efe3"
 LETTER_VOTE_BASE_SHA256 = "090694a356a8020db6d7d5df48d22e180b2b5a51a3ce2db66caab83d8e695b32"
 LETTER_VOTE_SCRIPT = "assets/js/letter-content.js"
 LETTER_VOTE_MAINTENANCE = frozenset({
@@ -579,6 +579,10 @@ LETTER_VOTE_REPLACEMENTS = (
      "The board is expected to vote on the plan on November 16, with closure hearings and any final closure decision to follow."),
     ("El D65 describe la votación del 9 de noviembre como una votación sobre el plan, a la que todavía seguirían audiencias sobre los cierres y una decisión final posterior.",
      "Se espera que la Junta vote sobre el plan el 16 de noviembre; después seguirían audiencias sobre los cierres y cualquier decisión final al respecto."),
+)
+LETTER_VOTE_REMOVALS = (
+    ("School Age Child Care (SACC)", "d51ce57e1172c061425a27c4b48e32a8752f818057da30bc2182bce83a0de979"),
+    ("Cuidado infantil escolar (SACC)", "0baf9c04bf58bfa97b346079145b5b68efb4a1ce9ae5c3726006a31ff583d4a9"),
 )
 
 
@@ -602,8 +606,7 @@ def load_letter_vote_approval(filename, purpose, base, sandbox_url):
             or type(record["version"]) is not int or record["version"] != 1
             or record["purpose"] != purpose or record["sandbox_id"] != "letter-vote-nov16"
             or not isinstance(record["authorizer_id"], str) or not isinstance(record["source"], dict)
-            or set(record["source"]) != {"channel_id", "message_ts", "question_ts"}
-            or not all(isinstance(value, str) for value in record["source"].values())
+            or set(record["source"]) != {"date", "delegation", "removal"}
             or hashlib.sha256(json.dumps({"authorizer_id": record["authorizer_id"], "source": record["source"]},
                                          sort_keys=True, separators=(",", ":")).encode()).hexdigest() != LETTER_VOTE_SOURCE_DIGEST
             or record["checkout"] != str(ROOT.resolve())
@@ -664,8 +667,18 @@ def load_letter_vote_approval(filename, purpose, base, sandbox_url):
                 if baseline.count(before) != 1:
                     raise ValueError("letter script baseline substitution is not unique")
                 baseline = baseline.replace(before, after, 1)
+            for title, expected in LETTER_VOTE_REMOVALS:
+                marker = b'      {\n        "title": "' + title.encode() + b'",'
+                if baseline.count(marker) != 1:
+                    raise ValueError("letter SACC removal marker is not unique")
+                start = baseline.index(marker)
+                ending = b'\n      },\n'
+                end = baseline.index(ending, start) + len(ending)
+                if hashlib.sha256(baseline[start:end]).hexdigest() != expected:
+                    raise ValueError("letter SACC removal block SHA-256 mismatch")
+                baseline = baseline[:start] + baseline[end:]
             if committed != baseline:
-                raise ValueError("letter script must contain exactly the two approved text substitutions")
+                raise ValueError("letter script must contain exactly the approved date substitutions and bilingual SACC removals")
     return approved
 
 
@@ -820,8 +833,8 @@ def main():
     ap.add_argument("--poll-copy-approval-file", help="German-only private hash-bound poll-copy-sandbox authorization JSON")
     ap.add_argument("--deletion-approval-file", help="German-only private exact nov16 page-deletion authorization JSON")
     ap.add_argument("--nov16-maintenance-approval-file", help="German-only private exact nov16 checker-maintenance authorization JSON")
-    ap.add_argument("--letter-vote-approval-file", help="German-only private exact bilingual letter-copy approval JSON")
-    ap.add_argument("--letter-vote-maintenance-approval-file", help="German-only private exact letter-vote checker-maintenance approval JSON")
+    ap.add_argument("--letter-vote-approval-file", help="private exact bilingual letter-copy approval with date, delegation and removal provenance")
+    ap.add_argument("--letter-vote-maintenance-approval-file", help="private exact letter-vote checker-maintenance approval JSON")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
@@ -836,7 +849,7 @@ def main():
             else:
                 letter_maintenance = approved
             if approved:
-                notes.append(f"German-only {purpose} approval; preview only, normal team review and vote remain.")
+                notes.append(f"Bound {purpose} approval; preview only, normal team review and vote remain.")
         except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
             blocking.append(f"Invalid {purpose} approval: {error}")
     try:
@@ -904,7 +917,7 @@ def main():
         verb = {"A": "added", "M": "changed", "D": "deleted"}.get(status, "changed")
 
         if path in letter_copy:
-            changes.append(f"German-authorized bilingual letter text {verb}: {path}")
+            changes.append(f"Authorized bilingual letter text {verb}: {path}")
             continue
         if poll_copy_approval and path == POLL_COPY_SCRIPT:
             base_mode = git("ls-tree", args.base, "--", path)
@@ -999,7 +1012,7 @@ def main():
                 if path in approved_deletions:
                     changes.append(f"German-authorized page deletion: {path}")
                     continue
-                blocking.append(f"The page {path} was deleted. Deleting published pages breaks existing links; ask German.")
+                blocking.append(f"The page {path} was deleted. Deleting published pages breaks existing links; ask German or Kerstin for scoped authorization and reviewed enforcement.")
                 continue
             text = (ROOT / path).read_text(encoding="utf-8")
             fm_text, body = split_front_matter(text)
