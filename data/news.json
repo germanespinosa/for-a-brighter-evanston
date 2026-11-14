@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-12",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/12/some-dewey-twi-families-express-frustration-after-district-cancels-second-engagement-meeting/",
+      "title": "Some Dewey TWI families express frustration after district cancels second engagement meeting",
+      "summary": "District 65 canceled a follow-up meeting with Dewey’s two-way immersion families, saying it needed more clarity on next steps. Several parents expressed frustration and said they wanted meaningful representation in planning for the program’s future.",
+      "title_es": "Algunas familias del programa TWI de Dewey expresan frustración tras la cancelación de una segunda reunión de participación por parte del distrito",
+      "summary_es": "El Distrito 65 canceló una reunión de seguimiento con las familias del programa de inmersión bilingüe de Dewey, señalando que necesitaba más claridad sobre los próximos pasos. Varios padres expresaron frustración y dijeron que querían una representación significativa en la planificación del futuro del programa."
+    },
+    {
       "date": "2026-11-09",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
