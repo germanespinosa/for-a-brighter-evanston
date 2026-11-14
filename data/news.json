@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-11",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/11/11/lateststories/d65-community-members-urge-board-to-vote-against-comprehensive-plan/",
+      "title": "D65 community members urge board to vote against comprehensive plan",
+      "summary": "Community members urged the District 65 board to reject the proposed financial plan, raising concerns about school closures and early childhood programs. Administrators defended the plan as necessary for financial sustainability, while board members discussed alternative closure scenarios.",
+      "title_es": "Miembros de la comunidad del D65 instan a la junta a votar contra el plan integral",
+      "summary_es": "Miembros de la comunidad instaron a la junta del Distrito 65 a rechazar el plan financiero propuesto y expresaron inquietudes sobre los cierres escolares y los programas de primera infancia. Los administradores defendieron el plan como necesario para la sostenibilidad financiera, mientras la junta debatió escenarios alternativos de cierre."
+    },
+    {
       "date": "2026-11-10",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
