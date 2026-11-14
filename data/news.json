@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-14",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/14/king-arts-off-the-agenda-as-district-65-prepares-to-vote-on-closing-dewey-lincolnwood/",
+      "title": "King Arts off the agenda as District 65 prepares to vote on closing Dewey, Lincolnwood",
+      "summary": "The District 65 board’s Nov. 16 agenda includes votes on closing Dewey and Lincolnwood, but not King Arts. The article describes the closure alternatives and differing community views, including concerns about impacts on students.",
+      "title_es": "King Arts queda fuera de la agenda mientras el Distrito 65 se prepara para votar sobre el cierre de Dewey y Lincolnwood",
+      "summary_es": "La agenda de la junta del Distrito 65 para el 16 de noviembre incluye votaciones sobre el cierre de Dewey y Lincolnwood, pero no de King Arts. El artículo describe las alternativas de cierre y las distintas opiniones de la comunidad, incluidas las inquietudes sobre el impacto en los estudiantes."
+    },
+    {
       "date": "2026-11-11",
       "source": "Chicago Tribune",
       "site": "Chicago Tribune",
