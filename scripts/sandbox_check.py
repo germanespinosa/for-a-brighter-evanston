@@ -563,6 +563,112 @@ def load_nov16_maintenance_approval(filename, base, sandbox_url):
     return approved
 
 
+# This separate authorization binds both the answer and its precise question;
+# only its digest is public. The private record carries the provenance itself.
+LETTER_VOTE_SOURCE_DIGEST = "690df753b4f402d88e31d98f3713693a7b615bcf34009ab3a8c7afde74559a1e"
+LETTER_VOTE_BASE = "628c7adb15cf0954dda06902aa759619d4560fa0"
+LETTER_VOTE_BASE_SHA256 = "090694a356a8020db6d7d5df48d22e180b2b5a51a3ce2db66caab83d8e695b32"
+LETTER_VOTE_SCRIPT = "assets/js/letter-content.js"
+LETTER_VOTE_MAINTENANCE = frozenset({
+    "scripts/sandbox_check.py", "scripts/tests/test_letter_vote_approval.py",
+    "docs/agents/fabian-website.md", "docs/agents/fabian-website-cards.md",
+    "docs/help/team-help.md", "docs/help/team-help.pdf", "docs/help/reviewed-sources.json",
+})
+LETTER_VOTE_REPLACEMENTS = (
+    ("D65 describes November 9 as a plan vote, with closure hearings and later final action still to follow.",
+     "The board is expected to vote on the plan on November 16, with closure hearings and any final closure decision to follow."),
+    ("El D65 describe la votación del 9 de noviembre como una votación sobre el plan, a la que todavía seguirían audiencias sobre los cierres y una decisión final posterior.",
+     "Se espera que la Junta vote sobre el plan el 16 de noviembre; después seguirían audiencias sobre los cierres y cualquier decisión final al respecto."),
+)
+
+
+def load_letter_vote_approval(filename, purpose, base, sandbox_url):
+    if not filename:
+        return {}
+    path = Path(filename).absolute()
+    if (any(p.is_symlink() for p in (path, *path.parents))
+            or path.resolve().is_relative_to(ROOT.resolve())):
+        raise ValueError("letter approval must be a private non-symlink file outside the checkout")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "r", encoding="utf-8") as stream:
+        info = os.fstat(stream.fileno())
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
+                or stat.S_IMODE(info.st_mode) != 0o600):
+            raise ValueError("letter approval must be operator-owned, regular and mode 0600")
+        record = json.load(stream, object_pairs_hook=unique_json_fields)
+    keys = {"version", "purpose", "sandbox_id", "authorizer_id", "source", "checkout",
+            "base_commit", "head_commit", "files"}
+    if (not isinstance(record, dict) or set(record) != keys
+            or type(record["version"]) is not int or record["version"] != 1
+            or record["purpose"] != purpose or record["sandbox_id"] != "letter-vote-nov16"
+            or not isinstance(record["authorizer_id"], str) or not isinstance(record["source"], dict)
+            or set(record["source"]) != {"channel_id", "message_ts", "question_ts"}
+            or not all(isinstance(value, str) for value in record["source"].values())
+            or hashlib.sha256(json.dumps({"authorizer_id": record["authorizer_id"], "source": record["source"]},
+                                         sort_keys=True, separators=(",", ":")).encode()).hexdigest() != LETTER_VOTE_SOURCE_DIGEST
+            or record["checkout"] != str(ROOT.resolve())
+            or git("branch", "--show-current").strip() != "sandbox/letter-vote-nov16"
+            or base != "origin/main"):
+        raise ValueError("letter approval schema, provenance, checkout, base or branch does not match")
+    if (git("rev-parse", "--verify", "origin/main^{commit}").strip() != LETTER_VOTE_BASE
+            or record["base_commit"] != LETTER_VOTE_BASE
+            or record["head_commit"] != git("rev-parse", "--verify", "HEAD^{commit}").strip()
+            or git("merge-base", "origin/main", "HEAD").strip() != LETTER_VOTE_BASE):
+        raise ValueError("letter approval must bind the exact base, current HEAD and merge base")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/letter-vote-nov16" or url.query or url.fragment):
+            raise ValueError("letter approval sandbox URL does not match")
+    allowed = {LETTER_VOTE_SCRIPT} if purpose == "letter-vote-copy" else LETTER_VOTE_MAINTENANCE
+    approved = nov16_inventory(record, allowed)
+
+    # Nothing else, even normally editable live data, was part of this consent.
+    diff = git("diff", "--no-renames", "--name-status", "-z", "origin/main...HEAD").split("\0")
+    entries = list(zip(diff[0::2], diff[1::2]))
+    for status, name in entries:
+        if (name == LETTER_VOTE_SCRIPT and status == "M"):
+            continue
+        if name in LETTER_VOTE_MAINTENANCE and (status == "M" or
+                (name == "scripts/tests/test_letter_vote_approval.py" and status == "A")):
+            continue
+        raise ValueError(f"{name}: change outside letter vote authorization")
+    if ("M", LETTER_VOTE_SCRIPT) not in entries:
+        raise ValueError("letter approval requires the committed copy change")
+    if git("status", "--porcelain=v1", "-z", "--untracked-files=all"):
+        raise ValueError("letter approval requires a clean committed working tree and index")
+    if any(not entry.startswith("H ") for entry in git("ls-files", "-v", "-z").split("\0") if entry):
+        raise ValueError("letter approval forbids assume-unchanged and skip-worktree index entries")
+    if git("ls-files", "--others", "--ignored", "--exclude-standard", "--", "assets/js/"):
+        raise ValueError("letter approval forbids even ignored untracked assets/js files")
+    for name, digest in approved.items():
+        target = ROOT / name
+        base_mode = git("ls-tree", "origin/main", "--", name)
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or target.stat().st_mode & 0o111
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                or (not base_mode and name != "scripts/tests/test_letter_vote_approval.py")
+                or (base_mode and not base_mode.startswith("100644 "))):
+            raise ValueError(f"{name}: expected regular non-executable committed file with valid base")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if hashlib.sha256(committed).hexdigest() != digest or target.read_bytes() != committed:
+            raise ValueError(f"{name}: digest must match committed and working bytes")
+        if name == LETTER_VOTE_SCRIPT:
+            baseline = subprocess.run(["git", "-C", str(ROOT), "show", f"origin/main:{name}"],
+                                      check=True, capture_output=True).stdout
+            if hashlib.sha256(baseline).hexdigest() != LETTER_VOTE_BASE_SHA256:
+                raise ValueError("letter script baseline SHA-256 mismatch")
+            for before, after in LETTER_VOTE_REPLACEMENTS:
+                before, after = before.encode(), after.encode()
+                if baseline.count(before) != 1:
+                    raise ValueError("letter script baseline substitution is not unique")
+                baseline = baseline.replace(before, after, 1)
+            if committed != baseline:
+                raise ValueError("letter script must contain exactly the two approved text substitutions")
+    return approved
+
+
 def unique_json_fields(pairs):
     record = {}
     for key, value in pairs:
@@ -714,10 +820,25 @@ def main():
     ap.add_argument("--poll-copy-approval-file", help="German-only private hash-bound poll-copy-sandbox authorization JSON")
     ap.add_argument("--deletion-approval-file", help="German-only private exact nov16 page-deletion authorization JSON")
     ap.add_argument("--nov16-maintenance-approval-file", help="German-only private exact nov16 checker-maintenance authorization JSON")
+    ap.add_argument("--letter-vote-approval-file", help="German-only private exact bilingual letter-copy approval JSON")
+    ap.add_argument("--letter-vote-maintenance-approval-file", help="German-only private exact letter-vote checker-maintenance approval JSON")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    letter_copy, letter_maintenance = {}, {}
+    for filename, purpose in ((args.letter_vote_approval_file, "letter-vote-copy"),
+                              (args.letter_vote_maintenance_approval_file, "letter-vote-maintenance")):
+        try:
+            approved = load_letter_vote_approval(filename, purpose, args.base, args.url)
+            if purpose == "letter-vote-copy":
+                letter_copy = approved
+            else:
+                letter_maintenance = approved
+            if approved:
+                notes.append(f"German-only {purpose} approval; preview only, normal team review and vote remain.")
+        except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+            blocking.append(f"Invalid {purpose} approval: {error}")
     try:
         approved_deletions = load_nov16_deletion_approval(args.deletion_approval_file, args.base, args.url)
     except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
@@ -782,6 +903,9 @@ def main():
         ext = Path(path).suffix.lower()
         verb = {"A": "added", "M": "changed", "D": "deleted"}.get(status, "changed")
 
+        if path in letter_copy:
+            changes.append(f"German-authorized bilingual letter text {verb}: {path}")
+            continue
         if poll_copy_approval and path == POLL_COPY_SCRIPT:
             base_mode = git("ls-tree", args.base, "--", path)
             if status not in {"A", "M"} or (base_mode and not base_mode.startswith("100644 ")):
@@ -789,7 +913,7 @@ def main():
             else:
                 changes.append(f"German-authorized poll-copy script {verb}: {path}")
             continue
-        if path in approved_maintenance or path in nov16_maintenance:
+        if path in approved_maintenance or path in nov16_maintenance or path in letter_maintenance:
             if status not in {"A", "M"}:
                 blocking.append(f"{path}: maintenance authorizes additions/updates only, never deletion or type changes.")
             else:

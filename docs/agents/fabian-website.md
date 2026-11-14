@@ -280,6 +280,23 @@ python3 scripts/sandbox_check.py --base origin/main \
 
 Missing, stale, insecure or mismatched records block. If base, checkout or HEAD changes, reverify and regenerate the records. Verify the deployed sandbox revision and independently check each deleted route is absent; the normal URL checker does not fetch deleted pages. Other holds and the normal team review/vote remain. Before publication, independently verify current remote main, the exact voted sandbox revision, approved checker and maintenance file bytes, and the merge tree and exact four deleted files against the reviewed base. If main has materially drifted, stop and review again rather than reusing stale approvals. After publication, verify all four missing production URLs and the current pages and sitemap.
 
+### Narrow owner-approved letter date correction in `letter-vote-nov16`
+
+German authorized only the two English and Spanish date-sentence substitutions in `assets/js/letter-content.js`, with the narrowly scoped checker and supporting maintenance required for sandbox review. This does not authorize any other letter wording (including the separate SACC issue), JavaScript behavior, or live publication. Preserve the other bytes exactly, verify both language outputs without sending any messages, and use separate private provenance-bound records for the letter content and checker maintenance. All other restrictions and the normal team review and vote remain.
+
+Verify the original owner message and the exact question it answered. Keep two distinct operator-owned non-symlink regular JSON records outside the checkout, each mode 0600. Each has exactly `version`, `purpose`, `sandbox_id`, `authorizer_id`, `source`, `checkout`, `base_commit`, `head_commit` and `files`. The source contains exactly `channel_id`, `message_ts` and `question_ts`. The checker pins the approved provenance by digest, the exact base commit and baseline script bytes. The content record's purpose is `letter-vote-copy` and lists only `assets/js/letter-content.js` and its committed SHA-256. The maintenance record's purpose is `letter-vote-maintenance` and lists exactly `scripts/sandbox_check.py`, `scripts/tests/test_letter_vote_approval.py`, `docs/agents/fabian-website.md`, `docs/agents/fabian-website-cards.md`, `docs/help/team-help.md`, `docs/help/team-help.pdf`, and `docs/help/reviewed-sources.json`, each with its committed SHA-256. Both records bind the current sandbox checkout, exact base and reviewed HEAD. Build help and test before committing; create records only after the reviewed commit is final.
+
+Independently verify the expected remote, fresh refs and reviewed checker bytes before executing it; the checker cannot attest itself. Then run:
+
+```bash
+python3 scripts/sandbox_check.py --base origin/main \
+  --letter-vote-approval-file /private/letter-copy.json \
+  --letter-vote-maintenance-approval-file /private/letter-maintenance.json
+# Add --url https://forabrighterevanston.org/sandbox/letter-vote-nov16/ after deployment.
+```
+
+The checker requires a clean committed checkout and allows no other changes, including other scripts or normally editable content, under this narrow approval. Verify the deployed script's full bytes, the two generated letters in both languages and preserved behavior before sharing the preview. If base or HEAD changes, stop and reverify rather than reusing stale records. The records do not authorize publication; normal review and team voting apply.
+
 ### Not allowed (structural, unless explicitly excepted above)
 
 Explain this with **Message W11**. For the page-specific CSS and unchanged-workbook classes above, ask German or Kerstin. The exact two-page URL-copy action and its maintenance require German alone; other restricted work still needs German’s separate authorization:
@@ -519,7 +536,7 @@ The site rebuilds without it. Check that `/sandbox/<id>/` no longer loads (HTTP 
 Triggered by "publish", "send it to publish", "let's vote", or similar. A vote never starts without this review.
 
 1. Acknowledge with **Message W10**, react 👀, and start the status message.
-2. **Bring the sandbox up to date with the live site**, so the vote covers what will really go live:
+2. **Bring the sandbox up to date with the live site**, so the vote covers what will really go live. For the exact `letter-vote-nov16` exception, first fetch and compare the expected remote, base and HEAD. The base is pinned: if it changed, stop and review the new base and authorization instead of automatically merging or pushing. For the reviewed pinned candidate, independently verify the committed checker and both private approvals before any push; the generic commands below do not waive that check.
 
    ```bash
    git checkout sandbox/<id> && git pull --ff-only origin sandbox/<id>
@@ -555,7 +572,7 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    cat /tmp/review-<id>/*.txt; python3 -c "import json;print(*json.load(open('/tmp/review-<id>/screens.json'))['problems'],sep='\n')"
    ```
 
-   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes.
+   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes. For `letter-vote-nov16`, use its two distinct approval flags from section 5, independently verify the checker, compare the deployed script's full bytes against the approved revision, and exercise both language generators without sending messages.
 
    Both scripts already work in parallel inside: `sandbox_check.py` checks links about 16 at a time, and `sandbox_screens.py` loads about 6 pages at a time (`--jobs` changes that). The exit codes no longer show in this form; read the outputs: `RESULT:` in `rules.txt`, `problems` in `screens.json`, and the verdict line of each mockup report. If `screens.json` isn't JSON (Playwright error), rerun that one script on its own.
 
