@@ -14,6 +14,16 @@
 
 <div class="hm">
 
+<aside class="alert-bar" aria-label="{% if page.lang == 'es' %}Encuentro comunitario{% else %}Community meet-up{% endif %}">
+  <div class="alert-bar__inner">
+    {% if page.lang == 'es' %}
+    <p class="alert-bar__text hm-foot__text">Encuentro Unidos por Nuestras Escuelas · Domingo 15 de noviembre · 1–2 p. m. · Twiggs Park, área de juegos en Payne St.</p>
+    {% else %}
+    <p class="alert-bar__text hm-foot__text">United for Our Schools Meet-Up · Sunday, Nov. 15 · 1–2 p.m. · Twiggs Park, playground on Payne St.</p>
+    {% endif %}
+  </div>
+</aside>
+
 <section class="hm-hero" aria-labelledby="hero-title">
   <div class="hm-wrap hm-hero__inner">
     <div class="hm-hero__copy">
