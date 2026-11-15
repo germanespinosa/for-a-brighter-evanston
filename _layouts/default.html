@@ -95,7 +95,9 @@
   {%- endif %}
 
   {% include header.html %}
+  {%- unless page.is_home %}
   {% include alert-bar.html %}
+  {%- endunless %}
 
   <main id="main" tabindex="-1">
     {{ content }}
