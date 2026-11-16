@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-12",
+      "source": "Evanston Wire",
+      "site": "Evanston Wire",
+      "url": "https://evanstonwire.com/articles/district-65-board-saves-sacc-child-care-with-union-deal-mwcq8ojf",
+      "title": "District 65 board saves SACC child care with union deal",
+      "summary": "District 65 and its child care employees’ union reached an agreement to preserve the before- and after-school SACC program. The article reports that updated financial projections assume a 12% fee increase for fiscal year 2028; it is not an adopted fee schedule.",
+      "title_es": "La junta del Distrito 65 salva el programa de cuidado infantil SACC mediante un acuerdo sindical",
+      "summary_es": "El Distrito 65 y el sindicato de empleados de cuidado infantil llegaron a un acuerdo para preservar el programa SACC antes y después de clases. El artículo informa que las proyecciones financieras actualizadas suponen un aumento de tarifas del 12% para el año fiscal 2028; no se trata de una tarifa aprobada."
+    },
+    {
       "date": "2026-11-14",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
