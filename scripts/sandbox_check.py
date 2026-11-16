@@ -223,8 +223,11 @@ class LinkParser(HTMLParser):
         self.links = []
         self.metadata = {}
         self.in_head = False
+        self.iframes = []
 
     def handle_starttag(self, tag, attrs):
+        if tag == "iframe":
+            self.iframes.append(attrs)
         a = dict(attrs)
         if tag == "head":
             self.in_head = True
@@ -241,6 +244,74 @@ class LinkParser(HTMLParser):
             self.in_head = False
 
     handle_startendtag = handle_starttag
+
+
+class DiscoveryParser(HTMLParser):
+    """Collect approved sections as normalized HTML events and reject inert ancestors."""
+
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+
+    def __init__(self, marker=("aria-labelledby", "video-title")):
+        super().__init__()
+        self.marker = marker
+        self.sections = []
+        self.depth = 0
+        self.ancestors = []
+        self.inert = False
+
+    def handle_starttag(self, tag, attrs):
+        values = dict(attrs)
+        style = re.sub(r"\s+", "", values.get("style") or "").lower()
+        hidden = (tag in {"template", "head", "noscript"} or "hidden" in values or "inert" in values
+                  or (tag == "details" and "open" not in values)
+                  or (values.get("aria-hidden") or "").lower() == "true"
+                  or "display:none" in style or "visibility:hidden" in style)
+        if not self.depth and tag == "section" and self.marker in attrs:
+            self.sections.append([])
+            self.depth = 1
+            self.inert |= hidden or any(flag for _, flag in self.ancestors)
+        elif self.depth and tag == "section":
+            self.depth += 1
+        if self.depth:
+            self.sections[-1].append(("start", tag, tuple(sorted(attrs, key=repr))))
+        if tag not in self.VOID:
+            self.ancestors.append((tag, hidden))
+
+    def handle_endtag(self, tag):
+        if self.depth:
+            self.sections[-1].append(("end", tag))
+            if tag == "section":
+                self.depth -= 1
+        for index in range(len(self.ancestors) - 1, -1, -1):
+            if self.ancestors[index][0] == tag:
+                del self.ancestors[index:]
+                break
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        self.handle_endtag(tag)
+
+    def handle_data(self, data):
+        text = " ".join(data.split())
+        if self.depth and text:
+            self.sections[-1].append(("text", text))
+
+
+def expected_discovery(lang, base_url):
+    template = (ROOT / "_includes/pages/home.html").read_text(encoding="utf-8")
+    start, end = template.index(VIDEO_START.decode()), template.index(VIDEO_END.decode())
+    section = template[start:end]
+    conditional = re.search(r"{% if page.lang == 'es' %}(.*?){% else %}(.*?){% endif %}", section, re.S)
+    arrow = re.search(r"{%- capture arrow -%}(.*?){%- endcapture -%}", template, re.S)
+    if not conditional or not arrow:
+        raise ValueError("approved video discovery template cannot be rendered")
+    section = section[:conditional.start()] + conditional.group(1 if lang == "es" else 2) + section[conditional.end():]
+    section = re.sub(r"{{ '(.*?)' \| relative_url }}",
+                     lambda m: urlsplit(base_url).path + m.group(1).lstrip("/"), section)
+    section = section.replace("{{ arrow }}", arrow.group(1))
+    parser = DiscoveryParser()
+    parser.feed(section)
+    return parser.sections
 
 
 class TemplateSafetyParser(HTMLParser):
@@ -308,6 +379,18 @@ def fetch_sharing_image(url):
         return error.code, "", False
     except Exception:
         return 0, "", False
+
+
+def fetch_approved_video_card(url, digest):
+    """Fetch the complete bounded response; any network error or mismatch blocks."""
+    req = urllib.request.Request(url, headers={"User-Agent": "fabian-sandbox-check"})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as response:
+            data = response.read(MEDIA_MAX_BYTES + 1)
+            return (response.status == 200 and response.headers.get_content_type().startswith("image/")
+                    and len(data) <= MEDIA_MAX_BYTES and hashlib.sha256(data).hexdigest() == digest)
+    except Exception:
+        return False
 
 
 # These identity bindings enforce German's explicit same-class delegation;
@@ -747,10 +830,77 @@ HERO_MAINTENANCE = frozenset({
 # Fail closed until an independent review of the final non-checker inventory.
 # The source manifest refers back to this checker, so pin its other entries
 # canonically and bind its exact bytes via the separately attested record.
-HERO_MAINTENANCE_INVENTORY_SHA256 = "03d5723a74f2e34fb2ce09266107bfbd3a2a4f421c757cbbb0f4776c6665c2e5"
+HERO_MAINTENANCE_INVENTORY_SHA256 = "c8d375b56e8272e5fc65c29504695ee96d7531fb5f123f91beb94e99b56001ca"
+
+# This is the exact original human approval record, not a new approval or vote.
+VIDEO_APPROVAL_SHA256 = "e2881eb4e9f724f69290d033ae9bf5efef9e50ace29f0f1435b175b09075a30f"
+VIDEO_SOURCE_SHA256 = "beebcaf5faf1610228ad02fd04622426a31aecf02f1177a8ae565a7a918bcc7a"
+VIDEO_CHECKOUT = "/home/german/fabian-workspaces/homepage-hero-heather"
+VIDEO_AUTHORIZATION_HEAD = "959fa91be86ad0fe5feb852dda21469bde323fad"
+VIDEO_TEMPLATE_SHA256 = "2f8e069bf9b3d2f14d37f9c825b001a1efcbf0b8dee3a9956d709a37f65b03eb"
+VIDEO_FILES = {
+    "home/video/index.html": "6e7dc095d395300bcc19230ae4ae9010dc54b0ec910051dca6eb3133a90be267",
+    "es/video/index.html": "d56fa9c2c2a2fbdb776248ec7ecc5dc5dcbec51cbf15b80053efcd629248f5ff",
+    "assets/img/share-video-en.png": "9718c494e5974ca12d9a797d15e51fca696ce302c62c439548844f130934d8a6",
+    "assets/img/share-video-es.png": "fe86fa77a6821803c231694cc44b58471c9297fc8c5db4690e9f8bb07986b7cd",
+}
+VIDEO_START = b'<section class="hm-section hm-section--white" aria-labelledby="video-title">'
+VIDEO_END = b'<section class="hm-section hm-section--cream" id="the-problem"'
 
 
-def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha256=None):
+def load_youtube_approval(filename, base, sandbox_url):
+    if not filename:
+        return False
+    path = Path(filename).absolute()
+    if any(p.is_symlink() for p in (path, *path.parents)) or path.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError("YouTube approval must be outside checkout with no symlinks")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600:
+            raise ValueError("YouTube approval must be operator-owned regular mode 0600")
+        raw = stream.read()
+    if hashlib.sha256(raw).hexdigest() != VIDEO_APPROVAL_SHA256:
+        raise ValueError("YouTube approval bytes differ from the verified original provenance")
+    record = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_json_fields)
+    source_keys = {"channel_id", "authorizer_id", "question_ts", "answer_ts", "answer"}
+    keys = source_keys | {"purpose", "video_url", "video_id", "scope"}
+    if (not isinstance(record, dict) or set(record) != keys
+            or not all(isinstance(record[key], str) for key in keys)
+            or record["purpose"] != "youtube-embed-exception-for-video-preview-and-safety-checks"
+            or record["video_url"] != "https://youtu.be/EMAzDgqHdYI"
+            or record["video_id"] != "EMAzDgqHdYI"
+            or record["scope"] != "Only this video’s YouTube player and necessary safety checks; preserve hero and normal team vote. No approval to bypass vote."
+            or hashlib.sha256(json.dumps({key: record[key] for key in source_keys}, sort_keys=True,
+                                         separators=(",", ":")).encode()).hexdigest() != VIDEO_SOURCE_SHA256
+            or str(ROOT.resolve()) != VIDEO_CHECKOUT or base != "origin/main"):
+        raise ValueError("YouTube approval schema, provenance or exact checkout mismatch")
+    if (git("branch", "--show-current").strip() != "sandbox/homepage-hero-heather"
+            or git("rev-parse", "origin/main^{commit}").strip() != HERO_BASE_COMMIT
+            or git("merge-base", "origin/main", "HEAD").strip() != HERO_BASE_COMMIT
+            or subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor",
+                               VIDEO_AUTHORIZATION_HEAD, "HEAD"], capture_output=True).returncode):
+        raise ValueError("YouTube approval branch, base or authorization HEAD mismatch")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/homepage-hero-heather" or url.query or url.fragment):
+            raise ValueError("YouTube approval sandbox URL mismatch")
+    for name, digest in VIDEO_FILES.items():
+        target = ROOT / name
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or target.stat().st_mode & 0o111 or target.stat().st_size > MEDIA_MAX_BYTES
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                or git("ls-tree", "origin/main", "--", name)):
+            raise ValueError(f"{name}: approved video file must be a new regular file")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if hashlib.sha256(committed).hexdigest() != digest or target.read_bytes() != committed:
+            raise ValueError(f"{name}: video file differs from the exact approved bytes")
+    return True
+
+
+def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha256=None, video=False):
     """Trusted, independently reviewed hashes; never infer approval from assets."""
     if not filename:
         return {}
@@ -831,7 +981,16 @@ def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha
                 raise ValueError(f"{name}: reviewed hero input must be a regular existing file")
             content = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
                                      check=True, capture_output=True).stdout
-            if hashlib.sha256(content).hexdigest() != digest or target.read_bytes() != content:
+            if name == HERO_TEMPLATE and video:
+                if (hashlib.sha256(content).hexdigest() != VIDEO_TEMPLATE_SHA256
+                        or content.count(VIDEO_START) != 1 or content.count(VIDEO_END) != 1):
+                    raise ValueError("video discovery template differs from approved bytes")
+                start, end = content.index(VIDEO_START), content.index(VIDEO_END)
+                if end <= start or hashlib.sha256(content[:start] + content[end:]).hexdigest() != digest:
+                    raise ValueError("video discovery must preserve the entire reviewed hero template")
+            elif hashlib.sha256(content).hexdigest() != digest:
+                raise ValueError(f"{name}: hero input must match independently reviewed exact bytes")
+            if target.read_bytes() != content:
                 raise ValueError(f"{name}: hero input must match independently reviewed exact bytes")
         # Parse a deliberately narrow YAML subset identically with and without PyYAML.
         # Reject extra keys, aliases, foreign paths, duplicates and unsafe CSS values.
@@ -883,7 +1042,10 @@ def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha
         diff = git("diff", "--no-renames", "--name-status", "-z", "origin/main...HEAD").split("\0")
         entries = list(zip(diff[0::2], diff[1::2]))
         images = {name: status for status, name in entries if name.startswith(MEDIA_DIRS)}
-        if images != {name: "A" for name in HERO_PHOTO_SHA256}:
+        expected_images = {name: "A" for name in HERO_PHOTO_SHA256}
+        if video:
+            expected_images.update({name: "A" for name in VIDEO_FILES if name.startswith(MEDIA_DIRS)})
+        if images != expected_images:
             raise ValueError("hero photo image change inventory must be exactly the ten approved additions")
         for name, digest in HERO_PHOTO_SHA256.items():
             target = ROOT / name
@@ -948,6 +1110,8 @@ def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha
     # editable content is not a separate authorization for this exception.
     additions = {HERO_SCRIPT, *HERO_PHOTO_SHA256,
                  "scripts/tests/test_homepage_hero_approval.py", "scripts/tests/test_hero_slideshow.py"}
+    if video:
+        additions.update(VIDEO_FILES)
     modifications = {HERO_CSS, HERO_TEMPLATE, HERO_DATA, "_layouts/default.html",
                      "_data/i18n/en.yml", "_data/i18n/es.yml", *HERO_PAGES,
                      *(HERO_MAINTENANCE - additions)}
@@ -1154,22 +1318,30 @@ def main():
     ap.add_argument("--homepage-hero-maintenance-review-sha256", help="independently reviewed SHA-256 of the exact maintenance record bytes")
     ap.add_argument("--homepage-hero-publication-approval-file", help="separate private publication-safeguards authorization JSON (not a vote)")
     ap.add_argument("--homepage-hero-publication-review-sha256", help="independently attested SHA-256 of exact publication-safeguards record bytes")
+    ap.add_argument("--youtube-approval-file", help="original private exact YouTube exception record for the combined hero candidate")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    try:
+        video = load_youtube_approval(args.youtube_approval_file, args.base, args.url)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        video = False
+        blocking.append(f"Invalid YouTube approval: {error}")
     hero_assets, hero_maintenance = {}, {}
     for filename, purpose in ((args.homepage_hero_approval_file, "homepage-hero-assets"),
                               (args.homepage_hero_maintenance_approval_file, "homepage-hero-maintenance")):
         try:
             approved = load_homepage_hero_approval(filename, purpose, args.base, args.url,
-                                                  args.homepage_hero_maintenance_review_sha256)
+                                                  args.homepage_hero_maintenance_review_sha256, video)
             if purpose == "homepage-hero-assets":
                 hero_assets = approved
             else:
                 hero_maintenance = approved
         except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
             blocking.append(f"Invalid {purpose} approval: {error}")
+    if video and not (hero_assets and hero_maintenance):
+        blocking.append("YouTube exception requires both independently reviewed hero approvals for this exact HEAD.")
     hero_publication = False
     try:
         hero_publication = load_hero_publication_safeguards(
@@ -1431,6 +1603,9 @@ def main():
         base_body = split_front_matter(base_text)[1] if base_text is not None else ""
         for rx, what in UNSAFE:
             if len(rx.findall(body)) > len(rx.findall(base_body)):
+                if (video and hero_assets and hero_maintenance and path in VIDEO_FILES
+                        and what == "an embedded frame or object"):
+                    continue  # exact pinned page bytes contain only the reviewed YouTube player
                 blocking.append(f"{label}: adds {what}, which isn't allowed in page content.")
         for rx, what in WARN_PATTERNS:
             if len(rx.findall(body)) > len(rx.findall(base_body)):
@@ -1525,6 +1700,30 @@ def main():
                 continue
             parser = LinkParser()
             parser.feed(html)
+            if video and hero_assets and hero_maintenance and path in HERO_PAGES:
+                actual = DiscoveryParser()
+                actual.feed(html)
+                try:
+                    expected = expected_discovery(fm.get("lang"), base_url)
+                except (OSError, ValueError):
+                    expected = []
+                if len(expected) != 1 or actual.sections != expected or actual.depth or actual.inert:
+                    blocking.append(f"{url}: deployed video discovery content or sandbox-relative localized link differs from the approved rendering.")
+            if video and hero_assets and hero_maintenance and path in VIDEO_FILES:
+                approved = LinkParser()
+                approved.feed(body)
+                if (len(parser.iframes) != 1 or len(approved.iframes) != 1
+                        or sorted(parser.iframes[0], key=repr) != sorted(approved.iframes[0], key=repr)):
+                    blocking.append(f"{url}: deployed video player must be the single exact approved iframe and attributes.")
+                rendered_body = re.sub(r"{{ '(.*?)' \| relative_url }}",
+                                       lambda m: urlsplit(base_url).path + m.group(1).lstrip("/"), body)
+                for marker in (("class", "page-hero"), ("aria-label", "Video")):
+                    actual_section, expected_section = DiscoveryParser(marker), DiscoveryParser(marker)
+                    actual_section.feed(html)
+                    expected_section.feed(rendered_body)
+                    if (len(expected_section.sections) != 1 or actual_section.depth or actual_section.inert
+                            or actual_section.sections != expected_section.sections):
+                        blocking.append(f"{url}: deployed video content differs from the approved rendering.")
             if st == "A":
                 sharing_description = fm.get("share_description") or fm.get("description", "")
                 expected = {"og:title": fm.get("share_title") or fm.get("title"),
@@ -1541,6 +1740,10 @@ def main():
                     image_status, mime, has_content = fetch_sharing_image(image_url)
                     if image_status != 200 or not mime.startswith("image/") or not has_content:
                         blocking.append(f"{url}: sharing image {image_url} must load with image MIME and nonempty content (HTTP {image_status}, MIME {mime!r}).")
+                    if (video and hero_assets and hero_maintenance and path in VIDEO_FILES
+                            and (image.lstrip("/") not in VIDEO_FILES
+                                 or not fetch_approved_video_card(image_url, VIDEO_FILES[image.lstrip("/")]))):
+                        blocking.append(f"{url}: sharing image {image_url} bytes could not be verified against the approved video card.")
             for tag, link in parser.links:
                 full = urljoin(url, link)
                 parts = urlsplit(full)

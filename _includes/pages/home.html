@@ -68,6 +68,22 @@
   </div>
 </section>
 
+<section class="hm-section hm-section--white" aria-labelledby="video-title">
+  <div class="hm-wrap">
+    {% if page.lang == 'es' %}
+    <p class="hm-eyebrow">Video</p>
+    <h2 class="hm-h2" id="video-title">Podemos mantener las luces encendidas</h2>
+    <p class="hm-body">Un mensaje de esperanza para la Junta Escolar del D65.</p>
+    <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/es/video/' | relative_url }}">Ver el video {{ arrow }}</a>
+    {% else %}
+    <p class="hm-eyebrow">Video</p>
+    <h2 class="hm-h2" id="video-title">We Can Keep The Lights On</h2>
+    <p class="hm-body">A message of hope for the D65 School Board.</p>
+    <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/home/video/' | relative_url }}">Watch the video {{ arrow }}</a>
+    {% endif %}
+  </div>
+</section>
+
 <section class="hm-section hm-section--cream" id="the-problem" aria-labelledby="problem-title">
   <div class="hm-wrap">
     <p class="hm-eyebrow">{{ h.problem.eyebrow }}</p>

@@ -8,7 +8,12 @@ import re
 import subprocess
 import sys
 import tempfile
+import threading
 import unittest
+from contextlib import contextmanager
+from html import escape
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlsplit
 from unittest.mock import patch
 
 CHECKER = Path(__file__).resolve().parents[1] / 'sandbox_check.py'
@@ -423,6 +428,325 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         server('update-ref', 'refs/heads/main', base)
         self.assertEqual(run(*push, env=env, check=False).returncode, 0)
         self.assertEqual(server('rev-parse', 'refs/heads/main'), candidate)
+
+    def prepare_combined_video(self, test_origin=None):
+        repo = CHECKER.parent.parent
+        old_base = self.base
+        preview_tree = self.git('rev-parse', 'HEAD^{tree}').strip()
+        self.git('checkout', '-q', 'main')
+        baseline = subprocess.run(['git', '-C', str(repo), 'show', 'origin/main:_includes/pages/home.html'],
+                                  check=True, capture_output=True).stdout
+        self.write('_includes/pages/home.html', baseline)
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'real template baseline')
+        self.base = self.git('rev-parse', 'HEAD').strip()
+        self.git('update-ref', 'refs/remotes/origin/main', self.base)
+        preview = self.git('commit-tree', preview_tree, '-p', self.base, '-m', 'preview').strip()
+        self.git('checkout', '-q', 'sandbox/homepage-hero-heather')
+        self.git('reset', '--hard', preview)
+        checker = self.root / 'scripts/sandbox_check.py'
+        text = checker.read_text().replace(old_base, self.base)
+        text = text.replace(hashlib.sha256(TEMPLATE_BASE).hexdigest(), hashlib.sha256(baseline).hexdigest())
+        text = text.replace('/home/german/fabian-workspaces/homepage-hero-heather', str(self.root))
+        text = text.replace('959fa91be86ad0fe5feb852dda21469bde323fad', self.base)
+        if test_origin:
+            # Only the test fixture rebinds the approved origin to its local HTTP server.
+            text = text.replace('url.scheme != "https" or url.netloc != "forabrighterevanston.org"',
+                                f'url.scheme != "http" or url.netloc != "{urlsplit(test_origin).netloc}"')
+        record = {'purpose': 'youtube-embed-exception-for-video-preview-and-safety-checks',
+                  'channel_id': 'CHANNEL_FIXTURE', 'authorizer_id': 'AUTHOR_FIXTURE',
+                  'question_ts': 'QUESTION_FIXTURE', 'answer_ts': 'ANSWER_FIXTURE',
+                  'answer': 'I approve YouTube exception', 'video_url': 'https://youtu.be/EMAzDgqHdYI',
+                  'video_id': 'EMAzDgqHdYI',
+                  'scope': 'Only this video’s YouTube player and necessary safety checks; preserve hero and normal team vote. No approval to bypass vote.'}
+        raw = (json.dumps(record, indent=2) + '\n').encode()
+        source = {key: record[key] for key in ('channel_id', 'authorizer_id', 'question_ts', 'answer_ts', 'answer')}
+        source_hash = hashlib.sha256(json.dumps(source, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        text = re.sub(r'VIDEO_APPROVAL_SHA256 = "[a-f0-9]{64}"',
+                      f'VIDEO_APPROVAL_SHA256 = "{hashlib.sha256(raw).hexdigest()}"', text)
+        text = re.sub(r'VIDEO_SOURCE_SHA256 = "[a-f0-9]{64}"',
+                      f'VIDEO_SOURCE_SHA256 = "{source_hash}"', text)
+        # In this fixture, the original reviewed hero is the real template minus
+        # the exact approved discovery insertion, not the toy hero above.
+        full = (repo / '_includes/pages/home.html').read_bytes()
+        start = full.index(b'<section class="hm-section hm-section--white" aria-labelledby="video-title">')
+        end = full.index(b'<section class="hm-section hm-section--cream" id="the-problem"', start)
+        reviewed = full[:start] + full[end:]
+        old_hash = hashlib.sha256(TEMPLATE_REVIEWED).hexdigest()
+        text = text.replace(old_hash, hashlib.sha256(reviewed).hexdigest())
+        checker.write_text(text)
+        self.write('_includes/pages/home.html', full)
+        for name in ('home/video/index.html', 'es/video/index.html',
+                     'assets/img/share-video-en.png', 'assets/img/share-video-es.png'):
+            self.write(name, (repo / name).read_bytes())
+        # Re-bind the fixture's checker and generated source manifest.
+        manifest_path = self.root / 'docs/help/reviewed-sources.json'
+        manifest = json.loads(manifest_path.read_text())
+        manifest['scripts/sandbox_check.py'] = hashlib.sha256(checker.read_bytes()).hexdigest()
+        manifest_path.write_text(json.dumps(manifest))
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'combined fixture')
+        self.records = [self.record('homepage-hero-assets', [CSS, JS]),
+                        self.record('homepage-hero-maintenance', MAINTENANCE)]
+        approval = Path(self.tmp.name) / 'video-approval.json'
+        approval.write_bytes(raw)
+        approval.chmod(0o600)
+        return approval
+
+    @contextmanager
+    def video_server(self):
+        routes = {}
+
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                status, mime, body = routes.get(self.path, (404, 'text/plain', b'missing'))
+                self.send_response(status)
+                self.send_header('Content-Type', mime)
+                self.end_headers()
+                if self.command != 'HEAD':
+                    self.wfile.write(body)
+            do_HEAD = do_GET
+
+            def log_message(self, *args):
+                pass
+
+        server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        base = f'http://127.0.0.1:{server.server_port}/sandbox/homepage-hero-heather/'
+        try:
+            yield base, routes
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+
+    def populate_video_server(self, base, routes):
+        prefix = urlsplit(base).path
+        template = (self.root / '_includes/pages/home.html').read_text()
+        section = template[template.index('<section class="hm-section hm-section--white" aria-labelledby="video-title">'):]
+        section = section[:section.index('</section>') + len('</section>')]
+        arrow = re.search(r'{%- capture arrow -%}(.*?){%- endcapture -%}', template).group(1)
+        for lang, route, page in [('en', '', 'home/video/index.html'), ('es', 'es/', 'es/video/index.html')]:
+            conditional = re.search(r"{% if page.lang == 'es' %}(.*?){% else %}(.*?){% endif %}", section, re.S)
+            branch = conditional.group(1 if lang == 'es' else 2)
+            home = section[:conditional.start()] + branch + section[conditional.end():]
+            target = 'es/video/' if lang == 'es' else 'home/video/'
+            home = re.sub(r"{{ '.*?' \| relative_url }}", prefix + target, home).replace('{{ arrow }}', arrow)
+            routes[prefix + route] = (200, 'text/html', home.encode())
+            source = (self.root / page).read_text()
+            front, body = source.split('---', 2)[1:]
+            fields = dict(re.findall(r'^(\w+):\s*(.*)$', front, re.M))
+            fields = {k: v.strip('"') for k, v in fields.items()}
+            metadata = {'og:title': fields['share_title'], 'og:description': fields['share_description'],
+                        'og:image': base + fields['share_image'].lstrip('/'), 'twitter:card': 'summary_large_image'}
+            head = ''.join(f'<meta {"name" if k.startswith("twitter:") else "property"}="{k}" content="{escape(v, quote=True)}">' for k, v in metadata.items())
+            body = re.sub(r"{{ '(.*?)' \| relative_url }}", lambda m: prefix + m.group(1).lstrip('/'), body)
+            routes[prefix + target] = (200, 'text/html', ('<html><head>' + head + '</head><body>' + body + '</body></html>').encode())
+            image = fields['share_image'].lstrip('/')
+            routes[prefix + image] = (200, 'image/png', (self.root / image).read_bytes())
+
+    def test_deployed_video_player_must_match_approved_rendering(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            code, report = self.check(extra=args)
+            self.assertEqual(code, 0, report)
+            for route in ('home/video/', 'es/video/'):
+                path = urlsplit(base).path + route
+                original = routes[path]
+                mutations = [
+                    lambda b: b.replace(b'www.youtube.com', b'evil.example'),
+                    lambda b: b.replace(b'EMAzDgqHdYI', b'OTHERVIDEO1'),
+                    lambda b: b.replace(b'height="240"', b'height="241"'),
+                    lambda b: b.replace(b'allowfullscreen', b'allowfullscreen onload="evil()"'),
+                    lambda b: b + b'<iframe src="https://evil.example/"></iframe>',
+                ]
+                for mutate in mutations:
+                    with self.subTest(route=route, mutation=mutate):
+                        changed = mutate(original[2])
+                        self.assertNotEqual(changed, original[2])
+                        routes[path] = (200, 'text/html', changed)
+                        code, report = self.check(extra=args)
+                        self.assertEqual(code, 1, report)
+                        self.assertTrue(any('video' in item.lower() for item in report['blocking']), report)
+                routes[path] = original
+
+    def test_deployed_homepage_video_discovery_is_localized_and_unchanged(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            for route, target, label in [('', 'home/video/', 'Watch the video'),
+                                         ('es/', 'es/video/', 'Ver el video')]:
+                path = urlsplit(base).path + route
+                original = routes[path]
+                href = (urlsplit(base).path + target).encode()
+                wrong_localized = (urlsplit(base).path + ('es/video/' if route == '' else 'home/video/')).encode()
+                for mutate in (lambda b: b.replace(href, b'/home/video/'),
+                               lambda b: b.replace(href, wrong_localized),
+                               lambda b: b.replace(href, b'https://evil.example/video/'),
+                               lambda b: b.replace(label.encode(), b'Changed words'),
+                               lambda b: b.replace(b'<section', b'<aside', 1).replace(b'</section>', b'</aside>', 1),
+                               lambda b: b'<template>' + b + b'</template>',
+                               lambda b: b'<div hidden>' + b + b'</div>',
+                               lambda b: b''):
+                    with self.subTest(route=route, mutation=mutate):
+                        changed = mutate(original[2])
+                        self.assertNotEqual(changed, original[2])
+                        routes[path] = (200, 'text/html', changed)
+                        code, report = self.check(extra=args)
+                        self.assertEqual(code, 1, report)
+                        self.assertTrue(any('discovery' in item.lower() for item in report['blocking']), report)
+                routes[path] = original
+
+    def test_deployed_video_body_matches_approved_content(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            for route, phrase in [('home/video/', b'Video in English with Spanish subtitles included in the video.'),
+                                  ('es/video/', 'Video en inglés con subtítulos en español incluidos en el video.'.encode())]:
+                path = urlsplit(base).path + route
+                original = routes[path]
+                routes[path] = (200, 'text/html', original[2].replace(phrase, b'Changed deployed content'))
+                self.assertNotEqual(routes[path], original)
+                code, report = self.check(extra=args)
+                self.assertEqual(code, 1, report)
+                self.assertTrue(any('video' in item.lower() for item in report['blocking']), report)
+                routes[path] = original
+
+    def test_deployed_video_rejects_inert_or_closed_ancestors_on_every_route(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            for route in ('', 'es/', 'home/video/', 'es/video/'):
+                path = urlsplit(base).path + route
+                original = routes[path]
+                for opening, closing in ((b'<div inert>', b'</div>'),
+                                         (b'<details>', b'</details>')):
+                    with self.subTest(route=route, ancestor=opening):
+                        content = original[2]
+                        if b'<body>' in content:
+                            content = content.replace(b'<body>', b'<body>' + opening, 1).replace(b'</body>', closing + b'</body>', 1)
+                        else:
+                            content = opening + content + closing
+                        routes[path] = (200, 'text/html', content)
+                        code, report = self.check(extra=args)
+                        self.assertEqual(code, 1, report)
+                        routes[path] = original
+
+    def test_deployed_video_cards_must_match_approved_bytes(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            for lang in ('en', 'es'):
+                path = urlsplit(base).path + f'assets/img/share-video-{lang}.png'
+                original = routes[path]
+                with self.subTest(lang=lang):
+                    routes[path] = (200, 'image/png', b'wrong nonempty image bytes')
+                    code, report = self.check(extra=args)
+                    self.assertEqual(code, 1, report)
+                    self.assertTrue(any('sharing image' in item.lower() and 'bytes' in item.lower()
+                                        for item in report['blocking']), report)
+                    routes[path] = original
+
+    def test_deployed_video_network_failures_block(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            code, report = self.check(extra=args, python_flags=('-S',))
+            self.assertEqual(code, 0, report)
+            for route in ('', 'es/', 'home/video/', 'es/video/',
+                          'assets/img/share-video-en.png', 'assets/img/share-video-es.png'):
+                path = urlsplit(base).path + route
+                original = routes[path]
+                with self.subTest(route=route):
+                    routes[path] = (503, 'text/plain', b'unavailable')
+                    code, report = self.check(extra=args)
+                    self.assertEqual(code, 1, report)
+                    self.assertTrue(report['blocking'], report)
+                    routes[path] = original
+
+    def test_combined_video_requires_distinct_approval_and_preserves_hero(self):
+        approval = self.prepare_combined_video()
+        self.assertEqual(self.check()[0], 1)
+        for flags in ((), ('-S',)):
+            code, report = self.check(extra=['--youtube-approval-file', str(approval)], python_flags=flags)
+            self.assertEqual(code, 0, report)
+
+    def test_combined_video_rejects_unreviewed_content_and_extra_paths(self):
+        approval = self.prepare_combined_video()
+        original = self.git('rev-parse', 'HEAD').strip()
+        args = ['--youtube-approval-file', str(approval)]
+        edits = [
+            ('home/video/index.html', lambda b: b.replace(b'EMAzDgqHdYI', b'OTHERVIDEO1')),
+            ('home/video/index.html', lambda b: b.replace(b'www.youtube.com', b'evil.example')),
+            ('es/video/index.html', lambda b: b.replace(b'height="240"', b'height="241"')),
+            ('es/video/index.html', lambda b: b + b'<iframe src="https://evil.example/"></iframe>'),
+            ('home/video/index.html', lambda b: b + b'<script>alert(1)</script>'),
+            ('assets/img/share-video-en.png', lambda b: b + b'altered'),
+            ('_includes/pages/home.html', lambda b: b.replace(b'hero', b'evil', 1)),
+            ('_includes/pages/home.html', lambda b: b.replace(b'Watch the video', b'Watch now')),
+            ('data/news.json', lambda b: b + b' '),
+            ('home/extra/index.html', lambda b: b'<iframe src="https://evil.example/"></iframe>'),
+        ]
+        for name, change in edits:
+            with self.subTest(name=name, change=change):
+                self.git('reset', '--hard', original)
+                target = self.root / name
+                existing = target.read_bytes() if target.exists() else b''
+                changed = change(existing)
+                self.assertNotEqual(existing, changed)
+                self.write(name, changed)
+                self.git('add', '-A')
+                self.git('commit', '-qm', 'hostile fixture')
+                self.records = [self.record('homepage-hero-assets', [CSS, JS]),
+                                self.record('homepage-hero-maintenance', MAINTENANCE)]
+                for flags in ((), ('-S',)):
+                    code, report = self.check(extra=args, python_flags=flags)
+                    self.assertEqual(code, 1, report)
+
+    def test_combined_video_approval_security_and_head_binding(self):
+        approval = self.prepare_combined_video()
+        args = ['--youtube-approval-file', str(approval)]
+        raw = approval.read_bytes()
+        for mode in (0o400, 0o644, 0o700):
+            approval.chmod(mode)
+            self.assertEqual(self.check(extra=args)[0], 1)
+        approval.chmod(0o600)
+        approval.write_bytes(raw.replace(b'I approve YouTube exception', b'I reject YouTube exception'))
+        self.assertEqual(self.check(extra=args)[0], 1)
+        approval.write_bytes(raw + b' ')
+        self.assertEqual(self.check(extra=args)[0], 1)
+        approval.write_bytes(raw)
+        actual = approval.with_suffix('.real')
+        approval.rename(actual)
+        approval.symlink_to(actual)
+        self.assertEqual(self.check(extra=args)[0], 1)
+        approval.unlink()
+        actual.rename(approval)
+        card = self.root / 'assets/img/share-video-en.png'
+        card.chmod(0o755)
+        code, report = self.check(extra=args)
+        self.assertEqual(code, 1, report)
+        self.assertTrue(any('approved video file must be a new regular file' in item for item in report['blocking']))
+        card.chmod(0o644)
+        saved = card.with_suffix('.saved')
+        card.rename(saved)
+        card.symlink_to(saved)
+        code, report = self.check(extra=args)
+        self.assertEqual(code, 1, report)
+        self.assertTrue(any('approved video file must be a new regular file' in item for item in report['blocking']))
+        card.unlink()
+        saved.rename(card)
+        self.assertEqual(self.check(extra=args + ['--base', 'HEAD'])[0], 1)
+        self.git('commit', '--allow-empty', '-qm', 'different HEAD')
+        self.assertEqual(self.check(extra=args)[0], 1)
 
     def test_exact_assets_and_separate_maintenance_records(self):
         self.assertEqual(self.check((False, False))[0], 1)
