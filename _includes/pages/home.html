@@ -88,24 +88,20 @@
       <article class="hm-card hm-lever">
         {% if page.lang == 'es' %}
         <h3 class="hm-lever__title">El gasto en reparaciones es una elección</h3>
-        <table class="hm-lever__text" cellspacing="6">
-          <thead><tr><th scope="col">Meta actual</th><th scope="col">Opción de las familias</th><th scope="col">Plan del Distrito</th></tr></thead>
-          <tbody>
-            <tr><td><strong>$2.7M</strong></td><td><mark class="hm-mark"><strong>$4.7M</strong></mark></td><td><strong>$8.3M</strong></td></tr>
-            <tr><td>política actual del Distrito</td><td>menos del doble de la meta actual</td><td>más del triple de la meta actual</td></tr>
-          </tbody>
-        </table>
+        <ul class="hm-repair-stats" role="list">
+          <li class="hm-repair-stat hm-repair-stat--goal"><span class="hm-repair-stat__label">Meta actual</span><strong class="hm-repair-stat__value">$2.7M</strong><span class="hm-repair-stat__caption">política actual del Distrito</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
+          <li class="hm-repair-stat hm-repair-stat--featured"><span class="hm-repair-stat__label">Opción de las familias</span><strong class="hm-repair-stat__value">$4.7M</strong><span class="hm-repair-stat__caption">menos del doble de la meta actual</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
+          <li class="hm-repair-stat hm-repair-stat--plan"><span class="hm-repair-stat__label">Plan del Distrito</span><strong class="hm-repair-stat__value">$8.3M</strong><span class="hm-repair-stat__caption">más del triple de la meta actual</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
+        </ul>
         <p class="hm-lever__text">Como dijo la presidenta de la Junta, la cantidad que el D65 gasta en reparaciones es «una elección». Hoy, la meta del Distrito es de $2.7 millones al año. El plan de la administración aumentaría esa cifra a más del triple, hasta $8.3 millones. Las familias demostraron que aumentarla a $4.7 millones en su lugar, que sigue siendo un aumento considerable, mantiene abiertas Dewey y Lincolnwood y deja al Distrito en una situación financiera aproximadamente igual, sin cambiar nada más en el plan. Eso da tiempo para hacer esto bien: dar a la comunidad una elección clara sobre un referéndum y dejar que la próxima persona a cargo de la superintendencia corrija las cifras para que tengan sentido.</p>
         <p class="hm-source"><a href="{{ options_url | relative_url }}" target="_blank" rel="noopener">Ver las opciones</a></p>
         {% else %}
         <h3 class="hm-lever__title">Repair spending is a choice</h3>
-        <table class="hm-lever__text" cellspacing="6">
-          <thead><tr><th scope="col">Today's goal</th><th scope="col">Parents' option</th><th scope="col">District plan</th></tr></thead>
-          <tbody>
-            <tr><td><strong>$2.7M</strong></td><td><mark class="hm-mark"><strong>$4.7M</strong></mark></td><td><strong>$8.3M</strong></td></tr>
-            <tr><td>current District policy</td><td>less than double today's goal</td><td>more than triple today's goal</td></tr>
-          </tbody>
-        </table>
+        <ul class="hm-repair-stats" role="list">
+          <li class="hm-repair-stat hm-repair-stat--goal"><span class="hm-repair-stat__label">Today's goal</span><strong class="hm-repair-stat__value">$2.7M</strong><span class="hm-repair-stat__caption">current District policy</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
+          <li class="hm-repair-stat hm-repair-stat--featured"><span class="hm-repair-stat__label">Parents' option</span><strong class="hm-repair-stat__value">$4.7M</strong><span class="hm-repair-stat__caption">less than double today's goal</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
+          <li class="hm-repair-stat hm-repair-stat--plan"><span class="hm-repair-stat__label">District plan</span><strong class="hm-repair-stat__value">$8.3M</strong><span class="hm-repair-stat__caption">more than triple today's goal</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
+        </ul>
         <p class="hm-lever__text">As the board president put it, the amount D65 spends on repairs is "a choice." Today, the District's goal is $2.7 million a year. The administration's plan would more than triple that, to $8.3 million. Parents showed that raising it to $4.7 million instead, still a big increase, keeps Dewey and Lincolnwood open and leaves the District in about the same financial shape, without changing anything else in the plan. That buys time to do this right: give the community a clear choice on a referendum, and let the next superintendent fix the numbers so they make sense.</p>
         <p class="hm-source"><a href="{{ options_url | relative_url }}" target="_blank" rel="noopener">See the options</a></p>
         {% endif %}
