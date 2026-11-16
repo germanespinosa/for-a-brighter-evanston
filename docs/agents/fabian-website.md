@@ -304,11 +304,72 @@ python3 scripts/sandbox_check.py --base origin/main \
 
 The checker requires a clean committed checkout and allows no other changes, including other scripts or normally editable content, under this narrow approval. Before sharing the preview, fetch its full `assets/js/letter-content.js` response and byte-compare it with `git show <reviewed-HEAD>:assets/js/letter-content.js`; verify the generated letters in both languages and preserved behavior without sending messages. An HTTP error or byte mismatch blocks, not just a warning. Before a vote and again before a publication merge, fetch the expected remote and require `origin/main` and the merge base to equal the exact pinned base above, and the sandbox to equal the reviewed/voted HEAD. Independently verify both private records and the exact committed and working checker/maintenance bytes; compare the candidate merge tree in full with the voted tree and confirm news is untouched. If main, HEAD, merge tree, or reviewed bytes differ, stop: do not merge, push, retry on a new base, or merely regenerate records. Review the changed candidate and scope, obtain any needed new authorization and reviewed enforcement, and hold a fresh review and team vote if the candidate changes. After a successful publication, fetch the live `assets/js/letter-content.js` response and byte-compare it with the voted blob; an HTTP failure or mismatch leaves publication unverified. The records do not authorize publication; normal review and team voting apply.
 
+### Bilingual homepage photo-hero preview
+
+Kerstin explicitly approved homepage-specific styling, a slideshow script and necessary safety-check updates for the English and Spanish **previews**, in response to the question naming that scope. This is not a publication waiver. Verify both original #website messages and their human/bot identities before creating records; retain their provenance privately. This exception is only for `sandbox/homepage-hero-heather`, `assets/css/release-home.css` under `.release-home`, and the new independently reviewed `assets/js/hero-slideshow.js`, loaded on `/` and `/es/`. Do not infer permission for other scripts, pages, sandboxes, news, unrelated maintenance or direct publication.
+
+Create two distinct private operator-owned regular JSON files, mode exactly `0600`, outside the checkout and without symlinks in any path component. Neither is authenticated by Slack by the checker: the trusted operator must first verify the source and independently review the exact bytes, particularly the script's behavior and network access. Do not mint new hashes to excuse altered, unreviewed bytes. The source object contains the verified channel ID, the approving human message timestamp as `message_ts`, and the exact question timestamp as `question_ts`. The checker pins these and the delegate identity; public placeholders here are not approval records.
+
+Both records have exactly these keys (no extras or duplicates):
+```json
+{
+  "version": 1,
+  "purpose": "homepage-hero-assets",
+  "sandbox_id": "homepage-hero-heather",
+  "authorizer_id": "<verified delegate ID>",
+  "source": {"channel_id": "<verified #website ID>", "message_ts": "<verified approval timestamp>", "question_ts": "<verified question timestamp>"},
+  "checkout": "<resolved checkout path>",
+  "base_commit": "<full current origin/main commit>",
+  "head_commit": "<full reviewed sandbox HEAD commit>",
+  "pages": ["index.html", "es/index.html"],
+  "routes": ["/", "/es/"],
+  "scope": ".release-home",
+  "files": [
+    {"path": "assets/css/release-home.css", "sha256": "<reviewed CSS SHA-256>"},
+    {"path": "assets/js/hero-slideshow.js", "sha256": "<reviewed script SHA-256>"}
+  ]
+}
+```
+The separate `homepage-hero-maintenance` record has the same keys and provenance but lists exactly `scripts/sandbox_check.py`, `scripts/tests/test_homepage_hero_approval.py`, `scripts/tests/test_hero_slideshow.py`, `docs/agents/fabian-website.md`, `docs/agents/fabian-website-cards.md`, `docs/help/team-help.md`, `docs/help/team-help.pdf`, and `docs/help/reviewed-sources.json`, each with its reviewed lowercase SHA-256. The maintenance record is not a general process waiver. The asset and maintenance inventories, provenance, checkout, base, HEAD, pages and routes must match exactly. The files must match committed and working bytes, use regular non-executable modes, and the entire checkout/index must be clean. The script must be new relative to base. The checker validates the CSS subset and exact page loaders, requires the two precise route-guarded layout changes, and pins the exact reviewed shared home template, its main baseline, and hero data bytes. Any other home-template or hero-data edit requires fresh independent review and enforcement pins; generic template checks do not grant a hero exception. A legacy generic CSS record cannot replace the hero asset record in this sandbox. The checker cannot verify its own integrity; compare the reviewed checker and all maintenance bytes independently before executing it.
+
+The checker additionally requires each homepage to be byte-identical to the pinned base except the exact script-list addition, and both translation files byte-identical except the specified photo credits. It requires the exact candidate changed-path and addition/modification inventory: the two homepages, two translation files, hero data, home template, layout, CSS, JavaScript, the ten approved photos, and the eight maintenance files above. No unrelated changes are permitted, including normally editable content. The comparison is against the pinned, already-merged `origin/main`: independent main news is part of the base, not a candidate change; candidate news edits still block. It permits exactly the ten new JPEGs listed in `HERO_PHOTO_SHA256`, and no other changed media; each pinned hash comes from the supplied prepared manifest and must match its committed and working bytes with a regular non-executable Git mode. The hero data must list those local files exactly once in order, with strictly validated position and dimensions, even without PyYAML. Positions must use canonical integer percentages from `0%` through `100%` on both axes, without leading zeros, matching the CSS attribute selectors exactly. Foreign or substituted image sources are not authorized. Independently verify the supplied manifest against the actual photos and inspect their content; hashes alone do not establish consent or visual suitability.
+
+The content pins for CSS, JavaScript, the updated home template and hero data, and the maintenance inventory pin intentionally remain `UNREVIEWED`: do not refresh them until an independent audit of the final candidate. Preserve the existing template **base** hash when re-reviewing the new base; it is not an updated-content pin. After the audit, update only the reviewed final-content pins, regenerate dependent help artifacts and manifest, and independently review the resulting final checker and maintenance bytes as described below. A changed candidate invalidates that audit.
+
+An independent reviewer must inspect the final committed maintenance files, base, HEAD and provenance, then independently attest the SHA-256 of the **exact bytes** of the completed maintenance record via a trusted out-of-band channel. Supply that independently retained digest as `--homepage-hero-maintenance-review-sha256`. Merely generating a fresh digest from the record being submitted, or trusting the record's own hashes, is not an independent review. If bytes or HEAD change, repeat the review and obtain a new attestation; do not recycle or self-mint it. This operator-held trust anchor is essential because the checker cannot securely pin its own hash inside itself.
+
+The checker separately pins the non-checker maintenance inventory with `HERO_MAINTENANCE_INVENTORY_SHA256`; `UNREVIEWED` intentionally blocks the exception. After independent review, construct a mapping from each non-checker maintenance path to its exact reviewed lowercase SHA-256. For `docs/help/reviewed-sources.json` only, use instead the SHA-256 of its JSON object with the `scripts/sandbox_check.py` entry removed, serialized as UTF-8 JSON with sorted keys and separators `,` and `:` without whitespace. Hash the resulting path-to-digest mapping with the same canonical JSON encoding. This avoids a circular dependency: the complete manifest itself records the checker hash. Review and install that inventory pin, regenerate the manifest with the final checker hash, and independently review the final checker and complete manifest bytes; the out-of-band record attestation binds both exact files. The manifest's checker entry must match the record. Never update a pin merely to make a changed record pass. Regenerate dependent help artifacts before final review.
+
+Immediately before **each external action** (including push/deployment, sharing a preview, requesting a vote or publishing), recheck the authoritative remote, not only the potentially stale local `origin/main`. Confirm `origin` is the independently verified repository, then run this preflight in the reviewed clean checkout; stop on any failure, mismatch or network error:
+
+```bash
+set -e
+test "$(git remote get-url origin)" = 'git@github.com:germanespinosa/for-a-brighter-evanston.git'
+git fetch origin
+reviewed_base=0d6f0373fba5c5629bafa8423d855e68931e03e3
+test "$(git rev-parse origin/main^{commit})" = "$reviewed_base"
+test "$(git ls-remote --exit-code origin refs/heads/main)" = "$(printf '%s\trefs/heads/main' "$reviewed_base")"
+test "$(git merge-base origin/main HEAD)" = "$reviewed_base"
+test -z "$(git status --porcelain=v1 --untracked-files=all)"
+```
+
+Also compare `HEAD` to both approved records and rerun the static checker with the independently attested maintenance digest. If main advanced, the remote cannot be reached, HEAD or files changed, or any check fails, stop: obtain a fresh review, update the reviewed base/byte pins and records, and repeat preflight. Repeat immediately before each subsequent external action; this is not an atomic lock on the remote. The static checker itself does not fetch or assert that its cached remote-tracking ref is fresh.
+
+After independent review, help regeneration and a final local commit, create the records from those reviewed bytes and run:
+```bash
+python3 scripts/sandbox_check.py --base origin/main \
+  --homepage-hero-approval-file /private/hero-assets.json \
+  --homepage-hero-maintenance-approval-file /private/hero-maintenance.json \
+  --homepage-hero-maintenance-review-sha256 '<independently attested record SHA-256>'
+# Add --url https://forabrighterevanston.org/sandbox/homepage-hero-heather/ after deployment.
+```
+Verify the rendered asset loading and wrapper on both home routes and their absence on unrelated pages, fetch and compare the deployed CSS and script bytes with the reviewed committed files, and exercise the slideshow, reduced motion, controls and mobile/desktop behavior. The checker does not prove JavaScript is safe or rendered route isolation. It pins both reviewed asset digests in code as well as the private asset record: changing an asset requires separately reviewed enforcement and a new pin, not merely a refreshed record. Any changed base, HEAD or maintenance requires renewed independent review and records; do not bypass an invalid record. Normal review, holds and team vote remain.
+
 ### Not allowed (structural, unless explicitly excepted above)
 
 Explain this with **Message W11**. Restricted work needs an explicit scope-specific authorization from German or Kerstin and reviewed enforcement; previously created owner-bound exceptions retain their exact historical sources. Authorization does not override safety, news ownership, or the team vote:
 
-- styles and scripts: `assets/css/`, `assets/js/`, except the exact page CSS, two-page URL-copy script, and bounded bilingual letter-content substitutions and SACC removal explicitly approved and checked above. Other changes to the Write to the Board `letter-content.js` remain restricted,
+- styles and scripts: `assets/css/`, `assets/js/`, except the exact page CSS, homepage hero, two-page URL-copy script, and bounded bilingual letter-content substitutions and SACC removal explicitly approved and checked above. Other changes to the Write to the Board `letter-content.js` remain restricted,
 - site settings and build: `_config.yml`, `CNAME`, `.github/`, `Gemfile`, `robots.txt`, `sitemap.xml`, `favicon.svg`, `404.html`, the `.ics` file,
 - the news list `data/news.json` (that's `#news`),
 - `docs/`, `scripts/`, `README.md`,

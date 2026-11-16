@@ -105,6 +105,8 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 
 **Copy link on the poll page:** On the English voter-poll page and its Spanish counterpart, “Copy link” / “Copiar enlace” copies that page's current URL; a fallback is available when the browser's normal clipboard action is denied. The existing permission covers only the reviewed script and its loading on these two pages, is bound to its original owner approval, and does not authorize publication or unrelated JavaScript. Fabian tests the actual action in both languages and checks the exact script against its separate approval record.[2]
 
+**Homepage photo hero:** Kerstin approved a bilingual preview with homepage-specific styling and a slideshow, plus the safety-check updates needed for that preview. Fabian independently reviews the exact assets, checks them only for the two home pages, and keeps separate private asset and safety-maintenance records. This does not approve unrelated scripts or publication; the usual review, holds and team vote remain.[2]
+
 **Approval example — only German or Kerstin can grant it:**
 > @fabian I approve page-specific styling for Home, The Poll and A Brighter Path Forward, in English and Spanish, and hosting the supplied macro-free Excel financial model in [sandbox name] for review only. Do not publish yet.
 

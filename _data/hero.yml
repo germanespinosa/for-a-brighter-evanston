@@ -1,7 +1,41 @@
-# Home page hero photo (Photo by Joerg Metzner, supplied in #website).
-# The first entry is shown in the hero and preloaded by _layouts/default.html.
-# Alt text and credit live in _data/i18n/<lang>.yml (home.photo_alt, home.photo_credit).
-- file: rally-01.jpg
-  position: "55% 40%"
+# Supplied and optimized Heather Eidson photographs, in slideshow order.
+- file: heather-eidson-meetup-01.jpg
+  position: "50% 50%"
   width: 1600
   height: 1067
+- file: heather-eidson-meetup-02.jpg
+  position: "50% 50%"
+  width: 1067
+  height: 1600
+- file: heather-eidson-meetup-03.jpg
+  position: "50% 50%"
+  width: 1500
+  height: 1000
+- file: heather-eidson-meetup-04.jpg
+  position: "50% 50%"
+  width: 1600
+  height: 1067
+- file: heather-eidson-meetup-05.jpg
+  position: "50% 50%"
+  width: 1600
+  height: 1067
+- file: heather-eidson-meetup-06.jpg
+  position: "50% 50%"
+  width: 1400
+  height: 934
+- file: heather-eidson-meetup-07.jpg
+  position: "50% 50%"
+  width: 1600
+  height: 1067
+- file: heather-eidson-meetup-08.jpg
+  position: "50% 50%"
+  width: 1600
+  height: 1067
+- file: heather-eidson-meetup-09.jpg
+  position: "50% 50%"
+  width: 1600
+  height: 1067
+- file: heather-eidson-meetup-10.jpg
+  position: "50% 50%"
+  width: 1500
+  height: 1000

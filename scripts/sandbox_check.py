@@ -130,6 +130,9 @@ def parse_front_matter(fm):
                 except (ValueError, TypeError):
                     if value.startswith("'") and value.endswith("'"):
                         value = value[1:-1].replace("''", "'")
+                    elif (m.group(1) == "scripts" and re.fullmatch(
+                            r"\[\s*(?:[A-Za-z0-9_.-]+\s*(?:,\s*[A-Za-z0-9_.-]+\s*)*)?\]", value)):
+                        value = [item.strip() for item in value[1:-1].split(",") if item.strip()]
                     else:
                         value = re.split(r"\s+#", value, maxsplit=1)[0].strip()
                         # Do not turn YAML booleans, collections or complex
@@ -353,6 +356,8 @@ def load_scoped_approval(filename, sandbox_url=None):
         key = item.get("path")
         if key not in SCOPED_CSS or key in seen:
             raise ValueError("approval contains an unapproved or duplicate CSS path")
+        if sandbox == "homepage-hero-heather" and key == "assets/css/release-home.css":
+            raise ValueError("homepage hero CSS needs its separate reviewed hash-bound approval")
         routes, scope = SCOPED_CSS[key]
         if item.get("routes") != routes or item.get("scope") != scope:
             raise ValueError("approval CSS routes/scope do not match the exact permitted pages")
@@ -698,6 +703,263 @@ def unique_json_fields(pairs):
     return record
 
 
+HERO_CSS = "assets/css/release-home.css"
+HERO_SCRIPT = "assets/js/hero-slideshow.js"
+HERO_SOURCE_SHA256 = "7b61ae81b9bd7f6a7cecc23f8a8f6c58a4fb1ebbc7e46fffc0499ca4f6e41643"
+HERO_BASE_COMMIT = "0d6f0373fba5c5629bafa8423d855e68931e03e3"
+HERO_TEMPLATE = "_includes/pages/home.html"
+HERO_TEMPLATE_BASE_SHA256 = "f74d592ded8bfa7196061e8044040c86171f7d65118a145ea794d1212657c762"
+HERO_TEMPLATE_SHA256 = "b183e0c0d4c36016a195709273bdc387153c4aed59230cab9a8dd2162d1463e8"
+HERO_DATA = "_data/hero.yml"
+HERO_DATA_SHA256 = "46f404c057fe2faf2ad9190734006a236654e651cf8257305ef0ef69dd85ecad"
+# Supplied prepared-manifest hashes; changing these requires independent review.
+HERO_PHOTO_SHA256 = {
+    "assets/img/hero/heather-eidson-meetup-01.jpg": "99cd6be7fc893dcbff422c11e34d011823017f6b1932911aea501860b66fef29",
+    "assets/img/hero/heather-eidson-meetup-02.jpg": "ee6551ec55a55b2a17ece23c2a9f8191d1175c771433e5c27251e7fdffc2f913",
+    "assets/img/hero/heather-eidson-meetup-03.jpg": "c1623e1bd8efeb5dc5c1402888bce134f362d61668bd9493a2aecb901ac02f58",
+    "assets/img/hero/heather-eidson-meetup-04.jpg": "5fa69917710f58ef552a5dd5c2fdf254dc8a13632e4b9be342668a8c8cdf942a",
+    "assets/img/hero/heather-eidson-meetup-05.jpg": "a5964e4b5559d704c22f38f28c68dd03c0ea1841467be20299cd87b7cb917ed8",
+    "assets/img/hero/heather-eidson-meetup-06.jpg": "2351890bf401c1f4066d413669bfad8e83682458678e6090aaff06fa7f9bf56f",
+    "assets/img/hero/heather-eidson-meetup-07.jpg": "8d04500a427513b1f7cc5cb7b3aae2a4e018829ab003929f12ec5491aa61c0cf",
+    "assets/img/hero/heather-eidson-meetup-08.jpg": "01b7ceaf333a501ea3d99acb550ebd99f338c9a67a84a2f8cf87e3e192b744e4",
+    "assets/img/hero/heather-eidson-meetup-09.jpg": "f4a232facbc5297a5556a1b1a947d3ac8ad9a99608ae675addc48edc81a591e1",
+    "assets/img/hero/heather-eidson-meetup-10.jpg": "f1cf0c8d9aa8c5b304f1e7f0ca2876f1285b39d1eef7daf36283951698d983c7",
+}
+HERO_REVIEWED_SHA256 = {
+    HERO_CSS: "ba6e19296d74cedd93468847b89538cf7fa0e61d37ee683d3af17ff4fdb87a2c",
+    HERO_SCRIPT: "3963b9f166e4a22dcac0aa9410a3366279889257d9dcf2c32cb6532b797fd92a",
+}
+HERO_PAGES = ["index.html", "es/index.html"]
+HERO_ROUTES = ["/", "/es/"]
+HERO_OLD_LINK = "  {%- if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}\n"
+HERO_NEW_LINK = ("  {%- if page.url == '/' or page.url == '/es/' %}\n"
+                 "  <link rel=\"stylesheet\" href=\"{{ '/assets/css/release-home.css' | relative_url }}\">\n"
+                 "  {%- elsif page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}\n")
+HERO_OLD_BODY = "{% if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %} release-poll"
+HERO_NEW_BODY = "{% if page.url == '/' or page.url == '/es/' %} release-home{% elsif page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %} release-poll"
+HERO_MAINTENANCE = frozenset({
+    "scripts/sandbox_check.py", "scripts/tests/test_homepage_hero_approval.py", "scripts/tests/test_hero_slideshow.py",
+    "docs/agents/fabian-website.md", "docs/agents/fabian-website-cards.md",
+    "docs/help/team-help.md", "docs/help/team-help.pdf", "docs/help/reviewed-sources.json",
+})
+# Fail closed until an independent review of the final non-checker inventory.
+# The source manifest refers back to this checker, so pin its other entries
+# canonically and bind its exact bytes via the separately attested record.
+HERO_MAINTENANCE_INVENTORY_SHA256 = "ae1190733b829fc51d4bacb05998da926e341f29910903a3237f31369570ee82"
+
+
+def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha256=None):
+    """Trusted, independently reviewed hashes; never infer approval from assets."""
+    if not filename:
+        return {}
+    path = Path(filename).absolute()
+    if any(p.is_symlink() for p in (path, *path.parents)) or path.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError("hero approval must be a private non-symlink file outside the checkout")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600:
+            raise ValueError("hero approval must be operator-owned, regular and mode 0600")
+        raw = stream.read()
+        if purpose == "homepage-hero-maintenance":
+            if (not isinstance(review_sha256, str) or not re.fullmatch(r"[a-f0-9]{64}", review_sha256)
+                    or hashlib.sha256(raw).hexdigest() != review_sha256):
+                raise ValueError("maintenance needs the independently reviewed record SHA-256")
+        record = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_json_fields)
+    keys = {"version", "purpose", "sandbox_id", "authorizer_id", "source", "checkout",
+            "base_commit", "head_commit", "pages", "routes", "scope", "files"}
+    if (not isinstance(record, dict) or set(record) != keys or type(record["version"]) is not int
+            or record["version"] != 1 or record["purpose"] != purpose
+            or purpose not in {"homepage-hero-assets", "homepage-hero-maintenance"}
+            or record["sandbox_id"] != "homepage-hero-heather"
+            or not isinstance(record["authorizer_id"], str) or not isinstance(record["source"], dict)
+            or set(record["source"]) != {"channel_id", "message_ts", "question_ts"}
+            or not all(isinstance(value, str) for value in record["source"].values())
+            or hashlib.sha256(json.dumps({"authorizer_id": record["authorizer_id"], "source": record["source"]},
+                                        sort_keys=True, separators=(",", ":")).encode()).hexdigest() != HERO_SOURCE_SHA256
+            or record["checkout"] != str(ROOT.resolve()) or base != "origin/main"
+            or git("branch", "--show-current").strip() != "sandbox/homepage-hero-heather"
+            or record["pages"] != HERO_PAGES or record["routes"] != HERO_ROUTES
+            or record["scope"] != ".release-home"):
+        raise ValueError("hero approval schema, provenance, scope, checkout or sandbox does not match")
+    current_base = git("rev-parse", "--verify", "origin/main^{commit}").strip()
+    if (current_base != HERO_BASE_COMMIT or record["base_commit"] != current_base or record["head_commit"] != git("rev-parse", "HEAD^{commit}").strip()
+            or git("merge-base", "origin/main", "HEAD").strip() != current_base):
+        raise ValueError("hero approval must bind current base, HEAD and merge base")
+    if git("status", "--porcelain=v1", "-z", "--untracked-files=all"):
+        raise ValueError("hero approval requires a clean committed checkout and index")
+    if any(not entry.startswith("H ") for entry in git("ls-files", "-v", "-z").split("\0") if entry):
+        raise ValueError("hero approval forbids hidden index entries")
+    if git("ls-files", "--others", "--ignored", "--exclude-standard", "--", "assets/js/"):
+        raise ValueError("hero approval forbids ignored untracked scripts")
+    if git("ls-files", "--others", "--ignored", "--exclude-standard", "--", *MEDIA_DIRS):
+        raise ValueError("hero approval forbids ignored untracked media")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/homepage-hero-heather" or url.query or url.fragment):
+            raise ValueError("hero approval sandbox URL does not match")
+    allowed = frozenset({HERO_CSS, HERO_SCRIPT}) if purpose == "homepage-hero-assets" else HERO_MAINTENANCE
+    approved = nov16_inventory(record, allowed)
+    if purpose == "homepage-hero-maintenance":
+        independent_inventory = {name: digest for name, digest in approved.items()
+                                 if name != "scripts/sandbox_check.py"}
+        manifest_path = ROOT / "docs/help/reviewed-sources.json"
+        if any(p.is_symlink() for p in (manifest_path, *manifest_path.parents)) or not manifest_path.is_file():
+            raise ValueError("maintenance source manifest must be a regular file")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"), object_pairs_hook=unique_json_fields)
+        if (not isinstance(manifest, dict)
+                or manifest.pop("scripts/sandbox_check.py", None) != approved["scripts/sandbox_check.py"]):
+            raise ValueError("maintenance source manifest must bind the approved checker SHA-256")
+        independent_inventory["docs/help/reviewed-sources.json"] = hashlib.sha256(
+            json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        inventory_digest = hashlib.sha256(json.dumps(independent_inventory, sort_keys=True,
+                                                     separators=(",", ":")).encode()).hexdigest()
+        if inventory_digest != HERO_MAINTENANCE_INVENTORY_SHA256:
+            raise ValueError("maintenance requires the independently pinned maintenance inventory")
+    if purpose == "homepage-hero-assets":
+        if approved != HERO_REVIEWED_SHA256:
+            raise ValueError("hero asset hashes must match the independently reviewed pinned bytes")
+        for name, digest in ((HERO_TEMPLATE, HERO_TEMPLATE_SHA256), (HERO_DATA, HERO_DATA_SHA256)):
+            target = ROOT / name
+            if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                    or target.stat().st_mode & 0o111
+                    or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                    or not git("ls-tree", "origin/main", "--", name).startswith("100644 ")):
+                raise ValueError(f"{name}: reviewed hero input must be a regular existing file")
+            content = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                     check=True, capture_output=True).stdout
+            if hashlib.sha256(content).hexdigest() != digest or target.read_bytes() != content:
+                raise ValueError(f"{name}: hero input must match independently reviewed exact bytes")
+        # Parse a deliberately narrow YAML subset identically with and without PyYAML.
+        # Reject extra keys, aliases, foreign paths, duplicates and unsafe CSS values.
+        try:
+            lines = [line for line in (ROOT / HERO_DATA).read_text(encoding="ascii").splitlines()
+                     if line and not line.startswith("#")]
+        except UnicodeError as error:
+            raise ValueError("hero photo records must use the strict ASCII format") from error
+        if len(lines) != 4 * len(HERO_PHOTO_SHA256):
+            raise ValueError("hero photo records must contain exactly the approved inventory")
+        names = []
+        for offset in range(0, len(lines), 4):
+            file = re.fullmatch(r"- file: (heather-eidson-meetup-[0-9]{2}\.jpg)", lines[offset])
+            # CSS has exact attribute selectors for canonical 0% through 100%.
+            position = re.fullmatch(r'  position: "(0|[1-9][0-9]?|100)% (0|[1-9][0-9]?|100)%"', lines[offset + 1])
+            width = re.fullmatch(r"  width: ([1-9][0-9]{0,3})", lines[offset + 2])
+            height = re.fullmatch(r"  height: ([1-9][0-9]{0,3})", lines[offset + 3])
+            if (not file or not position or not width or not height
+                    or any(int(value) > 100 for value in position.groups())
+                    or int(width.group(1)) > 1600 or int(height.group(1)) > 1600):
+                raise ValueError("hero photo record has unsafe file, position or dimensions")
+            names.append("assets/img/hero/" + file.group(1))
+        if names != list(HERO_PHOTO_SHA256):
+            raise ValueError("hero photo records must list the approved local files in order")
+        for lang, old_credit, new_credit in (
+                ("en", b"  photo_credit: Photo by Joerg Metzner\n", b"  photo_credit: Photos by Heather Eidson\n"),
+                ("es", b"  photo_credit: Foto de Joerg Metzner\n", b"  photo_credit: Fotos de Heather Eidson\n")):
+            name = f"_data/i18n/{lang}.yml"
+            original = subprocess.run(["git", "-C", str(ROOT), "show", f"origin/main:{name}"],
+                                      check=True, capture_output=True).stdout
+            current = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                     check=True, capture_output=True).stdout
+            target = ROOT / name
+            if (original.count(old_credit) != 1 or current != original.replace(old_credit, new_credit, 1)
+                    or any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                    or target.stat().st_mode & 0o111
+                    or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                    or not git("ls-tree", "origin/main", "--", name).startswith("100644 ")
+                    or target.read_bytes() != current):
+                raise ValueError(f"{name}: homepage translation must match base except the exact photo credit")
+        original_template = subprocess.run(["git", "-C", str(ROOT), "show", f"origin/main:{HERO_TEMPLATE}"],
+                                           check=True, capture_output=True).stdout
+        if hashlib.sha256(original_template).hexdigest() != HERO_TEMPLATE_BASE_SHA256:
+            raise ValueError("hero template baseline differs from reviewed current main")
+        layout = git_show("origin/main", "_layouts/default.html")
+        if (layout is None or layout.count(HERO_OLD_LINK) != 1 or layout.count(HERO_OLD_BODY) != 1
+                or git_show("HEAD", "_layouts/default.html") != layout.replace(HERO_OLD_LINK, HERO_NEW_LINK, 1).replace(HERO_OLD_BODY, HERO_NEW_BODY, 1)):
+            raise ValueError("hero stylesheet/wrapper requires the exact two-route layout change and no other layout edits")
+        diff = git("diff", "--no-renames", "--name-status", "-z", "origin/main...HEAD").split("\0")
+        entries = list(zip(diff[0::2], diff[1::2]))
+        images = {name: status for status, name in entries if name.startswith(MEDIA_DIRS)}
+        if images != {name: "A" for name in HERO_PHOTO_SHA256}:
+            raise ValueError("hero photo image change inventory must be exactly the ten approved additions")
+        for name, digest in HERO_PHOTO_SHA256.items():
+            target = ROOT / name
+            if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                    or target.stat().st_mode & 0o111 or target.stat().st_size > MEDIA_MAX_BYTES
+                    or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                    or git("ls-tree", "origin/main", "--", name)):
+                raise ValueError(f"{name}: approved photo must be a new regular non-executable file")
+            committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                       check=True, capture_output=True).stdout
+            if hashlib.sha256(committed).hexdigest() != digest or target.read_bytes() != committed:
+                raise ValueError(f"{name}: photo must match the supplied pinned bytes")
+        for status, name in entries:
+            if name.startswith(TEMPLATE_DIRS) and name not in {"_layouts/default.html", "_includes/pages/home.html"}:
+                raise ValueError(f"{name}: other template changes require separate review")
+        for name, route in zip(HERO_PAGES, HERO_ROUTES):
+            original_bytes = subprocess.run(["git", "-C", str(ROOT), "show", f"origin/main:{name}"],
+                                            check=True, capture_output=True).stdout
+            current_bytes = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                           check=True, capture_output=True).stdout
+            loader = b"scripts: [home.js]\n"
+            new_loader = b"scripts: [home.js, hero-slideshow.js]\n"
+            target = ROOT / name
+            if (original_bytes.count(loader) != 1 or not original_bytes.startswith(b"---\n")
+                    or loader not in original_bytes.split(b"\n---\n", 1)[0] + b"\n"
+                    or current_bytes != original_bytes.replace(loader, new_loader, 1)
+                    or any(p.is_symlink() for p in (target, *target.parents))
+                    or not target.is_file() or target.stat().st_mode & 0o111
+                    or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                    or not git("ls-tree", "origin/main", "--", name).startswith("100644 ")
+                    or target.read_bytes() != current_bytes):
+                raise ValueError(f"{name}: homepage must match base bytes except the exact approved loader")
+            original = git_show("origin/main", name)
+            current = git_show("HEAD", name)
+            if original is None or current is None:
+                raise ValueError("both existing homepage loaders are required")
+            old = parse_front_matter(split_front_matter(original)[0])
+            new = parse_front_matter(split_front_matter(current)[0])
+            if (not isinstance(old.get("scripts"), list) or new.get("scripts") != old["scripts"] + ["hero-slideshow.js"]
+                    or page_url(name, new) != route):
+                raise ValueError("hero script must load exactly once on both approved homepage routes")
+    for name, digest in approved.items():
+        target = ROOT / name
+        baseline = git("ls-tree", "origin/main", "--", name)
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or target.stat().st_mode & 0o111
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                or (baseline and not baseline.startswith("100644 "))
+                or (name == HERO_SCRIPT and baseline)
+                or git("diff", "--cached", "--name-only", "HEAD", "--", name)):
+            raise ValueError(f"{name}: requires regular non-executable committed and unstaged file")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if hashlib.sha256(committed).hexdigest() != digest or target.read_bytes() != committed:
+            raise ValueError(f"{name}: reviewed hash must match committed and working bytes")
+        if name == HERO_CSS:
+            problem = scoped_css_problem(committed.decode("utf-8"), ".release-home")
+            if problem or len(committed) > MEDIA_MAX_BYTES:
+                raise ValueError(f"{name}: {problem or 'CSS exceeds 5 MB'}")
+    # Compare the entire candidate tree to the pinned merged main, not just
+    # media/templates or paths covered by the two approval records.  Normal
+    # editable content is not a separate authorization for this exception.
+    additions = {HERO_SCRIPT, *HERO_PHOTO_SHA256,
+                 "scripts/tests/test_homepage_hero_approval.py", "scripts/tests/test_hero_slideshow.py"}
+    modifications = {HERO_CSS, HERO_TEMPLATE, HERO_DATA, "_layouts/default.html",
+                     "_data/i18n/en.yml", "_data/i18n/es.yml", *HERO_PAGES,
+                     *(HERO_MAINTENANCE - additions)}
+    expected = {**{name: "A" for name in additions}, **{name: "M" for name in modifications}}
+    diff = git("diff", "--no-renames", "--name-status", "-z", "origin/main...HEAD").split("\0")
+    entries = list(zip(diff[0::2], diff[1::2]))
+    actual = {name: status for status, name in entries}
+    if len(actual) != len(entries) or actual != expected:
+        unexpected = sorted(name for name, status in actual.items() if expected.get(name) != status)
+        missing = sorted(name for name, status in expected.items() if actual.get(name) != status)
+        raise ValueError(f"hero candidate changed-path inventory mismatch: unexpected/status {unexpected}; missing/status {missing}")
+    return approved
+
+
 def load_poll_copy_approval(filename, sandbox_url=None):
     """One immutable clipboard script, two existing pages, German's exact consent."""
     if not filename:
@@ -842,10 +1104,27 @@ def main():
     ap.add_argument("--nov16-maintenance-approval-file", help="German-only private exact nov16 checker-maintenance authorization JSON")
     ap.add_argument("--letter-vote-approval-file", help="private exact bilingual letter-copy approval with date, delegation and removal provenance")
     ap.add_argument("--letter-vote-maintenance-approval-file", help="private exact letter-vote checker-maintenance approval JSON")
+    ap.add_argument("--homepage-hero-approval-file", help="private reviewed homepage hero asset approval JSON")
+    ap.add_argument("--homepage-hero-maintenance-approval-file", help="private reviewed homepage hero safety-maintenance approval JSON")
+    ap.add_argument("--homepage-hero-maintenance-review-sha256", help="independently reviewed SHA-256 of the exact maintenance record bytes")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    hero_assets, hero_maintenance = {}, {}
+    for filename, purpose in ((args.homepage_hero_approval_file, "homepage-hero-assets"),
+                              (args.homepage_hero_maintenance_approval_file, "homepage-hero-maintenance")):
+        try:
+            approved = load_homepage_hero_approval(filename, purpose, args.base, args.url,
+                                                  args.homepage_hero_maintenance_review_sha256)
+            if purpose == "homepage-hero-assets":
+                hero_assets = approved
+            else:
+                hero_maintenance = approved
+            if approved:
+                notes.append(f"{purpose}: reviewed preview only; normal review, vote and other holds remain.")
+        except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+            blocking.append(f"Invalid {purpose} approval: {error}")
     letter_copy, letter_maintenance = {}, {}
     for filename, purpose in ((args.letter_vote_approval_file, "letter-vote-copy"),
                               (args.letter_vote_maintenance_approval_file, "letter-vote-maintenance")):
@@ -926,6 +1205,12 @@ def main():
         if path in letter_copy:
             changes.append(f"Authorized bilingual letter text {verb}: {path}")
             continue
+        if path in hero_assets:
+            if (path == HERO_SCRIPT and status != "A") or (path == HERO_CSS and status != "M"):
+                blocking.append(f"{path}: hero approval requires the exact new script and modified stylesheet, no deletion or mode changes.")
+            else:
+                changes.append(f"Reviewed homepage hero asset {verb}: {path}")
+            continue
         if poll_copy_approval and path == POLL_COPY_SCRIPT:
             base_mode = git("ls-tree", args.base, "--", path)
             if status not in {"A", "M"} or (base_mode and not base_mode.startswith("100644 ")):
@@ -933,11 +1218,11 @@ def main():
             else:
                 changes.append(f"German-authorized poll-copy script {verb}: {path}")
             continue
-        if path in approved_maintenance or path in nov16_maintenance or path in letter_maintenance:
+        if path in approved_maintenance or path in nov16_maintenance or path in letter_maintenance or path in hero_maintenance:
             if status not in {"A", "M"}:
                 blocking.append(f"{path}: maintenance authorizes additions/updates only, never deletion or type changes.")
             else:
-                authorizer = "Delegate" if path in letter_maintenance else "German"
+                authorizer = "Delegate" if path in letter_maintenance or path in hero_maintenance else "German"
                 changes.append(f"{authorizer}-authorized fixed-inventory maintenance {verb}: {path}")
             continue
         if path in approved_css or path in approved_workbooks:
@@ -1075,6 +1360,11 @@ def main():
             base_fm = parse_front_matter(split_front_matter(base_text)[0])
             for k in ("css", "scripts", "nav", "is_home", "permalink", "lang"):
                 if base_fm.get(k) != fm.get(k):
+                    if (k == "scripts" and hero_assets and path in HERO_PAGES
+                            and page_url(path, fm) == HERO_ROUTES[HERO_PAGES.index(path)]
+                            and isinstance(base_fm.get(k), list)
+                            and fm.get(k) == base_fm[k] + ["hero-slideshow.js"]):
+                        continue
                     if (k == "scripts" and poll_copy_approval and path in POLL_COPY_PAGES
                             and base_fm.get(k) in (None, []) and fm.get(k) == ["poll-copy.js"]
                             and page_url(path, fm) == POLL_COPY_ROUTES[POLL_COPY_PAGES.index(path)]):
