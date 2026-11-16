@@ -601,7 +601,7 @@ The site rebuilds without it. Check that `/sandbox/<id>/` no longer loads (HTTP 
 
 ## 8. Validate and give your opinion before every vote
 
-Triggered by "publish", "send it to publish", "let's vote", or similar. A vote never starts without this review.
+Triggered by "publish", "send it to publish", "let's vote", or similar. A vote never starts without this review. The `homepage-hero-heather` exception covers preview preparation only; before opening its vote, obtain a separately authorized and reviewed, scope-specific publication procedure.
 
 1. Acknowledge with **Message W10**, react 👀, and start the status message.
 2. **Bring the sandbox up to date with the live site**, so the vote covers what will really go live. For `letter-vote-nov16` and `homepage-hero-heather`, follow their respective pinned-base and reviewed-byte gates in section 5; do not run the generic command block or generated-file conflict resolution below for either exception. Stop instead of automatically merging, rebuilding, or pushing when anything drifts.
@@ -765,7 +765,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    ```
 
    If it differs, stop and send **Message W19**. A new vote is needed.
-3. Merge into the live site. For `letter-vote-nov16`, do **not** run the generic block below: follow its pinned-base publication procedure after the block instead. For `homepage-hero-heather`, first repeat section 5's authoritative remote preflight, independent checker/record verification and voted-commit check; stop on any drift before merging or pushing. Use `--no-ff`, so the whole update is one commit and easy to roll back:
+3. Merge into the live site. For `letter-vote-nov16`, do **not** run the generic block below: follow its pinned-base publication procedure after the block instead. The `homepage-hero-heather` exception authorizes preview preparation only and has no approved publication procedure in this manual: do **not** run the generic block or push it to main. Stop and obtain a separately reviewed, scope-specific publication procedure and authorization before considering a team vote or publication. For other updates, use `--no-ff`, so the whole update is one commit and easy to roll back:
 
    ```bash
    git checkout main && git pull --ff-only origin main

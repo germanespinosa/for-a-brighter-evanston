@@ -745,7 +745,7 @@ HERO_MAINTENANCE = frozenset({
 # Fail closed until an independent review of the final non-checker inventory.
 # The source manifest refers back to this checker, so pin its other entries
 # canonically and bind its exact bytes via the separately attested record.
-HERO_MAINTENANCE_INVENTORY_SHA256 = "2afea7e0583423a9e0db52d9e898be4588faa49d1a28f7899ca10896706ac2e8"
+HERO_MAINTENANCE_INVENTORY_SHA256 = "3a374ec99beb12731bb80b0021c3f7f1a87dc452c7311ff6ae70bd1016b4e018"
 
 
 def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha256=None):

@@ -4,14 +4,14 @@
   "_layouts/default.html": "f4e55b5c9e0d1ef5da22db7eaa6224a7d17abf6c0861a39eb909888204812fa4",
   "assets/img/brand-icon.png": "db5a5a96da2b984d9b68bca04ce682bbf72e84f6ffb5f3e6db93b81b6defddad",
   "docs/agents/fabian-news.md": "c1e8bdadcd70d34defe692e871736c0f75b0864d4032e4f6dfda6b2b1113519a",
-  "docs/agents/fabian-website-cards.md": "0a525ddc22375d686d56e4b877a84570bb86a7281aaaf1c16676822d0856368d",
-  "docs/agents/fabian-website.md": "045934c3e1276956adbe03a27e1f733fc2cf5d629981915888f8e16bf83c0bb1",
+  "docs/agents/fabian-website-cards.md": "780769febe88a4595a9b9f6b46ac03027dc04ccab2c3d3014c7cabfd67fd86f4",
+  "docs/agents/fabian-website.md": "798a126b13fe11b6c64d7bb99bbdb7b2a25d7c26e2b0a62ab75eca385260f302",
   "docs/help/team-help.md": "aea81a4c680a65ab838abb53aee7e93411752ec03c2a02939e0d2acbbd13aa3a",
-  "docs/help/team-help.pdf": "29fa0a50c301dcfb7f06c2621944e1ed734c726bb510df07b765dfb64db92b4e",
+  "docs/help/team-help.pdf": "eb0f8f95fb6a26978b09d9b439f9a293dec04853b0be582783ff91113c6d0334",
   "scripts/build_help_pdf.py": "18501d95aed7179d1945e696e7e17208648ff49456651c4af66420ddd4b94f7a",
   "scripts/build_site_icons.py": "79c2541a4ac57f6dca20157ac5e6d45018633092e7e702228d67524ef9dea262",
   "scripts/mockup_check.py": "26856d4708b2ee9643f7481d88dd8eceac2595111897bb25edebae5d44b3c896",
   "scripts/news_tool.py": "90855011b7d2486e48145cfca8e194eaa3c22dbb814e6342fd5d248d1e6a7c52",
-  "scripts/sandbox_check.py": "4d975657b782b0dda5ef76efefd72dee58b73c3f5e6b691f096e908eb295de63",
+  "scripts/sandbox_check.py": "d124be3f6004201d8c4545ad50e171b57917c694dd23966c2e4bfeb8ccf0048b",
   "scripts/sandbox_screens.py": "324aec2ba0cf8175d2ed885ff532fc7c090ad318ca2c57066358c0e05e653126"
 }

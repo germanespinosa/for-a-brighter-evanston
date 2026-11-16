@@ -58,7 +58,7 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 1. Post "✅ Approved by [names]. Publishing…".
 2. The sandbox must still be the voted commit; otherwise **W19**, stop.
-3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes. For `homepage-hero-heather`, repeat section 5's remote preflight, record/checker verification and voted-commit check before merging or pushing. For either exception, stop on drift or rejected push; never retry on a newer base with the old approvals.
+3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes; stop on drift or rejected push, never retry on a newer base with the old approvals. The `homepage-hero-heather` exception is preview-only: do not run this generic merge or push it to main without a separately authorized and reviewed publication procedure.
 4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4). For `letter-vote-nov16`, byte-compare the fetched live letter script against the voted blob (section 5).
 5. Delete the sandbox branch, post **W20**, react ✅. Save the records, then `/compact` last (section 9, step 7).
 
