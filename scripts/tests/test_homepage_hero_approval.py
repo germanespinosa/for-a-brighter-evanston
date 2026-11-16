@@ -546,6 +546,25 @@ class HomepageHeroApprovalTests(unittest.TestCase):
             image = fields['share_image'].lstrip('/')
             routes[prefix + image] = (200, 'image/png', (self.root / image).read_bytes())
 
+    def test_deployed_video_accepts_only_existing_hidden_form_frame(self):
+        with self.video_server() as (base, routes):
+            approval = self.prepare_combined_video(base)
+            self.populate_video_server(base, routes)
+            args = ['--youtube-approval-file', str(approval), '--url', base]
+            shell = b'<iframe name="gf_hidden" title="Form submission" hidden></iframe>'
+            for route in ('home/video/', 'es/video/'):
+                path = urlsplit(base).path + route
+                original = routes[path]
+                content = original[2].replace(b'</body>', shell + b'</body>')
+                routes[path] = (200, 'text/html', content)
+                code, report = self.check(extra=args)
+                self.assertEqual(code, 0, report)
+                for bad in (shell.replace(b'hidden>', b'hidden src="https://evil.example">'), shell + shell):
+                    routes[path] = (200, 'text/html', original[2].replace(b'</body>', bad + b'</body>'))
+                    code, report = self.check(extra=args)
+                    self.assertEqual(code, 1, report)
+                routes[path] = original
+
     def test_deployed_video_player_must_match_approved_rendering(self):
         with self.video_server() as (base, routes):
             approval = self.prepare_combined_video(base)

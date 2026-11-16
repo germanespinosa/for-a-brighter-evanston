@@ -830,7 +830,7 @@ HERO_MAINTENANCE = frozenset({
 # Fail closed until an independent review of the final non-checker inventory.
 # The source manifest refers back to this checker, so pin its other entries
 # canonically and bind its exact bytes via the separately attested record.
-HERO_MAINTENANCE_INVENTORY_SHA256 = "c8d375b56e8272e5fc65c29504695ee96d7531fb5f123f91beb94e99b56001ca"
+HERO_MAINTENANCE_INVENTORY_SHA256 = "4473e1763738e3c7059b16691fa570fa99682720f2f78fdead1bc8841443dff1"
 
 # This is the exact original human approval record, not a new approval or vote.
 VIDEO_APPROVAL_SHA256 = "e2881eb4e9f724f69290d033ae9bf5efef9e50ace29f0f1435b175b09075a30f"
@@ -1712,8 +1712,12 @@ def main():
             if video and hero_assets and hero_maintenance and path in VIDEO_FILES:
                 approved = LinkParser()
                 approved.feed(body)
-                if (len(parser.iframes) != 1 or len(approved.iframes) != 1
-                        or sorted(parser.iframes[0], key=repr) != sorted(approved.iframes[0], key=repr)):
+                existing_form_frame = sorted([("name", "gf_hidden"), ("title", "Form submission"), ("hidden", None)], key=repr)
+                actual_frames = [sorted(frame, key=repr) for frame in parser.iframes]
+                expected_player = sorted(approved.iframes[0], key=repr) if len(approved.iframes) == 1 else None
+                if (expected_player is None or actual_frames.count(expected_player) != 1
+                        or actual_frames.count(existing_form_frame) > 1
+                        or any(frame not in (expected_player, existing_form_frame) for frame in actual_frames)):
                     blocking.append(f"{url}: deployed video player must be the single exact approved iframe and attributes.")
                 rendered_body = re.sub(r"{{ '(.*?)' \| relative_url }}",
                                        lambda m: urlsplit(base_url).path + m.group(1).lstrip("/"), body)
