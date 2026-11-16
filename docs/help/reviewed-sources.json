@@ -1,17 +1,17 @@
 {
   ".github/workflows/pages.yml": "359f9ee1c1e538312fc3bf08d97a2b1897a8c549bd6cf96456bb3191f2eb3d17",
   ".github/workflows/sandbox-trigger.yml": "0b93e8f88d3fb43516441c9521f14b025287a9e6c70e58d8d19ead24d98a7aff",
-  "_layouts/default.html": "b1a119603c0e1feff5f153643553a38c7db645fe1fbbbbc881649c69fc7b4a87",
+  "_layouts/default.html": "f4e55b5c9e0d1ef5da22db7eaa6224a7d17abf6c0861a39eb909888204812fa4",
   "assets/img/brand-icon.png": "db5a5a96da2b984d9b68bca04ce682bbf72e84f6ffb5f3e6db93b81b6defddad",
   "docs/agents/fabian-news.md": "c1e8bdadcd70d34defe692e871736c0f75b0864d4032e4f6dfda6b2b1113519a",
-  "docs/agents/fabian-website-cards.md": "b524e5d80729c67aab85e05681111c009d96466b45d0a463d45663b3a6a45aaf",
-  "docs/agents/fabian-website.md": "b41e69a4eb76bfa74ef65a8867c3b4245f6a6f02d166447bf4f3a9924459ab0f",
-  "docs/help/team-help.md": "2a3b2f86f0e95ad9aae3d2be0b218c8f3b12140bfb19d40184bd5ccb2ca67607",
-  "docs/help/team-help.pdf": "aeabd86aa25e03467989bf6b2ba5a09e1819130be952c524b399fa85aa4b2881",
+  "docs/agents/fabian-website-cards.md": "cf053b0653eab0ddec821a54d8a1761e5af16b63dc5d27a877fc83d06c4811b7",
+  "docs/agents/fabian-website.md": "59fcf1da7a521ddde7fe1b26e59873606312baaa91b24f33a174fd7bf2dbd901",
+  "docs/help/team-help.md": "38b5c60896ab5eca623779c6825b2ae8248d2e155ed2a1d19304330a2ff44d7f",
+  "docs/help/team-help.pdf": "e4b454394bbe70d61dcb09b6002236d873e0e60881fdbbcebadb222ce7c2feea",
   "scripts/build_help_pdf.py": "18501d95aed7179d1945e696e7e17208648ff49456651c4af66420ddd4b94f7a",
   "scripts/build_site_icons.py": "79c2541a4ac57f6dca20157ac5e6d45018633092e7e702228d67524ef9dea262",
   "scripts/mockup_check.py": "26856d4708b2ee9643f7481d88dd8eceac2595111897bb25edebae5d44b3c896",
   "scripts/news_tool.py": "90855011b7d2486e48145cfca8e194eaa3c22dbb814e6342fd5d248d1e6a7c52",
-  "scripts/sandbox_check.py": "1f8a2642e963f597c7e4f8816bed56c46e365cc600ec4b434dc5f18c3274665a",
+  "scripts/sandbox_check.py": "e453463757281b97cfcb1a9ef80db6501532ddb9039f24439e386695ad65b10f",
   "scripts/sandbox_screens.py": "324aec2ba0cf8175d2ed885ff532fc7c090ad318ca2c57066358c0e05e653126"
 }

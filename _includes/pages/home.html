@@ -24,7 +24,15 @@
   </div>
 </aside>
 
-<section class="hm-hero" aria-labelledby="hero-title">
+<section class="hm-hero" aria-labelledby="hero-title" data-hero-slideshow>
+  <div class="hm-hero__background" aria-hidden="true">
+    {% for photo in site.data.hero %}
+    {% assign position = photo.position | split: ' ' %}
+    <img class="hm-hero__slide" data-hero-position-x="{{ position[0] | escape }}" data-hero-position-y="{{ position[1] | escape }}" data-hero-slide {% if forloop.first %}data-active="true" src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}" fetchpriority="high"{% else %}data-src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}"{% endif %} alt="" width="{{ photo.width }}" height="{{ photo.height }}">
+    {% endfor %}
+  </div>
+  <p class="hm-hero__credit">{{ h.photo_credit }}</p>
+  <button class="hm-hero__pause" type="button" data-hero-pause data-pause="{% if page.lang == 'es' %}Pausar fotos{% else %}Pause photos{% endif %}" data-play="{% if page.lang == 'es' %}Reanudar fotos{% else %}Resume photos{% endif %}" hidden>{% if page.lang == 'es' %}Pausar fotos{% else %}Pause photos{% endif %}</button>
   <div class="hm-wrap hm-hero__inner">
     <div class="hm-hero__copy">
       <p class="hm-eyebrow hm-eyebrow--gold">{{ h.hero.eyebrow }}</p>
@@ -47,10 +55,6 @@
     </div>
 
     <div class="hm-hero__media">
-      <figure class="hm-photo">
-        <img src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}" alt="{{ h.photo_alt }}" width="{{ photo.width }}" height="{{ photo.height }}" style="object-position: {{ photo.position }};" fetchpriority="high">
-        <figcaption class="hm-photo__credit">{{ h.photo_credit }}</figcaption>
-      </figure>
       {%- if ev.show %}
       <aside class="hm-event" aria-labelledby="event-title">
         <p class="hm-eyebrow hm-eyebrow--blue hm-event__eyebrow">{{ h.event.eyebrow }}</p>
@@ -61,6 +65,22 @@
       </aside>
       {%- endif %}
     </div>
+  </div>
+</section>
+
+<section class="hm-section hm-section--white" aria-labelledby="video-title">
+  <div class="hm-wrap">
+    {% if page.lang == 'es' %}
+    <p class="hm-eyebrow">Video</p>
+    <h2 class="hm-h2" id="video-title">Podemos mantener las luces encendidas</h2>
+    <p class="hm-body">Un mensaje de esperanza para la Junta Escolar del D65.</p>
+    <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/es/video/' | relative_url }}">Ver el video {{ arrow }}</a>
+    {% else %}
+    <p class="hm-eyebrow">Video</p>
+    <h2 class="hm-h2" id="video-title">We Can Keep The Lights On</h2>
+    <p class="hm-body">A message of hope for the D65 School Board.</p>
+    <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/home/video/' | relative_url }}">Watch the video {{ arrow }}</a>
+    {% endif %}
   </div>
 </section>
 

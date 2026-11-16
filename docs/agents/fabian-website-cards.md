@@ -20,7 +20,7 @@ How and when to read these documents (the fingerprint check) is in reference sec
 1. **W4**, react 👀. Vote running → **W17** instead, stop.
 2. Unclear request → ask one short question first. Restricted part → **W11**, and do only the allowed part (section 5, including its narrow exceptions).
 3. A file came with the request and might be a mockup → Card C first.
-4. One step: edit, commit (section 10 format), run `scripts/sandbox_check.py --base origin/main` (must be BLOCKING 0), push. For the specifically approved four-page removal in `nov16-meeting` or bilingual letter date correction and SACC removal in `letter-vote-nov16`, use the separate bounded records described in section 5; they do not authorize other removals or script changes. Batch requests that arrive close together into one push.
+4. One step: edit, commit (section 10 format), run `scripts/sandbox_check.py --base origin/main` (must be BLOCKING 0), push. For the specifically approved four-page removal in `nov16-meeting`, bilingual letter correction in `letter-vote-nov16`, or homepage photo hero in `homepage-hero-heather`, use the separate bounded records and independent reviews in section 5; they do not authorize other removals or script changes. Batch requests that arrive close together into one push.
 5. When the preview has rebuilt, open each changed page once, then post **W5**.
 6. New page? It also needs its own sharing card (section 5) and the Spanish offer.
 
@@ -39,8 +39,10 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 ## Card E: "publish" / "let's vote" (review before every vote)
 
+**`homepage-hero-heather` gate:** Preview-only by default. This is one combined hero and video candidate: the separately approved exact YouTube player `EMAzDgqHdYI`, bilingual video pages and sharing cards, and homepage discovery link do not authorize other embeds. Pass the original private video approval with the hero records; verify its human provenance and inspect both languages, cards and hero. Do not post **W14** until the two original hero records and distinct independently attested safeguards record pass section 5, the deployed revision and full section 8 review are verified, and other holds including photo permission are resolved. A checker exit code alone is not a vote or proof of deployment.
+
 1. **W10**, react 👀.
-2. Ordinary updates: merge `origin/main` into the sandbox and push. If only the generated help PDF and `reviewed-sources.json` conflict, rebuild them; any other conflict → abort and **W15**. For `letter-vote-nov16`, instead obey section 5's pinned-base and reviewed-byte gates; drift means stop, not automatic merge or rebuild (section 8, step 2).
+2. Ordinary updates: merge `origin/main` into the sandbox and push. If only the generated help PDF and `reviewed-sources.json` conflict, rebuild them; any other conflict → abort and **W15**. For `letter-vote-nov16` and `homepage-hero-heather`, obey each section 5 pinned-base and reviewed-byte gate; drift means stop, not automatic merge or rebuild (section 8, step 2).
 3. After the rebuild, run `sandbox_check.py --url …`, `sandbox_screens.py …` (and `mockup_check.py compare` for mockup pages) **together in one shell call** (`… & … & wait`, section 8 step 4), then read all the outputs. Look at the screenshots yourself.
 4. Do the title, navigation and sitemap check (section 8, step 6), and verify new-page sharing cards.
 5. Post **W13**. Any blocking problem → no vote; offer fixes.
@@ -56,11 +58,13 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 ## Card G: the vote passed (publish)
 
+For `homepage-hero-heather`, verify the explicit passed vote (at least 2 yes, 0 no) and acquire the single-host local exclusive per-vote claim before announcing or merging; otherwise stop. Follow the section 5 hero-only procedure, never the generic block. Recheck channel history for any eligible cancellation before push; Slack and Git are not atomic, and uncertainty means stop and reconcile. The claim does not coordinate other hosts or site-wide publishers. No code action is a vote.
+
 1. Post "✅ Approved by [names]. Publishing…".
 2. The sandbox must still be the voted commit; otherwise **W19**, stop.
-3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes; stop on drift or rejected push, never retry on a newer base with the old approvals.
-4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4). For `letter-vote-nov16`, byte-compare the fetched live letter script against the voted blob (section 5).
-5. Delete the sandbox branch, post **W20**, react ✅. Save the records, then `/compact` last (section 9, step 7).
+3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes; stop on drift or rejected push, never retry on a newer base with the old approvals. For `homepage-hero-heather`, section 5 requires the exact voted tree, pinned old OID and reviewed private pre-push hook on the actual non-force push; stop on drift or failure, never retry.
+4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4). For `letter-vote-nov16`, byte-compare the fetched live letter script against the voted blob. For the hero compare live CSS, script and all ten photos to voted blobs and exercise both routes (section 5). For the combined candidate also verify both live video routes, exact player URL and attributes with no other iframe, localized discovery content and links, live sharing metadata and both cards' full bytes against the voted blobs before success; failures or network uncertainty are unverified.
+5. For the hero, proceed only after the hero-closeout gate in section 5: claim ownership, remote main, production deployment, all live asset bytes, routes, news and sitemap must all verify. On failure or uncertainty stop, retain evidence, and never claim success. Delete the sandbox only with the section 5 exact voted-SHA lease and verify the remote ref is absent and sandbox route gone; otherwise stop and reconcile. Then post **W20**, react ✅, save records and `/compact` last (section 9, step 7).
 
 ## Card H: anything else
 
