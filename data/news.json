@@ -3,6 +3,16 @@
   "articles": [
     {
       "date": "2026-11-15",
+      "source": "CBS Chicago",
+      "site": "CBS Chicago",
+      "url": "https://www.cbsnews.com/chicago/video/district-65-families-rally-ahead-of-elementary-school-closure-vote/",
+      "title": "District 65 families rally ahead of elementary school closure vote",
+      "summary": "CBS Chicago reports on a rally by District 65 families ahead of a school closure vote. The video highlights parents’ concerns about Dewey’s Spanish Two-Way Immersion program and Lincolnwood’s STEP program.",
+      "title_es": "Familias del Distrito 65 se manifiestan antes de la votación sobre el cierre de escuelas primarias",
+      "summary_es": "CBS Chicago informa sobre una manifestación de familias del Distrito 65 antes de una votación sobre el cierre de escuelas. El video destaca las inquietudes de los padres sobre el programa de inmersión bilingüe de Dewey y el programa STEP de Lincolnwood."
+    },
+    {
+      "date": "2026-11-15",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
       "url": "https://evanstonroundtable.com/2026/11/15/parents-say-cutting-capital-spending-to-4-7-million-would-leave-district-65-in-same-financial-position-as-closing-dewey-lincolnwood/",
