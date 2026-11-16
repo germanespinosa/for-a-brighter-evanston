@@ -221,3 +221,43 @@
 @media (prefers-reduced-motion: reduce) {
   .release-home .hm-hero__slide { transition: none; }
 }
+
+/* Repair spending figures: one accessible item per comparison. */
+.release-home .hm-repair-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  container-type: inline-size;
+}
+.release-home .hm-repair-stat {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 8px;
+  border: 1px solid var(--hm-line);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--navy);
+}
+.release-home .hm-repair-stat--featured { background: var(--navy); border-color: var(--navy); color: var(--white); }
+.release-home .hm-repair-stat__label { font-family: var(--font-display); font-size: 11px; font-weight: 800; line-height: 1.25; letter-spacing: .04em; text-transform: uppercase; color: var(--blue); }
+.release-home .hm-repair-stat--featured .hm-repair-stat__label, .release-home .hm-repair-stat--featured .hm-repair-stat__value { color: var(--gold); }
+.release-home .hm-repair-stat__value { font-family: var(--font-display); font-size: clamp(20px, 6.5cqw, 30px); font-weight: 900; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
+.release-home .hm-repair-stat__caption { font-size: 13px; font-weight: 700; line-height: 1.3; }
+.release-home .hm-repair-stat__bar { display: block; align-self: stretch; height: 8px; margin-top: auto; overflow: hidden; border-radius: 2px; background: var(--tint); }
+.release-home .hm-repair-stat__bar span { display: block; height: 100%; background: var(--orange); }
+.release-home .hm-repair-stat--goal .hm-repair-stat__bar span { width: 32.5301%; }
+.release-home .hm-repair-stat--featured .hm-repair-stat__bar span { width: 56.6265%; }
+.release-home .hm-repair-stat--plan .hm-repair-stat__bar span { width: 100%; }
+@media (max-width: 700px) {
+  .release-home .hm-repair-stats { grid-template-columns: minmax(0, 1fr); }
+  .release-home .hm-repair-stat { padding: 16px; }
+  .release-home .hm-repair-stat__label { font-size: 12px; }
+  .release-home .hm-repair-stat__value { font-size: 32px; }
+  .release-home .hm-repair-stat__caption { font-size: 15px; }
+}
