@@ -604,7 +604,7 @@ The site rebuilds without it. Check that `/sandbox/<id>/` no longer loads (HTTP 
 Triggered by "publish", "send it to publish", "let's vote", or similar. A vote never starts without this review.
 
 1. Acknowledge with **Message W10**, react 👀, and start the status message.
-2. **Bring the sandbox up to date with the live site**, so the vote covers what will really go live. For the exact `letter-vote-nov16` exception, follow the pinned-base and reviewed-byte gates in section 5; do not run the generic command block or generated-file conflict resolution below for that exception. Stop instead of automatically merging, rebuilding, or pushing when anything drifts.
+2. **Bring the sandbox up to date with the live site**, so the vote covers what will really go live. For `letter-vote-nov16` and `homepage-hero-heather`, follow their respective pinned-base and reviewed-byte gates in section 5; do not run the generic command block or generated-file conflict resolution below for either exception. Stop instead of automatically merging, rebuilding, or pushing when anything drifts.
 
    ```bash
    git checkout sandbox/<id> && git pull --ff-only origin sandbox/<id>
@@ -640,7 +640,7 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    cat /tmp/review-<id>/*.txt; python3 -c "import json;print(*json.load(open('/tmp/review-<id>/screens.json'))['problems'],sep='\n')"
    ```
 
-   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes. For `letter-vote-nov16`, use its two distinct approval flags from section 5, independently verify the checker, compare the deployed script's full bytes against the approved revision, and exercise both language generators without sending messages.
+   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes. For `letter-vote-nov16`, use its two distinct approval flags from section 5, independently verify the checker, compare the deployed script's full bytes against the approved revision, and exercise both language generators without sending messages. For `homepage-hero-heather`, use section 5's two approval records and independently attested maintenance digest, repeat its authoritative remote preflight, and verify deployed asset bytes and slideshow behavior on both homepages.
 
    Both scripts already work in parallel inside: `sandbox_check.py` checks links about 16 at a time, and `sandbox_screens.py` loads about 6 pages at a time (`--jobs` changes that). The exit codes no longer show in this form; read the outputs: `RESULT:` in `rules.txt`, `problems` in `screens.json`, and the verdict line of each mockup report. If `screens.json` isn't JSON (Playwright error), rerun that one script on its own.
 
@@ -765,7 +765,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    ```
 
    If it differs, stop and send **Message W19**. A new vote is needed.
-3. Merge into the live site. For `letter-vote-nov16`, do **not** run the generic block below: follow its pinned-base publication procedure after the block instead. Use `--no-ff`, so the whole update is one commit and easy to roll back:
+3. Merge into the live site. For `letter-vote-nov16`, do **not** run the generic block below: follow its pinned-base publication procedure after the block instead. For `homepage-hero-heather`, first repeat section 5's authoritative remote preflight, independent checker/record verification and voted-commit check; stop on any drift before merging or pushing. Use `--no-ff`, so the whole update is one commit and easy to roll back:
 
    ```bash
    git checkout main && git pull --ff-only origin main
@@ -778,7 +778,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
 
    - If the merge conflicts: `git merge --abort`, then **Message W15**.
    - If `news untouched` doesn't print: `git reset --hard origin/main`, then **Message W15**. Never publish a change to the news list from `#website`.
-   - If the push is rejected because main changed: for `letter-vote-nov16`, stop and follow the drift rule in section 5; never retry on the newer main with these pinned approvals. For other ordinary updates, `git reset --hard origin/main` and repeat this step; that's the same voted version merged onto the newer main, so it doesn't need a new vote.
+   - If the push is rejected because main changed: for `letter-vote-nov16` or `homepage-hero-heather`, stop and follow the applicable drift rule in section 5; never retry on the newer main with these pinned approvals. For other ordinary updates, `git reset --hard origin/main` and repeat this step; that's the same voted version merged onto the newer main, so it doesn't need a new vote.
 4. Wait for the build. Check that each changed page loads on the live site with the new content, using `?nocache=…` URLs.
    For `letter-vote-nov16`, also fetch the live letter-content script and compare every byte with the voted blob as required by section 5; page appearance alone is not verification.
    For new pages, also verify the live sharing-card title, description and image against the approved preview, and fetch the live image. Do not report publication verified based only on visible body content or HTTP status.
