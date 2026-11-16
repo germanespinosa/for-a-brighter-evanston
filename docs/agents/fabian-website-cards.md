@@ -39,6 +39,8 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 ## Card E: "publish" / "let's vote" (review before every vote)
 
+**`homepage-hero-heather` hold:** This exception is preview-only. Do not post **W14**, open a vote, or publish until a separately authorized and independently reviewed, scope-specific publication procedure exists. Stop and explain the hold; a checker exit code of 0 means eligible for preview, not vote-ready. Confirm photo permission before sharing the preview; other holds remain.
+
 1. **W10**, react 👀.
 2. Ordinary updates: merge `origin/main` into the sandbox and push. If only the generated help PDF and `reviewed-sources.json` conflict, rebuild them; any other conflict → abort and **W15**. For `letter-vote-nov16` and `homepage-hero-heather`, obey each section 5 pinned-base and reviewed-byte gate; drift means stop, not automatic merge or rebuild (section 8, step 2).
 3. After the rebuild, run `sandbox_check.py --url …`, `sandbox_screens.py …` (and `mockup_check.py compare` for mockup pages) **together in one shell call** (`… & … & wait`, section 8 step 4), then read all the outputs. Look at the screenshots yourself.
@@ -55,6 +57,8 @@ How and when to read these documents (the fingerprint check) is in reference sec
 5. **2+ yes and 0 no → Card G now.**
 
 ## Card G: the vote passed (publish)
+
+For `homepage-hero-heather`, stop before announcing publication or merging: preview approval is not publication authorization. A separately authorized and independently reviewed, scope-specific publication procedure must exist before a vote can be opened or publication considered; other holds remain.
 
 1. Post "✅ Approved by [names]. Publishing…".
 2. The sandbox must still be the voted commit; otherwise **W19**, stop.

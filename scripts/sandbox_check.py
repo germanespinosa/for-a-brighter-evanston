@@ -745,7 +745,7 @@ HERO_MAINTENANCE = frozenset({
 # Fail closed until an independent review of the final non-checker inventory.
 # The source manifest refers back to this checker, so pin its other entries
 # canonically and bind its exact bytes via the separately attested record.
-HERO_MAINTENANCE_INVENTORY_SHA256 = "3a374ec99beb12731bb80b0021c3f7f1a87dc452c7311ff6ae70bd1016b4e018"
+HERO_MAINTENANCE_INVENTORY_SHA256 = "24e9cdbfc4e1faaabc2f52e3270aea6157efda223120d24e3c1adc03c9c3e9a3"
 
 
 def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha256=None):
@@ -1122,7 +1122,7 @@ def main():
             else:
                 hero_maintenance = approved
             if approved:
-                notes.append(f"{purpose}: reviewed preview only; normal review, vote and other holds remain.")
+                notes.append(f"{purpose}: reviewed preview only; vote and publication are held until a separately authorized and reviewed publication procedure exists; other holds remain.")
         except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
             blocking.append(f"Invalid {purpose} approval: {error}")
     letter_copy, letter_maintenance = {}, {}
@@ -1512,7 +1512,13 @@ def main():
             print(f"{title} ({len(items)})")
             for i in items:
                 print(f"  - {i}")
-        print("RESULT:", "NOT READY FOR A VOTE" if blocking else "OK TO VOTE (review warnings)")
+        if blocking:
+            result = "NOT READY FOR A VOTE"
+        elif hero_assets or hero_maintenance:
+            result = "OK FOR PREVIEW ONLY (vote/publication held)"
+        else:
+            result = "OK TO VOTE (review warnings)"
+        print("RESULT:", result)
     return 1 if blocking else 0
 
 

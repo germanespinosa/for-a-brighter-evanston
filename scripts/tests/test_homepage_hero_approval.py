@@ -161,6 +161,34 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         self.assertEqual(code, 0, report)
         self.assertTrue(any('preview only' in note.lower() for note in report['notes']))
 
+    def test_text_result_is_preview_only_for_eligible_hero(self):
+        code, report = self.check()
+        self.assertEqual(code, 0, report)
+        result = subprocess.run([
+            sys.executable, str(self.root / 'scripts/sandbox_check.py'),
+            '--homepage-hero-approval-file', str(self.paths[0]),
+            '--homepage-hero-maintenance-approval-file', str(self.paths[1]),
+            '--homepage-hero-maintenance-review-sha256', self.review_digest,
+        ], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('RESULT: OK FOR PREVIEW ONLY (vote/publication held)', result.stdout)
+        self.assertNotIn('OK TO VOTE', result.stdout)
+
+    def test_text_result_retains_vote_readiness_for_ordinary_candidate(self):
+        self.git('checkout', '-qb', 'sandbox/ordinary', 'main')
+        result = subprocess.run([sys.executable, str(self.root / 'scripts/sandbox_check.py')],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('RESULT: OK TO VOTE (review warnings)', result.stdout)
+
+    def test_text_result_blocks_invalid_hero(self):
+        result = subprocess.run([sys.executable, str(self.root / 'scripts/sandbox_check.py')],
+                                capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('RESULT: NOT READY FOR A VOTE', result.stdout)
+        self.assertNotIn('OK FOR PREVIEW ONLY', result.stdout)
+        self.assertNotIn('OK TO VOTE', result.stdout)
+
     def test_provenance_and_scope_fields_are_exact(self):
         for index in (0, 1):
             original = copy.deepcopy(self.records[index])
