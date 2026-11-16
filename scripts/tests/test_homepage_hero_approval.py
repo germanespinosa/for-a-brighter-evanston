@@ -17,6 +17,9 @@ JS = 'assets/js/hero-slideshow.js'
 PAGES = ['index.html', 'es/index.html']
 SOURCE = {'authorizer_id': 'DELEGATE_FIXTURE', 'source': {'channel_id': 'CHANNEL_FIXTURE',
           'message_ts': 'approval-fixture', 'question_ts': 'question-fixture'}}
+PUBLICATION_SOURCE = {'authorizer_id': 'PUBLISHER_FIXTURE', 'source': {
+    'channel_id': 'PUBLICATION_CHANNEL_FIXTURE', 'question_ts': 'publication-question-fixture',
+    'message_ts': 'publication-answer-fixture', 'answer': 'yes'}}
 OLD_LINK = "  {%- if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}\n"
 NEW_LINK = ("  {%- if page.url == '/' or page.url == '/es/' %}\n"
             "  <link rel=\"stylesheet\" href=\"{{ '/assets/css/release-home.css' | relative_url }}\">\n"
@@ -46,6 +49,7 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         checker = CHECKER.read_bytes()
         bindings = {
             b'HERO_SOURCE_SHA256 = ': json.dumps(SOURCE, sort_keys=True, separators=(',', ':')).encode(),
+            b'HERO_PUBLICATION_SOURCE_SHA256 = ': json.dumps(PUBLICATION_SOURCE, sort_keys=True, separators=(',', ':')).encode(),
             b'HERO_CSS: ': b'.release-home .hero { color: navy; }\n',
             b'HERO_SCRIPT: ': b'/* reviewed slideshow fixture */\n',
             b'HERO_TEMPLATE_BASE_SHA256 = ': TEMPLATE_BASE,
@@ -81,6 +85,9 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         checker_path = self.root / 'scripts/sandbox_check.py'
         checker, count = re.subn(b'HERO_BASE_COMMIT = "[a-f0-9]{40}"',
                                  b'HERO_BASE_COMMIT = "' + self.base.encode() + b'"', checker_path.read_bytes())
+        self.assertEqual(count, 1)
+        checker, count = re.subn(b'HERO_AUTHORIZATION_HEAD = "[a-f0-9]{40}"',
+                                 b'HERO_AUTHORIZATION_HEAD = "' + self.base.encode() + b'"', checker)
         self.assertEqual(count, 1)
         checker_path.write_bytes(checker)
         self.write('_includes/pages/home.html', TEMPLATE_REVIEWED)
@@ -153,6 +160,270 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         self.assertEqual(result.stderr, '')
         return result.returncode, json.loads(result.stdout)
 
+    def publication_record(self):
+        return {'version': 1, 'purpose': 'homepage-hero-publication-safeguards',
+                'sandbox_id': 'homepage-hero-heather', **copy.deepcopy(PUBLICATION_SOURCE),
+                'authorization_head': self.base,
+                'checkout': str(self.root.resolve()), 'base_commit': self.base,
+                'head_commit': self.git('rev-parse', 'HEAD').strip(),
+                'pages': PAGES, 'routes': ['/', '/es/'], 'scope': '.release-home',
+                'files': copy.deepcopy(self.records[1]['files'])}
+
+    def check_publication(self, record, digest=None, use=(True, True), python_flags=()):
+        path = Path(self.tmp.name) / 'publication.json'
+        raw = json.dumps(record).encode()
+        path.write_bytes(raw)
+        path.chmod(0o600)
+        if digest is None:
+            digest = hashlib.sha256(raw).hexdigest()
+        return self.check(use=use, extra=['--homepage-hero-publication-approval-file', str(path),
+                                         '--homepage-hero-publication-review-sha256', digest], python_flags=python_flags)
+
+    def test_distinct_reviewed_publication_safeguards_allow_review_not_publication(self):
+        code, report = self.check_publication(self.publication_record())
+        self.assertEqual(code, 0, report)
+        self.assertTrue(any('normal team review and vote' in note.lower() for note in report['notes']), report)
+        self.assertFalse(any('preview only; vote and publication are held' in note.lower() for note in report['notes']))
+
+    def test_publication_record_rejects_wrong_provenance_scope_and_missing_previews(self):
+        original = self.publication_record()
+        for key, value in [('version', True), ('purpose', 'homepage-hero-maintenance'),
+                           ('sandbox_id', 'other'), ('authorizer_id', 'other'),
+                           ('source', dict(original['source'], channel_id='other')),
+                           ('source', dict(original['source'], question_ts='other')),
+                           ('source', dict(original['source'], message_ts='other')),
+                           ('source', dict(original['source'], answer='no')),
+                           ('authorization_head', '0' * 40), ('checkout', '/other'),
+                           ('base_commit', '0' * 40), ('head_commit', '0' * 40),
+                           ('scope', '.other'), ('pages', ['index.html']), ('routes', ['/']),
+                           ('files', []), ('extra', 1)]:
+            with self.subTest(key=key, value=value):
+                self.assertEqual(self.check_publication(dict(original, **{key: value}))[0], 1)
+        for use in ((False, False), (False, True), (True, False)):
+            self.assertEqual(self.check_publication(original, use=use)[0], 1)
+        self.assertEqual(self.check_publication(original, digest='0' * 64)[0], 1)
+        self.assertEqual(self.check_publication(original, digest='')[0], 1)
+
+    def test_publication_source_pin_and_scope_fail_closed_without_site_packages(self):
+        original = self.publication_record()
+        for flags in ((), ('-S',)):
+            with self.subTest(flags=flags, attack='valid'):
+                code, report = self.check_publication(original, python_flags=flags)
+                self.assertEqual(code, 0, report)
+            for key, value in (
+                ('authorizer_id', 'OTHER_FIXTURE'),
+                ('source', dict(original['source'], channel_id='OTHER_CHANNEL_FIXTURE')),
+                ('source', dict(original['source'], question_ts='other-question')),
+                ('source', dict(original['source'], message_ts='other-answer')),
+                ('source', dict(original['source'], answer='no')),
+                ('source', dict(original['source'], extra='unreviewed')),
+                ('source', {k: v for k, v in original['source'].items() if k != 'question_ts'}),
+                ('scope', '.other'), ('routes', ['/', '/es/', '/other/']),
+                ('pages', ['index.html', 'es/index.html', 'other/index.html']),
+            ):
+                with self.subTest(flags=flags, key=key, value=value):
+                    code, report = self.check_publication(dict(original, **{key: value}), python_flags=flags)
+                    self.assertEqual(code, 1, report)
+                    self.assertTrue(any('publication record schema, provenance or binding mismatch' in item
+                                        for item in report['blocking']), report)
+
+    def test_publication_authorization_head_must_be_an_ancestor(self):
+        tree = self.git('rev-parse', 'HEAD^{tree}').strip()
+        disconnected = self.git('commit-tree', tree, '-m', 'unrelated authorization').strip()
+        checker = self.root / 'scripts/sandbox_check.py'
+        text = checker.read_text()
+        needle = f'HERO_AUTHORIZATION_HEAD = "{self.base}"'
+        self.assertIn(needle, text)
+        checker.write_text(text.replace(needle, f'HERO_AUTHORIZATION_HEAD = "{disconnected}"'))
+        manifest_path = self.root / 'docs/help/reviewed-sources.json'
+        manifest = json.loads(manifest_path.read_text())
+        manifest['scripts/sandbox_check.py'] = hashlib.sha256(checker.read_bytes()).hexdigest()
+        manifest_path.write_text(json.dumps(manifest))
+        self.git('add', '-A')
+        self.git('commit', '-qm', 'disconnected authorization fixture')
+        self.records = [self.record('homepage-hero-assets', [CSS, JS]),
+                        self.record('homepage-hero-maintenance', MAINTENANCE)]
+        record = self.publication_record()
+        record['authorization_head'] = disconnected
+        code, report = self.check_publication(record)
+        self.assertEqual(code, 1, report)
+        self.assertTrue(any('authorization' in item.lower() for item in report['blocking']), report)
+
+    def test_publication_record_permissions_stale_heads_and_duplicate_fields(self):
+        record = self.publication_record()
+        self.assertEqual(self.check_publication(record)[0], 0)
+        path = Path(self.tmp.name) / 'publication.json'
+        raw = path.read_bytes()
+        digest = hashlib.sha256(raw).hexdigest()
+        args = ['--homepage-hero-publication-approval-file', str(path),
+                '--homepage-hero-publication-review-sha256', digest]
+        for mode in (0o400, 0o644, 0o700):
+            path.chmod(mode)
+            self.assertEqual(self.check(extra=args)[0], 1)
+        path.chmod(0o600)
+        actual = path.with_suffix('.real')
+        path.rename(actual)
+        path.symlink_to(actual)
+        self.assertEqual(self.check(extra=args)[0], 1)
+        path.unlink()
+        actual.rename(path)
+        duplicate = raw.replace(b'"version": 1', b'"version": 1, "version": 1', 1)
+        path.write_bytes(duplicate)
+        args[-1] = hashlib.sha256(duplicate).hexdigest()
+        self.assertEqual(self.check(extra=args)[0], 1)
+        path.write_bytes(raw)
+        args[-1] = digest
+        self.git('commit', '--allow-empty', '-qm', 'new candidate')
+        self.assertEqual(self.check(extra=args)[0], 1)
+
+    def test_hero_publication_hook_and_manual_fail_closed(self):
+        manual = (CHECKER.parent.parent / 'docs/agents/fabian-website.md').read_text()
+        match = re.search(r'<!-- hero-pre-push-hook -->\n```sh\n(.*?)```', manual, re.S)
+        self.assertIsNotNone(match, 'hero publication must provide the actual reviewed hook')
+        hook = Path(self.tmp.name) / 'pre-push'
+        hook.write_text(match.group(1))
+        hook.chmod(0o700)
+        base = self.base
+        voted = self.git('rev-parse', 'HEAD').strip()
+        env = dict(os.environ, FABIAN_EXPECTED_MAIN=base, FABIAN_EXPECTED_MERGE=voted)
+        def run(lines):
+            return subprocess.run([str(hook), 'origin', 'fixture'], input=lines, text=True,
+                                  capture_output=True, env=env).returncode
+        valid = f'HEAD {voted} refs/heads/main {base}\n'
+        self.assertEqual(run(valid), 0)
+        for invalid in ('', valid + valid, f'HEAD {voted} refs/heads/other {base}\n',
+                        f'HEAD {voted} refs/heads/main {"0" * 40}\n',
+                        f'HEAD {"0" * 40} refs/heads/main {base}\n'):
+            with self.subTest(input=invalid):
+                self.assertNotEqual(run(invalid), 0)
+        for phrase in ('2 yes / 0 no', 'no code action', 'entire merge tree',
+                       'no retries', 'cooperating handlers', 'live bytes',
+                       'cancellation cutoff', 'not atomic', 'eligible cancellation'):
+            self.assertIn(phrase, manual.lower())
+
+    def test_preflight_switches_to_expected_merge_after_publication_push(self):
+        manual = (CHECKER.parent.parent / 'docs/agents/fabian-website.md').read_text().lower()
+        marker = 'immediately before **each pre-push external action**'
+        self.assertIn(marker, manual)
+        preflight = manual.split(marker, 1)[1].split('after independent review, help regeneration', 1)[0]
+        self.assertIn('through initiating the main push', preflight)
+        self.assertIn('after the main push', preflight)
+        self.assertIn('expected merge oid', preflight)
+        self.assertNotIn('repeat immediately before each subsequent external action', preflight)
+
+    def test_hero_closeout_requires_all_verification_before_cleanup_or_success(self):
+        manual = (CHECKER.parent.parent / 'docs/agents/fabian-website.md').read_text().lower()
+        self.assertIn('<!-- hero-closeout-gate -->', manual)
+        self.assertIn('<!-- end-hero-closeout-gate -->', manual)
+        closeout = manual.split('<!-- hero-closeout-gate -->', 1)[1].split('<!-- end-hero-closeout-gate -->', 1)[0]
+        for requirement in ('production build/deploy', 'actual remote main', 'live bytes',
+                            'all ten photo', 'both home routes', 'unrelated route',
+                            'news', 'sitemap', 'claim ownership', 'stop',
+                            'do not delete', 'do not post', 'do not switch', 'unverified'):
+            with self.subTest(requirement=requirement):
+                self.assertIn(requirement, closeout)
+        steps = manual.split('**when the vote passes:**', 1)[1].split('## 10.', 1)[0]
+        self.assertIn('only after the hero-closeout gate', steps)
+        cards = (CHECKER.parent.parent / 'docs/agents/fabian-website-cards.md').read_text().lower()
+        card = cards.split('## card g:', 1)[1].split('## card', 1)[0]
+        self.assertIn('only after the hero-closeout gate', card)
+        self.assertIn('stop', card)
+
+    def test_documented_hero_claim_is_exclusive_for_same_vote(self):
+        manual = (CHECKER.parent.parent / 'docs/agents/fabian-website.md').read_text()
+        match = re.search(r'<!-- hero-claim-command -->\n```sh\n(.*?)```', manual, re.S)
+        self.assertIsNotNone(match, 'hero must document atomic local per-vote acquisition')
+        assert match is not None
+        claim = Path(self.tmp.name) / 'vote-claim'
+        env = dict(os.environ, claim=str(claim))
+        def acquire():
+            return subprocess.run(['sh', '-eu', '-c', match.group(1)], env=env,
+                                  capture_output=True, text=True)
+        self.assertEqual(acquire().returncode, 0)
+        self.assertTrue(claim.is_dir())
+        self.assertNotEqual(acquire().returncode, 0)
+        self.assertTrue(claim.is_dir())
+
+    def test_documented_hero_cleanup_uses_exact_vote_lease(self):
+        manual = (CHECKER.parent.parent / 'docs/agents/fabian-website.md').read_text()
+        match = re.search(r'<!-- hero-cleanup-command -->\n```sh\n(.*?)```', manual, re.S)
+        self.assertIsNotNone(match, 'hero cleanup must provide an executable exact-lease command')
+        folder = Path(self.tmp.name)
+        remote, repo = folder / 'cleanup-remote.git', folder / 'cleanup-repo'
+        subprocess.run(['git', 'init', '--bare', '-q', str(remote)], check=True)
+        subprocess.run(['git', 'init', '-q', '-b', 'main', str(repo)], check=True)
+        def run(*args, check=True):
+            return subprocess.run(['git', '-C', str(repo), *args], check=check,
+                                  capture_output=True, text=True)
+        run('config', 'user.email', 'test@example.test')
+        run('config', 'user.name', 'Test')
+        run('remote', 'add', 'origin', str(remote))
+        run('commit', '--allow-empty', '-qm', 'voted')
+        voted = run('rev-parse', 'HEAD').stdout.strip()
+        ref = 'refs/heads/sandbox/homepage-hero-heather'
+        run('push', '-q', 'origin', f'HEAD:{ref}')
+        run('commit', '--allow-empty', '-qm', 'newer')
+        newer = run('rev-parse', 'HEAD').stdout.strip()
+        run('push', '-q', 'origin', f'HEAD:{ref}')
+        env = dict(os.environ, voted_sha=voted)
+        def cleanup():
+            return subprocess.run(['sh', '-eu', '-c', match.group(1)], cwd=repo, env=env,
+                                  capture_output=True, text=True)
+        self.assertNotEqual(cleanup().returncode, 0)
+        self.assertEqual(run('ls-remote', 'origin', ref).stdout.split()[0], newer)
+        run('push', '-q', '--force', 'origin', f'{voted}:{ref}')
+        self.assertEqual(cleanup().returncode, 0)
+        self.assertEqual(run('ls-remote', 'origin', ref).stdout, '')
+        self.assertNotEqual(cleanup().returncode, 0, 'a missing ref is not a fresh successful deletion')
+
+    def test_documented_hook_guards_actual_git_push_and_server_race(self):
+        manual = (CHECKER.parent.parent / 'docs/agents/fabian-website.md').read_text()
+        match = re.search(r'<!-- hero-pre-push-hook -->\n```sh\n(.*?)```', manual, re.S)
+        assert match is not None
+        folder = Path(self.tmp.name)
+        remote, repo, hooks = folder / 'remote.git', folder / 'push-repo', folder / 'hooks'
+        subprocess.run(['git', 'init', '--bare', '-q', str(remote)], check=True)
+        subprocess.run(['git', 'init', '-q', '-b', 'main', str(repo)], check=True)
+        def run(*args, env=None, check=True):
+            return subprocess.run(['git', '-C', str(repo), *args], check=check,
+                                  capture_output=True, text=True, env=env)
+        run('config', 'user.email', 'test@example.test')
+        run('config', 'user.name', 'Test')
+        run('remote', 'add', 'origin', str(remote))
+        run('commit', '--allow-empty', '-qm', 'base')
+        base = run('rev-parse', 'HEAD').stdout.strip()
+        run('push', '-q', 'origin', 'HEAD:refs/heads/main')
+        run('commit', '--allow-empty', '-qm', 'intermediate')
+        intermediate = run('rev-parse', 'HEAD').stdout.strip()
+        run('push', '-q', 'origin', 'HEAD:refs/heads/main')
+        run('commit', '--allow-empty', '-qm', 'candidate')
+        candidate = run('rev-parse', 'HEAD').stdout.strip()
+        hooks.mkdir()
+        hook = hooks / 'pre-push'
+        hook.write_text(match.group(1))
+        hook.chmod(0o700)
+        env = dict(os.environ, FABIAN_EXPECTED_MAIN=base, FABIAN_EXPECTED_MERGE=candidate)
+        push = ('-c', f'core.hooksPath={hooks}', 'push', 'origin', 'HEAD:refs/heads/main')
+        # The advanced server tip is still an ancestor, so ordinary push would succeed.
+        self.assertEqual(run('push', '--dry-run', 'origin', 'HEAD:refs/heads/main').returncode, 0)
+        self.assertNotEqual(run(*push, env=env, check=False).returncode, 0)
+        def server(*args):
+            return subprocess.run(['git', '--git-dir', str(remote), *args], check=True,
+                                  capture_output=True, text=True).stdout.strip()
+        self.assertEqual(server('rev-parse', 'refs/heads/main'), intermediate)
+        server('update-ref', 'refs/heads/main', base)
+        # Pre-receive advances the ref after advertisement but before the update.
+        race_hook = remote / 'hooks/pre-receive'
+        race_hook.write_text(f'#!/bin/sh\nunset GIT_QUARANTINE_PATH GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES\ngit update-ref refs/heads/main {intermediate} {base}\n')
+        race_hook.chmod(0o700)
+        race_result = run(*push, env=env, check=False)
+        self.assertNotEqual(race_result.returncode, 0)
+        self.assertEqual(server('rev-parse', 'refs/heads/main'), intermediate, race_result.stderr)
+        race_hook.unlink()
+        server('update-ref', 'refs/heads/main', base)
+        self.assertEqual(run(*push, env=env, check=False).returncode, 0)
+        self.assertEqual(server('rev-parse', 'refs/heads/main'), candidate)
+
     def test_exact_assets_and_separate_maintenance_records(self):
         self.assertEqual(self.check((False, False))[0], 1)
         self.assertEqual(self.check((True, False))[0], 1)
@@ -193,7 +464,7 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         for index in (0, 1):
             original = copy.deepcopy(self.records[index])
             for key, value in [('version', True), ('purpose', 'other'), ('sandbox_id', 'other'),
-                               ('authorizer_id', 'U0CE2G08ZRC'), ('checkout', '/other'),
+                               ('authorizer_id', 'OTHER_FIXTURE'), ('checkout', '/other'),
                                ('source', dict(original['source'], message_ts='wrong-approval')),
                                ('source', dict(original['source'], question_ts='wrong-question')),
                                ('base_commit', '0' * 40), ('head_commit', '0' * 40),
@@ -347,8 +618,8 @@ class HomepageHeroApprovalTests(unittest.TestCase):
     def test_legacy_css_record_cannot_bypass_hero_hash_approval(self):
         legacy = Path(self.tmp.name) / 'legacy.json'
         legacy.write_text(json.dumps({'version': 1, 'purpose': 'sandbox-review',
-            'sandbox_id': 'homepage-hero-heather', 'authorizer_id': 'U0CE4NY7KC2',
-            'source': {'channel_id': 'C0CEMKENSQ1', 'message_ts': '100.000000'},
+            'sandbox_id': 'homepage-hero-heather', 'authorizer_id': 'LEGACY_FIXTURE',
+            'source': {'channel_id': 'LEGACY_CHANNEL_FIXTURE', 'message_ts': 'legacy-fixture'},
             'css': [{'path': CSS, 'routes': ['/', '/es/'], 'scope': '.release-home'}], 'workbooks': []}))
         legacy.chmod(0o600)
         code, report = self.check((False, True), extra=['--approval-file', str(legacy)])
@@ -650,7 +921,7 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         assert spec is not None and spec.loader is not None
         checker = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(checker)
-        self.assertEqual(checker.HERO_BASE_COMMIT, '0d6f0373fba5c5629bafa8423d855e68931e03e3')
+        self.assertEqual(checker.HERO_BASE_COMMIT, '09a9d89b86586e9779454fcdb4911bda62dd03f9')
         self.assertEqual(checker.HERO_TEMPLATE_BASE_SHA256,
                          'f74d592ded8bfa7196061e8044040c86171f7d65118a145ea794d1212657c762')
 
@@ -659,10 +930,8 @@ class HomepageHeroApprovalTests(unittest.TestCase):
         assert spec is not None and spec.loader is not None
         checker = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(checker)
-        source = {'authorizer_id': 'U0CE4NY7KC2', 'source': {'channel_id': 'C0CEMKENSQ1',
-                  'message_ts': '1794802992.360449', 'question_ts': '1794800455.768529'}}
-        digest = hashlib.sha256(json.dumps(source, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
-        self.assertEqual(checker.HERO_SOURCE_SHA256, digest)
+        self.assertEqual(checker.HERO_SOURCE_SHA256, '7b61ae81b9bd7f6a7cecc23f8a8f6c58a4fb1ebbc7e46fffc0499ca4f6e41643')
+        self.assertEqual(checker.HERO_PUBLICATION_SOURCE_SHA256, 'c99b405655561a1af8a7ecbb0afa2fbe116bc1151ab567e00edcd36bc6defa71')
 
     def test_advanced_main_is_rejected_even_if_record_is_refreshed(self):
         self.git('checkout', '-q', 'main')

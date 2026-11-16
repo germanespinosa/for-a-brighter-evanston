@@ -306,7 +306,7 @@ The checker requires a clean committed checkout and allows no other changes, inc
 
 ### Bilingual homepage photo-hero preview
 
-Kerstin explicitly approved homepage-specific styling, a slideshow script and necessary safety-check updates for the English and Spanish **previews**, in response to the question naming that scope. This is not a publication waiver. Do not open a vote or publish this hero until a separately authorized and independently reviewed, scope-specific publication procedure exists. Confirm photo permission before sharing a preview; all other holds remain. Verify both original #website messages and their human/bot identities before creating records; retain their provenance privately. This exception is only for `sandbox/homepage-hero-heather`, `assets/css/release-home.css` under `.release-home`, and the new independently reviewed `assets/js/hero-slideshow.js`, loaded on `/` and `/es/`. Do not infer permission for other scripts, pages, sandboxes, news, unrelated maintenance or direct publication.
+Kerstin explicitly approved homepage-specific styling, a slideshow script and necessary safety-check updates for the English and Spanish **previews**, in response to the question naming that scope. This is not a publication waiver. She separately authorized safeguards and guide updates for this specific hero followed by the normal team vote, not live publication without a passed vote. The separate reviewed safeguards record and the procedure below are mandatory before opening a vote; without them remain preview-only. Confirm photo permission before sharing a preview; all other holds remain. Verify both original #website messages and their human/bot identities before creating records; retain their provenance privately. This exception is only for `sandbox/homepage-hero-heather`, `assets/css/release-home.css` under `.release-home`, and the new independently reviewed `assets/js/hero-slideshow.js`, loaded on `/` and `/es/`. Do not infer permission for other scripts, pages, sandboxes, news, unrelated maintenance or direct publication.
 
 Create two distinct private operator-owned regular JSON files, mode exactly `0600`, outside the checkout and without symlinks in any path component. Neither is authenticated by Slack by the checker: the trusted operator must first verify the source and independently review the exact bytes, particularly the script's behavior and network access. Do not mint new hashes to excuse altered, unreviewed bytes. The source object contains the verified channel ID, the approving human message timestamp as `message_ts`, and the exact question timestamp as `question_ts`. The checker pins these and the delegate identity; public placeholders here are not approval records.
 
@@ -340,20 +340,20 @@ An independent reviewer must inspect the final committed maintenance files, base
 
 The checker separately pins the non-checker maintenance inventory with `HERO_MAINTENANCE_INVENTORY_SHA256`; `UNREVIEWED` intentionally blocks the exception. After independent review, construct a mapping from each non-checker maintenance path to its exact reviewed lowercase SHA-256. For `docs/help/reviewed-sources.json` only, use instead the SHA-256 of its JSON object with the `scripts/sandbox_check.py` entry removed, serialized as UTF-8 JSON with sorted keys and separators `,` and `:` without whitespace. Hash the resulting path-to-digest mapping with the same canonical JSON encoding. This avoids a circular dependency: the complete manifest itself records the checker hash. Review and install that inventory pin, regenerate the manifest with the final checker hash, and independently review the final checker and complete manifest bytes; the out-of-band record attestation binds both exact files. The manifest's checker entry must match the record. Never update a pin merely to make a changed record pass. Regenerate dependent help artifacts before final review.
 
-Immediately before **each external action** (including push/deployment, sharing a preview, requesting a vote or publishing), recheck the authoritative remote, not only the potentially stale local `origin/main`. Confirm `origin` is the independently verified repository, then run this preflight in the reviewed clean checkout; stop on any failure, mismatch or network error:
+Immediately before **each pre-push external action** (including pushing or sharing a preview and requesting a vote), and through initiating the main push, recheck the authoritative remote, not only the potentially stale local `origin/main`. Confirm `origin` is the independently verified repository, then run this preflight in the reviewed clean checkout; stop on any failure, mismatch or network error:
 
 ```bash
 set -e
 test "$(git remote get-url origin)" = 'git@github.com:germanespinosa/for-a-brighter-evanston.git'
 git fetch origin
-reviewed_base=0d6f0373fba5c5629bafa8423d855e68931e03e3
+reviewed_base=09a9d89b86586e9779454fcdb4911bda62dd03f9
 test "$(git rev-parse origin/main^{commit})" = "$reviewed_base"
 test "$(git ls-remote --exit-code origin refs/heads/main)" = "$(printf '%s\trefs/heads/main' "$reviewed_base")"
 test "$(git merge-base origin/main HEAD)" = "$reviewed_base"
 test -z "$(git status --porcelain=v1 --untracked-files=all)"
 ```
 
-Also compare `HEAD` to both approved records and rerun the static checker with the independently attested maintenance digest. If main advanced, the remote cannot be reached, HEAD or files changed, or any check fails, stop: obtain a fresh review, update the reviewed base/byte pins and records, and repeat preflight. Repeat immediately before each subsequent external action; this is not an atomic lock on the remote. The static checker itself does not fetch or assert that its cached remote-tracking ref is fresh.
+Also compare `HEAD` to both approved records and rerun the static checker with the independently attested maintenance digest. If main advanced before the push, the remote cannot be reached, HEAD or files changed, or any check fails, stop: obtain a fresh review, update the reviewed base/byte pins and records, and repeat preflight. Repeat for each subsequent action through initiating the main push; this is not an atomic lock on the remote. The static checker itself does not fetch or assert that its cached remote-tracking ref is fresh. After the main push, the reviewed base is no longer the expected remote tip: do not rerun this base-tip preflight. Instead retain the claim and require the expected merge OID and the deployment, live-byte, news and cleanup checks in the hero-only publication and closeout procedure below. If the push result or remote state is uncertain, stop and reconcile without retrying.
 
 After independent review, help regeneration and a final local commit, create the records from those reviewed bytes and run:
 ```bash
@@ -363,7 +363,90 @@ python3 scripts/sandbox_check.py --base origin/main \
   --homepage-hero-maintenance-review-sha256 '<independently attested record SHA-256>'
 # Add --url https://forabrighterevanston.org/sandbox/homepage-hero-heather/ after deployment.
 ```
-Verify the rendered asset loading and wrapper on both home routes and their absence on unrelated pages, fetch and compare the deployed CSS and script bytes with the reviewed committed files, and exercise the slideshow, reduced motion, controls and mobile/desktop behavior. The checker does not prove JavaScript is safe or rendered route isolation. It pins both reviewed asset digests in code as well as the private asset record: changing an asset requires separately reviewed enforcement and a new pin, not merely a refreshed record. Any changed base, HEAD or maintenance requires renewed independent review and records; do not bypass an invalid record. A zero exit code and `OK FOR PREVIEW ONLY` are not permission to open a vote or publish: the separately authorized and independently reviewed publication procedure must exist first, and normal review, photo permission and all other holds still apply.
+Verify the rendered asset loading and wrapper on both home routes and their absence on unrelated pages, fetch and compare the deployed CSS and script bytes with the reviewed committed files, and exercise the slideshow, reduced motion, controls and mobile/desktop behavior. The checker does not prove JavaScript is safe or rendered route isolation. It pins both reviewed asset digests in code as well as the private asset record: changing an asset requires separately reviewed enforcement and a new pin, not merely a refreshed record. Any changed base, HEAD or maintenance requires renewed independent review and records; do not bypass an invalid record. Without the third record below, a zero exit code and `OK FOR PREVIEW ONLY` do not permit a vote. Photo permission and all other holds still apply.
+
+#### Separate safeguards record and hero-only vote gate
+
+Verify the distinct human yes to the specific safeguards-and-guide question, including identity, exact question and answer, in the original channel; preview approval is not this consent. Keep its provenance privately. After independent review of the complete procedure, checker, tests, manual, cards, help and exact final bytes, create a third distinct private operator-owned regular mode `0600` JSON file outside the checkout, with no symlink in any component. Its exact keys are `version`, `purpose`, `sandbox_id`, `authorizer_id`, `source`, `authorization_head`, `checkout`, `base_commit`, `head_commit`, `pages`, `routes`, `scope`, `files`. Set version 1, purpose `homepage-hero-publication-safeguards`, sandbox `homepage-hero-heather`; `source` has only `channel_id`, `question_ts`, `message_ts` (the answer) and `answer` (`yes`). The checker pins the real actor, channel, question, answer, and the full preview HEAD at authorization; those values are not placeholders and are distinct from the earlier preview provenance. `checkout`, pinned `base_commit`, final reviewed `head_commit`, pages, routes and scope match the other two records. `files` is exactly the eight maintenance path/hash entries from the separately reviewed maintenance record; each SHA-256 binds the actual committed and working bytes. The authorization HEAD is the earlier preview commit, not the later final candidate HEAD, and must be an ancestor of that candidate. The checker cannot authenticate messages or itself: independently verify original provenance and all bytes before invoking it.
+
+The independent reviewer must attest the SHA-256 of the exact completed third record bytes, out of band, independently of the operator; a digest calculated by the operator from a self-created record is not an attestation. Pass the third record and attested digest in addition to both original records and maintenance attestation:
+
+```bash
+python3 scripts/sandbox_check.py --base origin/main \
+  --homepage-hero-approval-file /private/hero-assets.json \
+  --homepage-hero-maintenance-approval-file /private/hero-maintenance.json \
+  --homepage-hero-maintenance-review-sha256 '<independently attested maintenance record SHA-256>' \
+  --homepage-hero-publication-approval-file /private/hero-publication.json \
+  --homepage-hero-publication-review-sha256 '<independently attested publication record SHA-256>' \
+  --url https://forabrighterevanston.org/sandbox/homepage-hero-heather/
+```
+
+Even `OK TO VOTE` is only a static check, not a vote or proof of deployment. Complete all section 8 review, including actual successful deployed revision, rendered English/Spanish pages, link/navigation/sitemap checks, screenshots, asset byte comparisons and all other holds, before W14. Record the exact reviewed and deployed sandbox commit in the durable vote record. Recount eligible human messages in #website under section 9; the vote must be explicitly passed with at least 2 yes / 0 no, not expired or cancelled. No code action, approval record, request, reaction, test, commit, push or deployment is a vote. A changed candidate requires fresh review and a fresh vote.
+
+#### Hero-only publication after the vote
+
+The following is a mandatory exception to the generic merge instructions, not a pre-authorization to publish. First verify the durable vote record and source messages show an explicit passed 2 yes / 0 no (or more yes, zero no), within the normal voting window, for the exact voted SHA; stop if ambiguous. For this hero, the cancellation cutoff is the timestamp of the first eligible vote message at which the chronological tally reaches 2+ yes and 0 no; it must be before the 24-hour deadline. Reconstruct the tally and any eligible cancellation, or confirmed restart/destroy, in chronological order from W14 through that cutoff. A cancellation at or before the cutoff cancels the vote; if message ordering or eligibility is uncertain, stop. A cancellation after the vote passed is not a cancellation of that closed vote; handle subsequent requests under the applicable ordinary process rather than treating them as votes.
+
+Before announcement or merge, acquire a **local exclusive per-vote claim** on the single designated operator host. All hero handlers on that host must use the same operator-owned private non-symlink directory, `~/.fabian/website-votes/claims`, mode 0700, on a local filesystem with atomic `mkdir`. Use the same claim path for this exact vote regardless of voted SHA: append the full W14 Slack channel ID, a hyphen, and the exact W14 message timestamp as a single filename (verify those values against the vote record and reject path separators). Set `claim` to that path, then run:
+
+<!-- hero-claim-command -->
+```sh
+: "${claim:?}"
+umask 077
+mkdir -- "$claim"
+```
+
+A failed acquisition means stop; do not overwrite, remove or steal an existing claim. After successful acquisition, record the exact vote identifier, voted SHA, unique holder and attempt details inside the private claim and in the durable vote record before acting; if recording fails, retain the claim and stop. Confirm that record and claim ownership before each action and hold through verification and durable closeout. If the prior holder, claim ownership, an earlier push, or the state of the vote is uncertain, stop and reconcile from remote refs, deployment and channel history; do not assume a stale claim is free or retry blindly. Release the claim only after durable successful closeout, or after the attempt is safely reconciled and no publication is in flight.
+
+This claim prevents duplicate attempts only among cooperating handlers using that same host, account and path; it is not a site-wide lock and cannot coordinate other hosts or publishers. Before proceeding, establish that this vote has one designated operator/host and no other handler is acting; if that cannot be established, stop and reconcile. Other publishers may still advance main: the pinned hook and Git server compare-and-update below protect the main ref, not the Slack vote or other operations.
+
+Before push, reread complete original channel history through the cutoff and check for newly known eligible cancellations, confirmed restart/destroy, missing votes or changed eligibility; correct the durable record and stop if one invalidates the pass or if history is unavailable or uncertain. In particular, stop when an eligible cancellation is discovered late, even after the initial recount. Slack cancellation and Git are not atomic: a cancellation can be discovered after the last check or while the push is in flight. If it is known before the push starts, do not push; if discovered during or after an uncertain push, stop, inspect the actual remote/deployment, preserve evidence and follow incident/rollback rules instead of claiming nothing changed. Never blindly retry.
+
+
+In the clean reviewed sandbox checkout, verify the expected remote identity and fetch; compare local HEAD, remote sandbox, both preview records and the third record to the exact voted SHA, current `origin/main` and remote advertised main to the pinned base, and merge base to the same pin. Independently compare final checker and every maintenance record file against the voted blobs and working bytes, confirm no hidden index entries, untracked or ignored scripts/media, then rerun all three record gates and section 8 checks. Check news at the voted SHA is byte-for-byte the pinned base's `data/news.json`. Stop on any mismatch, network error or incomplete review. Fresh refs are observations, not locks.
+
+In a separate clean local main checkout at the exact pinned base, with no hidden index entries, merge the exact voted SHA `--no-ff` (not a moving branch). Before push, check the merge has exactly two parents, first the pin and second the voted SHA; compare the **entire merge tree** with the voted tree, and separately compare the merge news blob to pinned base news. Verify the working/index tree is clean, the sandbox worktree and remote sandbox still equal the voted SHA, and re-fetch/recheck the authoritative remote main pin immediately before push. If anything moved or a merge failed, stop: no retries, no generic rebase, no force and no reusing the vote on a changed tree. Fresh review, authorization and a new vote are required as applicable.
+
+The actual normal non-force push must use the following independently reviewed private `pre-push` hook. Install the exact bytes in a private operator-owned non-symlink directory outside every checkout, mode 0700, hook mode 0700; compare to the independently reviewed bytes and locally exercise accepted and rejected single/multiple-ref and old-OID cases before use. Do not rely on a generic merge being race-safe. The hook checks the server-advertised old OID at the actual push and exactly the intended new merge OID and one main ref. If main advances after advertisement, the server's normal compare-and-update rejects the race. Never bypass the hook or force push; a rejected/uncertain push is a stop, not permission to retry.
+
+<!-- hero-pre-push-hook -->
+```sh
+#!/bin/sh
+set -eu
+[ "$#" -eq 2 ] && [ "$1" = origin ] || exit 1
+: "${FABIAN_EXPECTED_MAIN:?}" "${FABIAN_EXPECTED_MERGE:?}"
+count=0
+while read -r local_ref local_oid remote_ref remote_oid extra; do
+  count=$((count + 1))
+  [ "$count" -eq 1 ] && [ -z "$extra" ] && [ "$local_ref" = HEAD ] &&
+    [ "$local_oid" = "$FABIAN_EXPECTED_MERGE" ] &&
+    [ "$remote_ref" = refs/heads/main ] && [ "$remote_oid" = "$FABIAN_EXPECTED_MAIN" ] || exit 1
+done
+[ "$count" -eq 1 ]
+```
+
+After verifying `FABIAN_EXPECTED_MAIN` is the reviewed pin and `FABIAN_EXPECTED_MERGE` is the just-checked merge OID, export both. Immediately before initiating the push, repeat the channel-history/cancellation check above and confirm claim ownership; if an eligible cancellation is known or anything is uncertain, stop. Only then run `git -c core.hooksPath=<private-hook-dir> push origin HEAD:refs/heads/main`. Never use `--force`, `+`, `--no-verify`, or a different hook. Keep the exclusive claim; verify the actual remote main equals that merge OID and the production build/deploy for it succeeded. Fetch the actual live bytes for the CSS, script and all ten photo URLs and compare each to the voted blobs; HTTP failure or mismatch is unverified. Inspect user-visible `/` and `/es/` on desktop and mobile, navigation and language switches, slideshow controls/reduced motion, correct photo credits, unrelated route isolation, news and live sitemap. A successful push, build status, cache-busted page or HTTP 200 alone does not establish publication. If any live bytes or routes are wrong or unverifiable, keep publication unverified, report the blocker, retain evidence and follow incident/rollback rules; do not claim success or release another publisher to act blindly.
+
+After the closeout gate passes, delete only the exact voted sandbox ref, never a newer revision. Set `voted_sha` to the full recorded vote commit; verify the remote identity and that the advertised sandbox ref still equals it. Run this exact-lease deletion once (the force-with-lease option here is for deletion of the sandbox ref only, never for main):
+
+<!-- hero-cleanup-command -->
+```sh
+ref=refs/heads/sandbox/homepage-hero-heather
+: "${voted_sha:?}"
+git push --force-with-lease="$ref:$voted_sha" origin ":$ref"
+if git ls-remote --exit-code origin "$ref"; then
+  exit 1
+else
+  status=$?
+  [ "$status" -eq 2 ] || exit "$status"
+fi
+```
+
+Exit 2 from `ls-remote --exit-code` means the ref is absent; any network error, rejected/uncertain deletion or ref still present means stop and reconcile, retaining evidence. A successful push response alone is not verified cleanup. Do not blindly retry or delete a changed branch. Check the deployed sandbox route is gone separately; if cleanup is uncertain, do not post W20 or claim completion.
+
+<!-- hero-closeout-gate -->
+**Hero-closeout gate:** Before sandbox deletion, a success message or success reaction, verify all of the following while retaining and confirming claim ownership: the actual remote main is the checked merge OID; its production build/deploy succeeded; actual live bytes of the CSS, script and all ten photo URLs match the voted blobs; both home routes and unrelated route isolation work; and production news and sitemap match the approved pinned-base news and final route inventory. Complete all section 9 live checks too. Record the evidence durably. If any check fails, is incomplete or cannot be verified, or claim ownership is lost or uncertain, stop and mark publication unverified. Do not delete the sandbox, do not post W20 or any publication-success claim, and do not switch to a success reaction. Report the blocker accurately, preserve evidence and follow incident/rollback rules; do not say nothing changed if the push might have taken effect. Resolve claim loss safely rather than assuming it is held or releasing another publisher blindly.
+<!-- end-hero-closeout-gate -->
 
 ### Not allowed (structural, unless explicitly excepted above)
 
@@ -601,7 +684,7 @@ The site rebuilds without it. Check that `/sandbox/<id>/` no longer loads (HTTP 
 
 ## 8. Validate and give your opinion before every vote
 
-Triggered by "publish", "send it to publish", "let's vote", or similar. A vote never starts without this review. The `homepage-hero-heather` exception covers preview preparation only; before opening its vote, obtain a separately authorized and reviewed, scope-specific publication procedure.
+Triggered by "publish", "send it to publish", "let's vote", or similar. A vote never starts without this review. For `homepage-hero-heather`, preview-only is the default; before opening its vote require all three separately reviewed records and the hero-only procedure in section 5.
 
 1. Acknowledge with **Message W10**, react 👀, and start the status message.
 2. **Bring the sandbox up to date with the live site**, so the vote covers what will really go live. For `letter-vote-nov16` and `homepage-hero-heather`, follow their respective pinned-base and reviewed-byte gates in section 5; do not run the generic command block or generated-file conflict resolution below for either exception. Stop instead of automatically merging, rebuilding, or pushing when anything drifts.
@@ -640,7 +723,7 @@ Triggered by "publish", "send it to publish", "let's vote", or similar. A vote n
    cat /tmp/review-<id>/*.txt; python3 -c "import json;print(*json.load(open('/tmp/review-<id>/screens.json'))['problems'],sep='\n')"
    ```
 
-   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes. For `letter-vote-nov16`, use its two distinct approval flags from section 5, independently verify the checker, compare the deployed script's full bytes against the approved revision, and exercise both language generators without sending messages. For `homepage-hero-heather`, use section 5's two approval records and independently attested maintenance digest, repeat its authoritative remote preflight, and verify deployed asset bytes and slideshow behavior on both homepages.
+   For the approved `nov16-meeting` removals, add both private approval-file flags described in section 5 to the validator command, independently verify the reviewed checker before execution, and separately check the four deleted preview routes. For `letter-vote-nov16`, use its two distinct approval flags from section 5, independently verify the checker, compare the deployed script's full bytes against the approved revision, and exercise both language generators without sending messages. For `homepage-hero-heather`, use section 5's three approval records and both independently attested digests, repeat its authoritative remote preflight, and verify deployed asset bytes and slideshow behavior on both homepages.
 
    Both scripts already work in parallel inside: `sandbox_check.py` checks links about 16 at a time, and `sandbox_screens.py` loads about 6 pages at a time (`--jobs` changes that). The exit codes no longer show in this form; read the outputs: `RESULT:` in `rules.txt`, `problems` in `screens.json`, and the verdict line of each mockup report. If `screens.json` isn't JSON (Playwright error), rerun that one script on its own.
 
@@ -756,7 +839,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
 
 **When the vote passes:**
 
-1. Post "✅ Approved by [names]. Publishing…" (and edit the vote message to say the same, if you can). Start the status message.
+1. For `homepage-hero-heather`, first verify the passed vote and acquire the exclusive claim as required by section 5; if either fails, stop. Then post "✅ Approved by [names]. Publishing…" (and edit the vote message to say the same, if you can). Start the status message.
 2. Make sure the sandbox wasn't changed after the vote started:
 
    ```bash
@@ -765,7 +848,7 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    ```
 
    If it differs, stop and send **Message W19**. A new vote is needed.
-3. Merge into the live site. For `letter-vote-nov16`, do **not** run the generic block below: follow its pinned-base publication procedure after the block instead. The `homepage-hero-heather` exception authorizes preview preparation only and has no approved publication procedure in this manual: do **not** run the generic block or push it to main. Stop and obtain a separately reviewed, scope-specific publication procedure and authorization before considering a team vote or publication. For other updates, use `--no-ff`, so the whole update is one commit and easy to roll back:
+3. Merge into the live site. For `letter-vote-nov16`, do **not** run the generic block below: follow its pinned-base publication procedure after the block instead. For `homepage-hero-heather`, do **not** run the generic block: follow the separate hero-only guarded publication procedure in section 5. For other updates, use `--no-ff`, so the whole update is one commit and easy to roll back:
 
    ```bash
    git checkout main && git pull --ff-only origin main
@@ -783,8 +866,8 @@ Delete them when the vote is cancelled, passes or is closed. If you can't create
    For `letter-vote-nov16`, also fetch the live letter-content script and compare every byte with the voted blob as required by section 5; page appearance alone is not verification.
    For new pages, also verify the live sharing-card title, description and image against the approved preview, and fetch the live image. Do not report publication verified based only on visible body content or HTTP status.
    Fetch the live sitemap and compare it with the approved final public-page inventory, including both languages and alternate links; verify listed destinations and navigation paths. If it is stale, incomplete or incorrect, resolve the discrepancy and verify again before reporting completion. Never insert the temporary sandbox URLs into the live sitemap.
-5. Remove the sandbox: `git push origin --delete sandbox/<id>`.
-6. Post **Message W20**: live links, who approved, and the refresh reminder. Switch the reaction to ✅.
+5. For `homepage-hero-heather`, proceed only after the hero-closeout gate in section 5 has passed; on any failed or uncertain verification stop, retain the sandbox and report the blocker. Delete and verify the hero sandbox only using its section 5 exact-lease procedure. For other updates remove the sandbox: `git push origin --delete sandbox/<id>`.
+6. For `homepage-hero-heather`, proceed only after the hero-closeout gate and successful sandbox removal; otherwise stop without claiming success. Post **Message W20**: live links, who approved, and the refresh reminder. Switch the reaction to ✅.
 7. **Compact context last.** At the end of every completed website update, once all changed production pages are fully live and verified, finish cleanup, save the durable publication/verification records and read back the top-level completion message. Then run Hermes `/compact` in the session that handled the update (Slack alternative: `!compact`). This is not triggered by sandbox previews, pending deployments, failed checks or an open vote. Preserve records and pending unrelated work before compaction; never use `/new` or erase history as a substitute. Use a supported session-command mechanism: posting `/compact` as bot text does not execute it. If the current interface cannot invoke session commands, record compaction as pending and tell German privately rather than claiming it ran; do not require nontechnical teammates to operate it. This is a closeout rule, not a claim of an installed automatic runtime hook.
 
 ---
@@ -855,7 +938,7 @@ German may also give you other instructions in his DMs about the site. Those are
 | More than one `sandbox/*` branch exists | Don't create, change or delete anything. Tell German in a DM and post **Message W22**. |
 | Push rejected on the sandbox branch | `git pull --rebase origin sandbox/<id>`, run the check again, push again. |
 | Authentication or permission errors | Don't retry with other credentials. **Message W22**. |
-| Force push | Allowed only on `sandbox/<id>` and only for a restart. **Never on `main`.** |
+| force push | Allowed only on `sandbox/<id>` and only for a restart. **Never on `main`.** The hero's section 5 exact-lease sandbox deletion is a separate deletion-only use of `--force-with-lease`, not authorization to overwrite a branch. |
 | Someone uploads a file you can't open, or an unsupported type | Say so and ask for a JPG/PNG/WebP/GIF image or a PDF; a supplied macro-free XLSX financial model needs the narrow explicit German/Kerstin approval above. |
 | A request mixes news and website changes | Do the website part; point the news part to `#news` (**Message W12**). |
 
@@ -1020,7 +1103,7 @@ Don't make the summary only a list of file names.
 - [ ] Mockup: what matters agreed (W26); every gap listed and asked for (W27), none filled by guessing; text copied verbatim (`mockup_check.py compare` = TEXT COPIED VERBATIM); typos asked about, not fixed
 
 **Publish**
-- [ ] Sandbox merged with the latest `origin/main` and rebuilt
+- [ ] Ordinary sandbox merged with latest `origin/main` and rebuilt; for `homepage-hero-heather`, follow the pinned-base, no-drift procedure in section 5 instead
 - [ ] Sandbox-only styling/model permission not mistaken for publication approval; copy/resource/publication holds resolved before voting
 - [ ] `sandbox_check.py --url`, `sandbox_screens.py` (and `mockup_check.py compare` for mockup pages) run together in one call; outputs read; screenshots reviewed
 - [ ] Fabian completed the mandatory rendered-title, heading, navigation and internal-link check; important pages reachable in both languages; no unresolved blockers

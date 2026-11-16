@@ -39,7 +39,7 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 ## Card E: "publish" / "let's vote" (review before every vote)
 
-**`homepage-hero-heather` hold:** This exception is preview-only. Do not post **W14**, open a vote, or publish until a separately authorized and independently reviewed, scope-specific publication procedure exists. Stop and explain the hold; a checker exit code of 0 means eligible for preview, not vote-ready. Confirm photo permission before sharing the preview; other holds remain.
+**`homepage-hero-heather` gate:** Preview-only by default. Do not post **W14** until the two original records and distinct independently attested safeguards record pass section 5, the deployed revision and full section 8 review are verified, and other holds including photo permission are resolved. A checker exit code alone is not a vote or proof of deployment.
 
 1. **W10**, react 👀.
 2. Ordinary updates: merge `origin/main` into the sandbox and push. If only the generated help PDF and `reviewed-sources.json` conflict, rebuild them; any other conflict → abort and **W15**. For `letter-vote-nov16` and `homepage-hero-heather`, obey each section 5 pinned-base and reviewed-byte gate; drift means stop, not automatic merge or rebuild (section 8, step 2).
@@ -58,13 +58,13 @@ How and when to read these documents (the fingerprint check) is in reference sec
 
 ## Card G: the vote passed (publish)
 
-For `homepage-hero-heather`, stop before announcing publication or merging: preview approval is not publication authorization. A separately authorized and independently reviewed, scope-specific publication procedure must exist before a vote can be opened or publication considered; other holds remain.
+For `homepage-hero-heather`, verify the explicit passed vote (at least 2 yes, 0 no) and acquire the single-host local exclusive per-vote claim before announcing or merging; otherwise stop. Follow the section 5 hero-only procedure, never the generic block. Recheck channel history for any eligible cancellation before push; Slack and Git are not atomic, and uncertainty means stop and reconcile. The claim does not coordinate other hosts or site-wide publishers. No code action is a vote.
 
 1. Post "✅ Approved by [names]. Publishing…".
 2. The sandbox must still be the voted commit; otherwise **W19**, stop.
-3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes; stop on drift or rejected push, never retry on a newer base with the old approvals. The `homepage-hero-heather` exception is preview-only: do not run this generic merge or push it to main without a separately authorized and reviewed publication procedure.
-4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4). For `letter-vote-nov16`, byte-compare the fetched live letter script against the voted blob (section 5).
-5. Delete the sandbox branch, post **W20**, react ✅. Save the records, then `/compact` last (section 9, step 7).
+3. Merge `--no-ff` into `main` with the publish message (section 10), check the news list is untouched, push. Conflict or news changed → **W15**. For `letter-vote-nov16`, section 5 additionally requires the exact pinned base, voted merge tree and reviewed bytes; stop on drift or rejected push, never retry on a newer base with the old approvals. For `homepage-hero-heather`, section 5 requires the exact voted tree, pinned old OID and reviewed private pre-push hook on the actual non-force push; stop on drift or failure, never retry.
+4. After the build, verify the live pages, the new-page sharing cards and the live sitemap (section 9, "When the vote passes", step 4). For `letter-vote-nov16`, byte-compare the fetched live letter script against the voted blob. For the hero compare live CSS, script and all ten photos to voted blobs and exercise both routes (section 5); failures are unverified.
+5. For the hero, proceed only after the hero-closeout gate in section 5: claim ownership, remote main, production deployment, all live asset bytes, routes, news and sitemap must all verify. On failure or uncertainty stop, retain evidence, and never claim success. Delete the sandbox only with the section 5 exact voted-SHA lease and verify the remote ref is absent and sandbox route gone; otherwise stop and reconcile. Then post **W20**, react ✅, save records and `/compact` last (section 9, step 7).
 
 ## Card H: anything else
 

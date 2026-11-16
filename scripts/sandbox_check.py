@@ -706,7 +706,9 @@ def unique_json_fields(pairs):
 HERO_CSS = "assets/css/release-home.css"
 HERO_SCRIPT = "assets/js/hero-slideshow.js"
 HERO_SOURCE_SHA256 = "7b61ae81b9bd7f6a7cecc23f8a8f6c58a4fb1ebbc7e46fffc0499ca4f6e41643"
-HERO_BASE_COMMIT = "0d6f0373fba5c5629bafa8423d855e68931e03e3"
+HERO_PUBLICATION_SOURCE_SHA256 = "c99b405655561a1af8a7ecbb0afa2fbe116bc1151ab567e00edcd36bc6defa71"
+HERO_BASE_COMMIT = "09a9d89b86586e9779454fcdb4911bda62dd03f9"
+HERO_AUTHORIZATION_HEAD = "fa6b193ea35c2bface8ddf90074208bd6720f93e"
 HERO_TEMPLATE = "_includes/pages/home.html"
 HERO_TEMPLATE_BASE_SHA256 = "f74d592ded8bfa7196061e8044040c86171f7d65118a145ea794d1212657c762"
 HERO_TEMPLATE_SHA256 = "b183e0c0d4c36016a195709273bdc387153c4aed59230cab9a8dd2162d1463e8"
@@ -745,7 +747,7 @@ HERO_MAINTENANCE = frozenset({
 # Fail closed until an independent review of the final non-checker inventory.
 # The source manifest refers back to this checker, so pin its other entries
 # canonically and bind its exact bytes via the separately attested record.
-HERO_MAINTENANCE_INVENTORY_SHA256 = "24e9cdbfc4e1faaabc2f52e3270aea6157efda223120d24e3c1adc03c9c3e9a3"
+HERO_MAINTENANCE_INVENTORY_SHA256 = "03d5723a74f2e34fb2ce09266107bfbd3a2a4f421c757cbbb0f4776c6665c2e5"
 
 
 def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha256=None):
@@ -960,6 +962,49 @@ def load_homepage_hero_approval(filename, purpose, base, sandbox_url, review_sha
     return approved
 
 
+def load_hero_publication_safeguards(filename, review_sha256, base, assets, maintenance):
+    """Distinct user authorization and independently attested record, not a vote."""
+    if not filename:
+        if review_sha256:
+            raise ValueError("publication review digest without record")
+        return False
+    if not assets or not maintenance:
+        raise ValueError("both original preview approvals are required")
+    path = Path(filename).absolute()
+    if any(p.is_symlink() for p in (path, *path.parents)) or path.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError("publication record must be outside checkout without symlinks")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600:
+            raise ValueError("publication record must be operator-owned regular mode 0600")
+        raw = stream.read()
+    if (not isinstance(review_sha256, str) or not re.fullmatch(r"[a-f0-9]{64}", review_sha256)
+            or hashlib.sha256(raw).hexdigest() != review_sha256):
+        raise ValueError("publication requires independently attested record SHA-256")
+    record = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_json_fields)
+    keys = {"version", "purpose", "sandbox_id", "authorizer_id", "source", "authorization_head",
+            "checkout", "base_commit", "head_commit", "pages", "routes", "scope", "files"}
+    if (not isinstance(record, dict) or set(record) != keys or type(record["version"]) is not int
+            or record["version"] != 1 or record["purpose"] != "homepage-hero-publication-safeguards"
+            or record["sandbox_id"] != "homepage-hero-heather"
+            or hashlib.sha256(json.dumps({"authorizer_id": record["authorizer_id"], "source": record["source"]},
+                                         sort_keys=True, separators=(",", ":")).encode()).hexdigest() != HERO_PUBLICATION_SOURCE_SHA256
+            or record["authorization_head"] != HERO_AUTHORIZATION_HEAD
+            or record["checkout"] != str(ROOT.resolve()) or base != "origin/main"
+            or record["base_commit"] != HERO_BASE_COMMIT
+            or record["head_commit"] != git("rev-parse", "HEAD^{commit}").strip()
+            or record["pages"] != HERO_PAGES or record["routes"] != HERO_ROUTES
+            or record["scope"] != ".release-home"):
+        raise ValueError("publication record schema, provenance or binding mismatch")
+    if subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor",
+                       HERO_AUTHORIZATION_HEAD, "HEAD"], capture_output=True).returncode != 0:
+        raise ValueError("authorization preview HEAD must be an ancestor of the candidate")
+    if nov16_inventory(record, HERO_MAINTENANCE) != maintenance:
+        raise ValueError("publication record must bind independently reviewed maintenance bytes")
+    return True
+
+
 def load_poll_copy_approval(filename, sandbox_url=None):
     """One immutable clipboard script, two existing pages, German's exact consent."""
     if not filename:
@@ -1107,6 +1152,8 @@ def main():
     ap.add_argument("--homepage-hero-approval-file", help="private reviewed homepage hero asset approval JSON")
     ap.add_argument("--homepage-hero-maintenance-approval-file", help="private reviewed homepage hero safety-maintenance approval JSON")
     ap.add_argument("--homepage-hero-maintenance-review-sha256", help="independently reviewed SHA-256 of the exact maintenance record bytes")
+    ap.add_argument("--homepage-hero-publication-approval-file", help="separate private publication-safeguards authorization JSON (not a vote)")
+    ap.add_argument("--homepage-hero-publication-review-sha256", help="independently attested SHA-256 of exact publication-safeguards record bytes")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
@@ -1121,10 +1168,19 @@ def main():
                 hero_assets = approved
             else:
                 hero_maintenance = approved
-            if approved:
-                notes.append(f"{purpose}: reviewed preview only; vote and publication are held until a separately authorized and reviewed publication procedure exists; other holds remain.")
         except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
             blocking.append(f"Invalid {purpose} approval: {error}")
+    hero_publication = False
+    try:
+        hero_publication = load_hero_publication_safeguards(
+            args.homepage_hero_publication_approval_file, args.homepage_hero_publication_review_sha256,
+            args.base, hero_assets, hero_maintenance)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        blocking.append(f"Invalid homepage-hero publication safeguards approval: {error}")
+    if hero_publication:
+        notes.append("Publication safeguards reviewed; normal team review and vote, verified deployment, photo permission and all other holds remain. No code action is a vote.")
+    elif hero_assets or hero_maintenance:
+        notes.append("Reviewed preview only; vote and publication are held until a separately authorized and reviewed publication procedure exists; other holds remain.")
     letter_copy, letter_maintenance = {}, {}
     for filename, purpose in ((args.letter_vote_approval_file, "letter-vote-copy"),
                               (args.letter_vote_maintenance_approval_file, "letter-vote-maintenance")):
@@ -1514,7 +1570,7 @@ def main():
                 print(f"  - {i}")
         if blocking:
             result = "NOT READY FOR A VOTE"
-        elif hero_assets or hero_maintenance:
+        elif (hero_assets or hero_maintenance) and not hero_publication:
             result = "OK FOR PREVIEW ONLY (vote/publication held)"
         else:
             result = "OK TO VOTE (review warnings)"
