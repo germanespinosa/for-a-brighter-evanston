@@ -68,6 +68,59 @@
   </div>
 </section>
 
+<section class="hm-section hm-section--cream" aria-labelledby="repair-title">
+  <div class="hm-wrap">
+    <h2 class="hm-h2" id="repair-title">{% if page.lang == 'es' %}Nuevo: Las cifras de reparación del Distrito no se sostienen{% else %}New: The District's repair numbers don't hold up{% endif %}</h2>
+    <div class="hm-grid3">
+      <article class="hm-card hm-lever">
+        {% if page.lang == 'es' %}
+        <h3 class="hm-lever__title">Una factura de $600 millones en reparaciones que no se sostiene</h3>
+        <p class="hm-lever__text">La administración dice que el D65 necesita casi $600 millones en reparaciones de edificios, y el plan actual da esa cifra por sentada. Una madre o un padre que examinó los propios datos del Distrito encontró:</p>
+        <p class="hm-lever__text"><strong>Cuenta escuelas que ya están cerradas.</strong> Kingsley y Bessie Rhodes siguen en la lista de reparaciones. <strong>Supone la opción más costosa de calefacción y refrigeración.</strong> Eso supone cerca de $100 millones para sistemas geotérmicos. Un sistema convencional de calefacción y refrigeración probablemente costaría menos. Los créditos fiscales federales también podrían reducir el costo de los sistemas geotérmicos, pero no está claro si la estimación del Distrito los tiene en cuenta. <strong>Algunos costos se cuentan dos veces.</strong> El plan paga tanto los nuevos sistemas geotérmicos como algunas de las mejoras a los sistemas antiguos de calefacción y refrigeración que esos sistemas reemplazarían. Otros elementos, como el reemplazo de tuberías galvanizadas, también se cuentan dos veces. <strong>Unos $130 millones podrían pagarse con bonos especiales de seguridad,</strong> no con el presupuesto regular. Cuando el Evanston RoundTable envió al Distrito preguntas detalladas para este artículo, la administración no respondió ni una sola.</p>
+        <p class="hm-source"><a href="https://evanstonroundtable.com/2026/11/15/parents-say-cutting-capital-spending-to-4-7-million-would-leave-district-65-in-same-financial-position-as-closing-dewey-lincolnwood/" target="_blank" rel="noopener">Leer el artículo del RoundTable</a></p>
+        {% else %}
+        <h3 class="hm-lever__title">A $600 million repair bill that doesn't hold up</h3>
+        <p class="hm-lever__text">The administration says D65 needs nearly $600 million in building repairs, and the current plan treats that number as a given. A parent who dug into the District's own data found:</p>
+        <p class="hm-lever__text"><strong>It counts schools that are already closed.</strong> Kingsley and Bessie Rhodes are still on the repair list. <strong>It assumes the most expensive heating and cooling option.</strong> That's close to $100 million for geothermal. A conventional heating and cooling system would likely cost less. Federal tax credits could also lower the geothermal cost, but it's unclear whether the District's estimate accounts for them. <strong>Some costs are counted twice.</strong> The plan pays for new geothermal systems and for some of the older heating and cooling upgrades they would replace. Other items, like galvanized pipe replacements, are counted twice too. <strong>About $130 million could be paid for with special safety bonds,</strong> not the regular budget. When the Evanston RoundTable sent the District detailed questions for this story, the administration didn't answer a single one.</p>
+        <p class="hm-source"><a href="https://evanstonroundtable.com/2026/11/15/parents-say-cutting-capital-spending-to-4-7-million-would-leave-district-65-in-same-financial-position-as-closing-dewey-lincolnwood/" target="_blank" rel="noopener">Read the RoundTable story</a></p>
+        {% endif %}
+      </article>
+      <article class="hm-card hm-lever">
+        {% if page.lang == 'es' %}
+        <h3 class="hm-lever__title">El gasto en reparaciones es una elección</h3>
+        <table class="hm-lever__text" cellspacing="6">
+          <thead><tr><th scope="col">Meta actual</th><th scope="col">Opción de las familias</th><th scope="col">Plan del Distrito</th></tr></thead>
+          <tbody>
+            <tr><td><strong>$2.7M</strong></td><td><mark class="hm-mark"><strong>$4.7M</strong></mark></td><td><strong>$8.3M</strong></td></tr>
+            <tr><td>política actual del Distrito</td><td>menos del doble de la meta actual</td><td>más del triple de la meta actual</td></tr>
+          </tbody>
+        </table>
+        <p class="hm-lever__text">Como dijo la presidenta de la Junta, la cantidad que el D65 gasta en reparaciones es «una elección». Hoy, la meta del Distrito es de $2.7 millones al año. El plan de la administración aumentaría esa cifra a más del triple, hasta $8.3 millones. Las familias demostraron que aumentarla a $4.7 millones en su lugar, que sigue siendo un aumento considerable, mantiene abiertas Dewey y Lincolnwood y deja al Distrito en una situación financiera aproximadamente igual, sin cambiar nada más en el plan. Eso da tiempo para hacer esto bien: dar a la comunidad una elección clara sobre un referéndum y dejar que la próxima persona a cargo de la superintendencia corrija las cifras para que tengan sentido.</p>
+        <p class="hm-source"><a href="{{ options_url | relative_url }}" target="_blank" rel="noopener">Ver las opciones</a></p>
+        {% else %}
+        <h3 class="hm-lever__title">Repair spending is a choice</h3>
+        <table class="hm-lever__text" cellspacing="6">
+          <thead><tr><th scope="col">Today's goal</th><th scope="col">Parents' option</th><th scope="col">District plan</th></tr></thead>
+          <tbody>
+            <tr><td><strong>$2.7M</strong></td><td><mark class="hm-mark"><strong>$4.7M</strong></mark></td><td><strong>$8.3M</strong></td></tr>
+            <tr><td>current District policy</td><td>less than double today's goal</td><td>more than triple today's goal</td></tr>
+          </tbody>
+        </table>
+        <p class="hm-lever__text">As the board president put it, the amount D65 spends on repairs is "a choice." Today, the District's goal is $2.7 million a year. The administration's plan would more than triple that, to $8.3 million. Parents showed that raising it to $4.7 million instead, still a big increase, keeps Dewey and Lincolnwood open and leaves the District in about the same financial shape, without changing anything else in the plan. That buys time to do this right: give the community a clear choice on a referendum, and let the next superintendent fix the numbers so they make sense.</p>
+        <p class="hm-source"><a href="{{ options_url | relative_url }}" target="_blank" rel="noopener">See the options</a></p>
+        {% endif %}
+      </article>
+    </div>
+    <div class="hm-foot">
+      {% if page.lang == 'es' %}
+      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/es/escriba-a-la-junta-issue/' | relative_url }}">Escribe a la Junta antes de las 6 p. m. {{ arrow }}</a>
+      {% else %}
+      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/home/write-to-the-board-issue/' | relative_url }}">Email the board before 6 p.m. {{ arrow }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
 <section class="hm-section hm-section--white" aria-labelledby="video-title">
   <div class="hm-wrap">
     {% if page.lang == 'es' %}
