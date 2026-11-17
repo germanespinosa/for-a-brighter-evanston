@@ -245,7 +245,7 @@
   color: var(--navy);
 }
 .release-home .hm-repair-stat--featured { background: var(--navy); border-color: var(--navy); color: var(--white); }
-.release-home .hm-repair-stat__label { font-family: var(--font-display); font-size: 11px; font-weight: 800; line-height: 1.25; letter-spacing: .04em; text-transform: uppercase; color: var(--blue); }
+.release-home .hm-repair-stat__label { font-family: var(--font-display); font-size: 12px; font-weight: 800; line-height: 1.25; letter-spacing: .04em; text-transform: uppercase; color: var(--blue); }
 .release-home .hm-repair-stat--featured .hm-repair-stat__label, .release-home .hm-repair-stat--featured .hm-repair-stat__value { color: var(--gold); }
 .release-home .hm-repair-stat__value { font-family: var(--font-display); font-size: clamp(20px, 6.5cqw, 30px); font-weight: 900; line-height: 1; letter-spacing: -.04em; white-space: nowrap; }
 .release-home .hm-repair-stat__caption { font-size: 13px; font-weight: 700; line-height: 1.3; }
