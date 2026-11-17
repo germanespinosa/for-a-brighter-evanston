@@ -650,6 +650,8 @@ It compares only the page's main content and reports:
 
 Fix every CHANGED and MINOR line, unless the requester explicitly asked for that change; then note it in the fills file and the commit message. Make sure every ADDED line is something you labeled or were asked for. The result must say **TEXT COPIED VERBATIM** before W5 says the text matches. Also compare the preview with the mockup by eye: the order, headings and agreed layout.
 
+**Visual comparison for image/PDF mockups.** After the first build, use `sandbox_screens.py` on only the changed sandbox route(s), at desktop and phone widths. Skip live captures unless an existing-page baseline is needed. Compare the supplied image and rendered screenshots at the same or closest practical viewport: proportions, line wrapping, spacing, image placement, buttons and phone overflow. Fix material differences; share the first usable W5 preview promptly and label minor differences. This fits inside the existing build and review steps, with no extra confirmation or prototype. If either image is unavailable, do not claim a visual match. Section 8 still requires fresh checks before a vote.
+
 **7. Report and record.** In W5 and in the review (W13), add one line: "Built from [file] supplied by [name]: text copied verbatim; [n] gaps answered by [name]; parts followed: [text, layout…]; not followed: [style…]." In the sandbox commit message, add:
 
 ```
@@ -1105,6 +1107,7 @@ Don't make the summary only a list of file names.
 - [ ] Sandbox rebuilt; changed pages checked; W5 posted
 - [ ] File shared with a request: asked whether it's a mockup (W25) unless the requester already said so; nothing assumed
 - [ ] Mockup: what matters agreed (W26); every gap listed and asked for (W27), none filled by guessing; text copied verbatim (`mockup_check.py compare` = TEXT COPIED VERBATIM); typos asked about, not fixed
+- [ ] Visual mockup: changed sandbox page compared with supplied reference at desktop and phone widths; material mismatches fixed or disclosed before W5, with no extra approval stage
 
 **Publish**
 - [ ] Ordinary sandbox merged with latest `origin/main` and rebuilt; for `homepage-hero-heather`, follow the pinned-base, no-drift procedure in section 5 instead
