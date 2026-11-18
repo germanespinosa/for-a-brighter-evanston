@@ -12,7 +12,8 @@
     success: 'Mailchimp recibió su solicitud. Revise su correo por si necesita confirmar la inscripción.',
     rejected: 'Mailchimp no pudo completar la inscripción. Revise sus datos e inténtelo de nuevo.',
     uncertain: 'No pudimos confirmar el resultado. Antes de volver a intentarlo, revise su correo o contacte al equipo; es posible que Mailchimp haya recibido su solicitud.',
-    captcha: 'Mailchimp necesita una verificación. La inscripción aún no está completa; continúe en Mailchimp.',
+    captcha: 'Mailchimp solicitó una verificación. La inscripción no se ha completado; continúe en Mailchimp para intentarlo.',
+    captchaInvalid: 'Mailchimp solicitó una verificación, pero no pudimos comprobar el enlace. ',
     unavailable: 'El formulario no está disponible aquí. Puede enviar sus datos directamente a Mailchimp en una pestaña nueva.',
     fallback: 'Enviar directamente a Mailchimp'
   } : {
@@ -21,11 +22,18 @@
     success: 'Mailchimp received your request. Check your email in case you need to confirm your signup.',
     rejected: 'Mailchimp could not complete the signup. Check your details and try again.',
     uncertain: 'We could not confirm the result. Before trying again, check your email or contact the team; Mailchimp may have received your request.',
-    captcha: 'Mailchimp requires verification. Signup is not complete; continue on Mailchimp.',
+    captcha: 'Mailchimp requested verification. Your signup is not complete; continue on Mailchimp to proceed.',
+    captchaInvalid: 'Mailchimp requested verification, but we could not verify the link. ',
     unavailable: 'The form is unavailable here. You can send your details directly to Mailchimp in a new tab.',
     fallback: 'Send directly to Mailchimp'
   };
   var state = 'loading';
+  var hadMc = Object.prototype.hasOwnProperty.call(window, 'mc');
+  var previousMc = window.mc;
+  var hadJQuery = Object.prototype.hasOwnProperty.call(window, 'jQuery');
+  var previousJQuery = window.jQuery;
+  var hadDollar = Object.prototype.hasOwnProperty.call(window, '$');
+  var previousDollar = window.$;
   var script = document.createElement('script');
   var loaderTimer;
   var fallback = document.createElement('button');
@@ -43,6 +51,46 @@
     status.textContent = words.unavailable;
     fallback.hidden = false;
   }
+
+  /* The bundled validator predates destroy() and binds unnamespaced delegates.
+     Remove only its own handlers, not other handlers on the same elements. */
+  function cleanupVendor(jq, mc) {
+    if (jq && jq !== previousJQuery && jq.fn) {
+      var validator = (jq.data && jq.data(form, 'validator')) || (mc && mc.mce_validator);
+      if (validator && typeof validator.destroy === 'function') validator.destroy();
+      if (typeof jq._data === 'function') {
+        [form, document].forEach(function (element) {
+          var events = jq._data(element, 'events') || {};
+          Object.keys(events).forEach(function (type) {
+            events[type].slice().forEach(function (entry) {
+              var source = Function.prototype.toString.call(entry.handler);
+              var delegate = element === form && /var e=a\(c\.target\);return e\.is\(b\)\?d\.apply\(e,arguments\)/.test(source);
+              var submit = element === form && type === 'submit' && /c\.settings\.submitHandler/.test(source) && /c\.focusInvalid/.test(source);
+              var keydown = element === document && type === 'keydown' && /keycode\s*=/.test(source) && /mc\.showPopup/.test(source);
+              if (delegate || submit || keydown) jq(element).off(type + (entry.namespace ? '.' + entry.namespace : ''), entry.handler);
+            });
+          });
+        });
+      }
+      if (jq.removeData) jq.removeData(form, 'validator');
+      if (typeof jq.noConflict === 'function') jq.noConflict(true);
+    }
+    if (hadJQuery) window.jQuery = previousJQuery;
+    else delete window.jQuery;
+    if (hadDollar) window.$ = previousDollar;
+    else delete window.$;
+    if (hadMc) window.mc = previousMc;
+    else delete window.mc;
+  }
+
+  /* A confirmed submission can be followed by a new, deliberate signup. */
+  document.addEventListener('click', function (event) {
+    var opener = event.target.closest('[data-dialog-open="updates-dialog"]');
+    if (opener && state === 'complete') {
+      state = 'ready';
+      status.textContent = '';
+    }
+  }, true);
 
   /* Stop native submission while loading or when a previous result is uncertain. */
   form.addEventListener('submit', function (event) {
@@ -64,11 +112,17 @@
   script.src = 'https://s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js';
   script.onload = function () {
     clearTimeout(loaderTimer);
-    if (state !== 'loading') return;
     var jq = window.jQuery;
     var mc = window.mc;
-    if (!jq || !mc || !mc.ajaxOptions || !mc.mce_validator ||
+    if (state !== 'loading') {
+      /* Removing a pending script does not guarantee it cannot execute later. */
+      cleanupVendor(jq, mc);
+      return;
+    }
+    if (!jq || jq === previousJQuery || typeof jq.noConflict !== 'function' ||
+        typeof jq.param !== 'function' || !mc || !mc.ajaxOptions || !mc.mce_validator ||
         mc.ajaxOptions.url !== form.action.replace('/post?u=', '/post-json?u=') + '&c=?') {
+      cleanupVendor(jq, mc);
       unavailable();
       return;
     }
@@ -88,14 +142,28 @@
         state = 'complete';
         status.textContent = words.success;
         form.reset();
-      } else if (response && response.result === 'error' && response.msg === 'captcha' &&
-                 response.params && typeof response.params === 'object') {
-        var url = new URL(form.action);
-        url.search = jq.param(response.params);
-        captcha.href = url.href;
-        captcha.hidden = false;
-        state = 'captcha';
-        status.textContent = words.captcha;
+      } else if (response && response.result === 'error' && response.msg === 'captcha') {
+        state = 'uncertain';
+        /* Follow the vendor's algorithm, but only for the configured form URL
+           and only after a visitor deliberately activates the link. */
+        var params = response.params;
+        var query = '';
+        try {
+          if (params && jq.isPlainObject(params) && Object.keys(params).length) query = jq.param(params);
+          var action = new URL(form.action);
+          if (query && action.origin === 'https://forabrighterevanston.us9.list-manage.com' &&
+              action.pathname === '/subscribe/post' && !action.username && !action.password) {
+            captcha.href = action.origin + action.pathname + '?' + query;
+            captcha.target = '_blank';
+            captcha.rel = 'noopener noreferrer';
+            captcha.hidden = false;
+            status.textContent = words.captcha;
+          } else {
+            status.textContent = words.captchaInvalid + words.uncertain;
+          }
+        } catch (error) {
+          status.textContent = words.captchaInvalid + words.uncertain;
+        }
       } else if (response && response.result === 'error') {
         state = 'ready';
         status.textContent = words.rejected;
