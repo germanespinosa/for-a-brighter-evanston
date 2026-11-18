@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-17",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/17/it-is-so-evident-this-will-do-a-generation-of-damage-lincolnwood-and-dewey-families-react-to-4-3-vote-to-start-closure-hearings/",
+      "title": "‘It is so evident this will do a generation of damage’: Lincolnwood and Dewey families react to 4-3 vote to start closure hearings",
+      "summary": "Families at Dewey and Lincolnwood shared disappointment and concerns after the District 65 board voted 4-3 to begin closure hearings for each school. The article also describes parents’ hopes that the hearing process could lead to alternatives.",
+      "title_es": "«Es evidente que esto causará daño durante una generación»: familias de Lincolnwood y Dewey reaccionan a la votación de 4 a 3 para iniciar audiencias sobre los cierres",
+      "summary_es": "Familias de Dewey y Lincolnwood expresaron decepción e inquietudes después de que la junta del Distrito 65 votara 4 a 3 para iniciar audiencias sobre el posible cierre de cada escuela. El artículo también describe la esperanza de algunos padres de que las audiencias puedan conducir a alternativas."
+    },
+    {
       "date": "2026-11-15",
       "source": "CBS Chicago",
       "site": "CBS Chicago",
