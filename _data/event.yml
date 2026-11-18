@@ -1,6 +1,6 @@
-# The next meeting shown in the yellow bar at the top of every page and in the
-# "Next up" card on the home page. Update this one file when the date changes;
-# the calendar links and the .ics download are built from it.
+# The upcoming hearings are undated. Keep calendar links disabled until an
+# event with confirmed dates, times and details replaces the historical data.
+# A nonempty en.time enables the dated event card and calendar links.
 # Set `show: false` to hide the bar and card.
 show: true
 calendar_title: D65 Board Meeting
@@ -8,6 +8,8 @@ location: 1500 McDaniel Ave, Evanston, IL 60201
 location_short: 1500 McDaniel Ave, Evanston
 details_url: https://www.district65.net/about/calendar/event-details/~occur-id/10994441
 
+# Historical Nov. 16 meeting data is retained, but the calendar file is disabled.
+# Restore it with a new calendar file only after dates, times, and location are verified.
 # Times in Chicago local time (used by Google Calendar and Outlook links)
 start_local: 20261116T180000
 end_local: 20261116T200000
@@ -19,16 +21,16 @@ end_utc: 20261117T020000Z
 
 en:
   # Yellow bar: written in sentence case, shown in capitals by CSS.
-  bar_long: "D65 board meeting · Vote anticipated · Monday, Nov. 16 · 6 p.m. · 1500 McDaniel Ave."
-  bar_short: "Board meeting · Vote anticipated · Mon., Nov. 16 · 6 p.m."
-  eyebrow: "Vote anticipated"
-  title: "D65 Board Meeting"
-  date_html: Monday,<br>November 16
-  time: 6 PM
+  bar_long: "School closure hearings · Dates and times to be announced"
+  bar_short: "Closure hearings: dates and times to be announced"
+  eyebrow: "School closure hearings"
+  title: ""
+  date_html: ""
+  time: ""
 es:
-  bar_long: "Reunión de la Junta del D65 · Se prevé una votación · lunes 16 de nov. · 6 p. m. · 1500 McDaniel Ave."
-  bar_short: "Reunión de la Junta · Se prevé votación · lun. 16 de nov. · 6 p. m."
-  eyebrow: "Se prevé una votación"
-  title: "Reunión de la Junta del D65"
-  date_html: Lunes,<br>16 de noviembre
-  time: 6 p. m.
+  bar_long: "Audiencias sobre el cierre de escuelas · Fechas y horarios por anunciar"
+  bar_short: "Audiencias sobre cierres · Fechas y horarios por anunciar"
+  eyebrow: "Audiencias sobre el cierre de escuelas"
+  title: ""
+  date_html: ""
+  time: ""

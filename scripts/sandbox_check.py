@@ -777,6 +777,97 @@ def load_letter_vote_approval(filename, purpose, base, sandbox_url):
     return approved
 
 
+# This source digest must be filled only after independent verification of the
+# human's original content and maintenance approvals. None fails closed.
+HEARING_SOURCE_DIGEST = "6dd11e8bc87136a864c73061f4eb2552d4792d11877a05f52573275f3783a219"
+HEARING_BASE = "8f27dc4f9639f11becba65876cb99148e823b66e"
+HEARING_CANDIDATE = "ecf6122496fca1215afcc2751cdd6e6f04ccc579"
+HEARING_SCRIPT = "assets/js/letter-content.js"
+HEARING_CALENDAR = "d65-board-meeting.ics"
+HEARING_MAINTENANCE = {
+    "scripts/sandbox_check.py": "M",
+    "scripts/tests/test_hearing_approval.py": "A",
+    "docs/agents/fabian-website.md": "M",
+    "docs/help/team-help.md": "M",
+    "docs/help/team-help.pdf": "M",
+    "docs/help/reviewed-sources.json": "M",
+}
+
+
+def load_hearing_approval(filename, base, sandbox_url):
+    if not filename:
+        return set()
+    path = Path(filename).absolute()
+    if any(p.is_symlink() for p in (path, *path.parents)) or path.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError("hearing record must be a private non-symlink outside the checkout")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "r", encoding="utf-8") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600:
+            raise ValueError("hearing record must be operator-owned, regular and mode 0600")
+        record = json.load(stream, object_pairs_hook=unique_json_fields)
+    keys = {"version", "purpose", "sandbox_id", "source", "checkout", "base_commit",
+            "candidate_commit", "head_commit", "files", "deleted"}
+    if (not isinstance(record, dict) or set(record) != keys or type(record["version"]) is not int
+            or record["version"] != 1 or record["purpose"] != "closure-hearings"
+            or record["sandbox_id"] != "closure-hearings" or base != "origin/main"
+            or record["checkout"] != str(ROOT.resolve())
+            or git("branch", "--show-current").strip() != "sandbox/closure-hearings"
+            or not isinstance(record["source"], dict)
+            or set(record["source"]) != {"actor", "channel", "content_approval", "maintenance_approval"}
+            or any(not isinstance(value, str) or not value.strip() for value in record["source"].values())
+            or not isinstance(HEARING_SOURCE_DIGEST, str)
+            or hashlib.sha256(json.dumps(record["source"], sort_keys=True, separators=(",", ":")).encode()).hexdigest() != HEARING_SOURCE_DIGEST):
+        raise ValueError("hearing record schema, independently reviewed source, checkout or branch mismatch")
+    if (record["base_commit"] != HEARING_BASE or record["candidate_commit"] != HEARING_CANDIDATE
+            or git("rev-parse", "--verify", "origin/main^{commit}").strip() != HEARING_BASE
+            or record["head_commit"] != git("rev-parse", "--verify", "HEAD^{commit}").strip()
+            or git("merge-base", "origin/main", "HEAD").strip() != HEARING_BASE
+            or git("merge-base", HEARING_CANDIDATE, "HEAD").strip() != HEARING_CANDIDATE):
+        raise ValueError("hearing base, candidate, HEAD or ancestry mismatch")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/closure-hearings" or url.query or url.fragment):
+            raise ValueError("hearing sandbox URL mismatch")
+    if git("status", "--porcelain=v1", "-z", "--untracked-files=all"):
+        raise ValueError("hearing approval requires a clean committed worktree and index")
+    if any(not entry.startswith("H ") for entry in git("ls-files", "-v", "-z").split("\0") if entry):
+        raise ValueError("hearing approval forbids hidden index entries")
+    diff = git("diff", "--no-renames", "--name-status", "-z", HEARING_CANDIDATE + "...HEAD").split("\0")
+    entries = list(zip(diff[0::2], diff[1::2]))
+    if any(HEARING_MAINTENANCE.get(name) != status for status, name in entries):
+        raise ValueError("changes beyond the exact candidate and bounded maintenance are not authorized")
+    if ("M", "scripts/sandbox_check.py") not in entries or ("A", "scripts/tests/test_hearing_approval.py") not in entries:
+        raise ValueError("reviewed checker and its tests are required")
+    allowed = {HEARING_SCRIPT} | {name for _, name in entries}
+    approved = nov16_inventory(record, allowed)
+    for name, digest in approved.items():
+        target = ROOT / name
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or target.stat().st_mode & 0o111
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")):
+            raise ValueError(f"{name}: expected regular non-executable committed file")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if hashlib.sha256(committed).hexdigest() != digest or target.read_bytes() != committed:
+            raise ValueError(f"{name}: reviewed digest must match committed and working bytes")
+    deleted = record["deleted"]
+    if (not isinstance(deleted, dict) or set(deleted) != {"path", "base_sha256"}
+            or deleted["path"] != HEARING_CALENDAR or not isinstance(deleted["base_sha256"], str)
+            or not re.fullmatch(r"[a-f0-9]{64}", deleted["base_sha256"])):
+        raise ValueError("hearing record must bind the exact deleted calendar and base digest")
+    target = ROOT / HEARING_CALENDAR
+    baseline = subprocess.run(["git", "-C", str(ROOT), "show", f"origin/main:{HEARING_CALENDAR}"],
+                              check=True, capture_output=True).stdout
+    if (any(p.is_symlink() for p in (target, *target.parents)) or os.path.lexists(target)
+            or git("ls-tree", "HEAD", "--", HEARING_CALENDAR)
+            or not git("ls-tree", "origin/main", "--", HEARING_CALENDAR).startswith("100644 ")
+            or hashlib.sha256(baseline).hexdigest() != deleted["base_sha256"]):
+        raise ValueError("hearing calendar deletion or base digest mismatch")
+    return allowed | {HEARING_CALENDAR}
+
+
 def unique_json_fields(pairs):
     record = {}
     for key, value in pairs:
@@ -1313,6 +1404,7 @@ def main():
     ap.add_argument("--nov16-maintenance-approval-file", help="German-only private exact nov16 checker-maintenance authorization JSON")
     ap.add_argument("--letter-vote-approval-file", help="private exact bilingual letter-copy approval with date, delegation and removal provenance")
     ap.add_argument("--letter-vote-maintenance-approval-file", help="private exact letter-vote checker-maintenance approval JSON")
+    ap.add_argument("--hearing-approval-file", help="private exact closure-hearings authorization and maintenance record")
     ap.add_argument("--homepage-hero-approval-file", help="private reviewed homepage hero asset approval JSON")
     ap.add_argument("--homepage-hero-maintenance-approval-file", help="private reviewed homepage hero safety-maintenance approval JSON")
     ap.add_argument("--homepage-hero-maintenance-review-sha256", help="independently reviewed SHA-256 of the exact maintenance record bytes")
@@ -1323,6 +1415,13 @@ def main():
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    try:
+        hearing = load_hearing_approval(args.hearing_approval_file, args.base, args.url)
+    except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+        hearing = set()
+        blocking.append(f"Invalid hearing approval: {error}")
+    if hearing:
+        notes.append("Hearing record bound to this candidate and maintenance; normal team review and vote and all other holds remain.")
     try:
         video = load_youtube_approval(args.youtube_approval_file, args.base, args.url)
     except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
@@ -1430,6 +1529,9 @@ def main():
         ext = Path(path).suffix.lower()
         verb = {"A": "added", "M": "changed", "D": "deleted"}.get(status, "changed")
 
+        if path in hearing:
+            changes.append(f"Reviewed hearing authorization {verb}: {path}")
+            continue
         if path in letter_copy:
             changes.append(f"Authorized bilingual letter text {verb}: {path}")
             continue

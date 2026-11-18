@@ -49,13 +49,13 @@ calendar:
   office: Outlook (work or school)
 
 home:
-  title: "D65 Board Meeting November 16"
-  description: "The District 65 board meets Monday, November 16 at 6 PM. A vote is anticipated."
+  title: "D65 School Closure Hearings"
+  description: "Hearings on the proposed closures of Dewey and Lincolnwood will be scheduled. Dates and times are to be announced."
   share_image: "/assets/img/share-home-en-202a113c41.jpg"
   photo_credit: Photos by Heather Eidson
   photo_alt: "Families and kids at a For a Brighter Evanston rally holding signs reading Our schools, Our voice, Our choice, next to a tiger mascot"
   hero:
-    eyebrow: "A board vote is anticipated Nov. 16."
+    eyebrow: "Closure hearings: dates and times to be announced"
     h1: "Closing two schools only buys"
     h1_mark: "one year."
     h1_mark2: "But there's a brighter path forward."
@@ -65,13 +65,13 @@ home:
   sig_label: Signatures and counting
   sign_btn: Sign the letter
   event:
-    eyebrow: Vote anticipated
-    date: "Monday, Nov. 16"
-    rally_time: "4 p.m."
-    rally: Rally with our teachers
-    meeting_time: "6 p.m."
-    meeting: Board meeting.
-    place: "1500 McDaniel Ave., Evanston"
+    eyebrow: Proposed school closures
+    date: "Closure hearings"
+    rally_time: ""
+    rally: ""
+    meeting_time: ""
+    meeting: "Dates and times to be announced."
+    place: ""
     calendar: Add to calendar
   problem:
     eyebrow: The problem
@@ -148,11 +148,11 @@ home:
     title_mark: "Let’s build a better one together."
     text: "Voters said a long-term financial plan with clear spending limits (38%, more than double the next answer) is needed to earn their support. Two-thirds want the board to hold off on closing schools until it has one. The board deserves a better proposal. So do our kids."
     email_label: Do this first
-    email_title: "Email the board. Ask them to vote no on Nov. 16."
+    email_title: "Email the board. Ask them to consider the alternatives."
     email_btn: Email the board
-    show_label: "Monday, Nov. 16"
-    show_title: Show up
-    show_text: "Attend the 6 p.m. board meeting at the Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave. A vote is anticipated."
+    show_label: "Dates and times to be announced"
+    show_title: Closure hearings
+    show_text: "Hearings on the proposed closures of Dewey and Lincolnwood will be scheduled before any final vote."
     sign_label: Add your name
     sign_title: Sign our demand letter
     sign_text: "Join hundreds of neighbors calling on the board to give residents a real say before any school closes."
@@ -179,12 +179,12 @@ home:
     text:
       a: "I signed the open letter asking the D65 board to give residents a real say on the proposed closures of Dewey and Lincolnwood. "
       b: "{n} Evanston neighbors have signed so far. "
-      c: "A board vote is anticipated Nov. 16. Add your name: "
+      c: "Closure hearings will be scheduled; dates and times are to be announced. Add your name: "
       fb: Message copied. Paste it into your Facebook post.
       fbNo: Facebook only shares the link. Copy the text first if you want to include it.
       igDl: Image ready below, and the text is copied for your caption.
       big: ["I signed", "the letter."]
       sub: Every Evanston resident deserves a real say on D65’s proposed school closures.
       cnt: "{n} neighbors have signed. Add your name."
-      cta: "Meeting Nov. 16 · vote anticipated"
+      cta: "Hearings · dates/times TBD"
       png: sign-the-letter.png
