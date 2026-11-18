@@ -9,7 +9,7 @@
   var words = es ? {
     loading: 'Cargando el formulario de Mailchimp…',
     pending: 'Enviando a Mailchimp…',
-    success: 'Mailchimp recibió su solicitud. Revise su correo por si necesita confirmar la inscripción.',
+    success: '¡Gracias por suscribirse!',
     rejected: 'Mailchimp no pudo completar la inscripción. Revise sus datos e inténtelo de nuevo.',
     uncertain: 'No pudimos confirmar el resultado. Antes de volver a intentarlo, revise su correo o contacte al equipo; es posible que Mailchimp haya recibido su solicitud.',
     captcha: 'Mailchimp solicitó una verificación. La inscripción no se ha completado; continúe en Mailchimp para intentarlo.',
@@ -19,7 +19,7 @@
   } : {
     loading: 'Loading the Mailchimp form…',
     pending: 'Sending to Mailchimp…',
-    success: 'Mailchimp received your request. Check your email in case you need to confirm your signup.',
+    success: 'Thanks for subscribing!',
     rejected: 'Mailchimp could not complete the signup. Check your details and try again.',
     uncertain: 'We could not confirm the result. Before trying again, check your email or contact the team; Mailchimp may have received your request.',
     captcha: 'Mailchimp requested verification. Your signup is not complete; continue on Mailchimp to proceed.',
