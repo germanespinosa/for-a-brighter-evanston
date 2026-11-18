@@ -4,27 +4,46 @@
   <h2 class="dialog__title" id="updates-title">{{ t.updates.title }}</h2>
   <div data-form-panel>
     <p>{{ t.updates.lead }}</p>
-    <form class="form" action="{{ site.links.updates_form }}" method="post" target="gf_hidden" data-google-form>
+    <form class="form" action="https://forabrighterevanston.us9.list-manage.com/subscribe/post?u=a29ce2936bee1dac08509481b&amp;id=891518ce66&amp;f_id=008ceee3f0" method="post" target="_blank" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" data-mailchimp-form data-language="{{ page.lang }}">
       <div class="form__row">
-        <div class="field">
+        <div class="field mc-field-group">
           <label for="updates-first">{{ t.updates.first }}</label>
-          <input id="updates-first" type="text" name="entry.1745172000" autocomplete="given-name" required>
+          <input id="updates-first" type="text" name="FNAME" autocomplete="given-name" required>
         </div>
-        <div class="field">
+        <div class="field mc-field-group">
           <label for="updates-last">{{ t.updates.last }}</label>
-          <input id="updates-last" type="text" name="entry.154916979" autocomplete="family-name" required>
+          <input id="updates-last" type="text" name="LNAME" autocomplete="family-name" required>
         </div>
       </div>
-      <div class="field">
+      <div class="field mc-field-group">
         <label for="updates-email">{{ t.updates.email }}</label>
         <div class="field__inline">
-          <input id="updates-email" type="email" name="entry.1895762409" autocomplete="email" placeholder="{{ t.updates.email_ph }}" required>
-          <button class="btn btn--navy" type="submit">{{ t.updates.submit }}</button>
+          <input id="updates-email" type="email" name="EMAIL" autocomplete="email" placeholder="{{ t.updates.email_ph }}" required>
+          <button class="btn btn--navy" type="submit" name="subscribe">{{ t.updates.submit }}</button>
         </div>
       </div>
-      <input type="hidden" name="entry.104417968" value="{{ page.lang }}">
+      <input type="hidden" name="tags" value="15370984">
+      <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_a29ce2936bee1dac08509481b_891518ce66" tabindex="-1" value=""></div>
+      <p data-mailchimp-status role="status" aria-live="polite"></p>
+      <p><a data-mailchimp-captcha target="_blank" rel="noopener noreferrer" hidden>{% if page.lang == 'es' %}Continuar en Mailchimp (se abre en otra pestaña){% else %}Continue on Mailchimp (opens a new tab){% endif %}</a></p>
     </form>
   </div>
-  <p class="form__thanks" data-form-thanks hidden role="status">{{ t.updates.thanks }}</p>
   <p class="dialog__fine">{{ t.updates.fine }}</p>
 </dialog>
+<noscript>
+  <section aria-labelledby="updates-noscript-title">
+    <h2 id="updates-noscript-title">{{ t.updates.title }}</h2>
+    <p>{% if page.lang == 'es' %}La inscripción se abrirá en Mailchimp en otra pestaña.{% else %}Signup opens on Mailchimp in a new tab.{% endif %}</p>
+    <form class="form" action="https://forabrighterevanston.us9.list-manage.com/subscribe/post?u=a29ce2936bee1dac08509481b&amp;id=891518ce66&amp;f_id=008ceee3f0" method="post" target="_blank" data-mailchimp-noscript>
+      <div class="form__row">
+        <div class="field"><label for="updates-noscript-first">{{ t.updates.first }}</label><input id="updates-noscript-first" name="FNAME" type="text" autocomplete="given-name" required></div>
+        <div class="field"><label for="updates-noscript-last">{{ t.updates.last }}</label><input id="updates-noscript-last" name="LNAME" type="text" autocomplete="family-name" required></div>
+      </div>
+      <div class="field"><label for="updates-noscript-email">{{ t.updates.email }}</label><input id="updates-noscript-email" name="EMAIL" type="email" autocomplete="email" required></div>
+      <input type="hidden" name="tags" value="15370984">
+      <div aria-hidden="true" style="position: absolute; left: -5000px;"><input type="text" name="b_a29ce2936bee1dac08509481b_891518ce66" tabindex="-1" value=""></div>
+      <button class="btn btn--navy" type="submit">{{ t.updates.submit }}</button>
+    </form>
+  </section>
+</noscript>
+<script defer src="{{ '/assets/js/mailchimp-updates.js' | relative_url }}"></script>

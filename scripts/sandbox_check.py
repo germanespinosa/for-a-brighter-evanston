@@ -877,6 +877,110 @@ def unique_json_fields(pairs):
     return record
 
 
+# Preview-only: independently conveyed record digests are the trust boundary.
+# Reviewers must verify private provenance and exact final candidate bytes.
+# This policy check is not a security review or publication authorization.
+MAILCHIMP_FILES = {"_includes/updates-dialog.html": "M", "assets/js/mailchimp-updates.js": "A"}
+MAILCHIMP_MAINTENANCE = frozenset({
+    "scripts/sandbox_check.py", "scripts/tests/test_mailchimp_script_approval.py",
+    "docs/agents/fabian-website.md", "docs/agents/fabian-website-cards.md",
+    "docs/help/team-help.md", "docs/help/team-help.pdf", "docs/help/reviewed-sources.json",
+})
+MAILCHIMP_PURPOSES = frozenset({"mailchimp-script-preview", "mailchimp-script-maintenance"})
+
+
+def load_mailchimp_approval(filename, purpose, base, sandbox_url, review_sha256=None):
+    """Bind exact record bytes to an independently conveyed review digest."""
+    if not filename:
+        if review_sha256:
+            raise ValueError("Mailchimp review digest requires its approval record")
+        return {}
+    path = Path(filename).absolute()
+    if any(p.is_symlink() for p in (path, *path.parents)) or path.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError("Mailchimp approval must be outside checkout without symlinks")
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600:
+            raise ValueError("Mailchimp approval must be operator-owned regular mode 0600")
+        raw = stream.read()
+    if (not isinstance(review_sha256, str) or not re.fullmatch(r"[a-f0-9]{64}", review_sha256)
+            or hashlib.sha256(raw).hexdigest() != review_sha256):
+        raise ValueError("Mailchimp requires an independently attested SHA-256 of the exact record bytes")
+    record = json.loads(raw.decode("utf-8"), object_pairs_hook=unique_json_fields)
+    keys = {"version", "purpose", "sandbox_id", "authorizer_id", "source", "checkout", "base_commit", "head_commit", "files"}
+    if (not isinstance(record, dict) or set(record) != keys or type(record["version"]) is not int
+            or record["version"] != 1 or purpose not in MAILCHIMP_PURPOSES or record["purpose"] != purpose
+            or record["sandbox_id"] != "mailchimp-script-preview"
+            or not isinstance(record["authorizer_id"], str) or not re.fullmatch(r"U[A-Z0-9]+", record["authorizer_id"])
+            or not isinstance(record["source"], dict)
+            or set(record["source"]) != {"channel_id", "question_ts", "answer_ts"}
+            or not isinstance(record["source"]["channel_id"], str)
+            or not re.fullmatch(r"C[A-Z0-9]+", record["source"]["channel_id"])
+            or any(not isinstance(record["source"][key], str) or not re.fullmatch(r"[0-9]+\.[0-9]{6}", record["source"][key])
+                   for key in ("question_ts", "answer_ts"))
+            or record["source"]["question_ts"] == record["source"]["answer_ts"]
+            or record["checkout"] != str(ROOT.resolve()) or base != "origin/main"
+            or git("branch", "--show-current").strip() != "sandbox/mailchimp-script-preview"):
+        raise ValueError("Mailchimp record schema, provenance, checkout or branch mismatch")
+    current_base = git("rev-parse", "--verify", "origin/main^{commit}").strip()
+    head = git("rev-parse", "--verify", "HEAD^{commit}").strip()
+    if (record["base_commit"] != current_base or record["head_commit"] != head
+            or git("merge-base", "origin/main", "HEAD").strip() != current_base):
+        raise ValueError("Mailchimp record must bind current base, HEAD and merge base")
+    if sandbox_url:
+        url = urlsplit(sandbox_url)
+        if (url.scheme != "https" or url.netloc != "forabrighterevanston.org"
+                or url.path.rstrip("/") != "/sandbox/mailchimp-script-preview" or url.query or url.fragment):
+            raise ValueError("Mailchimp sandbox URL mismatch")
+    if git("status", "--porcelain=v1", "-z", "--untracked-files=all"):
+        raise ValueError("Mailchimp approval requires a clean committed worktree and index")
+    if any(not item.startswith("H ") for item in git("ls-files", "-v", "-z").split("\0") if item):
+        raise ValueError("Mailchimp approval forbids hidden index entries")
+    if git("ls-files", "--others", "--ignored", "--exclude-standard", "-z"):
+        raise ValueError("Mailchimp approval forbids all ignored untracked files in the checkout")
+    diff = git("diff", "--no-renames", "--name-status", "-z", "origin/main...HEAD").split("\0")
+    entries = list(zip(diff[0::2], diff[1::2]))
+    actual = {name: status for status, name in entries}
+    if len(actual) != len(entries) or any(actual.get(name) != status for name, status in MAILCHIMP_FILES.items()):
+        raise ValueError("Mailchimp behavior change inventory mismatch")
+    maintenance = {name: status for status, name in entries if name in MAILCHIMP_MAINTENANCE}
+    if (maintenance.get("scripts/sandbox_check.py") != "M"
+            or maintenance.get("scripts/tests/test_mailchimp_script_approval.py") != "A"
+            or any(status not in {"A", "M"} for status in maintenance.values())
+            or actual != {**MAILCHIMP_FILES, **maintenance}):
+        raise ValueError("Mailchimp candidate contains missing or unauthorized maintenance or other changes")
+    expected = set(MAILCHIMP_FILES if purpose == "mailchimp-script-preview" else maintenance)
+    files = record["files"]
+    if not isinstance(files, list):
+        raise ValueError("Mailchimp approval needs an exact file inventory")
+    approved = {}
+    for item in files:
+        if (not isinstance(item, dict) or set(item) != {"path", "mode", "working_mode", "sha256"}
+                or not isinstance(item["path"], str) or item["path"] not in expected
+                or item["path"] in approved or item["mode"] != "100644"
+                or not isinstance(item["working_mode"], str) or not re.fullmatch(r"0[0-7]{3}", item["working_mode"])
+                or int(item["working_mode"], 8) & 0o133
+                or not isinstance(item["sha256"], str) or not re.fullmatch(r"[a-f0-9]{64}", item["sha256"])):
+            raise ValueError("invalid or duplicate Mailchimp file inventory")
+        approved[item["path"]] = (item["sha256"], int(item["working_mode"], 8))
+    if set(approved) != expected:
+        raise ValueError("Mailchimp approval needs the exact file inventory")
+    for name, (digest, working_mode) in approved.items():
+        target = ROOT / name
+        baseline = git("ls-tree", "origin/main", "--", name)
+        if (any(p.is_symlink() for p in (target, *target.parents)) or not target.is_file()
+                or stat.S_IMODE(target.stat().st_mode) != working_mode
+                or not git("ls-tree", "HEAD", "--", name).startswith("100644 ")
+                or (baseline and not baseline.startswith("100644 "))):
+            raise ValueError(f"{name}: expected committed and working regular mode 100644")
+        committed = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"],
+                                   check=True, capture_output=True).stdout
+        if hashlib.sha256(committed).hexdigest() != digest or target.read_bytes() != committed:
+            raise ValueError(f"{name}: reviewed digest must match committed and working bytes")
+    return approved
+
+
 HERO_CSS = "assets/css/release-home.css"
 HERO_SCRIPT = "assets/js/hero-slideshow.js"
 HERO_SOURCE_SHA256 = "7b61ae81b9bd7f6a7cecc23f8a8f6c58a4fb1ebbc7e46fffc0499ca4f6e41643"
@@ -1411,10 +1515,31 @@ def main():
     ap.add_argument("--homepage-hero-publication-approval-file", help="separate private publication-safeguards authorization JSON (not a vote)")
     ap.add_argument("--homepage-hero-publication-review-sha256", help="independently attested SHA-256 of exact publication-safeguards record bytes")
     ap.add_argument("--youtube-approval-file", help="original private exact YouTube exception record for the combined hero candidate")
+    ap.add_argument("--mailchimp-script-approval-file", help="independently reviewed private preview behavior approval JSON")
+    ap.add_argument("--mailchimp-script-maintenance-approval-file", help="separate independently reviewed private preview maintenance approval JSON")
+    ap.add_argument("--mailchimp-script-review-sha256", help="out-of-band independently attested SHA-256 of exact behavior record bytes")
+    ap.add_argument("--mailchimp-script-maintenance-review-sha256", help="out-of-band independently attested SHA-256 of exact maintenance record bytes")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
     args = ap.parse_args()
 
     blocking, warnings, spanish, changes, notes = [], [], [], [], []
+    mailchimp_behavior, mailchimp_maintenance = {}, {}
+    for filename, purpose, digest in ((args.mailchimp_script_approval_file, "mailchimp-script-preview", args.mailchimp_script_review_sha256),
+                                      (args.mailchimp_script_maintenance_approval_file, "mailchimp-script-maintenance", args.mailchimp_script_maintenance_review_sha256)):
+        try:
+            approved = load_mailchimp_approval(filename, purpose, args.base, args.url, digest)
+            if purpose == "mailchimp-script-preview":
+                mailchimp_behavior = approved
+            else:
+                mailchimp_maintenance = approved
+        except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
+            blocking.append(f"Invalid {purpose} approval: {error}")
+    if bool(mailchimp_behavior) != bool(mailchimp_maintenance):
+        blocking.append("Mailchimp preview requires both independent behavior and maintenance records.")
+    if mailchimp_behavior and mailchimp_maintenance:
+        notes.append("Mailchimp policy pass is not security approval: independent security and checker review of the exact final revision is required; privacy and possible external CAPTCHA review remain. Not live release approval.")
+    else:
+        mailchimp_behavior, mailchimp_maintenance = {}, {}
     try:
         hearing = load_hearing_approval(args.hearing_approval_file, args.base, args.url)
     except (OSError, ValueError, TypeError, AttributeError, KeyError, subprocess.CalledProcessError) as error:
@@ -1529,6 +1654,14 @@ def main():
         ext = Path(path).suffix.lower()
         verb = {"A": "added", "M": "changed", "D": "deleted"}.get(status, "changed")
 
+        if path in mailchimp_behavior:
+            changes.append(f"Reviewed Mailchimp preview {verb}: {path}")
+            if path == "_includes/updates-dialog.html":
+                warnings.append(f"{path}: check all affected English and Spanish rendered pages in the sandbox; a template is not a standalone route.")
+            continue
+        if path in mailchimp_maintenance:
+            changes.append(f"Separately reviewed Mailchimp maintenance {verb}: {path}")
+            continue
         if path in hearing:
             changes.append(f"Reviewed hearing authorization {verb}: {path}")
             continue

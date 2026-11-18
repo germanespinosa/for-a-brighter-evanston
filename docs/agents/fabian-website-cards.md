@@ -24,6 +24,8 @@ How and when to read these documents (the fingerprint check) is in reference sec
 5. When the preview has rebuilt, open each changed page once, then post **W5**.
 6. New page? It also needs its own sharing card (section 5) and the Spanish offer.
 
+**Mailchimp preview:** The specific form and script in `sandbox/mailchimp-script-preview` have sandbox-only consent; checker and instructions maintenance has a separate approval. Use both private scoped records and review the privacy/security risks in section 5. No real contacts without permission; a mock CAPTCHA is not real verification. The normal safety checks and review/vote remain.
+
 ## Card C: a file comes with a request (possible mockup)
 
 1. The request doesn't say "build from this mockup" → ask **W25** and wait. Not a mockup → treat it as an ordinary file (section 5).
