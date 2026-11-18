@@ -50,13 +50,13 @@ calendar:
   office: Outlook (trabajo o escuela)
 
 home:
-  title: "Reunión de la Junta del D65 el 16 de noviembre"
-  description: "La Junta del Distrito 65 se reúne el lunes 16 de noviembre a las 6 p. m. Se prevé una votación."
+  title: "Audiencias sobre el cierre de escuelas del D65"
+  description: "Se programarán audiencias sobre el cierre propuesto de Dewey y Lincolnwood. Las fechas y los horarios están por anunciarse."
   share_image: "/assets/img/share-home-es-75b5134b2c.jpg"
   photo_credit: Fotos de Heather Eidson
   photo_alt: "Familias y niños en una concentración de For a Brighter Evanston con carteles que dicen Our schools, Our voice, Our choice, junto a la mascota de un tigre"
   hero:
-    eyebrow: "Se prevé una votación de la Junta el 16 de nov."
+    eyebrow: "Audiencias sobre cierres · Fechas y horarios por anunciar"
     h1: "Cerrar dos escuelas solo compra"
     h1_mark: "un año."
     h1_mark2: "Pero hay un camino mejor."
@@ -66,13 +66,13 @@ home:
   sig_label: Firmas y seguimos sumando
   sign_btn: Firmar la carta
   event:
-    eyebrow: Se prevé una votación
-    date: "Lunes, 16 de nov."
-    rally_time: "4 p. m."
-    rally: Concentración con nuestros docentes
-    meeting_time: "6 p. m."
-    meeting: Reunión de la Junta.
-    place: "1500 McDaniel Ave., Evanston"
+    eyebrow: Cierre de escuelas propuesto
+    date: "Audiencias sobre cierres"
+    rally_time: ""
+    rally: ""
+    meeting_time: ""
+    meeting: "Fechas y horarios por anunciar."
+    place: ""
     calendar: Agregar al calendario
   problem:
     eyebrow: El problema
@@ -149,11 +149,11 @@ home:
     title_mark: "Construyamos uno mejor juntos."
     text: "Los votantes dijeron que, para ganar su apoyo, hace falta un plan financiero de largo plazo con límites claros al gasto (38%, más del doble de la siguiente respuesta). Dos tercios quieren que la Junta no cierre escuelas hasta tenerlo. La Junta merece una propuesta mejor. Nuestros hijos también."
     email_label: Haga esto primero
-    email_title: "Escriba a la Junta. Pídale que vote no el 16 de nov."
+    email_title: "Escriba a la Junta. Pídale que considere las alternativas."
     email_btn: Escriba a la Junta
-    show_label: "Lunes, 16 de nov."
-    show_title: Asista
-    show_text: "Asista a la reunión de la Junta a las 6 p. m. en el Joseph E. Hill Early Childhood Center, 1500 McDaniel Ave. Se prevé una votación."
+    show_label: "Fechas y horarios por anunciar"
+    show_title: Audiencias sobre cierres
+    show_text: "Se programarán audiencias sobre el cierre propuesto de Dewey y Lincolnwood antes de cualquier votación final."
     sign_label: Agregue su nombre
     sign_title: Firme nuestra carta de demandas
     sign_text: "Súmese a cientos de vecinos que piden a la Junta dar a los residentes una voz real antes de cerrar cualquier escuela."
@@ -180,12 +180,12 @@ home:
     text:
       a: "Firmé la carta abierta que pide a la junta del D65 dar a los residentes una voz real sobre el cierre propuesto de Dewey y Lincolnwood. "
       b: "Ya firmaron {n} vecinos de Evanston. "
-      c: "Se prevé una votación de la Junta el 16 de noviembre. Agregue su nombre: "
+      c: "Se programarán audiencias sobre cierres; las fechas y los horarios están por anunciarse. Agregue su nombre: "
       fb: Mensaje copiado. Péguelo en su publicación de Facebook.
       fbNo: Facebook solo comparte el enlace. Copie el texto primero si quiere incluirlo.
       igDl: La imagen está lista abajo y el texto está copiado para la descripción.
       big: ["Firmé", "la carta."]
       sub: Cada residente de Evanston merece una voz real sobre los cierres de escuelas que propone el D65.
       cnt: Ya firmaron {n} vecinos. Agregue su nombre.
-      cta: "Reunión 16 nov. · votación prevista"
+      cta: "Audiencias · fechas y horarios por anunciar"
       png: firme-la-carta.png

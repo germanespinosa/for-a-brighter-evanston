@@ -1,5 +1,6 @@
 {%- assign t = site.data.i18n[page.lang] -%}
 {%- assign ev = site.data.event -%}
+{%- if ev.en.time and ev.en.time != '' -%}
 {%- assign title_q = ev.calendar_title | url_encode -%}
 {%- assign loc_q = ev.location | url_encode -%}
 {%- assign title_o = title_q | replace: '+', '%20' -%}
@@ -15,3 +16,4 @@
     <li><a href="https://outlook.office.com/calendar/0/action/compose?rru=addevent&amp;subject={{ title_o }}&amp;startdt={{ start_o }}&amp;enddt={{ end_o }}&amp;location={{ loc_o }}" target="_blank" rel="noopener">{{ t.calendar.office }}</a></li>
   </ul>
 </details>
+{%- endif -%}

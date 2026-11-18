@@ -104,7 +104,7 @@ window.LETTER_CONTENT = {
         ],
         "facts": [
           "D65 proposes closing Dewey and Lincolnwood at the end of the 2026–27 school year.",
-          "The board is expected to vote on the plan on November 16, with closure hearings and any final closure decision to follow.",
+          "Public hearings on the proposed closures will be scheduled; dates and times have not yet been announced.",
           "The district proposes retaining both school sites and exploring a potential November 2028 bond referendum.",
           "The community demand letter calls for comparison of multiple sustainable options, including maintaining the current school footprint."
         ],
@@ -360,7 +360,7 @@ window.LETTER_CONTENT = {
         ],
         "facts": [
           "El D65 propone cerrar Dewey y Lincolnwood al final del año escolar 2026–27.",
-          "Se espera que la Junta vote sobre el plan el 16 de noviembre; después seguirían audiencias sobre los cierres y cualquier decisión final al respecto.",
+          "Se programarán audiencias públicas sobre los cierres propuestos; las fechas y horas aún no se han anunciado.",
           "El distrito propone conservar ambos terrenos escolares y estudiar un posible referéndum de bonos en noviembre de 2028.",
           "La carta de demandas de la comunidad pide comparar varias opciones sostenibles, incluida la de mantener todas las escuelas actuales."
         ],
