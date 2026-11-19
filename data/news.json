@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-17",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/17/letter-districts-decisions-pit-families-against-each-other/",
+      "title": "Letter: District’s decisions pit families against each other",
+      "summary": "In a letter, Dewey parent Jennifer Cotto Jhonson argues that District 65’s closure decisions are dividing families. She calls for an equity impact analysis, financial transparency and solidarity among school communities.",
+      "title_es": "Carta: Las decisiones del distrito enfrentan a las familias entre sí",
+      "summary_es": "En una carta, Jennifer Cotto Jhonson, madre de una estudiante de Dewey, sostiene que las decisiones del Distrito 65 sobre los cierres están dividiendo a las familias. Pide un análisis del impacto en la equidad, transparencia financiera y solidaridad entre las comunidades escolares."
+    },
+    {
       "date": "2026-11-16",
       "source": "The Daily Northwestern",
       "site": "The Daily Northwestern",
