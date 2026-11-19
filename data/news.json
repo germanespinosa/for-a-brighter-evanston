@@ -3,6 +3,16 @@
   "articles": [
     {
       "date": "2026-11-17",
+      "source": "Chicago Tribune",
+      "site": "Chicago Tribune",
+      "url": "https://www.chicagotribune.com/2026/11/17/evanston-65-error-closing-two-schools/",
+      "title": "Evanston District 65 discovers additional $7M error in budget, votes to start closing two schools anyway",
+      "summary": "The Chicago Tribune reports that District 65 identified an additional $7 million budget error before the board voted to begin the process of closing two schools. The vote was not a final closure decision.",
+      "title_es": "El Distrito 65 de Evanston descubre otro error de $7 millones en el presupuesto y aun así vota para iniciar el cierre de dos escuelas",
+      "summary_es": "El Chicago Tribune informa que el Distrito 65 identificó otro error presupuestario de $7 millones antes de que la junta votara para iniciar el proceso de cierre de dos escuelas. La votación no fue una decisión final de cierre."
+    },
+    {
+      "date": "2026-11-17",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
       "url": "https://evanstonroundtable.com/2026/11/17/letter-districts-decisions-pit-families-against-each-other/",
