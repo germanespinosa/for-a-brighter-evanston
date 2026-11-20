@@ -50,12 +50,12 @@ calendar:
 
 home:
   title: "D65 School Closure Hearings"
-  description: "Hearings on the proposed closures of Dewey and Lincolnwood will be scheduled. Dates and times are to be announced."
+  description: "Public hearings on the proposed closures of Dewey and Lincolnwood are scheduled for December 1, 3 and 8, 2026."
   share_image: "/assets/img/share-home-en-202a113c41.jpg"
   photo_credit: Photos by Heather Eidson
   photo_alt: "Families and kids at a For a Brighter Evanston rally holding signs reading Our schools, Our voice, Our choice, next to a tiger mascot"
   hero:
-    eyebrow: "Closure hearings: dates and times to be announced"
+    eyebrow: "School closure hearings: December 1, 3 and 8"
     h1: "Closing two schools only buys"
     h1_mark: "one year."
     h1_mark2: "But there's a brighter path forward."
@@ -66,11 +66,11 @@ home:
   sign_btn: Sign the letter
   event:
     eyebrow: Proposed school closures
-    date: "Closure hearings"
+    date: "Public hearings"
     rally_time: ""
     rally: ""
     meeting_time: ""
-    meeting: "Dates and times to be announced."
+    meeting: "Hearings on December 1, 3 and 8, 2026."
     place: ""
     calendar: Add to calendar
   problem:
@@ -150,9 +150,9 @@ home:
     email_label: Do this first
     email_title: "Email the board. Ask them to consider the alternatives."
     email_btn: Email the board
-    show_label: "Dates and times to be announced"
+    show_label: "December 1, 3 and 8"
     show_title: Closure hearings
-    show_text: "Hearings on the proposed closures of Dewey and Lincolnwood will be scheduled before any final vote."
+    show_text: "Public hearings on the proposed closures of Dewey and Lincolnwood will take place on three dates."
     sign_label: Add your name
     sign_title: Sign our demand letter
     sign_text: "Join hundreds of neighbors calling on the board to give residents a real say before any school closes."
