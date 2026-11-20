@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-18",
+      "source": "The Daily Northwestern",
+      "site": "The Daily Northwestern",
+      "url": "https://dailynorthwestern.com/2026/11/18/city/parents-community-members-angered-as-school-closure-plan-advances/",
+      "title": "Parents, community members angered as school closure plan advances",
+      "summary": "The Daily Northwestern reports on community reactions after the District 65 board voted to begin the closure process for Dewey and Lincolnwood. Speakers raised concerns about neighborhood schools, financial transparency and the future of Dewey’s Two-Way Immersion program; one parent supported the vote.",
+      "title_es": "Padres y miembros de la comunidad expresan indignación mientras avanza el plan de cierre escolar",
+      "summary_es": "The Daily Northwestern informa sobre las reacciones de la comunidad después de que la junta del Distrito 65 votara para iniciar el proceso de cierre de Dewey y Lincolnwood. Los participantes expresaron inquietudes sobre las escuelas de vecindario, la transparencia financiera y el futuro del programa de inmersión bilingüe de Dewey; una madre apoyó la votación."
+    },
+    {
       "date": "2026-11-17",
       "source": "Chicago Tribune",
       "site": "Chicago Tribune",
