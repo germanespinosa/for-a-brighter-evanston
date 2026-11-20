@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-19",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/19/letter-district-plan-disrupts-three-at-risk-groups-for-only-marginal-savings/",
+      "title": "Letter: District plan disrupts three at-risk groups for only marginal savings",
+      "summary": "In a letter, Dewey parent and educator Sam T. Detch argues that District 65’s proposal would disrupt students in the Two-Way Immersion, STEP and Head Start programs. Detch calls for more time and data-driven alternatives that preserve schools and programs.",
+      "title_es": "Carta: El plan del distrito afecta a tres grupos vulnerables por ahorros marginales",
+      "summary_es": "En una carta, Sam T. Detch, educador y padre de un estudiante de Dewey, sostiene que la propuesta del Distrito 65 afectaría a estudiantes de los programas de inmersión bilingüe, STEP y Head Start. Detch pide más tiempo y alternativas basadas en datos que preserven las escuelas y los programas."
+    },
+    {
       "date": "2026-11-18",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
