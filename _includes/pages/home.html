@@ -58,13 +58,14 @@
       {%- if ev.show %}
       <aside class="hm-event" aria-labelledby="event-title">
         <p class="hm-eyebrow hm-eyebrow--blue hm-event__eyebrow">{{ h.event.eyebrow }}</p>
-        <h2 class="hm-event__date" id="event-title">{{ h.event.date }}</h2>
+        <div class="hm-event__times"><h2 class="hm-event__date" id="event-title">{{ h.event.date }}</h2></div>
         <p class="hm-event__times"><b>{% if page.lang == 'es' %}Martes, 1 de diciembre de 2026{% else %}Tuesday, Dec. 1, 2026{% endif %}</b><br><time datetime="2026-12-01T17:15:00-06:00">5:15 p.m.</time> · Lincolnwood<br><time datetime="2026-12-01T19:45:00-06:00">7:45 p.m.</time> · Dewey</p>
         <p class="hm-event__times"><b>{% if page.lang == 'es' %}Jueves, 3 de diciembre de 2026{% else %}Thursday, Dec. 3, 2026{% endif %}</b><br><time datetime="2026-12-03T17:15:00-06:00">5:15 p.m.</time> · Dewey<br><time datetime="2026-12-03T19:45:00-06:00">7:45 p.m.</time> · Lincolnwood</p>
         <p class="hm-event__times"><b>{% if page.lang == 'es' %}Martes, 8 de diciembre de 2026{% else %}Tuesday, Dec. 8, 2026{% endif %}</b><br><time datetime="2026-12-08T17:15:00-06:00">5:15 p.m.</time> · Lincolnwood<br><time datetime="2026-12-08T19:45:00-06:00">7:45 p.m.</time> · Dewey</p>
-        <p class="hm-event__times">Joseph E. Hill Education Center<br>1500 McDaniel Ave., Evanston<br>{% if page.lang == 'es' %}Se ofrecerá interpretación al español.{% else %}Spanish interpretation will be provided.{% endif %}</p>
+        <p class="hm-event__times"><strong>Joseph E. Hill Education Center</strong><br>1500 McDaniel Ave., Evanston</p>
+        <p class="hm-event__times">{% if page.lang == 'es' %}Se ofrecerá interpretación al español.{% else %}Spanish interpretation will be provided.{% endif %}</p>
         <p class="hm-event__times">{% if page.lang == 'es' %}Inscríbase para hablar desde 30 minutos antes de cada audiencia y hasta que comience. Cada persona dispone de tres minutos. Las audiencias se transmitirán en vivo.{% else %}Sign up to speak starting 30 minutes before each hearing and through its start. Each speaker has three minutes. Hearings will be livestreamed.{% endif %}</p>
-        <p class="hm-event__times"><a href="https://www.district65.net/about/board-of-education/guidelines-for-public-hearings">{% if page.lang == 'es' %}Cómo participar{% else %}How to participate{% endif %}</a> · <a href="https://www.district65.net/news4/notice-of-public-hearings-proposed-school-closures">{% if page.lang == 'es' %}Aviso del Distrito{% else %}District notice{% endif %}</a></p>
+        <p class="hm-event__times"><a href="https://www.district65.net/about/board-of-education/guidelines-for-public-hearings">{% if page.lang == 'es' %}Cómo participar{% else %}How to participate{% endif %}</a><br><a href="https://www.district65.net/news4/notice-of-public-hearings-proposed-school-closures">{% if page.lang == 'es' %}Aviso del Distrito{% else %}District notice{% endif %}</a></p>
       </aside>
       {%- endif %}
     </div>
