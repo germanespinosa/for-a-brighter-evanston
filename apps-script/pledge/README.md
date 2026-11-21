@@ -30,7 +30,20 @@ Use the campaign's Google account (the one the team should own the data with).
    (or send it to whoever maintains the site). The URL is not secret: it is
    visible to every visitor, like any form address.
 
-## Mailchimp (optional, for the "Send me campaign updates" box)
+## Mailchimp (the "Send me campaign updates" box)
+
+This already works without any setup: when someone checks the box, their
+browser signs them up through the same public Mailchimp signup form as the
+site's "Get updates" box, with the same tag (settings in `_data/pledge.yml`,
+`mailchimp:`). The Sheet's `Mailchimp` column then says `not configured`,
+which only means the script itself did not contact Mailchimp.
+
+To also tag pledgers `Pledge` and `EN`/`ES`: create those tags in Mailchimp,
+then add their numeric IDs to `tags`, `tags_en` and `tags_es` in
+`_data/pledge.yml`.
+
+### Optional: script-side Mailchimp with an API key
+
 
 In Apps Script: Project Settings > Script properties > Add script property:
 

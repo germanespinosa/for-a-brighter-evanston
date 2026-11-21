@@ -120,6 +120,9 @@
   font: 700 15px var(--pl-body); text-decoration: none; cursor: pointer;
 }
 .pl-share__btn:hover { background: var(--pl-tint); }
+.pl-mc { margin: 14px 0 0; padding: 12px 14px; background: var(--pl-cream); font-size: 15px; line-height: 1.5; }
+.pl-mc[hidden] { display: none; }
+.pl-mc a { color: var(--pl-navy); font-weight: 700; }
 .pl-copied { min-height: 1.4em; margin: 10px 0 0; font-size: 14px; font-weight: 700; color: var(--pl-blue); }
 
 .pl-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 18px; font-size: 14px; }

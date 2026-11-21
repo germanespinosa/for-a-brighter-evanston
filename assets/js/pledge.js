@@ -34,6 +34,41 @@
     resize();
   }
 
+  // ---------------------------------------------------------------- mailchimp
+  // Same public signup form as the site's "Get updates" box, called the way
+  // Mailchimp's own embed script does (JSONP to post-json). No API key.
+  function mailchimpSignup(root, data, done) {
+    var action = root.getAttribute('data-mc-form');
+    if (!action) return;
+    var url;
+    try { url = new URL(action.replace('/subscribe/post?', '/subscribe/post-json?')); } catch (e) { return; }
+    if (url.protocol !== 'https:' || !/\.list-manage\.com$/.test(url.hostname)) return;
+    var tags = [root.getAttribute('data-mc-tags'), root.getAttribute('data-mc-tags-' + data.lang)]
+      .join(',').split(',').map(function (t) { return t.trim(); }).filter(function (t) { return /^\d+$/.test(t); });
+    var cb = 'fabePledgeMc' + Date.now();
+    url.searchParams.set('EMAIL', data.email);
+    url.searchParams.set('FNAME', data.first);
+    url.searchParams.set('LNAME', data.last);
+    if (tags.length) url.searchParams.set('tags', tags.join(','));
+    var hp = root.getAttribute('data-mc-honeypot');
+    if (hp) url.searchParams.set(hp, '');
+    url.searchParams.set('c', cb);
+    var script = document.createElement('script');
+    var timer = setTimeout(function () { cleanup(); }, 10000);
+    function cleanup() { clearTimeout(timer); try { delete window[cb]; } catch (e) { window[cb] = undefined; } script.remove(); }
+    window[cb] = function (res) {
+      cleanup();
+      if (res && res.result === 'error' && res.msg === 'captcha' && res.params) {
+        var check = new URL(action);
+        Object.keys(res.params).forEach(function (k) { check.searchParams.set(k, res.params[k]); });
+        done(check.origin + check.pathname + '?' + check.searchParams.toString());
+      }
+    };
+    script.onerror = cleanup;
+    script.src = url.toString();
+    document.head.appendChild(script);
+  }
+
   // ---------------------------------------------------------------- language
   function applyLang(root, copy, lang) {
     var c = copy[lang];
@@ -187,6 +222,14 @@
           if (!d || !d.ok) { fail('error'); return; }
           if (typeof d.count === 'number') showCount(root, d.count);
           finish(d.already ? 'already' : 'thanks');
+          if (form.optin.checked) {
+            mailchimpSignup(root, { email: email, first: first, last: last, lang: lang }, function (checkUrl) {
+              var box = root.querySelector('[data-pl-mc]');
+              box.querySelector('[data-pl-mc-link]').href = checkUrl;
+              box.hidden = false;
+              resize();
+            });
+          }
         })
         .catch(function () { fail('error'); });
     });

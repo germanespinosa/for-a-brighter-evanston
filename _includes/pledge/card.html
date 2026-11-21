@@ -4,7 +4,7 @@
 {%- endcomment -%}
 {%- assign pl = site.data.pledge -%}
 {%- assign c = pl[include.lang] -%}
-<div class="pl" data-pledge data-lang="{{ include.lang }}" data-endpoint="{{ pl.endpoint }}" data-sitekey="{{ pl.turnstile_sitekey }}" data-site="{{ '/' | absolute_url }}">
+<div class="pl" data-pledge data-lang="{{ include.lang }}" data-endpoint="{{ pl.endpoint }}" data-sitekey="{{ pl.turnstile_sitekey }}" data-mc-form="{{ pl.mailchimp.form }}" data-mc-honeypot="{{ pl.mailchimp.honeypot }}" data-mc-tags="{{ pl.mailchimp.tags }}" data-mc-tags-en="{{ pl.mailchimp.tags_en }}" data-mc-tags-es="{{ pl.mailchimp.tags_es }}" data-site="{{ '/' | absolute_url }}">
   <article class="pl-card" aria-labelledby="pl-title">
     <div class="pl-strip">
       <p class="pl-strip__line" aria-live="polite"><span class="pl-num" data-pl-count hidden></span> <span data-t="counter">{{ c.counter }}</span></p>
@@ -58,6 +58,7 @@
           <li><a class="pl-share__btn" data-share="facebook" href="#" target="_blank" rel="noopener" data-t="facebook">{{ c.facebook }}</a></li>
         </ul>
         <p class="pl-copied" data-pl-copied role="status"></p>
+        <p class="pl-mc" data-pl-mc hidden><span data-t="mc_check">{{ c.mc_check }}</span> <a data-pl-mc-link target="_blank" rel="noopener noreferrer" data-t="mc_link">{{ c.mc_link }}</a></p>
       </div>
 
       <div class="pl-foot">
