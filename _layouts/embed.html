@@ -5,7 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page.title }}</title>
   <meta name="robots" content="noindex">
-  <link rel="canonical" href="{{ site.data.pledge.en.page_url | absolute_url }}">
+  {%- if page.lang == 'es' %}{% assign pp = site.data.pledge.es.page_url %}{% assign img = '/assets/img/share-pledge-es-19fb825c63.jpg' %}{% assign st = 'Comprométete: nuestros niños merecen un plan mejor' %}{% assign sd = site.data.pledge.es.pledge %}{% else %}{% assign pp = site.data.pledge.en.page_url %}{% assign img = '/assets/img/share-pledge-en-70fa7acf6b.jpg' %}{% assign st = 'Take the pledge: our kids deserve a better plan' %}{% assign sd = site.data.pledge.en.pledge %}{% endif %}
+  <link rel="canonical" href="{{ pp | absolute_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="For A Brighter Evanston">
+  <meta property="og:title" content="{{ st | escape }}">
+  <meta property="og:description" content="{{ sd | escape }}">
+  <meta property="og:url" content="{{ pp | absolute_url }}">
+  <meta property="og:image" content="{{ img | absolute_url }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="{{ img | absolute_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Public+Sans:wght@400;600;700&display=swap">
