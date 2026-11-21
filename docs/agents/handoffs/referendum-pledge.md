@@ -89,10 +89,15 @@ Several of these files are restricted under manual section 5 (layout, scripts,
 stylesheets, data/config files, sitemap). Proceed with them only on German's own
 explicit message authorizing them for `sandbox/referendum-pledge`; verify that
 message as your manual requires before relying on it. That authorization covers
-these files as they are, not new scripts or other restricted files: anything
-beyond small text changes in the three `_data/pledge*.yml` files, or a change to
-a script, stylesheet, layout or the backend, goes to German first. The normal
+these files as they are, not new scripts or other restricted files. The normal
 review and the team vote still apply.
+
+Update (Nov. 21): the pledge is published. Its three text files
+(`_data/pledge.yml`, `_data/pledge_page.yml`, `_data/pledge_embed.yml`) are now
+regular page text files in the checker and the manual (section 5, "Text of the
+built-in pages"): wording changes go through the normal update, review and vote
+with no special authorization. Their settings (backend, Mailchimp, page links)
+stay locked. Scripts, stylesheet, layout and backend changes still go to German.
 
 ## 5. Backend: do not change
 
