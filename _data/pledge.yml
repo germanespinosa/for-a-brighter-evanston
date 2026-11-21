@@ -26,9 +26,9 @@ turnstile_sitekey: ""
 en:
   eyebrow: The District 65 referendum pledge                      # (mockup, + District 65)
   counter_label: Evanston · District 65 referendum pledge
-  headline: "Our kids deserve a better plan, and I’m ready to"
+  headline: "Our kids deserve a better plan, and I'm ready to"
   headline_mark: help build it.
-  pledge: "If the D65 board votes no on the current plan and builds a sustainable, fiscally responsible long-term vision with our community, I pledge to support the referendum that funds it."
+  pledge: "If the D65 board votes no on the current school closure plan and builds a sustainable, fiscally responsible long-term vision with our community, I pledge to support the referendum that funds it."
   first: First name
   last: Last name
   email: Your email
@@ -64,7 +64,7 @@ es:
   counter_label: Evanston · Compromiso por el referéndum del Distrito 65
   headline: "Nuestros niños merecen un plan mejor, y quiero"
   headline_mark: ayudar a construirlo.
-  pledge: "Si la junta escolar del D65 vota no al plan actual y construye con nuestra comunidad una visión a largo plazo, sostenible y fiscalmente responsable, me comprometo a apoyar el referéndum que la financie."
+  pledge: "Si la junta escolar del D65 vota no al plan actual de cierre de escuelas y construye con nuestra comunidad una visión a largo plazo, sostenible y fiscalmente responsable, me comprometo a apoyar el referéndum que la financie."
   first: Nombre
   last: Apellido
   email: Tu correo electrónico
