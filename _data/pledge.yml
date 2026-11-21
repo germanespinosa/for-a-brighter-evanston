@@ -4,7 +4,7 @@
 
 # The Apps Script web app URL (ends in /exec). Empty = not connected yet:
 # the counter stays hidden and the form shows its error message.
-endpoint: ""
+endpoint: "https://script.google.com/macros/s/AKfycbxvo-EN5uvfqpDpCD2ZsQPHNirG3Gj_ubHbfovB6_Wx_zJTY3_RxU4wq0WRxfUmyMRX/exec"
 # Cloudflare Turnstile site key (public). Empty = no challenge widget.
 # If you set it, also set TURNSTILE_SECRET in the Apps Script properties.
 turnstile_sitekey: ""
