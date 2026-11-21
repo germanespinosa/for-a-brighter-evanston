@@ -137,10 +137,10 @@ test('with the box checked the person is added with Pledge and language tags', (
   assert.strictEqual(env.sheets.Signatures.rows[1][4], 'yes');
 });
 
-test('opt-in without Mailchimp configured still stores the pledge', () => {
+test('opt-in without an API key is left to the website signup form', () => {
   const env = makeEnv();
   assert.strictEqual(env.post({ ...ok, optin: true }).count, 1);
-  assert.strictEqual(env.sheets.Signatures.rows[1][7], 'not configured');
+  assert.strictEqual(env.sheets.Signatures.rows[1][7], 'website signup form');
 });
 
 test('with a Turnstile secret, a missing or bad token is refused', () => {

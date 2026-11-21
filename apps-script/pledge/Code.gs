@@ -220,7 +220,9 @@ function turnstileOk_(secret, token) {
 function addToMailchimp_(p) {
   var key = prop_('MAILCHIMP_API_KEY');
   var list = prop_('MAILCHIMP_LIST_ID');
-  if (!key || !list) return 'not configured';
+  // Without a key, the website signs the person up from their browser
+  // through the public Mailchimp signup form (see assets/js/pledge.js).
+  if (!key || !list) return 'website signup form';
   var dc = key.split('-')[1];
   if (!dc) return 'bad key';
   var base = 'https://' + dc + '.api.mailchimp.com/3.0/lists/' + list + '/members/' + hash_(p.email);

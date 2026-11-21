@@ -35,8 +35,7 @@ Use the campaign's Google account (the one the team should own the data with).
 This already works without any setup: when someone checks the box, their
 browser signs them up through the same public Mailchimp signup form as the
 site's "Get updates" box, with the same tag (settings in `_data/pledge.yml`,
-`mailchimp:`). The Sheet's `Mailchimp` column then says `not configured`,
-which only means the script itself did not contact Mailchimp.
+`mailchimp:`). The Sheet's `Mailchimp` column then says `website signup form`.
 
 To also tag pledgers `Pledge` and `EN`/`ES`: create those tags in Mailchimp,
 then add their numeric IDs to `tags`, `tags_en` and `tags_es` in
@@ -53,8 +52,7 @@ In Apps Script: Project Settings > Script properties > Add script property:
 | `MAILCHIMP_LIST_ID` | The audience ID (Audience > Settings > Audience name and defaults). |
 
 Only people who check the box are added, with the tag `Pledge` and `EN` or
-`ES`. Until both properties are set, pledges are still stored and counted;
-the `Mailchimp` column shows `not configured`.
+`ES`. Until both properties are set, the website's signup form handles it (above).
 
 ## Spam protection
 
