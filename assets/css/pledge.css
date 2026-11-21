@@ -223,3 +223,41 @@
 .pl-prose h2 { margin: 32px 0 8px; font-family: var(--pl-display); font-weight: 800; font-size: 22px; }
 .pl-prose p { margin: 0 0 12px; font-size: 17px; line-height: 1.65; }
 .pl-prose a { color: var(--pl-navy); font-weight: 700; }
+
+/* ---------- "Add it to your site" button and guide page ---------- */
+.pl-share__btn--site { gap: 8px; background: var(--pl-navy); color: #fff; }
+.pl-share__btn--site:hover { background: var(--pl-blue); }
+.pl-guide__back { margin: 0 0 18px; font-size: 15px; }
+.pl-guide__back a { color: var(--pl-navy); font-weight: 700; text-underline-offset: 3px; }
+.pl-guide__intro .pl-lead { margin-bottom: 0; }
+.pl-guide__steps { background: #fff; }
+.pl-guide__step + .pl-guide__step { margin-top: 56px; padding-top: 48px; border-top: 1px solid var(--pl-line); }
+.pl-guide__h { display: flex; align-items: center; gap: 14px; margin: 0 0 22px; font-family: var(--pl-display); font-weight: 900; font-size: clamp(24px, 2.6vw, 30px); }
+.pl-guide__n { display: inline-grid; place-items: center; flex: none; width: 40px; height: 40px; background: var(--pl-gold); color: var(--pl-navy); font-size: 20px; }
+.pl-guide__opts { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px 48px; align-items: start; max-width: 960px; }
+.pl-guide__field label, .pl-guide__lang legend { display: block; margin-bottom: 6px; color: var(--pl-blue); font-family: var(--pl-display); font-weight: 800; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+.pl-guide__field input { width: 100%; max-width: 420px; min-height: 48px; padding: 10px 12px; border: 1.5px solid var(--pl-navy); border-radius: 4px; font: 400 17px var(--pl-body); color: var(--pl-navy); }
+.pl-guide__hint { margin: 8px 0 0; max-width: 560px; color: #4A5878; font-size: 14px; line-height: 1.5; }
+.pl-guide__lang { margin: 0; padding: 0; border: 0; }
+.pl-guide__lang label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-right: 18px; font-size: 17px; cursor: pointer; }
+.pl-guide__lang input { width: 20px; height: 20px; accent-color: var(--pl-navy); }
+.pl-guide__kind { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 24px 48px; align-items: start; padding: 28px; background: var(--pl-cream); border-radius: 4px; }
+.pl-guide__kind + .pl-guide__kind { margin-top: 24px; }
+.pl-guide__kind h3 { margin: 0 0 8px; font-family: var(--pl-display); font-weight: 900; font-size: 24px; }
+.pl-guide__kind p { margin: 0 0 16px; font-size: 17px; line-height: 1.55; }
+.pl-guide__small { margin: 0 0 8px !important; color: var(--pl-blue); font-family: var(--pl-display); font-weight: 800; font-size: 13px !important; letter-spacing: .12em; text-transform: uppercase; }
+.pl-guide__code .pl-snippet { align-items: flex-start; margin-bottom: 6px; }
+.pl-guide__code .pl-snippet button { display: inline-flex; align-items: center; gap: 8px; }
+.pl-guide__frame { padding: 16px; background: #fff; border: 1px dashed #B8C2D9; border-radius: 4px; }
+.pl-guide__frame iframe { display: block; }
+.pl-guide__platforms { margin: 0 0 20px; padding-left: 20px; font-size: 17px; line-height: 1.7; }
+.pl-guide__note { max-width: 760px; margin: 0 0 10px; font-size: 16px; line-height: 1.6; }
+.pl-guide__note a { color: var(--pl-navy); font-weight: 700; }
+@media (max-width: 860px) {
+  .pl-guide__opts, .pl-guide__kind { grid-template-columns: 1fr; }
+  .pl-guide__kind { padding: 18px; }
+  .pl-guide__frame { padding: 8px; }
+}
+
+.pl-guide__more { margin: 14px 0 0 !important; font-size: 16px !important; }
+.pl-guide__more a { color: var(--pl-navy); font-weight: 700; text-underline-offset: 3px; }

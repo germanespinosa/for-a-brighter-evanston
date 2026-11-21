@@ -1,0 +1,78 @@
+# "Add it to your site" page: /pledge/embed/ and /es/compromiso/insertar/.
+# Written for this build (not in the campaign brief): review before launch.
+en:
+  title: Put the pledge on your site
+  description: Add the referendum pledge to your school, PTA, neighborhood or community website. Copy the code and paste it in.
+  back: Back to the pledge
+  label: For partner sites
+  lead: Run a school, PTA, neighborhood or community website? Add the referendum pledge in a couple of minutes. Every signature counts toward the same total, and you can see how many people signed on your site.
+  step1: Name your site
+  site_label: Short name for your site
+  site_hint: Letters, numbers and dashes, for example lincolnwood-pta. It only tells us how many people signed on your site and is never shown publicly.
+  step2: Pick a version and copy its code
+  lang_label: Language of the card
+  full_title: Full pledge card
+  full_text: The whole pledge with the form. Best inside an article or on its own page.
+  counter_title: Counter only
+  counter_text: The live count and an “I pledge” button that opens the pledge page. Best for sidebars, footers and small spaces.
+  code_label: Code
+  copy: Copy code
+  copied: Code copied
+  preview: Preview
+  preview_note: This preview is live. A pledge made here counts.
+  frame_full: Referendum pledge form
+  frame_counter: Referendum pledge counter
+  step3: Paste it into your site
+  platforms:
+    - name: WordPress
+      how: Add a “Custom HTML” block and paste the code.
+    - name: Squarespace
+      how: Add a “Code” block and paste the code.
+    - name: Wix
+      how: Add “Embed Code”, then “Embed HTML”, and paste the code.
+    - name: Google Sites
+      how: Insert, then “Embed”, then “Embed code”, and paste the code.
+    - name: Any other site
+      how: Paste it anywhere your site lets you add HTML.
+  scripts_note: If your site removes scripts, the card still works. It keeps a fixed height, so you may see some empty space below it.
+  privacy_note: Names and emails are never shown publicly or shared with the sites that show the pledge. Your site only shows the total.
+  help: Questions? Email
+  site_default: your-site
+es:
+  title: Pon el compromiso en tu sitio
+  description: Agrega el compromiso por el referéndum al sitio de tu escuela, PTA, vecindario o comunidad. Copia el código y pégalo.
+  back: Volver al compromiso
+  label: Para sitios aliados
+  lead: ¿Tienes el sitio web de una escuela, una PTA, un vecindario o una organización comunitaria? Agrega el compromiso por el referéndum en un par de minutos. Cada firma suma al mismo total, y puedes ver cuántas personas firmaron en tu sitio.
+  step1: Ponle nombre a tu sitio
+  site_label: Nombre corto para tu sitio
+  site_hint: Letras, números y guiones, por ejemplo lincolnwood-pta. Solo nos dice cuántas personas firmaron en tu sitio y nunca se muestra públicamente.
+  step2: Elige una versión y copia su código
+  lang_label: Idioma de la tarjeta
+  full_title: Tarjeta completa del compromiso
+  full_text: Todo el compromiso con el formulario. Ideal dentro de un artículo o en una página propia.
+  counter_title: Solo el conteo
+  counter_text: El conteo en vivo y un botón de “Me comprometo” que abre la página del compromiso. Ideal para barras laterales, pies de página y espacios pequeños.
+  code_label: Código
+  copy: Copiar código
+  copied: Código copiado
+  preview: Vista previa
+  preview_note: Esta vista previa funciona de verdad. Un compromiso hecho aquí cuenta.
+  frame_full: Formulario del compromiso por el referéndum
+  frame_counter: Conteo del compromiso por el referéndum
+  step3: Pégalo en tu sitio
+  platforms:
+    - name: WordPress
+      how: Agrega un bloque “HTML personalizado” y pega el código.
+    - name: Squarespace
+      how: Agrega un bloque “Código” y pega el código.
+    - name: Wix
+      how: Agrega “Insertar código”, luego “Insertar HTML”, y pega el código.
+    - name: Google Sites
+      how: Insertar, luego “Insertar” (embed) y “Código insertado”, y pega el código.
+    - name: Cualquier otro sitio
+      how: Pégalo en cualquier lugar donde tu sitio te permita agregar HTML.
+  scripts_note: Si tu sitio elimina los scripts, la tarjeta sigue funcionando. Mantiene una altura fija, así que puede quedar algo de espacio vacío debajo.
+  privacy_note: Los nombres y correos nunca se muestran públicamente ni se comparten con los sitios que muestran el compromiso. Tu sitio solo muestra el total.
+  help: ¿Preguntas? Escribe a
+  site_default: tu-sitio

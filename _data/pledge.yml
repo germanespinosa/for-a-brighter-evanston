@@ -48,12 +48,14 @@ en:
   text: Text message
   email_share: Email
   facebook: Facebook
+  add_site: Add it to your site
   share_subject: Our kids deserve a better plan
   share_body: "I pledged to support a referendum for a better plan for D65. Will you pledge with me?"
   lang_label: Language
   mc_check: Mailchimp asked for a quick check before adding you to our updates. Your pledge is already counted.
   mc_link: Continue on Mailchimp (opens a new tab)
   page_url: /pledge/
+  embed_url: /pledge/embed/
   privacy_url: /privacy/
 
 es:
@@ -81,10 +83,12 @@ es:
   text: Mensaje de texto
   email_share: Correo
   facebook: Facebook
+  add_site: Ponlo en tu sitio
   share_subject: Nuestros niños merecen un plan mejor
   share_body: "Me comprometí a apoyar un referéndum para un plan mejor para el D65. ¿Te comprometes conmigo?"
   lang_label: Idioma
   mc_check: Mailchimp pidió una verificación rápida antes de agregarte a nuestras novedades. Tu compromiso ya está contado.
   mc_link: Continuar en Mailchimp (se abre en otra pestaña)
   page_url: /es/compromiso/
+  embed_url: /es/compromiso/insertar/
   privacy_url: /es/privacidad/

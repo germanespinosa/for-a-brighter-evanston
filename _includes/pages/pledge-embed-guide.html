@@ -1,0 +1,123 @@
+{%- assign g = site.data.pledge_embed[page.lang] -%}
+{%- assign c = site.data.pledge[page.lang] -%}
+{%- capture icon_copy -%}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><rect x="9" y="9" width="12" height="12" rx="1"/><path d="M5 15V4a1 1 0 0 1 1-1h11"/></svg>{%- endcapture -%}
+<div class="pl-page pl-guide" data-pl-guide
+     data-embed="{{ '/pledge-embed/' | absolute_url }}"
+     data-counter="{{ '/pledge-counter/' | absolute_url }}"
+     data-resize="{{ '/assets/js/pledge-resize.js' | absolute_url }}"
+     data-preview-embed="{{ '/pledge-embed/' | relative_url }}"
+     data-preview-counter="{{ '/pledge-counter/' | relative_url }}"
+     data-default-site="{{ g.site_default }}"
+     data-frame-full-en="{{ site.data.pledge_embed.en.frame_full }}" data-frame-full-es="{{ site.data.pledge_embed.es.frame_full }}"
+     data-frame-counter-en="{{ site.data.pledge_embed.en.frame_counter }}" data-frame-counter-es="{{ site.data.pledge_embed.es.frame_counter }}"
+     data-copied="{{ g.copied }}">
+  <section class="pl-sec pl-sec--cream pl-sec--top">
+    <div class="pl-wrap pl-guide__intro">
+      <p class="pl-guide__back"><a href="{{ c.page_url | relative_url }}">← {{ g.back }}</a></p>
+      <p class="pl-label">{{ g.label }}</p>
+      <h1 class="pl-h2">{{ g.title }}</h1>
+      <p class="pl-lead">{{ g.lead }}</p>
+    </div>
+  </section>
+
+  <section class="pl-sec pl-guide__steps" aria-label="{{ g.title }}">
+    <div class="pl-wrap">
+      <div class="pl-guide__step">
+        <h2 class="pl-guide__h"><span class="pl-guide__n" aria-hidden="true">1</span>{{ g.step1 }}</h2>
+        <div class="pl-guide__opts">
+          <div class="pl-guide__field">
+            <label for="pl-site">{{ g.site_label }}</label>
+            <input id="pl-site" type="text" inputmode="url" autocomplete="off" spellcheck="false" maxlength="40" placeholder="{{ g.site_default }}" aria-describedby="pl-site-hint" data-pl-site>
+            <p class="pl-guide__hint" id="pl-site-hint">{{ g.site_hint }}</p>
+          </div>
+          <fieldset class="pl-guide__lang">
+            <legend>{{ g.lang_label }}</legend>
+            <label><input type="radio" name="pl-lang" value="en"{% if page.lang == 'en' %} checked{% endif %} data-pl-lang> English</label>
+            <label><input type="radio" name="pl-lang" value="es"{% if page.lang == 'es' %} checked{% endif %} data-pl-lang> Español</label>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="pl-guide__step">
+        <h2 class="pl-guide__h"><span class="pl-guide__n" aria-hidden="true">2</span>{{ g.step2 }}</h2>
+        {%- assign kinds = "full,counter" | split: "," -%}
+        {%- for k in kinds %}
+        {%- if k == 'full' %}{% assign kt = g.full_title %}{% assign kx = g.full_text %}{% else %}{% assign kt = g.counter_title %}{% assign kx = g.counter_text %}{% endif %}
+        <article class="pl-guide__kind pl-guide__kind--{{ k }}" aria-labelledby="kind-{{ k }}">
+          <div class="pl-guide__code">
+            <h3 id="kind-{{ k }}">{{ kt }}</h3>
+            <p>{{ kx }}</p>
+            <p class="pl-guide__small">{{ g.code_label }}</p>
+            <div class="pl-snippet">
+              <code data-pl-code="{{ k }}"></code>
+              <button type="button" data-pl-copy="{{ k }}">{{ icon_copy }} {{ g.copy }}</button>
+            </div>
+            <p class="pl-copied-code" data-pl-copied="{{ k }}" role="status"></p>
+          </div>
+          <div class="pl-guide__preview">
+            <p class="pl-guide__small">{{ g.preview }}</p>
+            <div class="pl-guide__frame">
+              <iframe data-pl-preview="{{ k }}" title="{% if k == 'full' %}{{ g.frame_full }}{% else %}{{ g.frame_counter }}{% endif %}" style="width:100%;height:{% if k == 'full' %}700{% else %}180{% endif %}px;border:0"></iframe>
+            </div>
+            <p class="pl-guide__hint">{{ g.preview_note }}</p>
+          </div>
+        </article>
+        {%- endfor %}
+      </div>
+
+      <div class="pl-guide__step">
+        <h2 class="pl-guide__h"><span class="pl-guide__n" aria-hidden="true">3</span>{{ g.step3 }}</h2>
+        <ul class="pl-guide__platforms">
+          {%- for pf in g.platforms %}
+          <li><strong>{{ pf.name }}</strong> {{ pf.how }}</li>
+          {%- endfor %}
+        </ul>
+        <p class="pl-guide__note">{{ g.scripts_note }}</p>
+        <p class="pl-guide__note">{{ g.privacy_note }}</p>
+        <p class="pl-guide__note">{{ g.help }} <a href="mailto:{{ site.links.email }}">{{ site.links.email }}</a>.</p>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+(function () {
+  var root = document.querySelector('[data-pl-guide]');
+  if (!root) return;
+  var site = root.querySelector('[data-pl-site]');
+  var get = function (k) { return root.getAttribute('data-' + k); };
+  function clean(v) { return (v || '').toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9_-]/g, '').slice(0, 40); }
+  function lang() { var r = root.querySelector('[data-pl-lang]:checked'); return r ? r.value : 'en'; }
+  function q(src, l) { return '?source=' + src + (l === 'es' ? '&lang=es' : ''); }
+  function code(kind, src, l) {
+    var url = (kind === 'full' ? get('embed') : get('counter')) + q(src, l);
+    var title = get('frame-' + kind + '-' + l);
+    var h = kind === 'full' ? 1100 : 180;
+    return '<iframe src="' + url + '" title="' + title + '" style="width:100%;max-width:700px;height:' + h + 'px;border:0" loading="lazy"></iframe>\n' +
+           '<script src="' + get('resize') + '" async><\/script>';
+  }
+  var lastLang = null;
+  function update() {
+    var src = clean(site.value) || get('default-site');
+    var l = lang();
+    ['full', 'counter'].forEach(function (k) {
+      root.querySelector('[data-pl-code="' + k + '"]').textContent = code(k, src, l);
+      if (l !== lastLang) {
+        root.querySelector('[data-pl-preview="' + k + '"]').src = get('preview-' + (k === 'full' ? 'embed' : 'counter')) + q('embed-preview', l);
+      }
+    });
+    lastLang = l;
+  }
+  site.addEventListener('input', update);
+  root.querySelectorAll('[data-pl-lang]').forEach(function (r) { r.addEventListener('change', update); });
+  root.querySelectorAll('[data-pl-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var k = b.getAttribute('data-pl-copy');
+      var text = root.querySelector('[data-pl-code="' + k + '"]').textContent;
+      var note = root.querySelector('[data-pl-copied="' + k + '"]');
+      var done = function () { note.textContent = get('copied'); setTimeout(function () { note.textContent = ''; }, 4000); };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(done);
+    });
+  });
+  update();
+})();
+</script>

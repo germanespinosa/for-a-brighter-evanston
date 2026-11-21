@@ -55,6 +55,7 @@ en:
   code_copied: Code copied
   code_counter_label: "Short on space? This smaller version shows only the live count and an “I pledge” button:"   # (new)
   code_site: "YOUR-SITE"
+  code_more: See both versions with previews and step-by-step help
 
 es:
   title: Comprométete
@@ -109,6 +110,7 @@ es:
   code_copied: Código copiado
   code_counter_label: "¿Poco espacio? Esta versión más pequeña muestra solo el conteo en vivo y un botón de “Me comprometo”:"
   code_site: "TU-SITIO"
+  code_more: Mira ambas versiones con vista previa y ayuda paso a paso
 
 sources:
   - label: Evanston RoundTable, Nov. 16
