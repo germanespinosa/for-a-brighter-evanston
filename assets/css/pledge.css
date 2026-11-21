@@ -145,6 +145,9 @@
 }
 
 /* ---------- counter only ---------- */
+.pl-counter__label { margin: 0 0 10px; color: var(--pl-gold); font-family: var(--pl-display); font-weight: 800; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.4; }
+.pl-counter--band .pl-counter__label { max-width: 1120px; margin: 0 auto; padding: 16px 24px 0; }
+.pl-counter--band .pl-counter__inner { padding-top: 8px !important; }
 .pl-counter__inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
 .pl-counter__line { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.4; }
 .pl-embed-body .pl-counter { padding: 14px 18px; background: var(--pl-navy); color: #fff; border-radius: 4px; }
