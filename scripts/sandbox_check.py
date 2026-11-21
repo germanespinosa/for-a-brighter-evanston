@@ -46,6 +46,15 @@ TEXT_DATA_FILES = {
     "_data/i18n/en.yml", "_data/i18n/es.yml",       # home page, header/footer labels
     "_data/new_homes.yml", "_data/news_page.yml",   # page text and tables
     "_data/event.yml", "_data/hero.yml",            # next meeting, hero photo list
+    "_data/pledge.yml", "_data/pledge_page.yml",    # referendum pledge card and page text
+    "_data/pledge_embed.yml",                       # "Put the pledge on your site" guide text
+}
+# Settings inside text files that #website updates may not change: where pledges
+# are stored, the Mailchimp signup form, and the pledge pages' own links. Wording
+# around them stays editable. Changing these needs German.
+LOCKED_DATA_KEYS = {
+    "_data/pledge.yml": re.compile(r"(endpoint|turnstile_sitekey|mailchimp(\..+)?|(en|es)\.(page_url|embed_url|privacy_url))"),
+    "_data/pledge_page.yml": re.compile(r"(sources\[\d+\]\.url|(en|es)\.ways\[\d+\]\.url)"),
 }
 MEDIA_DIRS = ("assets/img/", "assets/files/")
 MEDIA_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf"}
@@ -1894,6 +1903,11 @@ def main():
             v = hv[k]
             if isinstance(v, str) and any(rx.search(v) for rx, _ in UNSAFE):
                 blocking.append(f"{path} → {k}: contains code that isn't allowed.")
+        locked = LOCKED_DATA_KEYS.get(path)
+        if locked:
+            for k in sorted(set(changed_keys) | {k for k in bv if k not in hv}):
+                if locked.fullmatch(k):
+                    blocking.append(f"{path} → {k}: this is a pledge setting (where signatures go, the Mailchimp form, or a pledge page link), not text. #website updates can't change it; ask German.")
         if changed_keys:
             changes.append(f"  {path}: {len(changed_keys)} value(s) changed: {', '.join(changed_keys[:8])}{' …' if len(changed_keys) > 8 else ''}")
         pair = {"_data/i18n/en.yml": "_data/i18n/es.yml", "_data/i18n/es.yml": "_data/i18n/en.yml"}.get(path)
@@ -1907,7 +1921,8 @@ def main():
                 spanish.append(f"{path} changed {', '.join(missing[:6])}, but {pair} did not change the same text.")
             elif changed_keys:
                 spanish.append(f"{path} and {pair}: the same text was changed in both languages.")
-        elif path in ("_data/new_homes.yml", "_data/news_page.yml", "_data/event.yml"):
+        elif path in ("_data/new_homes.yml", "_data/news_page.yml", "_data/event.yml",
+                      "_data/pledge.yml", "_data/pledge_page.yml", "_data/pledge_embed.yml"):
             en = [k for k in changed_keys if k.startswith("en.")]
             es = [k for k in changed_keys if k.startswith("es.")]
             missing = [k for k in en if "es." + k[3:] not in es] + [k for k in es if "en." + k[3:] not in en]
