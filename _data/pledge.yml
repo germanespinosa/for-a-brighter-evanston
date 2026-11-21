@@ -1,0 +1,96 @@
+# Referendum pledge tool. One tool, one counter: /pledge-embed/ is the card,
+# /pledge-counter/ the counter-only version, /pledge/ and /es/compromiso/ the
+# site pages. The backend is the Google Apps Script in apps-script/pledge/.
+
+# The Apps Script web app URL (ends in /exec). Empty = not connected yet:
+# the counter stays hidden and the form shows its error message.
+endpoint: "https://script.google.com/macros/s/AKfycbxvo-EN5uvfqpDpCD2ZsQPHNirG3Gj_ubHbfovB6_Wx_zJTY3_RxU4wq0WRxfUmyMRX/exec"
+# Mailchimp: people who check "Send me campaign updates" are signed up from
+# their browser through the same public signup form as the site's "Get
+# updates" box (_includes/updates-dialog.html). No API key involved.
+# tags: comma-separated Mailchimp tag IDs. 15370984 is the tag the "Get
+# updates" form uses; add the IDs of "Pledge", "EN" and "ES" tags here once
+# they exist in Mailchimp.
+mailchimp:
+  form: "https://forabrighterevanston.us9.list-manage.com/subscribe/post?u=a29ce2936bee1dac08509481b&id=891518ce66&f_id=008ceee3f0"
+  honeypot: b_a29ce2936bee1dac08509481b_891518ce66
+  tags: "15370984"
+  tags_en: ""
+  tags_es: ""
+# Cloudflare Turnstile site key (public). Empty = no challenge widget.
+# If you set it, also set TURNSTILE_SECRET in the Apps Script properties.
+turnstile_sitekey: ""
+
+# Copy. Card copy is final (campaign build brief, Nov. 20, 2026): use exactly,
+# no em dashes. Lines marked (mockup) come from the page preview design.
+en:
+  eyebrow: The District 65 referendum pledge                      # (mockup, + District 65)
+  counter_label: Evanston · District 65 referendum pledge
+  headline: "Our kids deserve a better plan, and I’m ready to"
+  headline_mark: help build it.
+  pledge: "If the D65 board votes no on the current plan and builds a sustainable, fiscally responsible long-term vision with our community, I pledge to support the referendum that funds it."
+  first: First name
+  last: Last name
+  email: Your email
+  updates: Send me campaign updates from For a Brighter Evanston
+  button: I pledge
+  counter: neighbors have pledged to support a referendum for a better plan.
+  thanks: Thank you. Now ask two neighbors to pledge with you.
+  already: You have already pledged. Thank you!
+  error: Something went wrong. Please try again.
+  invalid: Please enter your first name, last name and a valid email.
+  privacy_note: Your name and email are never shown publicly.      # (mockup)
+  privacy_link: Privacy                                            # (mockup)
+  why: Why this pledge, and why now?                               # (mockup)
+  sending: Sending…
+  share_label: Share the pledge
+  copy_link: Copy link
+  copied: Link copied
+  text: Text message
+  email_share: Email
+  facebook: Facebook
+  add_site: Add it to your site
+  share_subject: Our kids deserve a better plan
+  share_body: "I pledged to support a referendum for a better plan for D65. Will you pledge with me?"
+  lang_label: Language
+  mc_check: Mailchimp asked for a quick check before adding you to our updates. Your pledge is already counted.
+  mc_link: Continue on Mailchimp (opens a new tab)
+  page_url: /pledge/
+  embed_url: /pledge/embed/
+  privacy_url: /privacy/
+
+es:
+  eyebrow: El compromiso por el referéndum del Distrito 65
+  counter_label: Evanston · Compromiso por el referéndum del Distrito 65
+  headline: "Nuestros niños merecen un plan mejor, y quiero"
+  headline_mark: ayudar a construirlo.
+  pledge: "Si la junta escolar del D65 vota no al plan actual y construye con nuestra comunidad una visión a largo plazo, sostenible y fiscalmente responsable, me comprometo a apoyar el referéndum que la financie."
+  first: Nombre
+  last: Apellido
+  email: Tu correo electrónico
+  updates: Envíenme novedades de la campaña de For a Brighter Evanston
+  button: Me comprometo
+  counter: vecinos se han comprometido a apoyar un referéndum para un plan mejor.
+  thanks: Gracias. Ahora invita a dos vecinos a comprometerse contigo.
+  already: Ya te comprometiste. ¡Gracias!
+  error: Algo salió mal. Inténtalo de nuevo.
+  invalid: Escribe tu nombre, tu apellido y un correo electrónico válido.
+  privacy_note: Tu nombre y tu correo nunca se muestran públicamente.
+  privacy_link: Privacidad
+  why: ¿Por qué este compromiso, y por qué ahora?
+  sending: Enviando…
+  share_label: Comparte el compromiso
+  copy_link: Copiar enlace
+  copied: Enlace copiado
+  text: Mensaje de texto
+  email_share: Correo
+  facebook: Facebook
+  add_site: Ponlo en tu sitio
+  share_subject: Nuestros niños merecen un plan mejor
+  share_body: "Me comprometí a apoyar un referéndum para un plan mejor para el D65. ¿Te comprometes conmigo?"
+  lang_label: Idioma
+  mc_check: Mailchimp pidió una verificación rápida antes de agregarte a nuestras novedades. Tu compromiso ya está contado.
+  mc_link: Continuar en Mailchimp (se abre en otra pestaña)
+  page_url: /es/compromiso/
+  embed_url: /es/compromiso/insertar/
+  privacy_url: /es/privacidad/

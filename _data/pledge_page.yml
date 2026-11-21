@@ -1,0 +1,121 @@
+# Text of the /pledge/ and /es/compromiso/ pages, under the pledge card.
+# Groundwork copy from the campaign build brief (facts current as of Nov. 20,
+# 2026; update when the board sets its final vote date). Lines marked (mockup)
+# come from the page preview design; (new) were written for this build.
+en:
+  title: Take the pledge
+  description: "Our kids deserve a better plan. Pledge to support a referendum if the D65 board votes no on the current plan and builds a better one with our community."
+  frame_title: Referendum pledge form
+  stand_label: Where things stand
+  stand_head: "The vote was"
+  stand_mark: "4-3."
+  stand_tail: "It is not over."
+  stand_text: "On November 16, the District 65 board voted 4-3 to begin the process of closing Dewey and Lincolnwood. That vote did not close any school. It started the public hearings that state law requires before the board can take a final vote."
+  stand_strong: One vote decided it. One vote can change it.
+  next_label: What comes next
+  days:
+    - day: Tue, Dec. 1
+      slots: [["Lincolnwood hearing", "5:15 to 7:15 p.m."], ["Dewey hearing", "7:45 to 9:45 p.m."]]
+    - day: Thu, Dec. 3
+      slots: [["Dewey hearing", "5:15 to 7:15 p.m."], ["Lincolnwood hearing", "7:45 to 9:45 p.m."]]
+    - day: Tue, Dec. 8
+      slots: [["Lincolnwood hearing", "5:15 to 7:15 p.m."], ["Dewey hearing", "7:45 to 9:45 p.m."]]
+  final_head: The final vote
+  final_text: After the hearings, the board votes on closing Dewey and Lincolnwood. The date has not been announced.
+  hearings_note: All hearings are at the Joseph E. Hill Education Center, 1500 McDaniel Ave. Anyone can speak for up to three minutes.
+  sources_label: "Sources for the vote and hearing details:"
+  why_label: Why a pledge
+  why_head: The board has heard what this community is against. This pledge shows what we are for.
+  why_p1: District 65 will need a referendum to be financially sustainable for the long term, and a referendum only passes if voters trust the plan behind it. Closing schools will not earn that trust. Building a better plan with the community will.
+  why_p2: To get a yes on a referendum, the board needs to vote no on the current plan. A no vote is a vote to take the next step. Every name on this pledge tells the board that when they take it, we will be there to help.
+  poll_label: What Evanston voters told an independent pollster
+  poll_big: Nearly 4 to 1
+  poll_text: Voters say closing Dewey and Lincolnwood makes them less likely, not more likely, to support a referendum.
+  poll_less: 41% less likely
+  poll_more: 11% more likely
+  poll_small: Most voters polled have no child in a D65 school.
+  poll_foot: Public Policy Polling, 665 registered Evanston voters, Nov. 4 and 5, 2026. Margin of error ±3.8 points.
+  ways_head: Three ways to help right now
+  ways:
+    - title: Sign the pledge
+      text: Then ask two neighbors to sign with you.
+      link: Sign now
+      url: "#pledge"
+    - title: Speak at a hearing
+      text: December 1, 3 and 8. You get three minutes, and every voice goes on the record.
+      link: How to sign up to speak
+      url: "/#hearing-preparation"
+    - title: Write to the board
+      text: Tell board members what closing schools would mean for your family.
+      link: Write to the board
+      url: write
+  code_head: Put this pledge on your site
+  code_text: Run a school, PTA, or neighborhood site? Paste this code to show the pledge and the live count.
+  code_copy: Copy code
+  code_copied: Code copied
+  code_counter_label: "Short on space? This smaller version shows only the live count and an “I pledge” button:"   # (new)
+  code_site: "YOUR-SITE"
+  code_more: See both versions with previews and step-by-step help
+
+es:
+  title: Comprométete
+  description: "Nuestros niños merecen un plan mejor. Comprométete a apoyar un referéndum si la junta del D65 vota no al plan actual y construye uno mejor con nuestra comunidad."
+  frame_title: Formulario del compromiso por el referéndum
+  stand_label: Dónde estamos
+  stand_head: "La votación fue"
+  stand_mark: "4 a 3."
+  stand_tail: "Esto no ha terminado."
+  stand_text: "El 16 de noviembre, la junta escolar del Distrito 65 votó 4 a 3 para iniciar el proceso de cierre de Dewey y Lincolnwood. Ese voto no cerró ninguna escuela. Dio inicio a las audiencias públicas que la ley estatal exige antes de que la junta pueda tomar una decisión final."
+  stand_strong: Un voto lo decidió. Un voto puede cambiarlo.
+  next_label: Qué sigue
+  days:
+    - day: Mar., 1 de dic.
+      slots: [["Audiencia de Lincolnwood", "5:15 a 7:15 p. m."], ["Audiencia de Dewey", "7:45 a 9:45 p. m."]]
+    - day: Jue., 3 de dic.
+      slots: [["Audiencia de Dewey", "5:15 a 7:15 p. m."], ["Audiencia de Lincolnwood", "7:45 a 9:45 p. m."]]
+    - day: Mar., 8 de dic.
+      slots: [["Audiencia de Lincolnwood", "5:15 a 7:15 p. m."], ["Audiencia de Dewey", "7:45 a 9:45 p. m."]]
+  final_head: La votación final
+  final_text: Después de las audiencias, la junta vota sobre el cierre de Dewey y Lincolnwood. La fecha aún no se ha anunciado.
+  hearings_note: Todas las audiencias son en el Joseph E. Hill Education Center, 1500 McDaniel Ave. Cualquier persona puede hablar hasta tres minutos.
+  sources_label: "Fuentes sobre la votación y las audiencias:"
+  why_label: Por qué un compromiso
+  why_head: La junta ya escuchó a qué se opone esta comunidad. Este compromiso muestra lo que sí queremos.
+  why_p1: El Distrito 65 necesitará un referéndum para ser financieramente sostenible a largo plazo, y un referéndum solo se aprueba si los votantes confían en el plan que lo respalda. Cerrar escuelas no generará esa confianza. Construir un plan mejor junto con la comunidad, sí.
+  why_p2: Para lograr un sí en un referéndum, la junta necesita votar no al plan actual. Un voto por el no es un voto para dar el siguiente paso. Cada nombre en este compromiso le dice a la junta que, cuando lo dé, estaremos ahí para ayudar.
+  poll_label: Lo que los votantes de Evanston le dijeron a una encuestadora independiente
+  poll_big: Casi 4 a 1
+  poll_text: Los votantes dicen que cerrar Dewey y Lincolnwood los hace menos propensos, no más propensos, a apoyar un referéndum.
+  poll_less: 41% menos propensos
+  poll_more: 11% más propensos
+  poll_small: La mayoría de los votantes encuestados no tiene hijos en una escuela del D65.
+  poll_foot: Public Policy Polling, 665 votantes registrados de Evanston, 4 y 5 de noviembre de 2026. Margen de error de ±3.8 puntos.
+  ways_head: Tres formas de ayudar ahora
+  ways:
+    - title: Firma el compromiso
+      text: Luego pídeles a dos vecinos que firmen contigo.
+      link: Firma ahora
+      url: "#pledge"
+    - title: Habla en una audiencia
+      text: 1, 3 y 8 de diciembre. Tienes tres minutos, y cada voz queda en el acta.
+      link: Cómo inscribirte para hablar
+      url: "/es/#hearing-preparation"
+    - title: Escríbele a la junta
+      text: Cuéntales a los miembros de la junta lo que significaría para tu familia cerrar escuelas.
+      link: Escríbele a la junta
+      url: write
+  code_head: Pon este compromiso en tu sitio
+  code_text: ¿Tienes el sitio de una escuela, una PTA o un vecindario? Pega este código para mostrar el compromiso y el conteo en vivo.
+  code_copy: Copiar código
+  code_copied: Código copiado
+  code_counter_label: "¿Poco espacio? Esta versión más pequeña muestra solo el conteo en vivo y un botón de “Me comprometo”:"
+  code_site: "TU-SITIO"
+  code_more: Mira ambas versiones con vista previa y ayuda paso a paso
+
+sources:
+  - label: Evanston RoundTable, Nov. 16
+    url: https://evanstonroundtable.com/2026/11/16/live-blog-district-65-board-to-vote-on-moving-lincolnwood-dewey-closures-to-next-phase/
+  - label: Evanston RoundTable, Nov. 17
+    url: https://evanstonroundtable.com/2026/11/17/district-65-advances-dewey-lincolnwood-closures/
+  - label: Evanston Now
+    url: https://evanstonnow.com/lincolnwood-dewey-elementary-hearing-vote/
