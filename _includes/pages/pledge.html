@@ -1,0 +1,119 @@
+{%- assign t = site.data.i18n[page.lang] -%}
+{%- assign p = site.data.pledge_page[page.lang] -%}
+{%- assign embed = '/pledge-embed/' | absolute_url -%}
+{%- capture embed_src %}{{ '/pledge-embed/' | relative_url }}?source=fabe{% if page.lang == 'es' %}&lang=es{% endif %}{% endcapture -%}
+{%- capture snippet %}<iframe src="{{ embed }}?source={{ p.code_site }}{% if page.lang == 'es' %}&lang=es{% endif %}" title="{{ p.frame_title }}" style="width:100%;max-width:700px;height:1100px;border:0" loading="lazy"></iframe>
+<script src="{{ '/assets/js/pledge-resize.js' | absolute_url }}" async></script>{% endcapture -%}
+{%- capture snippet_counter %}<iframe src="{{ '/pledge-counter/' | absolute_url }}?source={{ p.code_site }}{% if page.lang == 'es' %}&lang=es{% endif %}" title="{{ p.frame_title }}" style="width:100%;max-width:700px;height:180px;border:0" loading="lazy"></iframe>
+<script src="{{ '/assets/js/pledge-resize.js' | absolute_url }}" async></script>{% endcapture -%}
+<div class="pl-page">
+  <h1 class="pl-sr">{{ p.title }}</h1>
+  <section class="pl-sec pl-sec--cream pl-sec--top" id="pledge" aria-label="{{ p.title }}">
+    <div class="pl-wrap">
+      <iframe class="pl-frame" src="{{ embed_src }}" title="{{ p.frame_title }}"></iframe>
+    </div>
+  </section>
+
+  <section class="pl-sec pl-sec--navy" id="where-things-stand" aria-labelledby="stand-title">
+    <div class="pl-wrap">
+      <p class="pl-label">{{ p.stand_label }}</p>
+      <h2 class="pl-h2" id="stand-title">{{ p.stand_head }} <mark class="pl-mark pl-nowrap">{{ p.stand_mark }}</mark> {{ p.stand_tail }}</h2>
+      <p class="pl-lead">{{ p.stand_text }}</p>
+      <p class="pl-strong">{{ p.stand_strong }}</p>
+      <h3 class="pl-label">{{ p.next_label }}</h3>
+      <ul class="pl-days">
+        {%- for d in p.days %}
+        <li class="pl-day">
+          <h3>{{ d.day }}</h3>
+          {%- for s in d.slots %}
+          <p>{{ s[0] }}<br>{{ s[1] }}</p>
+          {%- endfor %}
+        </li>
+        {%- endfor %}
+        <li class="pl-day pl-day--final">
+          <h3>{{ p.final_head }}</h3>
+          <p>{{ p.final_text }}</p>
+        </li>
+      </ul>
+      <p class="pl-note">{{ p.hearings_note }}</p>
+      <p class="pl-sources">{{ p.sources_label }} {% for s in site.data.pledge_page.sources %}<a href="{{ s.url }}" rel="noopener">{{ s.label }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}.</p>
+    </div>
+  </section>
+
+  <section class="pl-sec pl-sec--cream" aria-labelledby="why-title">
+    <div class="pl-wrap">
+      <div class="pl-why">
+        <div>
+          <p class="pl-label">{{ p.why_label }}</p>
+          <h2 class="pl-h2" id="why-title">{{ p.why_head }}</h2>
+        </div>
+        <div>
+          <p>{{ p.why_p1 }}</p>
+          <p>{{ p.why_p2 }}</p>
+        </div>
+      </div>
+      <div class="pl-poll">
+        <div>
+          <p class="pl-label">{{ p.poll_label }}</p>
+          <p class="pl-poll__big">{{ p.poll_big }}</p>
+        </div>
+        <div>
+          <p class="pl-poll__text">{{ p.poll_text }}</p>
+          <ul class="pl-bars">
+            <li><span class="pl-bar" style="width:min(390px, 55%)" aria-hidden="true"></span>{{ p.poll_less }}</li>
+            <li><span class="pl-bar pl-bar--light" style="width:min(105px, 15%)" aria-hidden="true"></span>{{ p.poll_more }}</li>
+          </ul>
+          <p class="pl-poll__small">{{ p.poll_small }}</p>
+          <p class="pl-poll__foot">{{ p.poll_foot }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pl-sec pl-sec--tint" aria-labelledby="ways-title">
+    <div class="pl-wrap">
+      <h2 class="pl-h2" id="ways-title">{{ p.ways_head }}</h2>
+      <ol class="pl-ways">
+        {%- for w in p.ways %}
+        {%- if w.url == 'write' %}{% assign href = t.urls.write | relative_url %}{% elsif w.url contains '#' and w.url != '#pledge' %}{% assign href = w.url | relative_url %}{% else %}{% assign href = w.url %}{% endif %}
+        <li class="pl-way">
+          <p class="pl-way__n" aria-hidden="true">{{ forloop.index }}</p>
+          <h3>{{ w.title }}</h3>
+          <p>{{ w.text }}</p>
+          <a href="{{ href }}">{{ w.link }}</a>
+        </li>
+        {%- endfor %}
+      </ol>
+    </div>
+  </section>
+
+  <section class="pl-sec pl-sec--cream" id="embed" aria-labelledby="code-title">
+    <div class="pl-wrap pl-code">
+      <div>
+        <h2 class="pl-h2" id="code-title">{{ p.code_head }}</h2>
+        <p>{{ p.code_text }}</p>
+      </div>
+      <div>
+        <div class="pl-snippet">
+          <code data-pl-snippet>{{ snippet | escape }}</code>
+          <button type="button" data-pl-copy-code>{{ p.code_copy }}</button>
+        </div>
+        <p class="pl-snippet__label">{{ p.code_counter_label }}</p>
+        <div class="pl-snippet">
+          <code data-pl-snippet>{{ snippet_counter | escape }}</code>
+          <button type="button" data-pl-copy-code>{{ p.code_copy }}</button>
+        </div>
+        <p class="pl-copied-code" data-pl-copied-code role="status" data-msg="{{ p.code_copied }}"></p>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  document.querySelectorAll('[data-pl-copy-code]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var code = b.parentNode.querySelector('[data-pl-snippet]').textContent;
+      var note = document.querySelector('[data-pl-copied-code]');
+      if (navigator.clipboard) navigator.clipboard.writeText(code).then(function () { note.textContent = note.getAttribute('data-msg'); });
+    });
+  });
+</script>

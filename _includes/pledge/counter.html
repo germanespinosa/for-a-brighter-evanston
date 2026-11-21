@@ -1,0 +1,13 @@
+{%- comment -%}
+  Counter-only version: the live count plus an "I pledge" button that opens the
+  pledge page. Used by /pledge-counter/ (for partners) and on our home page.
+{%- endcomment -%}
+{%- assign pl = site.data.pledge -%}
+{%- assign c = pl[include.lang] -%}
+<div class="pl pl-counter{% if include.band %} pl-counter--band{% endif %}" data-pledge-counter data-lang="{{ include.lang }}" data-endpoint="{{ pl.endpoint }}" data-site="{{ '/' | absolute_url }}">
+  <div class="pl-counter__inner">
+    <p class="pl-counter__line" aria-live="polite"><span class="pl-num" data-pl-count hidden></span> <span data-t="counter">{{ c.counter }}</span></p>
+    <a class="pl-btn pl-btn--inline" href="{{ c.page_url | relative_url }}" data-t="button" data-href="page_url"{% if include.partner %} data-pl-out{% endif %}>{{ c.button }}</a>
+  </div>
+  <script type="application/json" data-pl-copy>{"en":{{ pl.en | jsonify }},"es":{{ pl.es | jsonify }}}</script>
+</div>

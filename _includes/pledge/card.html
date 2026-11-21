@@ -1,0 +1,73 @@
+{%- comment -%}
+  The pledge card. Used by /pledge-embed/ (shown on our pages and partner sites
+  in an iframe). Text is rendered in include.lang and switched by pledge.js.
+{%- endcomment -%}
+{%- assign pl = site.data.pledge -%}
+{%- assign c = pl[include.lang] -%}
+<div class="pl" data-pledge data-lang="{{ include.lang }}" data-endpoint="{{ pl.endpoint }}" data-sitekey="{{ pl.turnstile_sitekey }}" data-site="{{ '/' | absolute_url }}">
+  <article class="pl-card" aria-labelledby="pl-title">
+    <div class="pl-strip">
+      <p class="pl-strip__line" aria-live="polite"><span class="pl-num" data-pl-count hidden></span> <span data-t="counter">{{ c.counter }}</span></p>
+    </div>
+    <div class="pl-body">
+      <div class="pl-top">
+        <p class="pl-eyebrow" data-t="eyebrow">{{ c.eyebrow }}</p>
+        <div class="pl-lang" role="group" aria-label="{{ c.lang_label }}" data-t-attr="aria-label:lang_label">
+          <button type="button" class="pl-lang__btn" data-lang-btn="en" lang="en" aria-pressed="{% if include.lang == 'en' %}true{% else %}false{% endif %}">English</button>
+          <button type="button" class="pl-lang__btn" data-lang-btn="es" lang="es" aria-pressed="{% if include.lang == 'es' %}true{% else %}false{% endif %}">Español</button>
+        </div>
+      </div>
+      <h1 class="pl-title" id="pl-title"><span data-t="headline">{{ c.headline }}</span> <mark class="pl-mark" data-t="headline_mark">{{ c.headline_mark }}</mark></h1>
+      <p class="pl-pledge" data-t="pledge">{{ c.pledge }}</p>
+
+      <form class="pl-form" data-pl-form novalidate>
+        <div class="pl-fields">
+          <div class="pl-field">
+            <label for="pl-first" data-t="first">{{ c.first }}</label>
+            <input id="pl-first" name="first" type="text" autocomplete="given-name" required maxlength="80">
+          </div>
+          <div class="pl-field">
+            <label for="pl-last" data-t="last">{{ c.last }}</label>
+            <input id="pl-last" name="last" type="text" autocomplete="family-name" required maxlength="80">
+          </div>
+          <div class="pl-field pl-field--email">
+            <label for="pl-email" data-t="email">{{ c.email }}</label>
+            <input id="pl-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254">
+          </div>
+        </div>
+        <div class="pl-hp" aria-hidden="true">
+          <label for="pl-website">Website</label>
+          <input id="pl-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <label class="pl-check">
+          <input type="checkbox" name="optin">
+          <span data-t="updates">{{ c.updates }}</span>
+        </label>
+        <div class="pl-turnstile" data-pl-turnstile hidden></div>
+        <button class="pl-btn" type="submit" data-t="button">{{ c.button }}</button>
+        <p class="pl-msg" data-pl-msg role="alert"></p>
+      </form>
+
+      <div class="pl-done" data-pl-done hidden tabindex="-1">
+        <p class="pl-done__msg" data-pl-done-msg></p>
+        <p class="pl-share__label" data-t="share_label">{{ c.share_label }}</p>
+        <ul class="pl-share">
+          <li><button type="button" class="pl-share__btn" data-share="copy" data-t="copy_link">{{ c.copy_link }}</button></li>
+          <li><a class="pl-share__btn" data-share="sms" href="#" data-t="text">{{ c.text }}</a></li>
+          <li><a class="pl-share__btn" data-share="email" href="#" data-t="email_share">{{ c.email_share }}</a></li>
+          <li><a class="pl-share__btn" data-share="facebook" href="#" target="_blank" rel="noopener" data-t="facebook">{{ c.facebook }}</a></li>
+        </ul>
+        <p class="pl-copied" data-pl-copied role="status"></p>
+      </div>
+
+      <div class="pl-foot">
+        <p class="pl-foot__privacy"><span data-t="privacy_note">{{ c.privacy_note }}</span> <a href="{{ c.privacy_url | absolute_url }}" data-t="privacy_link" data-href="privacy_url" data-pl-out>{{ c.privacy_link }}</a></p>
+        <a class="pl-foot__why" href="{{ c.page_url | absolute_url }}#where-things-stand" data-t="why" data-href="page_url" data-hash="#where-things-stand" data-pl-out>{{ c.why }}</a>
+      </div>
+      <a class="pl-brand" href="{{ '/' | absolute_url }}" data-pl-brand data-pl-out hidden>
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z" fill="currentColor"/></svg>For a Brighter Evanston
+      </a>
+    </div>
+  </article>
+  <script type="application/json" data-pl-copy>{"en":{{ pl.en | jsonify }},"es":{{ pl.es | jsonify }}}</script>
+</div>

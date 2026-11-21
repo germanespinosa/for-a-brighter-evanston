@@ -72,6 +72,11 @@
   </div>
 </section>
 
+<link rel="stylesheet" href="{{ '/assets/css/pledge.css' | relative_url }}">
+<section class="pl-home" aria-label="{{ site.data.pledge[page.lang].eyebrow }}">
+  {% include pledge/counter.html lang=page.lang band=true %}
+</section>
+
 <section class="hm-section hm-section--white" id="hearing-preparation" aria-labelledby="hearing-preparation-title">
   <div class="hm-wrap">
     {% if page.lang == 'es' %}
