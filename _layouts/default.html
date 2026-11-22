@@ -108,7 +108,7 @@
   {% include footer.html %}
   {% assign pledge_visual_preview = false %}
   {% if site.sandbox_id == 'homepage-flyers' %}
-    {% if page.url == '/pledge/' or page.url == '/es/compromiso/' or page.url == '/pledge/embed/' or page.url == '/es/compromiso/insertar/' or page.url == '/privacy/' or page.url == '/es/privacidad/' %}{% assign pledge_visual_preview = true %}{% endif %}
+    {% assign pledge_visual_preview = true %}
   {% endif %}
   {% if pledge_visual_preview %}
   <dialog class="dialog" id="updates-dialog" aria-labelledby="updates-title">
