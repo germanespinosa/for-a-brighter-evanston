@@ -87,6 +87,8 @@ To stop a pending addition or removal, say “cancel” or “stop.” To restor
 
 The sandbox stays open until the group publishes or destroys it; inactivity alone does not close it. News remains managed through #news, and the sandbox is intended to show the current live news list.[2]
 
+**Pledge-partner preview:** In the `homepage-flyers` preview, pledge submissions and campaign-email signup are disabled; other preview forms can still connect to live services. The pledge’s new partner-sharing permission applies only to people who agree to it, not to earlier opt-ins.
+
 ## What you can request
 
 **Site icon:** the small emblem in browser tabs and Google results is shared across the website, including both languages. It is separate from each page's sharing card. Google controls when its search results refresh and does not guarantee that an icon appears; a Search Console owner can request a homepage recrawl.[2]
