@@ -6,6 +6,7 @@
 {%- endcomment -%}
 {%- assign t = site.data.i18n[page.lang] -%}
 {%- assign h = t.home -%}
+{%- assign pl_hero = site.data.pledge[page.lang] -%}
 {%- assign ev = site.data.event -%}
 {%- assign photo = site.data.hero[0] -%}
 {%- capture arrow -%}<svg class="hm-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>{%- endcapture -%}
@@ -36,21 +37,21 @@
   <div class="hm-wrap hm-hero__inner">
     <div class="hm-hero__copy">
       <p class="hm-eyebrow hm-eyebrow--gold">{{ h.hero.eyebrow }}</p>
-      <h1 class="hm-hero__title" id="hero-title">{{ h.hero.h1 }} <mark class="hm-mark">{{ h.hero.h1_mark }}</mark><br><mark class="hm-mark">{{ h.hero.h1_mark2 }}</mark></h1>
+      <h1 class="hm-hero__title" id="hero-title">{{ h.hero.h1 }} <br><mark class="hm-mark">{{ h.hero.h1_mark }}</mark>{% if h.hero.h1_mark2 != '' %}<br><mark class="hm-mark">{{ h.hero.h1_mark2 }}</mark>{% endif %}</h1>
       <p class="hm-hero__lead">{{ h.hero.lead }}</p>
+      <div class="hm-sig hm-hero__ctas" data-pledge-counter data-lang="{{ page.lang }}" data-endpoint="{{ site.data.pledge.endpoint }}">
+        <div class="hm-sig__count">
+          <p class="hm-sig__number" data-pl-count aria-live="polite" aria-describedby="hero-pledge-count-label" hidden></p>
+          <p class="hm-sig__label" id="hero-pledge-count-label" data-t="counter">{{ pl_hero.counter }}</p>
+        </div>
+        <div class="hm-sig__actions">
+          <a class="hm-btn hm-btn--white" href="{{ pl_hero.page_url | relative_url }}">{{ pl_hero.button }}</a>
+          <button type="button" class="hm-linkbtn" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
+        </div>
+      </div>
       <div class="hm-hero__ctas">
         <a class="hm-btn hm-btn--gold hm-btn--lg" href="#options">{{ h.hero.options_btn }} {{ arrow }}</a>
         <a class="hm-btn hm-btn--ghost hm-btn--lg" href="{{ t.urls.write | relative_url }}">{{ h.hero.email_btn }} {{ arrow }}</a>
-      </div>
-      <div class="hm-sig">
-        <div class="sig-count hm-sig__count" data-signature-count data-src="{{ site.links.signature_count }}" hidden>
-          <p class="sig-count__number hm-sig__number" aria-describedby="sig-label" aria-live="polite">0</p>
-          <p class="sig-count__label hm-sig__label" id="sig-label">{{ h.sig_label }}</p>
-        </div>
-        <div class="hm-sig__actions">
-          <a class="hm-btn hm-btn--white" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.sign_btn }}</a>
-          <button type="button" class="hm-linkbtn" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
-        </div>
       </div>
     </div>
 
@@ -73,10 +74,6 @@
 </section>
 
 <link rel="stylesheet" href="{{ '/assets/css/pledge.css' | relative_url }}">
-<section class="pl-home" aria-label="{{ site.data.pledge[page.lang].eyebrow }}">
-  {% include pledge/counter.html lang=page.lang band=true %}
-</section>
-
 <section class="hm-section hm-section--white" id="hearing-preparation" aria-labelledby="hearing-preparation-title">
   <div class="hm-wrap">
     {% if page.lang == 'es' %}
