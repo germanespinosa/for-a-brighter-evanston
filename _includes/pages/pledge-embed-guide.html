@@ -48,10 +48,12 @@
             <h3 id="kind-{{ k }}">{{ kt }}</h3>
             <p>{{ kx }}</p>
             <p class="pl-guide__small">{{ g.code_label }}</p>
+            {% if site.sandbox_id == 'homepage-flyers' %}<p>{% if page.lang == 'es' %}El código para insertar no está disponible en esta vista previa.{% else %}Embed code is unavailable in this preview.{% endif %}</p><div hidden>{% endif %}
             <div class="pl-snippet">
               <code data-pl-code="{{ k }}"></code>
-              <button type="button" data-pl-copy="{{ k }}">{{ icon_copy }} {{ g.copy }}</button>
+              <button type="button" data-pl-copy="{{ k }}"{% if site.sandbox_id == 'homepage-flyers' %} disabled{% endif %}>{{ icon_copy }} {{ g.copy }}</button>
             </div>
+            {% if site.sandbox_id == 'homepage-flyers' %}</div>{% endif %}
             <p class="pl-copied-code" data-pl-copied="{{ k }}" role="status"></p>
           </div>
           <div class="pl-guide__preview">
@@ -59,7 +61,7 @@
             <div class="pl-guide__frame">
               <iframe data-pl-preview="{{ k }}" title="{% if k == 'full' %}{{ g.frame_full }}{% else %}{{ g.frame_counter }}{% endif %}" style="width:100%;height:{% if k == 'full' %}700{% else %}180{% endif %}px;border:0"></iframe>
             </div>
-            <p class="pl-guide__hint">{{ g.preview_note }}</p>
+            <p class="pl-guide__hint">{% if site.sandbox_id == 'homepage-flyers' %}{% if page.lang == 'es' %}Vista previa: la firma y la inscripción por correo están desactivadas.{% else %}Preview only: pledge and email signup are disabled.{% endif %}{% else %}{{ g.preview_note }}{% endif %}</p>
           </div>
         </article>
         {%- endfor %}

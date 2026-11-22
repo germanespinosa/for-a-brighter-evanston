@@ -35,7 +35,7 @@ en:
     - name: Any other site
       how: Paste it anywhere your site lets you add HTML.
   scripts_note: If your site removes scripts, the card still works. It keeps a fixed height, so you may see some empty space below it.
-  privacy_note: Names and emails are never shown publicly or shared with the sites that show the pledge. Your site only shows the total.
+  privacy_note: Names and emails are never shown publicly or shared with other people or organizations, except for the service providers described in our privacy notice and, if someone agrees through the updates checkbox, their email with Invest in Neighborhood Schools and the Legion of Data Nerds for campaign updates. Your site only shows the total.
   help: Questions? Email
   site_default: your-site
 es:
@@ -73,6 +73,6 @@ es:
     - name: Cualquier otro sitio
       how: Pégalo en cualquier lugar donde tu sitio te permita agregar HTML.
   scripts_note: Si tu sitio elimina los scripts, la tarjeta sigue funcionando. Mantiene una altura fija, así que puede quedar algo de espacio vacío debajo.
-  privacy_note: Los nombres y correos nunca se muestran públicamente ni se comparten con los sitios que muestran el compromiso. Tu sitio solo muestra el total.
+  privacy_note: Los nombres y correos nunca se muestran públicamente ni se comparten con otras personas u organizaciones, excepto con los proveedores de servicios descritos en nuestro aviso de privacidad y, si alguien acepta mediante la casilla de novedades, su correo electrónico con Invest in Neighborhood Schools y Legion of Data Nerds para enviar novedades de la campaña. Tu sitio solo muestra el total.
   help: ¿Preguntas? Escribe a
   site_default: tu-sitio
