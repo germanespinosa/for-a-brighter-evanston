@@ -67,13 +67,10 @@
         <a class="pl-foot__why" href="{{ c.page_url | absolute_url }}#where-things-stand" data-t="why" data-href="page_url" data-hash="#where-things-stand" data-pl-out>{{ c.why }}</a>
       </div>
       <div class="pl-foot">
-        <img src="{{ '/assets/img/partner-fabe.png' | relative_url }}" alt="For a Brighter Evanston" width="150" height="80">
+        <a href="{{ '/' | absolute_url }}" data-pl-out><img src="{{ '/assets/img/partner-fabe.png' | relative_url }}" alt="For a Brighter Evanston" width="150" height="80"></a>
         <img src="{{ '/assets/img/partner-iins.png' | relative_url }}" alt="Invest in Neighborhood Schools" width="144" height="80">
         <img src="{{ '/assets/img/partner-nerds.png' | relative_url }}" alt="Legion of Data Nerds" width="165" height="80">
       </div>
-      <a class="pl-brand" href="{{ '/' | absolute_url }}" data-pl-brand data-pl-out hidden>
-        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z" fill="currentColor"/></svg>For a Brighter Evanston
-      </a>
     </div>
   </article>
   <script type="application/json" data-pl-copy>{"en":{{ pl.en | jsonify }},"es":{{ pl.es | jsonify }}}</script>
