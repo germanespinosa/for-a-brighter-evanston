@@ -39,7 +39,7 @@
       <p class="hm-eyebrow hm-eyebrow--gold">{{ h.hero.eyebrow }}</p>
       <h1 class="hm-hero__title" id="hero-title">{{ h.hero.h1 }} <br><mark class="hm-mark">{{ h.hero.h1_mark }}</mark>{% if h.hero.h1_mark2 != '' %}<br><mark class="hm-mark">{{ h.hero.h1_mark2 }}</mark>{% endif %}</h1>
       <p class="hm-hero__lead">{{ h.hero.lead }}</p>
-      <div class="hm-sig hm-hero__ctas" data-pledge-counter data-lang="{{ page.lang }}" data-endpoint="{% unless site.sandbox_id == 'homepage-flyers' %}{{ site.data.pledge.endpoint }}{% endunless %}">
+      <div class="hm-sig hm-hero__ctas" data-pledge-counter data-lang="{{ page.lang }}" data-endpoint="{{ site.data.pledge.endpoint }}">
         <div class="hm-sig__count">
           <p class="hm-sig__number" data-pl-count aria-live="polite" aria-describedby="hero-pledge-count-label" hidden></p>
           <p class="hm-sig__label" id="hero-pledge-count-label" data-t="counter">{{ pl_hero.counter }}</p>
