@@ -93,7 +93,9 @@
       </article>
       <article class="hm-card hm-lever">
         <h3 class="hm-lever__title">Más maneras de ayudar</h3>
-        <p class="hm-lever__text"><strong>Siga hablando del tema.</strong> Pronto llegarán volantes para avisar a los vecinos sobre las audiencias.<br><br>Mientras tanto, hable con todas las personas que pueda: el vecino sin hijos en el D65, la madre o el padre al recoger a sus hijos, la persona detrás de usted en la fila de la cafetería.<br><br>Esas conversaciones son las que han llevado a esta comunidad hasta aquí.<br><br></p>
+        <p class="hm-lever__text"><strong>Siga hablando del tema.</strong> Descargue volantes para avisar a los vecinos sobre las audiencias.<br><br>Hable con todas las personas que pueda: el vecino sin hijos en el D65, la madre o el padre al recoger a sus hijos, la persona detrás de usted en la fila de la cafetería.<br><br>Esas conversaciones son las que han llevado a esta comunidad hasta aquí.<br><br></p>
+        <p class="hm-lever__text"><a href="#flyers">Ver y descargar los volantes</a></p>
+        <p class="hm-lever__text"><a href="https://docs.google.com/spreadsheets/d/19RI8LG9nMjeXgI6MuMNvc4D1-RJaYeSu/edit?gid=1937283420#gid=1937283420">Hoja de inscripción para repartir volantes</a></p>
         <ul class="hm-lever__text"><li>Traiga a un vecino a una audiencia o a un taller</li><li>Ayude a sus hijos a escribir una carta a la Junta</li><li>Escriba una carta al editor</li></ul>
       </article>
     </div>
@@ -111,11 +113,49 @@
       </article>
       <article class="hm-card hm-lever">
         <h3 class="hm-lever__title">More ways to help</h3>
-        <p class="hm-lever__text"><strong>Keep talking about it.</strong> Flyers are on the way to alert neighbors to the hearings.<br><br>In the meantime, talk to anyone and everyone: the neighbor without kids in D65, the parent at pickup, the person behind you in line at the coffee shop.<br><br>Those conversations are how this community got this far.<br><br></p>
+        <p class="hm-lever__text"><strong>Keep talking about it.</strong> Download flyers to alert neighbors to the hearings.<br><br>Talk to anyone and everyone: the neighbor without kids in D65, the parent at pickup, the person behind you in line at the coffee shop.<br><br>Those conversations are how this community got this far.<br><br></p>
+        <p class="hm-lever__text"><a href="#flyers">See and download the flyers</a></p>
+        <p class="hm-lever__text"><a href="https://docs.google.com/spreadsheets/d/19RI8LG9nMjeXgI6MuMNvc4D1-RJaYeSu/edit?gid=1937283420#gid=1937283420">Canvassing sign-up sheet</a></p>
         <ul class="hm-lever__text"><li>Bring a neighbor to a hearing or a workshop</li><li>Help your kids write a letter to the board</li><li>Write a letter to the editor</li></ul>
       </article>
     </div>
     {% endif %}
+  </div>
+</section>
+
+<section class="hm-section hm-bg-mist" id="flyers" aria-labelledby="flyers-title">
+  <div class="hm-wrap">
+    {% if page.lang == 'es' %}
+    <h2 class="hm-h2" id="flyers-title">Volantes para compartir</h2>
+    <p class="hm-intro">Seleccione un volante para verlo o descargarlo (PNG).</p>
+    {% assign flyer_titles = "Exige una solución real|Los niños pagan el costo|Es una solución falsa|La confianza va primero|Construyamos algo mejor" | split: "|" %}
+    {% else %}
+    <h2 class="hm-h2" id="flyers-title">Flyers to share</h2>
+    <p class="hm-intro">Select a flyer to view it or download the PNG.</p>
+    {% assign flyer_titles = "Demand a real fix|Kids carry the cost|It’s a false fix|Trust comes first|Build something better" | split: "|" %}
+    {% endif %}
+    {% assign flyer_letters = "a,b,c,d,e" | split: "," %}
+    <div class="hm-grid3">
+      {% for letter in flyer_letters %}
+      {% assign flyer_title = flyer_titles[forloop.index0] %}
+      {%- capture flyer_file -%}/assets/img/flyers/flyer-{{ letter }}-{{ page.lang }}.png{%- endcapture -%}
+      {%- capture flyer_thumb -%}/assets/img/flyers/flyer-{{ letter }}-{{ page.lang }}-thumb.webp{%- endcapture -%}
+      <article class="hm-card hm-lever">
+        <a href="{{ flyer_file | relative_url }}" data-flyer-view><img src="{{ flyer_thumb | relative_url }}" alt="{{ flyer_title | escape }}" width="480" height="621" loading="lazy" decoding="async" data-flyer-thumb></a>
+        <h3 class="hm-lever__text"><strong>{{ flyer_title }}</strong></h3>
+        <a class="hm-btn hm-btn--navy" href="{{ flyer_file | relative_url }}" download data-flyer-download><span class="hm-btn--navy">{% if page.lang == 'es' %}Descargar volante{% else %}Download flyer{% endif %} {{ letter | upcase }}</span></a>
+        <details class="hm-lever__text" data-flyer-transcript>
+          <summary aria-label="{% if page.lang == 'es' %}Leer el texto del volante{% else %}Read flyer text{% endif %}: {{ flyer_title | escape }}">{% if page.lang == 'es' %}Leer el texto{% else %}Read flyer text{% endif %}</summary>
+          {% include flyer-transcripts.html lang=page.lang letter=letter %}
+        </details>
+      </article>
+      {% if forloop.index == 3 %}
+    </div>
+    <div class="hm-foot"><div class="hm-grid3 hm-foot__text">
+      {% endif %}
+      {% endfor %}
+      <div aria-hidden="true"></div>
+    </div></div>
   </div>
 </section>
 
