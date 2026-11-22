@@ -4,7 +4,7 @@
 {%- endcomment -%}
 {%- assign pl = site.data.pledge -%}
 {%- assign c = pl[include.lang] -%}
-<div class="pl pl-counter{% if include.band %} pl-counter--band{% endif %}" data-pledge-counter data-lang="{{ include.lang }}" data-endpoint="{{ pl.endpoint }}" data-site="{{ '/' | absolute_url }}">
+<div class="pl pl-counter{% if include.band %} pl-counter--band{% endif %}" data-pledge-counter data-lang="{{ include.lang }}" data-endpoint="{% unless site.sandbox_id == 'homepage-flyers' %}{{ pl.endpoint }}{% endunless %}" data-site="{{ '/' | absolute_url }}">
   <p class="pl-counter__label" data-t="counter_label">{{ c.counter_label }}</p>
   <div class="pl-counter__inner">
     <p class="pl-counter__line" aria-live="polite"><span class="pl-num" data-pl-count hidden></span> <span data-t="counter">{{ c.counter }}</span></p>

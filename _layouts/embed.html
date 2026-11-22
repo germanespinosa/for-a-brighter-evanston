@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if site.sandbox_id == 'homepage-flyers' %}{% if page.url == '/pledge-embed/' or page.url == '/pledge-counter/' %}<meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; script-src 'self'">{% endif %}{% endif %}
   <title>{{ page.title }}</title>
   <meta name="robots" content="noindex">
   {%- if page.lang == 'es' %}{% assign pp = site.data.pledge.es.page_url %}{% assign img = '/assets/img/share-pledge-es-19fb825c63.jpg' %}{% assign st = 'Comprométete: nuestros niños merecen un plan mejor' %}{% assign sd = site.data.pledge.es.pledge %}{% else %}{% assign pp = site.data.pledge.en.page_url %}{% assign img = '/assets/img/share-pledge-en-70fa7acf6b.jpg' %}{% assign st = 'Take the pledge: our kids deserve a better plan' %}{% assign sd = site.data.pledge.en.pledge %}{% endif %}

@@ -12,9 +12,9 @@ endpoint: "https://script.google.com/macros/s/AKfycbxvo-EN5uvfqpDpCD2ZsQPHNirG3G
 # updates" form uses; add the IDs of "Pledge", "EN" and "ES" tags here once
 # they exist in Mailchimp.
 mailchimp:
-  form: "https://forabrighterevanston.us9.list-manage.com/subscribe/post?u=a29ce2936bee1dac08509481b&id=891518ce66&f_id=008ceee3f0"
+  form: "https://forabrighterevanston.us9.list-manage.com/subscribe/post?u=a29ce2936bee1dac08509481b&id=891518ce66&f_id=00b9eee3f0"
   honeypot: b_a29ce2936bee1dac08509481b_891518ce66
-  tags: "15370984"
+  tags: "15370992"
   tags_en: ""
   tags_es: ""
 # Cloudflare Turnstile site key (public). Empty = no challenge widget.
@@ -32,7 +32,7 @@ en:
   first: First name
   last: Last name
   email: Your email
-  updates: Send me campaign updates from For a Brighter Evanston
+  updates: Send me campaign updates and allow For a Brighter Evanston to share my email address with Invest in Neighborhood Schools and the Legion of Data Nerds.
   button: I pledge
   counter: neighbors have pledged to support a referendum for a better plan.
   thanks: Thank you. Now ask two neighbors to pledge with you.
@@ -68,7 +68,7 @@ es:
   first: Nombre
   last: Apellido
   email: Tu correo electrónico
-  updates: Envíenme novedades de la campaña de For a Brighter Evanston
+  updates: Envíenme novedades de la campaña y permitan que For a Brighter Evanston comparta mi correo electrónico con Invest in Neighborhood Schools y Legion of Data Nerds.
   button: Me comprometo
   counter: vecinos se han comprometido a apoyar un referéndum para un plan mejor.
   thanks: Gracias. Ahora invita a dos vecinos a comprometerse contigo.

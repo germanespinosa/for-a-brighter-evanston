@@ -106,7 +106,19 @@
   </main>
 
   {% include footer.html %}
+  {% assign pledge_visual_preview = false %}
+  {% if site.sandbox_id == 'homepage-flyers' %}
+    {% assign pledge_visual_preview = true %}
+  {% endif %}
+  {% if pledge_visual_preview %}
+  <dialog class="dialog" id="updates-dialog" aria-labelledby="updates-title">
+    <button type="button" class="dialog__close" data-dialog-close aria-label="{{ t.updates.close }}">{% include icons/close.svg %}</button>
+    <h2 class="dialog__title" id="updates-title">{{ t.updates.title }}</h2>
+    <p>{% if page.lang == 'es' %}Vista previa: la inscripción por correo está desactivada.{% else %}Preview only: email signup is disabled.{% endif %}</p>
+  </dialog>
+  {% else %}
   {% include updates-dialog.html %}
+  {% endif %}
 
   <!-- Google Forms post into this hidden frame so visitors stay on the page -->
   <iframe name="gf_hidden" title="Form submission" hidden></iframe>
