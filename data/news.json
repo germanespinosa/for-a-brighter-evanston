@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-22",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/22/here-in-evanston-the-heartbreak-that-is-district-65/",
+      "title": "Here in Evanston: The heartbreak that is District 65",
+      "summary": "In this opinion column, Mary Helt Gavin critiques District 65’s handling of its financial challenges and urges the district to slow down on school closures. She calls for a comprehensive educational vision developed with the community.",
+      "title_es": "Aquí en Evanston: La desolación que representa el Distrito 65",
+      "summary_es": "En esta columna de opinión, Mary Helt Gavin critica la gestión de los desafíos financieros del Distrito 65 y pide que el distrito avance con más cautela sobre los cierres escolares. Propone desarrollar una visión educativa integral junto con la comunidad."
+    },
+    {
       "date": "2026-11-19",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
