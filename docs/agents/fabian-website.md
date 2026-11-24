@@ -192,6 +192,14 @@ python3 scripts/sandbox_check.py --base origin/main --approval-file /private/app
 
 The asset record never waives restrictions on `docs/` or `scripts/`. Process/manual/validator maintenance needs separate explicit authorization and its own reviewed file inventory; keep those findings separate rather than widening the asset approval. Keep the complete nonzero report if any policy findings remain. Before voting, verify stylesheet loading and wrapper isolation on the actual rendered affected routes, and check unrelated routes retain their styles; the static selector check alone cannot prove route isolation.
 
+### Owner-approved site update in `home-hearings-resources`
+
+German approved Kerstin's "Home, Hearings, Resources" layout (new header and alert bar, new home page, new Hearings and Resources pages, English and Spanish) for `sandbox/home-hearings-resources` on Nov. 24, 2026. It was built outside #website and handed over with `docs/agents/handoffs/home-hearings-resources.md`. In that sandbox only, the checker allows:
+- `assets/css/campaign.css` (the shared stylesheet): it may be added and edited. Every selector must start with a `.cx…` class; escapes, imports, `url(...)` and other external resources stay blocked.
+- `assets/files/d65-closure-hearing-2026-12-01.ics`, `…-12-03.ics` and `…-12-08.ics` (the hearing calendar files): plain single-event iCalendar text with links only to forabrighterevanston.org.
+
+Deleting them, other stylesheets, scripts, other calendar files and every other restricted change still block, in this sandbox and in all others. After this update is published, these files are live files like any other: changing them in a later update is a restricted change again. The approval covers sandbox review only: the copy holds in the handoff, the normal review (section 8) and the team vote (section 9) still apply.
+
 ### Scoped Mailchimp preview
 
 The specific Mailchimp form and script in `_includes/updates-dialog.html` and `assets/js/mailchimp-updates.js` are approved for sandbox review in `sandbox/mailchimp-script-preview` only. The approval is not permission to publish, waive safety or security checks, or approve other forms or scripts. The checker, tests and related instructions have a separate scoped maintenance approval; neither approval extends the other. The normal review, outstanding holds and team vote still apply.
