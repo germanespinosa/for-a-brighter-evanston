@@ -1,35 +1,46 @@
+{%- comment -%}
+  Site header (Nov. 2026 layout). Styles: assets/css/campaign.css (cx-header).
+  Menu: The Facts, Hearings, Resources, In The News, Write to the Board,
+  Sign the Pledge, language switch.
+{%- endcomment -%}
 {%- assign t = site.data.i18n[page.lang] -%}
 {%- assign u = page.url -%}
 {%- assign cur = page.nav -%}
-{%- if u == '/home/voter-poll/' or u == '/es/encuesta/' -%}{%- assign cur = 'poll' -%}
-{%- elsif u == '/home/options/' or u == '/home/a-brighter-path-forward/' or u == '/es/un-camino-mejor/' or u == '/es/opciones/' -%}{%- assign cur = 'path' -%}
+{%- if u == '/home/options/' or u == '/es/opciones/' or u == '/home/voter-poll/' or u == '/es/encuesta/' or u == '/home/a-brighter-path-forward/' or u == '/es/un-camino-mejor/' -%}{%- assign cur = 'facts' -%}
+{%- elsif u == '/hearings/' or u == '/es/audiencias/' -%}{%- assign cur = 'hearings' -%}
+{%- elsif u == '/resources/' or u == '/es/recursos/' -%}{%- assign cur = 'resources' -%}
 {%- endif -%}
-<header class="site-header">
-  <div class="site-header__top">
-    <a class="brand" href="{{ t.urls.home | relative_url }}"{% if page.is_home %} aria-current="page"{% endif %}>
-      <svg class="brand__star" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z" fill="currentColor"/></svg><span class="brand__name">For a Brighter Evanston</span>
+{%- if page.lang == 'es' -%}
+  {%- assign nav_facts = 'Los hechos' -%}{%- assign url_facts = '/es/opciones/' -%}
+  {%- assign nav_hearings = 'Audiencias' -%}{%- assign url_hearings = '/es/audiencias/' -%}
+  {%- assign nav_resources = 'Recursos' -%}{%- assign url_resources = '/es/recursos/' -%}
+  {%- assign nav_news = 'En las noticias' -%}
+  {%- assign nav_pledge = 'Firma el compromiso' -%}
+{%- else -%}
+  {%- assign nav_facts = 'The Facts' -%}{%- assign url_facts = '/home/options/' -%}
+  {%- assign nav_hearings = 'Hearings' -%}{%- assign url_hearings = '/hearings/' -%}
+  {%- assign nav_resources = 'Resources' -%}{%- assign url_resources = '/resources/' -%}
+  {%- assign nav_news = 'In The News' -%}
+  {%- assign nav_pledge = 'Sign the Pledge' -%}
+{%- endif -%}
+<header class="cx-header">
+  <div class="cx-header__inner">
+    <a class="cx-brand" href="{{ t.urls.home | relative_url }}"{% if page.is_home %} aria-current="page"{% endif %}>
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.5L12 17.3l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z" fill="currentColor"/></svg><span>For a Brighter Evanston</span>
     </a>
-    <div class="site-header__actions">
-      <a class="site-header__btn site-header__btn--gold" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ t.nav.sign }}</a>
+    <nav class="cx-nav" aria-label="{{ t.nav.label }}">
+      <ul class="cx-nav__list">
+        <li><a href="{{ url_facts | relative_url }}"{% if cur == 'facts' %} aria-current="page"{% endif %}>{{ nav_facts }}</a></li>
+        <li><a href="{{ url_hearings | relative_url }}"{% if cur == 'hearings' %} aria-current="page"{% endif %}>{{ nav_hearings }}</a></li>
+        <li><a href="{{ url_resources | relative_url }}"{% if cur == 'resources' %} aria-current="page"{% endif %}>{{ nav_resources }}</a></li>
+        <li><a href="{{ t.urls.news | relative_url }}"{% if cur == 'news' %} aria-current="page"{% endif %}>{{ nav_news }}</a></li>
+        <li><a href="{{ t.urls.write | relative_url }}"{% if cur == 'write' %} aria-current="page"{% endif %}>{{ t.nav.write }}</a></li>
+      </ul>
+      <a class="cx-nav__cta" href="{{ site.data.pledge[page.lang].page_url | relative_url }}">{{ nav_pledge }}</a>
       {%- if page.alt_url %}
       {%- assign other = 'es' %}{% if page.lang == 'es' %}{% assign other = 'en' %}{% endif %}
-      <a class="site-header__btn site-header__btn--outline lang-switch" href="{{ page.alt_url | relative_url }}" hreflang="{{ other }}" lang="{{ other }}">
-        <span class="lang-switch__full">{{ t.switch_label }}</span><span class="lang-switch__short" aria-hidden="true">{{ t.switch_short }}</span>
-      </a>
+      <a class="cx-nav__lang" href="{{ page.alt_url | relative_url }}" hreflang="{{ other }}" lang="{{ other }}">{% if page.lang == 'es' %}English{% else %}Español{% endif %}</a>
       {%- endif %}
-    </div>
+    </nav>
   </div>
-
-  <nav class="site-menu" aria-label="{{ t.nav.label }}">
-    <ul class="site-menu__list site-menu__list--primary">
-      <li><a href="{{ t.urls.poll | relative_url }}"{% if cur == 'poll' %} aria-current="page"{% endif %}>{{ t.nav.poll }}</a></li>
-      <li><a href="{{ t.urls.path | relative_url }}"{% if cur == 'path' %} aria-current="page"{% endif %}>{{ t.nav.path }}</a></li>
-    </ul>
-    <ul class="site-menu__list site-menu__list--secondary">
-      <li><a href="{{ t.urls.write | relative_url }}"{% if cur == 'write' %} aria-current="page"{% endif %}>{{ t.nav.write }}</a></li>
-      <li><a href="{{ t.urls.news | relative_url }}"{% if cur == 'news' %} aria-current="page"{% endif %}>{{ t.nav.news }}</a></li>
-      <li><button type="button" class="site-menu__button" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button></li>
-      <li><a class="site-menu__icon" href="{{ site.links.instagram }}" target="_blank" rel="noopener" aria-label="{{ t.nav.instagram }}" title="{{ t.nav.instagram }}">{% include icons/instagram.svg %}</a></li>
-    </ul>
-  </nav>
 </header>

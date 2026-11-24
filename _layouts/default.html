@@ -70,6 +70,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@800;900&family=Public+Sans:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/campaign.css' | relative_url }}">
   {%- if page.is_home %}
   <link rel="preload" as="image" href="{{ site.data.hero[0].file | prepend: '/assets/img/hero/' | relative_url }}" fetchpriority="high">
   {%- endif %}
@@ -82,9 +83,7 @@
   {%- endunless %}
   <link rel="stylesheet" href="{{ '/assets/css/new-homes.css' | relative_url }}">
   {%- endif %}
-  {%- if page.url == '/' or page.url == '/es/' %}
-  <link rel="stylesheet" href="{{ '/assets/css/release-home.css' | relative_url }}">
-  {%- elsif page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}
+  {%- if page.url == '/home/voter-poll/' or page.url == '/es/encuesta/' %}
   <link rel="stylesheet" href="{{ '/assets/css/release-poll.css' | relative_url }}">
   {%- elsif page.url == '/home/a-brighter-path-forward/' or page.url == '/es/un-camino-mejor/' %}
   <link rel="stylesheet" href="{{ '/assets/css/release-path.css' | relative_url }}">
@@ -97,9 +96,7 @@
   {%- endif %}
 
   {% include header.html %}
-  {%- unless page.is_home %}
   {% include alert-bar.html %}
-  {%- endunless %}
 
   <main id="main" tabindex="-1">
     {{ content }}
@@ -107,7 +104,7 @@
 
   {% include footer.html %}
   {% assign pledge_visual_preview = false %}
-  {% if site.sandbox_id == 'homepage-flyers' %}
+  {% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %}
     {% assign pledge_visual_preview = true %}
   {% endif %}
   {% if pledge_visual_preview %}

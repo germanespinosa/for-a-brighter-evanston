@@ -1,0 +1,210 @@
+{%- comment -%}
+  Hearings page (/hearings/ and /es/audiencias/), Nov. 2026 layout.
+  Built from Kerstin's "FABE Site Update" mockup. Text in both languages is
+  written here. Calendar files: assets/files/d65-closure-hearing-<date>.ics.
+  Styles: assets/css/campaign.css (cx- classes).
+{%- endcomment -%}
+{%- assign t = site.data.i18n[page.lang] -%}
+{%- assign plc = site.data.pledge[page.lang] -%}
+{%- if page.lang == 'es' -%}{%- assign es = true -%}{%- assign url_resources = '/es/recursos/' -%}{%- assign url_facts = '/es/opciones/' -%}{%- else -%}{%- assign es = false -%}{%- assign url_resources = '/resources/' -%}{%- assign url_facts = '/home/options/' -%}{%- endif -%}
+{%- assign gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=America/Chicago&location=Joseph%20E.%20Hill%20Education%20Center%2C%201500%20McDaniel%20Ave.%2C%20Evanston%2C%20IL%2060201' -%}
+{%- if es -%}
+  {%- assign gcal_title = '&text=Audiencias%20sobre%20el%20cierre%20de%20escuelas%20del%20D65%20(Dewey%20y%20Lincolnwood)' -%}
+  {%- assign ws_title = '&text=Taller%20para%20preparar%20comentarios%20(Dewey)&location=Dewey%20Elementary%20School%2C%20sala%20multiusos%2C%201551%20Wesley%20Ave.%2C%20Evanston' -%}
+{%- else -%}
+  {%- assign gcal_title = '&text=D65%20school%20closure%20hearings%20(Dewey%20and%20Lincolnwood)' -%}
+  {%- assign ws_title = '&text=Comment-writing%20session%20(Dewey)&location=Dewey%20Elementary%20School%2C%20Multipurpose%20Room%2C%201551%20Wesley%20Ave.%2C%20Evanston' -%}
+{%- endif -%}
+{%- assign ws_base = 'https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=America/Chicago' -%}
+
+<div class="cx">
+
+<section class="cx-section cx-section--navy cx-grid-bg cx-page-hero" aria-labelledby="hearings-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Audiencias sobre los cierres del D65 · 1, 3 y 8 de diciembre{% else %}D65 closure hearings · December 1, 3 and 8{% endif %}</p>
+    <h1 class="cx-h1" id="hearings-title">{% if es %}Apoya al D65. <br><mark class="cx-mark">Llena la sala.</mark>{% else %}Show up for D65. <br><mark class="cx-mark">Pack the room.</mark>{% endif %}</h1>
+    <p class="cx-lead">{% if es %}La junta del D65 votó 4-3 para avanzar hacia el cierre de Dewey y Lincolnwood. Los cierres no son definitivos. Antes del voto decisivo de la junta hay seis audiencias públicas, y son la oportunidad de la comunidad para pedirle a la junta que vote NO a los cierres apresurados.{% else %}The D65 board voted 4-3 to move toward closing Dewey and Lincolnwood. The closures are not final. Six public hearings come before the board's deciding vote, and they are the community's chance to ask the board to vote NO on rushed school closures.{% endif %}</p>
+    <p class="cx-page-hero__strong">{% if es %}Habla si puedes. Ven aunque no hables. Una sala llena cuenta.{% else %}Speak if you can. Come even if you won't. A full room matters.{% endif %}</p>
+    <div class="cx-btns">
+      <a class="cx-btn cx-btn--gold" href="#schedule">{% if es %}Ver el calendario{% else %}See the schedule{% endif %}</a>
+      <a class="cx-btn cx-btn--ghost" href="#what-to-say">{% if es %}Qué decir{% else %}What to say{% endif %}</a>
+      <a class="cx-btn cx-btn--ghost" href="#cant-make-it">{% if es %}¿No puedes ir?{% else %}Can't make it?{% endif %}</a>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--white" id="schedule" aria-labelledby="schedule-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Cuándo y dónde{% else %}When and where{% endif %}</p>
+    <h2 class="cx-h2" id="schedule-title">{% if es %}Seis audiencias. <mark class="cx-mark">Tres noches.</mark>{% else %}Six hearings. <mark class="cx-mark">Three nights.</mark>{% endif %}</h2>
+    <p class="cx-body">{% if es %}Cada escuela tiene tres audiencias. Las dos escuelas se escuchan cada noche, una tras otra, así que puedes quedarte para ambas.{% else %}Each school has three hearings. Both schools are heard every night, back to back, so you can stay for both.{% endif %}</p>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-night">
+        <h3 class="cx-night__date">{% if es %}Martes 1 de diciembre{% else %}Tuesday, Dec. 1{% endif %}</h3>
+        <p class="cx-night__cal"><a href="{{ '/assets/files/d65-closure-hearing-2026-12-01.ics' | relative_url }}" download>{% if es %}Agregar al calendario{% else %}Add to calendar{% endif %}</a> <a href="{{ gcal }}{{ gcal_title }}&dates=20261201T171500/20261201T214500" target="_blank" rel="noopener">Google Calendar</a></p>
+        <p class="cx-night__slot"><span class="cx-night__school">Lincolnwood</span><span class="cx-night__time">{% if es %}5:15 a 7:15 p.m.{% else %}5:15 to 7:15 p.m.{% endif %}</span></p>
+        <p class="cx-night__slot"><span class="cx-night__school">Dewey</span><span class="cx-night__time">{% if es %}7:45 a 9:45 p.m.{% else %}7:45 to 9:45 p.m.{% endif %}</span></p>
+      </article>
+      <article class="cx-night">
+        <h3 class="cx-night__date">{% if es %}Jueves 3 de diciembre{% else %}Thursday, Dec. 3{% endif %}</h3>
+        <p class="cx-night__cal"><a href="{{ '/assets/files/d65-closure-hearing-2026-12-03.ics' | relative_url }}" download>{% if es %}Agregar al calendario{% else %}Add to calendar{% endif %}</a> <a href="{{ gcal }}{{ gcal_title }}&dates=20261203T171500/20261203T214500" target="_blank" rel="noopener">Google Calendar</a></p>
+        <p class="cx-night__slot"><span class="cx-night__school">Dewey</span><span class="cx-night__time">{% if es %}5:15 a 7:15 p.m.{% else %}5:15 to 7:15 p.m.{% endif %}</span></p>
+        <p class="cx-night__slot"><span class="cx-night__school">Lincolnwood</span><span class="cx-night__time">{% if es %}7:45 a 9:45 p.m.{% else %}7:45 to 9:45 p.m.{% endif %}</span></p>
+      </article>
+      <article class="cx-night">
+        <h3 class="cx-night__date">{% if es %}Martes 8 de diciembre{% else %}Tuesday, Dec. 8{% endif %}</h3>
+        <p class="cx-night__cal"><a href="{{ '/assets/files/d65-closure-hearing-2026-12-08.ics' | relative_url }}" download>{% if es %}Agregar al calendario{% else %}Add to calendar{% endif %}</a> <a href="{{ gcal }}{{ gcal_title }}&dates=20261208T171500/20261208T214500" target="_blank" rel="noopener">Google Calendar</a></p>
+        <p class="cx-night__slot"><span class="cx-night__school">Lincolnwood</span><span class="cx-night__time">{% if es %}5:15 a 7:15 p.m.{% else %}5:15 to 7:15 p.m.{% endif %}</span></p>
+        <p class="cx-night__slot"><span class="cx-night__school">Dewey</span><span class="cx-night__time">{% if es %}7:45 a 9:45 p.m.{% else %}7:45 to 9:45 p.m.{% endif %}</span></p>
+      </article>
+    </div>
+    <div class="cx-venue">
+      <div>
+        <p class="cx-eyebrow">{% if es %}Todas las audiencias{% else %}All hearings{% endif %}</p>
+        <h3 class="cx-venue__title">Joseph E. Hill Education Center</h3>
+        <p>{% if es %}1500 McDaniel Ave., Evanston. Habrá interpretación en español. La capacidad de la sala es limitada, así que llega temprano. No se permiten carteles sostenidos en la mano.{% else %}1500 McDaniel Ave., Evanston. Spanish interpretation is provided. <span lang="es">Habrá interpretación en español.</span> Room capacity is limited, so come early. Hand-held posters aren't allowed.{% endif %}</p>
+      </div>
+      <a class="cx-btn cx-btn--gold" href="https://www.google.com/maps/search/?api=1&amp;query=Joseph%20E.%20Hill%20Education%20Center%2C%201500%20McDaniel%20Ave%2C%20Evanston%2C%20IL%2060201" target="_blank" rel="noopener">{% if es %}Cómo llegar{% else %}Get directions{% endif %}</a>
+    </div>
+    <p class="cx-small cx-note">{% if es %}En las audiencias no se vota. Las seis se transmiten en vivo.{% else %}No vote is taken at the hearings. All six are livestreamed.{% endif %} <a class="cx-link" href="https://www.district65.net/news4/notice-of-public-hearings-proposed-school-closures" target="_blank" rel="noopener">{% if es %}Leer el aviso de audiencias del D65{% else %}Read D65's hearing notice{% endif %}</a></p>
+  </div>
+</section>
+
+<section class="cx-section cx-section--navy cx-grid-bg" id="how-to-speak" aria-labelledby="speak-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Cómo hablar{% else %}How to speak{% endif %}</p>
+    <h2 class="cx-h2" id="speak-title">{% if es %}¿Nunca has hablado en una reunión de la junta? <mark class="cx-mark">Así funciona.</mark>{% else %}Never spoken at a board meeting? <mark class="cx-mark">Here is how it works.</mark>{% endif %}</h2>
+    <div class="cx-grid cx-grid--3">
+      <article class="cx-card cx-card--deep">
+        <span class="cx-card__num" aria-hidden="true">1</span>
+        <h3 class="cx-card__title">{% if es %}Inscríbete para hablar{% else %}Sign up to speak{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Inscríbete en persona en la audiencia. Las puertas abren 30 minutos antes de cada audiencia y la inscripción cierra cuando esta comienza. No puedes inscribir a otra persona.{% else %}Sign up in person at the hearing. Doors open 30 minutes before each hearing, and sign-up closes when the hearing starts. You can't sign up for someone else.{% endif %}</p>
+        <a class="cx-card__link" href="https://www.district65.net/about/board-of-education/guidelines-for-public-hearings" target="_blank" rel="noopener">{% if es %}Reglas del D65 para las audiencias públicas{% else %}D65 public hearing guidelines{% endif %}</a>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <span class="cx-card__num" aria-hidden="true">2</span>
+        <h3 class="cx-card__title">{% if es %}Habla por ti{% else %}Speak for yourself{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Tienes tres minutos y puedes hablar una vez por audiencia. No puedes ceder tu tiempo ni hablar en nombre de otros, así que trae a tus vecinos y que cada uno hable también.{% else %}You get three minutes, and you can speak once per hearing. You can't give your time away or speak on behalf of others, so bring your neighbors and have each of them speak too.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <span class="cx-card__num" aria-hidden="true">3</span>
+        <h3 class="cx-card__title">{% if es %}Di quién eres{% else %}Say who you are{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Madre, padre, maestro, vecino, dueño de un negocio. La junta necesita escuchar sobre todo a residentes que no tienen hijos en una escuela del D65.{% else %}Parent, teacher, neighbor, business owner. The board especially needs to hear from residents with no child in a D65 school.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--deep cx-span-all">
+        <span class="cx-card__num" aria-hidden="true">4</span>
+        <h3 class="cx-card__title">{% if es %}Haz una sola petición{% else %}Make one ask{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Cuenta una historia verdadera, plantea un punto y termina con la petición: voten NO a este plan y construyan uno mejor con nuestra comunidad.{% else %}Tell one true story, make one point, and end with the ask: vote NO on this plan and build a better one with our community.{% endif %}</p>
+      </article>
+    </div>
+    <div class="cx-session">
+      <div>
+        <p class="cx-eyebrow">{% if es %}No tienes que prepararte solo{% else %}You don't have to prepare alone{% endif %}</p>
+        <h3 class="cx-session__title">{% if es %}Talleres para preparar comentarios en Dewey{% else %}Comment-writing sessions at Dewey{% endif %}</h3>
+        <p>{% if es %}Lunes 30 de noviembre y lunes 7 de diciembre, ambos a las 6 p.m. en la sala multiusos de Dewey. Prepara tus comentarios con tus vecinos. Abierto a todos.{% else %}Monday, Nov. 30 and Monday, Dec. 7, both at 6 p.m. in the Dewey Multipurpose Room. Work on your comments with neighbors. Open to all.{% endif %}</p>
+      </div>
+      <div class="cx-btns cx-btns--flush">
+        <a class="cx-btn cx-btn--gold" href="{{ ws_base }}{{ ws_title }}&dates=20261130T180000/20261130T193000" target="_blank" rel="noopener">{% if es %}Agregar 30 de nov.{% else %}Add Nov. 30{% endif %}</a>
+        <a class="cx-btn cx-btn--gold" href="{{ ws_base }}{{ ws_title }}&dates=20261207T180000/20261207T193000" target="_blank" rel="noopener">{% if es %}Agregar 7 de dic.{% else %}Add Dec. 7{% endif %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--cream cx-grid-bg" id="what-to-say" aria-labelledby="say-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Qué decir{% else %}What to say{% endif %}</p>
+    <h2 class="cx-h2" id="say-title">{% if es %}Tu historia, más <mark class="cx-mark">uno de estos tres puntos.</mark>{% else %}Your story, plus <mark class="cx-mark">one of these three points.</mark>{% endif %}</h2>
+    <p class="cx-body">{% if es %}Votar NO no es votar contra el cambio. Es decir sí a un plan más inteligente y sostenible que protege a los estudiantes, respeta el dinero de los contribuyentes y pone la educación primero. Elige el punto que sea verdad para ti y dilo con tus propias palabras.{% else %}Voting NO isn't a vote against change. It's a yes for a smarter, more sustainable plan that protects students, respects taxpayers' money and puts education first. Pick the point that is true for you and say it in your own words.{% endif %}</p>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card cx-card--white">
+        <p class="cx-eyebrow">{% if es %}El presupuesto{% else %}The budget{% endif %}</p>
+        <h3 class="cx-card__title">{% if es %}Responsabilidad fiscal es agotar primero las demás palancas.{% else %}Fiscal responsibility means exhausting other levers first.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Cerrar una escuela el año pasado no nos habría evitado llegar aquí, y cerrar dos ahora tampoco.{% else %}Closing a school last year wouldn't have kept us from being here today, and closing two now won't either.{% endif %}</p>
+        <p class="cx-card__text">{% if es %}Vender Kingsley y Bessie Rhodes, cerrar los distritos TIF que vencen y hacer los recortes que no cierran escuelas.{% else %}Sell Kingsley and Bessie Rhodes, retire expiring TIF districts and make the cuts that don't close a school.{% endif %}</p>
+        <p class="cx-card__text">{% if es %}Cerrar Dewey y Lincolnwood solo nos da un año.{% else %}Closing Dewey and Lincolnwood buys us one year.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--white">
+        <p class="cx-eyebrow">{% if es %}Equidad{% else %}Equity{% endif %}</p>
+        <h3 class="cx-card__title">{% if es %}Nuestros estudiantes más vulnerables merecen protección.{% else %}Our most vulnerable learners deserve protection.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Las familias de inmersión bilingüe, los estudiantes de STEP con autismo y los estudiantes con IEP y planes 504 son los más afectados.{% else %}Two-Way Immersion families, STEP students with autism, and students with IEPs and 504s carry the most.{% endif %}</p>
+        <p class="cx-card__text">{% if es %}La equidad debe demostrarse antes de un voto de cierre, no después.{% else %}Equity must be demonstrated before, not after, a closure vote.{% endif %}</p>
+        <p class="cx-card__text">{% if es %}Si esta es tu familia, tu historia es lo más poderoso que escuchará la junta.{% else %}If this is your family, your story is the most powerful thing the board will hear.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--white cx-span-all">
+        <p class="cx-eyebrow">{% if es %}Toda nuestra comunidad{% else %}Our whole community{% endif %}</p>
+        <h3 class="cx-card__title">{% if es %}La visión debe ir antes que los votos de cierre.{% else %}Vision should come before closure votes.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}El D65 necesita un referéndum pase lo que pase, y cerrar escuelas lo hace más difícil de aprobar.{% else %}D65 needs a referendum no matter what, and closing schools makes it harder to pass.{% endif %}</p>
+        <p class="cx-card__text">{% if es %}Evanston tiene un historial comprobado de aprobar referendos, pero los votantes necesitan ver una hoja de ruta antes de que se les pida invertir.{% else %}Evanston has a proven record of passing referenda, but voters need to see a roadmap before they are asked to invest.{% endif %}</p>
+        <p class="cx-card__text">{% if es %}No hay que apresurar las decisiones más grandes antes de que haya una superintendencia permanente.{% else %}Don't push through the biggest decisions before a permanent superintendent is in place.{% endif %}</p>
+      </article>
+    </div>
+    <div class="cx-grid cx-grid--2">
+      <div class="cx-shape">
+        <p class="cx-eyebrow">{% if es %}Tres minutos, paso a paso{% else %}A simple three-minute shape{% endif %}</p>
+        {% if es %}
+        <p><strong>Quién eres.</strong> Tu nombre y tu vínculo con Evanston.</p>
+        <p><strong>Qué significa.</strong> Una historia sobre tu hijo, tu calle o tu negocio.</p>
+        <p><strong>Un punto.</strong> Uno de los tres de arriba.</p>
+        <p><strong>La petición.</strong> Voten NO a este plan. Construyamos uno mejor juntos.</p>
+        {% else %}
+        <p><strong>Who you are.</strong> Your name and your tie to Evanston.</p>
+        <p><strong>What this means.</strong> One story about your child, your street or your business.</p>
+        <p><strong>One point.</strong> From the three above.</p>
+        <p><strong>The ask.</strong> Vote NO on this plan. Let's build a better one together.</p>
+        {% endif %}
+      </div>
+      <div class="cx-card cx-card--white cx-card--plain">
+        <p class="cx-eyebrow">{% if es %}Para saber más{% else %}Go deeper{% endif %}</p>
+        <h3 class="cx-card__title">{% if es %}Puntos clave y volantes{% else %}Talking points and flyers{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}La hoja completa de puntos clave, y volantes en inglés y español para compartir antes de las audiencias.{% else %}The full talking points handout, plus flyers in English and Spanish to share before the hearings.{% endif %}</p>
+        <p class="cx-card__text"><a class="cx-link" href="{{ url_resources | relative_url }}#talking-points">{% if es %}Descargar los puntos clave{% else %}Download the talking points{% endif %}</a> · <a class="cx-link" href="{{ url_resources | relative_url }}#flyers">{% if es %}Ver los volantes{% else %}Get the flyers{% endif %}</a> · <a class="cx-link" href="{{ url_facts | relative_url }}">{% if es %}Ver los hechos{% else %}See the facts{% endif %}</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--white" id="cant-make-it" aria-labelledby="cant-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}¿No puedes ir a una audiencia?{% else %}Can't make a hearing?{% endif %}</p>
+    <h2 class="cx-h2" id="cant-title">{% if es %}Aún puedes <mark class="cx-mark">hacerte oír.</mark>{% else %}You can still <mark class="cx-mark">be heard.</mark>{% endif %}</h2>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card">
+        <h3 class="cx-card__title">{% if es %}Escríbele a la junta{% else %}Write to the board{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Los comentarios por escrito se reciben en <a class="cx-link" href="mailto:schoolboard@district65.net">schoolboard@district65.net</a> hasta las 5 p.m. del 13 de diciembre. Nuestra herramienta te ayuda a escribir el tuyo en pocos minutos. También puedes ver las audiencias en vivo.{% else %}Written comments go to <a class="cx-link" href="mailto:schoolboard@district65.net">schoolboard@district65.net</a> until 5 p.m. on Dec. 13. Our tool helps you write yours in a few minutes. You can also watch the hearings on the livestream.{% endif %}</p>
+        <a class="cx-card__link" href="{{ t.urls.write | relative_url }}">{% if es %}Escríbele a la junta{% else %}Write to the board{% endif %}</a>
+      </article>
+      <article class="cx-card">
+        <h3 class="cx-card__title">{% if es %}Firma el compromiso{% else %}Sign the pledge{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Muéstrale a la junta que un NO a este plan es el camino hacia un SÍ en un referéndum. Toma menos de un minuto.{% else %}Show the board that a NO on this plan is the path to a YES on a referendum. It takes less than a minute.{% endif %}</p>
+        <a class="cx-card__link" href="{{ plc.page_url | relative_url }}">{% if es %}Firma el compromiso{% else %}Sign the pledge{% endif %}</a>
+      </article>
+      <article class="cx-card cx-span-all">
+        <h3 class="cx-card__title">{% if es %}Llama a tu representante en el concejo{% else %}Call your council member{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Esta decisión va más allá del Distrito 65. Pide a los funcionarios de la ciudad que participen en la conversación.{% else %}This decision reaches beyond District 65. Ask city officials to take part in the discussion.{% endif %}</p>
+        <a class="cx-card__link" href="https://www.cityofevanston.org/government/city-council" target="_blank" rel="noopener">{% if es %}Encuentra a tu representante{% else %}Find your council member{% endif %}</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--navy cx-grid-bg" aria-labelledby="next-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Lo que sigue{% else %}What happens next{% endif %}</p>
+    <h2 class="cx-h2 cx-h2--md" id="next-title">{% if es %}Primero las audiencias. Después decide la junta.{% else %}The hearings come first. Then the board decides.{% endif %}</h2>
+    <ol class="cx-timeline" role="list">
+      <li class="cx-step"><p class="cx-step__when">{% if es %}16 de nov.{% else %}Nov. 16{% endif %}</p><p class="cx-step__what">{% if es %}La junta votó 4-3 para iniciar el proceso de cierre.{% else %}The board voted 4-3 to begin the closure process.{% endif %}</p></li>
+      <li class="cx-step"><p class="cx-step__when">{% if es %}30 de nov. y 7 de dic.{% else %}Nov. 30 and Dec. 7{% endif %}</p><p class="cx-step__what">{% if es %}Talleres para preparar comentarios en Dewey, 6 p.m.{% else %}Comment-writing sessions at Dewey, 6 p.m.{% endif %}</p></li>
+      <li class="cx-step cx-step--now"><p class="cx-step__when">{% if es %}1, 3 y 8 de dic.{% else %}Dec. 1, 3 and 8{% endif %}</p><p class="cx-step__what">{% if es %}Seis audiencias públicas. Aquí entras tú.{% else %}Six public hearings. This is where you come in.{% endif %}</p></li>
+      <li class="cx-step cx-step--tbd"><p class="cx-step__when">{% if es %}Fecha por anunciar{% else %}Date TBD{% endif %}</p><p class="cx-step__what">{% if es %}El voto decisivo de la junta sobre los cierres.{% else %}The board's deciding vote on the closures.{% endif %}</p></li>
+    </ol>
+    <div class="cx-cta-row">
+      <p class="cx-cta-row__text">{% if es %}Construyamos el plan juntos, llevémoslo a los votantes y sigámoslo como una sola comunidad.{% else %}Let's build the plan together, bring it to voters, and see it through as one community.{% endif %}</p>
+      <div class="cx-cta-row__actions">
+        <a class="cx-btn cx-btn--gold cx-btn--lg" href="{{ plc.page_url | relative_url }}">{% if es %}Firma el compromiso{% else %}Sign the pledge{% endif %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>

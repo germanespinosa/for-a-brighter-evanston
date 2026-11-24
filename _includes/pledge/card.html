@@ -4,7 +4,7 @@
 {%- endcomment -%}
 {%- assign pl = site.data.pledge -%}
 {%- assign c = pl[include.lang] -%}
-<div class="pl" data-pledge data-lang="{{ include.lang }}" data-endpoint="{% unless site.sandbox_id == 'homepage-flyers' %}{{ pl.endpoint }}{% endunless %}" data-sitekey="{{ pl.turnstile_sitekey }}" data-mc-form="{% unless site.sandbox_id == 'homepage-flyers' %}{{ pl.mailchimp.form }}{% endunless %}" data-mc-honeypot="{{ pl.mailchimp.honeypot }}" data-mc-tags="{{ pl.mailchimp.tags }}" data-mc-tags-en="{{ pl.mailchimp.tags_en }}" data-mc-tags-es="{{ pl.mailchimp.tags_es }}" data-site="{{ '/' | absolute_url }}">
+<div class="pl" data-pledge data-lang="{{ include.lang }}" data-endpoint="{% unless site.sandbox_id == 'homepage-flyers' %}{{ pl.endpoint }}{% endunless %}" data-sitekey="{{ pl.turnstile_sitekey }}" data-mc-form="{% unless site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %}{{ pl.mailchimp.form }}{% endunless %}" data-mc-honeypot="{{ pl.mailchimp.honeypot }}" data-mc-tags="{{ pl.mailchimp.tags }}" data-mc-tags-en="{{ pl.mailchimp.tags_en }}" data-mc-tags-es="{{ pl.mailchimp.tags_es }}" data-site="{{ '/' | absolute_url }}">
   <article class="pl-card" aria-labelledby="pl-title">
     <div class="pl-strip">
       <p class="pl-strip__line" aria-live="polite"><span class="pl-num" data-pl-count hidden></span> <span data-t="counter">{{ c.counter }}</span></p>
@@ -17,22 +17,22 @@
           <button type="button" class="pl-lang__btn" data-lang-btn="es" lang="es" aria-pressed="{% if include.lang == 'es' %}true{% else %}false{% endif %}">Español</button>
         </div>
       </div>
-      <h1 class="pl-title" id="pl-title"><span data-t="headline">{{ c.headline }}</span> <mark class="pl-mark" data-t="headline_mark">{{ c.headline_mark }}</mark></h1>
+      <{{ include.heading | default: "h1" }} class="pl-title" id="pl-title"><span data-t="headline">{{ c.headline }}</span> <mark class="pl-mark" data-t="headline_mark">{{ c.headline_mark }}</mark></{{ include.heading | default: "h1" }}>
       <p class="pl-pledge" data-t="pledge">{{ c.pledge }}</p>
-      {% if site.sandbox_id == 'homepage-flyers' %}<p role="note"><strong>Preview only:</strong> pledge and email signup are disabled. <span lang="es">Vista previa: la firma del compromiso y la inscripción por correo están desactivadas.</span></p>{% endif %}
+      {% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %}<p role="note"><strong>Preview only:</strong> pledge and email signup are disabled. <span lang="es">Vista previa: la firma del compromiso y la inscripción por correo están desactivadas.</span></p>{% endif %}
       <form class="pl-form" data-pl-form novalidate>
         <div class="pl-fields">
           <div class="pl-field">
             <label for="pl-first" data-t="first">{{ c.first }}</label>
-            <input id="pl-first" name="first" type="text" autocomplete="given-name" required maxlength="80"{% if site.sandbox_id == 'homepage-flyers' %} disabled{% endif %}>
+            <input id="pl-first" name="first" type="text" autocomplete="given-name" required maxlength="80"{% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %} disabled{% endif %}>
           </div>
           <div class="pl-field">
             <label for="pl-last" data-t="last">{{ c.last }}</label>
-            <input id="pl-last" name="last" type="text" autocomplete="family-name" required maxlength="80"{% if site.sandbox_id == 'homepage-flyers' %} disabled{% endif %}>
+            <input id="pl-last" name="last" type="text" autocomplete="family-name" required maxlength="80"{% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %} disabled{% endif %}>
           </div>
           <div class="pl-field pl-field--email">
             <label for="pl-email" data-t="email">{{ c.email }}</label>
-            <input id="pl-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254"{% if site.sandbox_id == 'homepage-flyers' %} disabled{% endif %}>
+            <input id="pl-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254"{% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %} disabled{% endif %}>
           </div>
         </div>
         <div class="pl-hp" aria-hidden="true">
@@ -40,11 +40,11 @@
           <input id="pl-website" name="website" type="text" tabindex="-1" autocomplete="off">
         </div>
         <label class="pl-check">
-          <input type="checkbox" name="optin"{% if site.sandbox_id == 'homepage-flyers' %} disabled{% endif %}>
+          <input type="checkbox" name="optin"{% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %} disabled{% endif %}>
           <span data-t="updates">{{ c.updates }}</span>
         </label>
         <div class="pl-turnstile" data-pl-turnstile hidden></div>
-        <button class="pl-btn" type="submit" data-t="button"{% if site.sandbox_id == 'homepage-flyers' %} disabled{% endif %}>{{ c.button }}</button>
+        <button class="pl-btn" type="submit" data-t="button"{% if site.sandbox_id == 'homepage-flyers' or site.sandbox_id == 'home-hearings-resources' %} disabled{% endif %}>{{ c.button }}</button>
         <p class="pl-msg" data-pl-msg role="alert"></p>
       </form>
 

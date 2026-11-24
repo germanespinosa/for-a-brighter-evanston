@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//For a Brighter Evanston//Hearings//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:d65-closure-hearing-2026-12-03@forabrighterevanston.org
+DTSTAMP:20261124T220000Z
+DTSTART:20261203T231500Z
+DTEND:20261204T034500Z
+SUMMARY:D65 school closure hearings (Dewey and Lincolnwood)
+LOCATION:Joseph E. Hill Education Center\, 1500 McDaniel Ave.\, Evanston\, IL 60201
+DESCRIPTION:Dewey 5:15-7:15 p.m., then Lincolnwood 7:45-9:45 p.m. Sign up to speak in person starting 30 minutes before each hearing. Spanish interpretation is provided. https://forabrighterevanston.org/hearings/
+URL:https://forabrighterevanston.org/hearings/
+END:VEVENT
+END:VCALENDAR
