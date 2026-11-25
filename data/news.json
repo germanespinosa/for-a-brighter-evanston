@@ -2,6 +2,16 @@
   "_readme": "Articles for the In the news page (both languages). Newest first is not required; the page sorts by date. Required: date (YYYY-MM-DD), source, url, title. Optional: site (short name for the 'Read on' link), summary, title_es, summary_es (Spanish page falls back to English), alt_url + alt_label + alt_label_es (a second link, e.g. a free copy).",
   "articles": [
     {
+      "date": "2026-11-24",
+      "source": "Evanston RoundTable",
+      "site": "Evanston RoundTable",
+      "url": "https://evanstonroundtable.com/2026/11/24/district-65-parent-groups-gather-pledges-to-support-future-referendum-if-board-votes-no-on-closures/",
+      "title": "District 65 parent groups gather pledges to support future referendum if board votes ‘no’ on closures",
+      "summary": "Three District 65 parent groups co-sponsored a pledge to support a future referendum if the board votes not to close Dewey and Lincolnwood and develops a fiscally responsible long-term vision with the community. The RoundTable reports that the pledge had more than 450 signatures as of November 24.",
+      "title_es": "Grupos de padres del Distrito 65 reúnen compromisos para apoyar un futuro referéndum si la junta vota «no» a los cierres",
+      "summary_es": "Tres grupos de padres del Distrito 65 copatrocinaron un compromiso de apoyar un futuro referéndum si la junta vota no cerrar Dewey y Lincolnwood y desarrolla con la comunidad una visión responsable a largo plazo en lo financiero. El RoundTable informa que el compromiso tenía más de 450 firmas al 24 de noviembre."
+    },
+    {
       "date": "2026-11-22",
       "source": "Evanston RoundTable",
       "site": "Evanston RoundTable",
