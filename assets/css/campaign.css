@@ -171,7 +171,7 @@
 .cx-hero__slide[data-active] { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .cx-hero__slide { transition: none; } }
 .cx-hero__inner {
-  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 470px); gap: 48px; align-items: start;
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 600px); gap: 48px; align-items: start;
   padding-block: clamp(48px, 6vw, 80px);
 }
 .cx-hero__copy { padding-top: 8px; }
@@ -183,6 +183,7 @@
 }
 .cx-hero__card { scroll-margin-top: 16px; }
 .cx-hero__card .pl-card { box-shadow: var(--shadow-lg); }
+.cx-hero__card .pl-fields { align-items: end; }
 @media (max-width: 960px) {
   .cx-hero__inner { grid-template-columns: minmax(0, 1fr); gap: 36px; }
   .cx-hero__card { max-width: 640px; }
