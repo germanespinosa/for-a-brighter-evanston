@@ -87,7 +87,7 @@ To stop a pending addition or removal, say “cancel” or “stop.” To restor
 
 The sandbox stays open until the group publishes or destroys it; inactivity alone does not close it. News remains managed through #news, and the sandbox is intended to show the current live news list.[2]
 
-**Pledge-partner preview:** In the `homepage-flyers` preview, pledge submissions and campaign-email signup are disabled; other preview forms can still connect to live services. The pledge’s new partner-sharing permission applies only to people who agree to it, not to earlier opt-ins.
+**Pledge privacy and preview:** In the reviewed `home-hearings-resources` preview, pledge submissions and campaign-email signup are disabled; other preview forms can still connect to live services. The pledge’s partner-sharing permission applies only to people who agree to it, not to earlier opt-ins.
 
 ## What you can request
 
@@ -100,7 +100,7 @@ The sandbox stays open until the group publishes or destroys it; inactivity alon
 - Wording on the referendum pledge: the pledge card and counter, the pledge page and the "Put the pledge on your site" page, in English and Spanish. These go through the normal preview, review and team vote. The pledge's settings, such as where signatures are stored, the Mailchimp signup and the pledge page links, can't be changed this way; ask German.[2]
 - Images in JPG, PNG, WebP or GIF format, and PDF documents up to 5 MB. Fabian should resize photos and strip location metadata before adding them.[2]
 
-**Home, Hearings and Resources update:** German approved the new site layout from Kerstin's mockup for the `home-hearings-resources` preview, including its shared stylesheet and the hearing calendar files. Its text and pages follow the normal preview, review and team vote, and the team can ask Fabian for changes as usual. Pledges and email signups are turned off in that preview. Other style or calendar changes still need German.[2]
+**Home, Hearings and Resources update:** The site has bilingual Home, Hearings and Resources pages, a shared menu and alert bar. German approved the reviewed layout from Kerstin's mockup, including its shared stylesheet and hearing calendar files; the team approved the update by vote. Pledges and email signups are disabled in the `home-hearings-resources` preview, not on the live site. Future stylesheet or calendar changes require specific authorization.[2]
 
 **Website authorizations:** German has authorized Kerstin Shamberg to approve specific website changes, including restricted changes and associated process maintenance. Either can grant a scoped approval; it is not permission to publish directly, bypass safety checks or clear other holds. Fabian verifies the original human request, reviews the exact scope, and keeps authorization records separate. Examples include page-specific styling and hosting an unchanged, supplied macro-free Excel model; Fabian checks the model's safety without running it. If the checker cannot yet represent an approved change, it remains blocked until a bounded enforcement change is reviewed and tested. News remains managed separately in #news.[2]
 
