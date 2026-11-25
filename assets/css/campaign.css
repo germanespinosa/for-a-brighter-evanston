@@ -321,8 +321,9 @@
 
 /* Increase standalone phone controls without changing links inside prose. */
 @media (max-width: 640px) {
-  .cx-nav__list a, .cx-nav__lang, .cx-nav__cta, .cx-alert a,
-  .cx-night__cal a, .cx-card__link, .cx-btns .cx-link,
+  .cx-brand, .cx-nav__list a, .cx-nav__lang, .cx-nav__cta, .cx-alert a,
+  .cx-hero__pause, .cx-hero__card .pl-foot__why, .cx-night__cal a,
+  .cx-card__link, .cx-source, .cx-btns .cx-link, .cx-cta-row__actions .cx-link,
   .cx-flyer__links a, .cx-footer-updates {
     display: inline-flex;
     align-items: center;
