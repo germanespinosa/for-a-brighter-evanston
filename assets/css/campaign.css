@@ -318,3 +318,15 @@
 .cx-hero__card .pl-foot:last-child img { width: auto; max-width: 100%; height: 52px; object-fit: contain; }
 .cx-poll .cx-eyebrow { color: var(--gold); }
 .cx-shape .cx-eyebrow, .cx-venue .cx-eyebrow, .cx-session .cx-eyebrow { color: var(--gold); }
+
+/* Increase standalone phone controls without changing links inside prose. */
+@media (max-width: 640px) {
+  .cx-nav__list a, .cx-nav__lang, .cx-nav__cta, .cx-alert a,
+  .cx-night__cal a, .cx-card__link, .cx-btns .cx-link,
+  .cx-flyer__links a, .cx-footer-updates {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
