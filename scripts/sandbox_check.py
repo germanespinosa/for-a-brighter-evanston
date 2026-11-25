@@ -56,6 +56,21 @@ LOCKED_DATA_KEYS = {
     "_data/pledge.yml": re.compile(r"(endpoint|turnstile_sitekey|mailchimp(\..+)?|(en|es)\.(page_url|embed_url|privacy_url))"),
     "_data/pledge_page.yml": re.compile(r"(sources\[\d+\]\.url|(en|es)\.ways\[\d+\]\.url)"),
 }
+# Owner-approved site update (German, Nov. 24, 2026): Kerstin's "Home,
+# Hearings, Resources" layout in sandbox/home-hearings-resources only. It may
+# add and edit the shared stylesheet (every selector under a .cx class, no
+# escapes, imports or external resources) and the three hearing calendar files
+# (plain iCalendar text). Everything else follows the normal rules, and the
+# sandbox review and the team vote still apply.
+SITE_UPDATE_SANDBOX = "home-hearings-resources"
+SITE_UPDATE_CSS = "assets/css/campaign.css"
+SITE_UPDATE_ICS = {
+    "assets/files/d65-closure-hearing-2026-12-01.ics",
+    "assets/files/d65-closure-hearing-2026-12-03.ics",
+    "assets/files/d65-closure-hearing-2026-12-08.ics",
+}
+ICS_PROPERTIES = {"BEGIN", "END", "VERSION", "PRODID", "CALSCALE", "METHOD", "UID", "DTSTAMP",
+                  "DTSTART", "DTEND", "SUMMARY", "LOCATION", "DESCRIPTION", "URL"}
 MEDIA_DIRS = ("assets/img/", "assets/files/")
 MEDIA_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf"}
 PAGE_EXT = {".html", ".md"}
@@ -1416,7 +1431,7 @@ def load_poll_copy_approval(filename, sandbox_url=None):
     return record
 
 
-def scoped_css_problem(text, scope):
+def scoped_css_problem(text, scope, prefix=False):
     """Conservative CSS subset: scoped selectors, declarations, media/supports only.
 
     No escape syntax, fetches, imports, global keyframes or executable legacy CSS.
@@ -1430,11 +1445,12 @@ def scoped_css_problem(text, scope):
 
     def scoped_selector(selector):
         selector = selector.strip()
-        if not re.match(re.escape(scope) + r"(?=[\s.#:\[>]|$)", selector) or "||" in selector:
+        head = re.match(re.escape(scope) + (r"[-\w]*" if prefix else "") + r"(?=[\s.#:\[>]|$)", selector)
+        if not head or "||" in selector:
             return False
         # Remove attribute/function interiors before finding the first combinator.
         # A sibling of the wrapper escapes scope; siblings of its descendants do not.
-        tail = selector[len(scope):]
+        tail = selector[head.end():]
         previous = None
         while tail != previous:
             previous = tail
@@ -1465,6 +1481,24 @@ def scoped_css_problem(text, scope):
         return True
 
     return None if rules(text) else "every CSS selector must start with the approved page scope; only media/supports nesting is allowed"
+
+
+def ics_problem(text):
+    """Plain single-event iCalendar text with a fixed set of harmless properties."""
+    lines = text.replace("\r\n", "\n").rstrip("\n").split("\n")
+    if not text.isascii() or len(text) > 4000 or lines[:1] != ["BEGIN:VCALENDAR"] or lines[-1:] != ["END:VCALENDAR"]:
+        return "calendar files must be short ASCII iCalendar text"
+    for line in lines:
+        name = re.split(r"[:;]", line, maxsplit=1)[0]
+        if line.startswith((" ", "\t")) or name not in ICS_PROPERTIES:
+            return f"calendar property not allowed: {name or line[:20]}"
+        if name in {"BEGIN", "END"} and line.split(":", 1)[1] not in {"VCALENDAR", "VEVENT"}:
+            return "calendar files may contain one plain event only"
+        if name == "URL" and not line.startswith("URL:https://forabrighterevanston.org/"):
+            return "calendar links must point to forabrighterevanston.org"
+    if sum(line == "BEGIN:VEVENT" for line in lines) != 1:
+        return "calendar files may contain one plain event only"
+    return None
 
 
 def workbook_problem(target):
@@ -1723,6 +1757,32 @@ def main():
                 blocking.append(f"{path}: {problem}.")
             changes.append(f"Scoped sandbox-review asset {verb}: {path}")
             continue
+        if path == SITE_UPDATE_CSS or path in SITE_UPDATE_ICS:
+            target = ROOT / path
+            if git("branch", "--show-current").strip() == "sandbox/" + SITE_UPDATE_SANDBOX:
+                if (status not in {"A", "M"} or any(p.is_symlink() for p in (target, *target.parents))
+                        or not target.is_file() or not git("ls-tree", "HEAD", "--", path).startswith("100644 ")):
+                    blocking.append(f"{path}: approved site-update files must be regular, non-executable files; deletion is not authorized.")
+                    continue
+                if git("diff", "HEAD", "--", path):
+                    blocking.append(f"{path}: differs from the committed revision; commit before validation.")
+                    continue
+                try:
+                    text = target.read_text(encoding="utf-8")
+                except UnicodeError:
+                    text = None
+                if path == SITE_UPDATE_CSS:
+                    problem = ("CSS must be UTF-8 text" if text is None else
+                               "stylesheet is larger than 100 KB" if len(text) > 100_000 else
+                               scoped_css_problem(text, ".cx", prefix=True))
+                else:
+                    problem = "calendar files must be text" if text is None else ics_problem(text)
+                if problem:
+                    blocking.append(f"{path}: {problem}.")
+                    continue
+                changes.append(f"Owner-approved site-update file {verb}: {path}")
+                warnings.append(f"{path}: owner-approved for this update; review every affected page in both languages on desktop and phone.")
+                continue
         if path == "data/news.json":
             blocking.append("The news list (data/news.json) was changed. News is managed only in #news; this change must be removed.")
             continue
