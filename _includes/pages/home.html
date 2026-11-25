@@ -1,414 +1,435 @@
 {%- comment -%}
-  Home page template, shared by / (English) and /es/ (Spanish).
-  Text comes from _data/i18n/<lang>.yml (the `home:` section).
-  The rally/meeting card comes from _data/event.yml; the hero photo from _data/hero.yml.
-  Styles: assets/css/home.css (hm- classes). Behavior: assets/js/home.js.
+  Home page template (Nov. 2026 layout), shared by / (English) and /es/ (Spanish).
+  Built from Kerstin's "FABE Site Update: Home, Hearings, Resources" mockup.
+  Text is written here in both languages; the pledge card text comes from
+  _data/pledge.yml and the hero photos from _data/hero.yml.
+  Styles: assets/css/campaign.css (cx- classes) and assets/css/pledge.css.
+  Behavior: assets/js/hero-slideshow.js and assets/js/pledge.js.
 {%- endcomment -%}
 {%- assign t = site.data.i18n[page.lang] -%}
-{%- assign h = t.home -%}
-{%- assign pl_hero = site.data.pledge[page.lang] -%}
-{%- assign ev = site.data.event -%}
-{%- assign photo = site.data.hero[0] -%}
-{%- capture arrow -%}<svg class="hm-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>{%- endcapture -%}
-{%- capture share_url -%}{{ h.share.site_path | absolute_url }}{%- endcapture -%}
-{%- if page.lang == 'es' -%}{%- assign options_url = '/es/opciones/' -%}{%- else -%}{%- assign options_url = '/home/options/' -%}{%- endif -%}
-
-<div class="hm">
-
-<aside class="alert-bar" aria-label="{% if page.lang == 'es' %}Escribe a la Junta{% else %}Email the board{% endif %}">
-  <div class="alert-bar__inner">
-    {% if page.lang == 'es' %}
-    <p class="alert-bar__text hm-foot__text"><a href="{{ '/es/escriba-a-la-junta-issue/' | relative_url }}">Escribe a la Junta</a></p>
-    {% else %}
-    <p class="alert-bar__text hm-foot__text"><a href="{{ '/home/write-to-the-board-issue/' | relative_url }}">Email the board</a></p>
-    {% endif %}
-  </div>
-</aside>
-
-<section class="hm-hero" aria-labelledby="hero-title" data-hero-slideshow>
-  <div class="hm-hero__background" aria-hidden="true">
-    {% for photo in site.data.hero %}
-    {% assign position = photo.position | split: ' ' %}
-    <img class="hm-hero__slide" data-hero-position-x="{{ position[0] | escape }}" data-hero-position-y="{{ position[1] | escape }}" data-hero-slide {% if forloop.first %}data-active="true" src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}" fetchpriority="high"{% else %}data-src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}"{% endif %} alt="" width="{{ photo.width }}" height="{{ photo.height }}">
-    {% endfor %}
-  </div>
-  <p class="hm-hero__credit">{{ h.photo_credit }}</p>
-  <button class="hm-hero__pause" type="button" data-hero-pause data-pause="{% if page.lang == 'es' %}Pausar fotos{% else %}Pause photos{% endif %}" data-play="{% if page.lang == 'es' %}Reanudar fotos{% else %}Resume photos{% endif %}" hidden>{% if page.lang == 'es' %}Pausar fotos{% else %}Pause photos{% endif %}</button>
-  <div class="hm-wrap hm-hero__inner">
-    <div class="hm-hero__copy">
-      <p class="hm-eyebrow hm-eyebrow--gold">{{ h.hero.eyebrow }}</p>
-      <h1 class="hm-hero__title" id="hero-title">{{ h.hero.h1 }} <br><mark class="hm-mark">{{ h.hero.h1_mark }}</mark>{% if h.hero.h1_mark2 != '' %}<br><mark class="hm-mark">{{ h.hero.h1_mark2 }}</mark>{% endif %}</h1>
-      <p class="hm-hero__lead">{{ h.hero.lead }}</p>
-      <div class="hm-sig hm-hero__ctas" data-pledge-counter data-lang="{{ page.lang }}" data-endpoint="{{ site.data.pledge.endpoint }}">
-        <div class="hm-sig__count">
-          <p class="hm-sig__number" data-pl-count aria-live="polite" aria-describedby="hero-pledge-count-label" hidden></p>
-          <p class="hm-sig__label" id="hero-pledge-count-label" data-t="counter">{{ pl_hero.counter }}</p>
-        </div>
-        <div class="hm-sig__actions">
-          <a class="hm-btn hm-btn--white" href="{{ pl_hero.page_url | relative_url }}">{{ pl_hero.button }}</a>
-          <button type="button" class="hm-linkbtn" data-dialog-open="updates-dialog" aria-haspopup="dialog">{{ t.nav.updates }}</button>
-        </div>
-      </div>
-      <div class="hm-hero__ctas">
-        <a class="hm-btn hm-btn--gold hm-btn--lg" href="#options">{{ h.hero.options_btn }} {{ arrow }}</a>
-        <a class="hm-btn hm-btn--ghost hm-btn--lg" href="{{ t.urls.write | relative_url }}">{{ h.hero.email_btn }} {{ arrow }}</a>
-      </div>
-    </div>
-
-    <div class="hm-hero__media">
-      {%- if ev.show %}
-      <aside class="hm-event" aria-labelledby="event-title">
-        <p class="hm-eyebrow hm-eyebrow--blue hm-event__eyebrow">{{ h.event.eyebrow }}</p>
-        <div class="hm-event__times"><h2 class="hm-event__date" id="event-title">{{ h.event.date }}</h2></div>
-        <p class="hm-event__times"><b>{% if page.lang == 'es' %}Martes, 1 de diciembre de 2026{% else %}Tuesday, Dec. 1, 2026{% endif %}</b><br><time datetime="2026-12-01T17:15:00-06:00">5:15 p.m.</time> · Lincolnwood<br><time datetime="2026-12-01T19:45:00-06:00">7:45 p.m.</time> · Dewey</p>
-        <p class="hm-event__times"><b>{% if page.lang == 'es' %}Jueves, 3 de diciembre de 2026{% else %}Thursday, Dec. 3, 2026{% endif %}</b><br><time datetime="2026-12-03T17:15:00-06:00">5:15 p.m.</time> · Dewey<br><time datetime="2026-12-03T19:45:00-06:00">7:45 p.m.</time> · Lincolnwood</p>
-        <p class="hm-event__times"><b>{% if page.lang == 'es' %}Martes, 8 de diciembre de 2026{% else %}Tuesday, Dec. 8, 2026{% endif %}</b><br><time datetime="2026-12-08T17:15:00-06:00">5:15 p.m.</time> · Lincolnwood<br><time datetime="2026-12-08T19:45:00-06:00">7:45 p.m.</time> · Dewey</p>
-        <p class="hm-event__times"><strong>Joseph E. Hill Education Center</strong><br>1500 McDaniel Ave., Evanston</p>
-        <p class="hm-event__times">{% if page.lang == 'es' %}Se ofrecerá interpretación al español.{% else %}Spanish interpretation will be provided.{% endif %}</p>
-        <p class="hm-event__times">{% if page.lang == 'es' %}Inscríbase para hablar desde 30 minutos antes de cada audiencia y hasta que comience. Cada persona dispone de tres minutos. Las audiencias se transmitirán en vivo.{% else %}Sign up to speak starting 30 minutes before each hearing and through its start. Each speaker has three minutes. Hearings will be livestreamed.{% endif %}</p>
-        <p class="hm-event__times"><a href="https://www.district65.net/about/board-of-education/guidelines-for-public-hearings">{% if page.lang == 'es' %}Cómo participar{% else %}How to participate{% endif %}</a><br><a href="https://www.district65.net/news4/notice-of-public-hearings-proposed-school-closures">{% if page.lang == 'es' %}Aviso del Distrito{% else %}District notice{% endif %}</a></p>
-      </aside>
-      {%- endif %}
-    </div>
-  </div>
-</section>
-
+{%- assign plc = site.data.pledge[page.lang] -%}
+{%- if page.lang == 'es' -%}{%- assign es = true -%}{%- else -%}{%- assign es = false -%}{%- endif -%}
+{%- if es -%}
+  {%- assign url_hearings = '/es/audiencias/' -%}{%- assign url_resources = '/es/recursos/' -%}{%- assign url_options = '/es/opciones/' -%}{%- assign url_video = '/es/video/' -%}
+{%- else -%}
+  {%- assign url_hearings = '/hearings/' -%}{%- assign url_resources = '/resources/' -%}{%- assign url_options = '/home/options/' -%}{%- assign url_video = '/home/video/' -%}
+{%- endif -%}
+{%- capture share_url -%}{{ t.urls.home | absolute_url }}{%- endcapture -%}
 <link rel="stylesheet" href="{{ '/assets/css/pledge.css' | relative_url }}">
-<section class="hm-section hm-section--white" id="hearing-preparation" aria-labelledby="hearing-preparation-title">
-  <div class="hm-wrap">
-    {% if page.lang == 'es' %}
-    <h2 class="hm-h2" id="hearing-preparation-title">Prepárese para las audiencias públicas</h2>
-    <p class="hm-intro">El Distrito 65 celebrará audiencias públicas sobre el cierre propuesto de Dewey y Lincolnwood. La comunidad puede compartir sus comentarios en persona o por escrito.</p>
-    <div class="hm-grid3">
-      <article class="hm-card hm-lever">
-        <h3 class="hm-lever__title">Algunas cosas que debe saber antes de asistir:</h3>
-        <p class="hm-lever__text">Debe inscribirse en persona para hablar. Las puertas abren 30 minutos antes de cada audiencia y la inscripción cierra cuando esta comienza.<br><br>Cada persona tiene tres minutos y puede hablar una vez por audiencia.<br><br>No puede inscribir a otra persona ni cederle su tiempo.<br><br>No se permiten carteles sostenidos en la mano y la capacidad de la sala es limitada.<br><br>¿No puede asistir? Las audiencias se transmitirán en vivo y puede enviar comentarios por escrito a <a href="mailto:schoolboard@district65.net">schoolboard@district65.net</a> hasta las 5 p. m. del 13 de diciembre.</p>
-      </article>
-      <article class="hm-card hm-lever">
-        <h3 class="hm-lever__title">Cómo participar</h3>
-        <p class="hm-lever__text"><strong>Venga a un taller para preparar comentarios.</strong> Tres minutos pasan rápido y nadie debería tener que pensar a solas qué decir. Organizamos dos talleres para ayudar a todos a preparar comentarios que se complementen en vez de repetirse:<br><br><strong>lunes 30 de noviembre y<br>lunes 7 de diciembre,<br>ambos a las 6 p. m. en la sala multiusos de Dewey.</strong><br><br>¿Nunca ha hablado en una reunión de la Junta? Esto es para usted. ¡Todos son bienvenidos!</p>
-      </article>
-      <article class="hm-card hm-lever">
-        <h3 class="hm-lever__title">Más maneras de ayudar</h3>
-        <p class="hm-lever__text"><strong>Siga hablando del tema.</strong> Descargue volantes para avisar a los vecinos sobre las audiencias.<br><br>Hable con todas las personas que pueda: el vecino sin hijos en el D65, la madre o el padre al recoger a sus hijos, la persona detrás de usted en la fila de la cafetería.<br><br>Esas conversaciones son las que han llevado a esta comunidad hasta aquí.<br><br></p>
-        <p class="hm-lever__text"><a href="#flyers">Ver y descargar los volantes</a></p>
-        <p class="hm-lever__text"><a href="https://docs.google.com/spreadsheets/d/19RI8LG9nMjeXgI6MuMNvc4D1-RJaYeSu/edit?gid=1937283420#gid=1937283420">Hoja de inscripción para repartir volantes</a></p>
-        <ul class="hm-lever__text"><li>Traiga a un vecino a una audiencia o a un taller</li><li>Ayude a sus hijos a escribir una carta a la Junta</li><li>Escriba una carta al editor</li></ul>
-      </article>
-    </div>
-    {% else %}
-    <h2 class="hm-h2" id="hearing-preparation-title">Prepare for the public hearings</h2>
-    <p class="hm-intro">District 65 will hold public hearings on the proposed closures of Dewey and Lincolnwood. Community members can share comments in person or in writing.</p>
-    <div class="hm-grid3">
-      <article class="hm-card hm-lever">
-        <h3 class="hm-lever__title">A few things to know before you go:</h3>
-        <p class="hm-lever__text">You have to sign up in person to speak. Doors open 30 minutes before each hearing and sign-up closes when it starts.<br><br>Each speaker gets three minutes, and you can speak once per hearing.<br><br>You can’t sign up for someone else or give your time away.<br><br>Hand-held posters aren’t allowed, and room capacity is limited.<br><br>Can’t be there? Hearings are livestreamed, and written comments can go to <a href="mailto:schoolboard@district65.net">schoolboard@district65.net</a> until 5 p.m. on Dec. 13.</p>
-      </article>
-      <article class="hm-card hm-lever">
-        <h3 class="hm-lever__title">How to get involved</h3>
-        <p class="hm-lever__text"><strong>Come to a comment workshop.</strong> Three minutes goes fast, and nobody should have to figure out what to say alone. We’re hosting two workshops to help everyone prepare comments that work together instead of repeating each other:<br><br><strong>Monday, Nov. 30 and<br>Monday, Dec. 7,<br>both at 6 p.m. in the Dewey Multipurpose Room.</strong><br><br>Never spoken at a board meeting before? This is for you. Open to all!</p>
-      </article>
-      <article class="hm-card hm-lever">
-        <h3 class="hm-lever__title">More ways to help</h3>
-        <p class="hm-lever__text"><strong>Keep talking about it.</strong> Download flyers to alert neighbors to the hearings.<br><br>Talk to anyone and everyone: the neighbor without kids in D65, the parent at pickup, the person behind you in line at the coffee shop.<br><br>Those conversations are how this community got this far.<br><br></p>
-        <p class="hm-lever__text"><a href="#flyers">See and download the flyers</a></p>
-        <p class="hm-lever__text"><a href="https://docs.google.com/spreadsheets/d/19RI8LG9nMjeXgI6MuMNvc4D1-RJaYeSu/edit?gid=1937283420#gid=1937283420">Canvassing sign-up sheet</a></p>
-        <ul class="hm-lever__text"><li>Bring a neighbor to a hearing or a workshop</li><li>Help your kids write a letter to the board</li><li>Write a letter to the editor</li></ul>
-      </article>
-    </div>
-    {% endif %}
-  </div>
-</section>
 
-<section class="hm-section hm-bg-mist" id="flyers" aria-labelledby="flyers-title">
-  <div class="hm-wrap">
-    {% if page.lang == 'es' %}
-    <h2 class="hm-h2" id="flyers-title">Volantes para compartir</h2>
-    <p class="hm-intro">Seleccione un volante para verlo o descargarlo (PNG).</p>
-    {% assign flyer_titles = "Exige una solución real|Los niños pagan el costo|Es una solución falsa|La confianza va primero|Construyamos algo mejor" | split: "|" %}
-    {% else %}
-    <h2 class="hm-h2" id="flyers-title">Flyers to share</h2>
-    <p class="hm-intro">Select a flyer to view it or download the PNG.</p>
-    {% assign flyer_titles = "Demand a real fix|Kids carry the cost|It’s a false fix|Trust comes first|Build something better" | split: "|" %}
-    {% endif %}
-    {% assign flyer_letters = "a,b,c,d,e" | split: "," %}
-    <div class="hm-grid3">
-      {% for letter in flyer_letters %}
-      {% assign flyer_title = flyer_titles[forloop.index0] %}
-      {%- capture flyer_file -%}/assets/img/flyers/flyer-{{ letter }}-{{ page.lang }}.png{%- endcapture -%}
-      {%- capture flyer_thumb -%}/assets/img/flyers/flyer-{{ letter }}-{{ page.lang }}-thumb.webp{%- endcapture -%}
-      <article class="hm-card hm-lever">
-        <a href="{{ flyer_file | relative_url }}" data-flyer-view><img src="{{ flyer_thumb | relative_url }}" alt="{{ flyer_title | escape }}" width="480" height="621" loading="lazy" decoding="async" data-flyer-thumb></a>
-        <h3 class="hm-lever__text"><strong>{{ flyer_title }}</strong></h3>
-        <a class="hm-btn hm-btn--navy" href="{{ flyer_file | relative_url }}" download data-flyer-download><span class="hm-btn--navy">{% if page.lang == 'es' %}Descargar volante{% else %}Download flyer{% endif %} {{ letter | upcase }}</span></a>
-        <details class="hm-lever__text" data-flyer-transcript>
-          <summary aria-label="{% if page.lang == 'es' %}Leer el texto del volante{% else %}Read flyer text{% endif %}: {{ flyer_title | escape }}">{% if page.lang == 'es' %}Leer el texto{% else %}Read flyer text{% endif %}</summary>
-          {% include flyer-transcripts.html lang=page.lang letter=letter %}
-        </details>
-      </article>
-      {% if forloop.index == 3 %}
-    </div>
-    <div class="hm-foot"><div class="hm-grid3 hm-foot__text">
-      {% endif %}
-      {% endfor %}
-      <div aria-hidden="true"></div>
-    </div></div>
-  </div>
-</section>
+<div class="cx">
 
-<section class="hm-section hm-section--cream" aria-labelledby="repair-title">
-  <div class="hm-wrap">
-    <div class="hm-h2--xl"><h2 class="hm-statement__title" id="repair-title">{% if page.lang == 'es' %}Nuevo: Las cifras de reparación del Distrito no se sostienen{% else %}New: The District's repair numbers don't hold up{% endif %}</h2></div>
-    <div class="hm-grid3">
-      <article class="hm-card hm-lever">
-        {% if page.lang == 'es' %}
-        <h3 class="hm-lever__title">Una factura de $600 millones en reparaciones que no se sostiene</h3>
-        <p class="hm-lever__text">La administración dice que el D65 necesita casi $600 millones en reparaciones de edificios, y el plan actual da esa cifra por sentada. Una madre o un padre que examinó los propios datos del Distrito encontró:</p>
-        <p class="hm-lever__text"><strong>Cuenta escuelas que ya están cerradas.</strong> Kingsley y Bessie Rhodes siguen en la lista de reparaciones.<br><br><strong>Supone la opción más costosa de calefacción y refrigeración.</strong> Eso supone cerca de $100 millones para sistemas geotérmicos. Un sistema convencional de calefacción y refrigeración probablemente costaría menos. Los créditos fiscales federales también podrían reducir el costo de los sistemas geotérmicos, pero no está claro si la estimación del Distrito los tiene en cuenta.<br><br><strong>Algunos costos se cuentan dos veces.</strong> El plan paga tanto los nuevos sistemas geotérmicos como algunas de las mejoras a los sistemas antiguos de calefacción y refrigeración que esos sistemas reemplazarían. Otros elementos, como el reemplazo de tuberías galvanizadas, también se cuentan dos veces.<br><br><strong>Unos $130 millones podrían pagarse con bonos especiales de seguridad,</strong> no con el presupuesto regular. Cuando el Evanston RoundTable envió al Distrito preguntas detalladas para este artículo, la administración no respondió ni una sola.</p>
-        <p class="hm-source"><a href="https://evanstonroundtable.com/2026/11/15/parents-say-cutting-capital-spending-to-4-7-million-would-leave-district-65-in-same-financial-position-as-closing-dewey-lincolnwood/" target="_blank" rel="noopener">Leer el artículo del RoundTable</a></p>
-        {% else %}
-        <h3 class="hm-lever__title">A $600 million repair bill that doesn't hold up</h3>
-        <p class="hm-lever__text">The administration says D65 needs nearly $600 million in building repairs, and the current plan treats that number as a given. A parent who dug into the District's own data found:</p>
-        <p class="hm-lever__text"><strong>It counts schools that are already closed.</strong> Kingsley and Bessie Rhodes are still on the repair list.<br><br><strong>It assumes the most expensive heating and cooling option.</strong> That's close to $100 million for geothermal. A conventional heating and cooling system would likely cost less. Federal tax credits could also lower the geothermal cost, but it's unclear whether the District's estimate accounts for them.<br><br><strong>Some costs are counted twice.</strong> The plan pays for new geothermal systems and for some of the older heating and cooling upgrades they would replace. Other items, like galvanized pipe replacements, are counted twice too.<br><br><strong>About $130 million could be paid for with special safety bonds,</strong> not the regular budget. When the Evanston RoundTable sent the District detailed questions for this story, the administration didn't answer a single one.</p>
-        <p class="hm-source"><a href="https://evanstonroundtable.com/2026/11/15/parents-say-cutting-capital-spending-to-4-7-million-would-leave-district-65-in-same-financial-position-as-closing-dewey-lincolnwood/" target="_blank" rel="noopener">Read the RoundTable story</a></p>
-        {% endif %}
-      </article>
-      <article class="hm-card hm-lever">
-        {% if page.lang == 'es' %}
-        <h3 class="hm-lever__title">El gasto en reparaciones es una elección</h3>
-        <ul class="hm-repair-stats" role="list">
-          <li class="hm-repair-stat hm-repair-stat--goal"><span class="hm-repair-stat__label">Meta actual</span><strong class="hm-repair-stat__value">$2.7M</strong><span class="hm-repair-stat__caption">política actual del Distrito</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
-          <li class="hm-repair-stat hm-repair-stat--featured"><span class="hm-repair-stat__label">Opción de las familias</span><strong class="hm-repair-stat__value">$4.7M</strong><span class="hm-repair-stat__caption">menos del doble de la meta actual</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
-          <li class="hm-repair-stat hm-repair-stat--plan"><span class="hm-repair-stat__label">Plan del Distrito</span><strong class="hm-repair-stat__value">$8.3M</strong><span class="hm-repair-stat__caption">más del triple de la meta actual</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
-        </ul>
-        <p class="hm-lever__text">Como dijo la presidenta de la Junta, la cantidad que el D65 gasta en reparaciones es «una elección». Hoy, la meta del Distrito es de $2.7 millones al año. El plan de la administración aumentaría esa cifra a más del triple, hasta $8.3 millones.</p>
-        <p class="hm-lever__text">Las familias demostraron que aumentarla a $4.7 millones en su lugar, que sigue siendo un aumento considerable, mantiene abiertas Dewey y Lincolnwood y deja al Distrito en una situación financiera aproximadamente igual, sin cambiar nada más en el plan. Eso da tiempo para hacer esto bien: dar a la comunidad una elección clara sobre un referéndum y dejar que la próxima persona a cargo de la superintendencia corrija las cifras para que tengan sentido.</p>
-        <p class="hm-source"><a href="{{ options_url | relative_url }}" target="_blank" rel="noopener">Ver las opciones</a></p>
-        {% else %}
-        <h3 class="hm-lever__title">Repair spending is a choice</h3>
-        <ul class="hm-repair-stats" role="list">
-          <li class="hm-repair-stat hm-repair-stat--goal"><span class="hm-repair-stat__label">Today's goal</span><strong class="hm-repair-stat__value">$2.7M</strong><span class="hm-repair-stat__caption">current District policy</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
-          <li class="hm-repair-stat hm-repair-stat--featured"><span class="hm-repair-stat__label">Parents' option</span><strong class="hm-repair-stat__value">$4.7M</strong><span class="hm-repair-stat__caption">less than double today's goal</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
-          <li class="hm-repair-stat hm-repair-stat--plan"><span class="hm-repair-stat__label">District plan</span><strong class="hm-repair-stat__value">$8.3M</strong><span class="hm-repair-stat__caption">more than triple today's goal</span><span class="hm-repair-stat__bar" aria-hidden="true"><span></span></span></li>
-        </ul>
-        <p class="hm-lever__text">As the board president put it, the amount D65 spends on repairs is "a choice." Today, the District's goal is $2.7 million a year. The administration's plan would more than triple that, to $8.3 million.</p>
-        <p class="hm-lever__text">Parents showed that raising it to $4.7 million instead, still a big increase, keeps Dewey and Lincolnwood open and leaves the District in about the same financial shape, without changing anything else in the plan. That buys time to do this right: give the community a clear choice on a referendum, and let the next superintendent fix the numbers so they make sense.</p>
-        <p class="hm-source"><a href="{{ options_url | relative_url }}" target="_blank" rel="noopener">See the options</a></p>
-        {% endif %}
-      </article>
-    </div>
-    <div class="hm-foot">
-      {% if page.lang == 'es' %}
-      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/es/escriba-a-la-junta-issue/' | relative_url }}">Escribe a la Junta {{ arrow }}</a>
-      {% else %}
-      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/home/write-to-the-board-issue/' | relative_url }}">Email the board {{ arrow }}</a>
-      {% endif %}
-    </div>
+<section class="cx-hero" aria-labelledby="hero-title" data-hero-slideshow>
+  <div class="cx-hero__background" aria-hidden="true">
+    {%- for photo in site.data.hero %}
+    {%- assign position = photo.position | default: '50% 50%' %}
+    <img class="cx-hero__slide" style="object-position: {{ position | escape }}" data-hero-slide {% if forloop.first %}data-active="true" src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}" fetchpriority="high"{% else %}data-src="{{ photo.file | prepend: '/assets/img/hero/' | relative_url }}"{% endif %} alt="" width="{{ photo.width }}" height="{{ photo.height }}">
+    {%- endfor %}
   </div>
-</section>
-
-<section class="hm-section hm-section--white" aria-labelledby="video-title">
-  <div class="hm-wrap">
-    {% if page.lang == 'es' %}
-    <p class="hm-eyebrow">Video</p>
-    <h2 class="hm-h2" id="video-title">Podemos mantener las luces encendidas</h2>
-    <p class="hm-body">Un mensaje de esperanza para la Junta Escolar del D65.</p>
-    <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/es/video/' | relative_url }}">Ver el video {{ arrow }}</a>
-    {% else %}
-    <p class="hm-eyebrow">Video</p>
-    <h2 class="hm-h2" id="video-title">We Can Keep The Lights On</h2>
-    <p class="hm-body">A message of hope for the D65 School Board.</p>
-    <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ '/home/video/' | relative_url }}">Watch the video {{ arrow }}</a>
-    {% endif %}
-  </div>
-</section>
-
-<section class="hm-section hm-section--cream" id="the-problem" aria-labelledby="problem-title">
-  <div class="hm-wrap">
-    <p class="hm-eyebrow">{{ h.problem.eyebrow }}</p>
-    <h2 class="hm-h2" id="problem-title">{{ h.problem.title }} <mark class="hm-mark">{{ h.problem.title_mark }}</mark></h2>
-    <p class="hm-intro">{{ h.problem.text }}</p>
-    <div class="hm-grid3">
-      <article class="hm-card hm-poll">
-        <h3 class="hm-eyebrow">{{ h.problem.c1_label }}</h3>
-        <p class="hm-poll__big">{{ h.problem.c1_big }}</p>
-        <p class="hm-poll__text">{{ h.problem.c1_text }}</p>
-        <div class="hm-bar" role="img" aria-label="{{ h.problem.c1_aria }}"><span class="hm-bar__fill hm-bg-orange" style="width: 41%"></span></div>
-      </article>
-      <article class="hm-card hm-card--navy hm-poll">
-        <h3 class="hm-eyebrow hm-eyebrow--gold">{{ h.problem.c2_label }}</h3>
-        <p class="hm-poll__big hm-text-gold">{{ h.problem.c2_big }}</p>
-        <p class="hm-poll__text">{{ h.problem.c2_text }}</p>
-        <div class="hm-poll__rows">
-          <div class="hm-poll__row"><span class="hm-poll__swatch hm-bg-orange" style="width: 41%" aria-hidden="true"></span><span class="hm-poll__rowtext">{{ h.problem.c2_less }}</span></div>
-          <div class="hm-poll__row hm-poll__row--muted"><span class="hm-poll__swatch hm-bg-mist" style="width: 11%" aria-hidden="true"></span><span class="hm-poll__rowtext">{{ h.problem.c2_more }}</span></div>
-        </div>
-      </article>
-      <article class="hm-card hm-poll">
-        <h3 class="hm-eyebrow">{{ h.problem.c3_label }}</h3>
-        <p class="hm-poll__big">{{ h.problem.c3_big }}</p>
-        <p class="hm-poll__text">{{ h.problem.c3_text }}</p>
-        <div class="hm-bar hm-bar--split" role="img" aria-label="{{ h.problem.c3_aria }}"><span class="hm-bar__fill hm-bg-orange" style="width: 65%"></span><span class="hm-bar__fill hm-bg-navy" style="width: 21%"></span></div>
-        <p class="hm-poll__note">{{ h.problem.c3_note }}</p>
-      </article>
-    </div>
-    <div class="hm-foot">
-      <p class="hm-foot__text"><a href="{{ '/assets/files/poll-full-results-nov-2026.pdf' | relative_url }}">{{ h.problem.source }}</a></p>
-      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ h.problem.poll_url | relative_url }}">{{ h.problem.poll_btn }} {{ arrow }}</a>
-    </div>
-  </div>
-</section>
-
-<section class="hm-section hm-section--navy" aria-labelledby="statement-title">
-  <div class="hm-wrap hm-statement">
-    <h2 class="hm-statement__title" id="statement-title">{{ h.statement.title }} <mark class="hm-mark">{{ h.statement.title_mark }}</mark></h2>
-    <p class="hm-statement__text">{{ h.statement.text }} <b>{{ h.statement.text_bold }}</b></p>
-  </div>
-</section>
-
-<section class="hm-section hm-section--white" aria-labelledby="bandaid-title">
-  <div class="hm-wrap">
-    <div class="hm-bandaid">
-      <div class="hm-bandaid__copy">
-        <p class="hm-eyebrow">{{ h.bandaid.eyebrow }}</p>
-        <h2 class="hm-h2 hm-h2--xl" id="bandaid-title">{{ h.bandaid.title }}</h2>
-        <p class="hm-body">{{ h.bandaid.p1 }}</p>
-        <p class="hm-body">{{ h.bandaid.p2 }}</p>
+  <button class="cx-hero__pause" type="button" data-hero-pause data-pause="{% if es %}Pausar fotos{% else %}Pause photos{% endif %}" data-play="{% if es %}Reanudar fotos{% else %}Resume photos{% endif %}" hidden>{% if es %}Pausar fotos{% else %}Pause photos{% endif %}</button>
+  <div class="cx-wrap cx-hero__inner">
+    <div class="cx-hero__copy">
+      <p class="cx-eyebrow cx-eyebrow--gold">{% if es %}Cierres de escuelas del Distrito 65{% else %}District 65 school closures{% endif %}</p>
+      <h1 class="cx-h1" id="hero-title">{% if es %}Apostemos por Evanston. <br><mark class="cx-mark">Apoya al D65.</mark>{% else %}Let's bet on Evanston. <br><mark class="cx-mark">Show up for D65.</mark>{% endif %}</h1>
+      <p class="cx-hero__lead">{% if es %}La crisis financiera del D65 es real. Hay que actuar ya. Pero cerrar escuelas no arreglará nuestro presupuesto.{% else %}D65's financial crisis is real. Action is urgent. But closing schools won't fix our budget.{% endif %}</p>
+      <p class="cx-hero__strong">{% if es %}Hay palancas que no cierran ninguna escuela, y tenemos la oportunidad de construir un plan mejor.{% else %}There are levers that don't close a school, and we have an opportunity to build a better plan.{% endif %}</p>
+      <div class="cx-btns">
+        <a class="cx-btn cx-btn--gold" href="{{ url_hearings | relative_url }}">{% if es %}Habla en una audiencia{% else %}Speak at a hearing{% endif %}</a>
+        <a class="cx-btn cx-btn--ghost" href="#budget">{% if es %}Las palancas que no cierran escuelas{% else %}See the levers that don't close a school{% endif %}</a>
       </div>
-      <div class="hm-bandaid__side">
-        <div class="hm-runout">
-          <h3 class="hm-eyebrow hm-runout__label">{{ h.bandaid.chart_label }}</h3>
-          <div class="hm-runout__rows">
-            <div>
-              <p class="hm-runout__row"><span>{{ h.bandaid.open_label }}</span><span class="hm-runout__year">{{ h.bandaid.open_year }}</span></p>
-              <div class="hm-runout__track" aria-hidden="true"><span class="hm-bg-navy" style="width: 60%"></span></div>
-            </div>
-            <div>
-              <p class="hm-runout__row"><span>{{ h.bandaid.close_label }}</span><span class="hm-runout__year">{{ h.bandaid.close_year }}</span></p>
-              <div class="hm-runout__track" aria-hidden="true"><span class="hm-bg-navy" style="width: 60%"></span><span class="hm-bg-orange" style="width: 10%"></span></div>
-            </div>
-          </div>
-          <p class="hm-runout__note">{{ h.bandaid.chart_note }} <mark class="hm-mark">{{ h.bandaid.chart_note_mark }}</mark></p>
+      <p class="cx-credit">{% if es %}Fotos: Heather Eidson.{% else %}Photos: Heather Eidson.{% endif %}</p>
+    </div>
+    <div class="cx-hero__card" id="pledge">
+      {% include pledge/card.html lang=page.lang heading="h2" %}
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--navy cx-grid-bg" aria-labelledby="why-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Esto va más allá de dos escuelas. Se trata del futuro de Evanston.{% else %}This is bigger than two schools. It's about Evanston's future.{% endif %}</p>
+    <h2 class="cx-h2 cx-h2--md" id="why-title">{% if es %}Nuestra comunidad aceptará cambios difíciles si construyen algo mejor, pero este plan tiene <mark class="cx-mark">mucho más riesgo que beneficio.</mark>{% else %}Our community will accept hard change if it builds toward something better, but this current plan has <mark class="cx-mark">far more risk than benefit.</mark>{% endif %}</h2>
+    <p class="cx-body">{% if es %}Votar NO no es votar contra el cambio. Es decir sí a un plan más inteligente y sostenible que protege a los estudiantes, respeta el dinero de los contribuyentes y pone la educación primero.{% else %}Voting NO isn't a vote against change. It's a yes for a smarter, more sustainable plan that protects students, respects taxpayers' money and puts education first.{% endif %}</p>
+    <div class="cx-grid cx-grid--3">
+      <a class="cx-card cx-card--deep cx-card--link" href="#budget">
+        <span class="cx-card__num" aria-hidden="true">1</span>
+        <h3 class="cx-card__title">{% if es %}La responsabilidad fiscal empieza por todas las demás palancas.{% else %}Fiscal responsibility starts with every other lever.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Primero hay que agotar las palancas que no cierran escuelas. Cerrar dos escuelas nos da un año y crea nuevos problemas.{% else %}Exhaust the levers that don't close a school first. Closing two schools buys us one year, and creates new problems.{% endif %}</p>
+      </a>
+      <a class="cx-card cx-card--deep cx-card--link" href="#equity">
+        <span class="cx-card__num" aria-hidden="true">2</span>
+        <h3 class="cx-card__title">{% if es %}Nuestros estudiantes más vulnerables merecen protección.{% else %}Our most vulnerable learners deserve protection.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}El plan del D65 no es equitativo. Los niños pagan el costo, y algunos pagan mucho más que otros.{% else %}D65's plan is inequitable. Kids carry the cost, and some carry far more of it than others.{% endif %}</p>
+      </a>
+      <a class="cx-card cx-card--deep cx-card--link" href="#community">
+        <span class="cx-card__num" aria-hidden="true">3</span>
+        <h3 class="cx-card__title">{% if es %}La visión debe ir antes que los votos de cierre.{% else %}Vision should come before closure votes.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}El plan del D65 afectará a todo Evanston. Los votantes necesitan ver una hoja de ruta antes de que se les pida invertir.{% else %}D65's plan will impact all of Evanston. Voters need to see a roadmap before they are asked to invest.{% endif %}</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--white" id="budget" aria-labelledby="budget-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}1 de 3 · El presupuesto{% else %}1 of 3 · The budget{% endif %}</p>
+    <h2 class="cx-h2" id="budget-title">{% if es %}Responsabilidad fiscal es <mark class="cx-mark">agotar primero las demás palancas.</mark>{% else %}Fiscal responsibility means <mark class="cx-mark">exhausting other levers first.</mark>{% endif %}</h2>
+    <p class="cx-lead">{% if es %}Cerrar otra escuela el año pasado no nos habría evitado llegar a este punto, y cerrar dos ahora tampoco resolverá la crisis.{% else %}Closing another school last year wouldn't have kept us from being here today, and closing two now won't solve the crisis either.{% endif %}</p>
+    <p class="cx-body">{% if es %}Una buena administración demuestra disciplina financiera ahora, sin alterar para siempre los vecindarios de Evanston con un solo voto, y elige el camino hacia una solución duradera.{% else %}Real stewardship means showing financial discipline now, without permanently altering Evanston's neighborhoods for years to come with a single vote, and choosing the path to a lasting fix.{% endif %}</p>
+
+    <h3 class="cx-h3">{% if es %}Empecemos por las palancas que no cierran ninguna escuela.{% else %}Start with the levers that don't close a school.{% endif %}</h3>
+    <div class="cx-grid cx-grid--4">
+      <article class="cx-card">
+        <h4 class="cx-card__title">{% if es %}Vender Kingsley y Bessie Rhodes{% else %}Sell Kingsley and Bessie Rhodes{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}Propiedades sobrantes que el distrito puede vender en este año fiscal, sin nuevos cierres.{% else %}Surplus properties the district can sell this fiscal year, with no new closures.{% endif %}</p>
+      </article>
+      <article class="cx-card">
+        <h4 class="cx-card__title">{% if es %}Cerrar los distritos TIF que vencen{% else %}Retire expiring TIF districts{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}Terminarlos devuelve ingresos del impuesto a la propiedad a las escuelas y a otros organismos fiscales.{% else %}Ending them returns property tax revenue to the schools and other taxing bodies.{% endif %}</p>
+      </article>
+      <article class="cx-card">
+        <h4 class="cx-card__title">{% if es %}Hacer los recortes que no cierran escuelas{% else %}Make the cuts that don't close a school{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}Reducciones de costos administrativos específicas que la administración ya propuso.{% else %}Targeted administrative cost reductions the administration has already proposed.{% endif %}</p>
+      </article>
+      <article class="cx-card">
+        <h4 class="cx-card__title">{% if es %}Alianzas con Northwestern y la Ciudad{% else %}Partner with Northwestern and the City{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}Alianzas sistémicas y significativas que conviertan a las escuelas públicas de Evanston en un modelo nacional.{% else %}Meaningful, systemic partnerships that make Evanston's public schools a national model.{% endif %}</p>
+      </article>
+    </div>
+
+    <h3 class="cx-h3">{% if es %}Cerrar dos escuelas <mark class="cx-mark">no es una de esas palancas.</mark>{% else %}Closing two schools <mark class="cx-mark">isn't one of those levers.</mark>{% endif %}</h3>
+    <p class="cx-lead">{% if es %}El plan del D65 no resolverá nuestro problema y creará otros nuevos. Esto es lo que muestran las propias cifras del distrito.{% else %}D65's plan won't solve our problem, and it will create new ones. Here is what the district's own numbers show.{% endif %}</p>
+    <div class="cx-stats">
+      <div class="cx-stat">
+        <p class="cx-stat__label">{% if es %}Se acaban las reservas: escuelas abiertas{% else %}Reserves run out: schools stay open{% endif %}</p>
+        <p class="cx-stat__value">FY33</p>
+      </div>
+      <div class="cx-stat">
+        <p class="cx-stat__label">{% if es %}Se acaban las reservas: cerrar dos escuelas{% else %}Reserves run out: close two schools{% endif %}</p>
+        <p class="cx-stat__value">FY34</p>
+      </div>
+      <div class="cx-stat cx-stat--navy">
+        <p class="cx-stat__big">{% if es %}Dos escuelas por <mark class="cx-mark">un año más.</mark>{% else %}Two schools for <mark class="cx-mark">one more year.</mark>{% endif %}</p>
+        <p class="cx-stat__note">{% if es %}Según las propias cifras del distrito.{% else %}By the district's own numbers.{% endif %}</p>
+      </div>
+    </div>
+
+    <div class="cx-cols">
+      <div>
+        <h3 class="cx-cols__title">{% if es %}Por qué no resuelve el problema{% else %}Why it won't solve the problem{% endif %}</h3>
+        <div class="cx-point">
+          <h4>{% if es %}Solo compra un año{% else %}It buys us one year{% endif %}</h4>
+          <p>{% if es %}Luego vuelve el mismo déficit, porque cerrar escuelas no arregla lo que lo causa.{% else %}Then the same shortfall is back, because closing schools does not fix what is driving it.{% endif %}</p>
         </div>
-        <div class="hm-error">
-          <p class="hm-error__big">{{ h.bandaid.big }}</p>
-          <p class="hm-error__text">{{ h.bandaid.error_text }} <b>{{ h.bandaid.error_bold }}</b></p>
+        <div class="cx-point">
+          <h4>{% if es %}Ganancias mínimas{% else %}Minimal gains{% endif %}</h4>
+          <p>{% if es %}Cerrar Dewey y Lincolnwood ahorra unos $2.3 millones al año antes de los costos de transporte, de $21 millones en recortes.{% else %}Closing Dewey and Lincolnwood saves about $2.3 million a year before busing costs, out of $21 million in cuts.{% endif %}</p>
+        </div>
+        <div class="cx-point">
+          <h4>{% if es %}No podemos confiar en los números{% else %}We can't trust the numbers{% endif %}</h4>
+          <p>{% if es %}El D65 reconoció un error de pronóstico de $27 millones. Sus propios consultores luego encontraron otro error de $7.3 millones. Las necesidades de reparación están infladas.{% else %}D65 has acknowledged a $27 million forecasting error. Its own consultants then found another $7.3 million error. Building repair needs are overstated.{% endif %} <a class="cx-link" href="https://evanstonroundtable.com/2026/11/15/parents-say-cutting-capital-spending-to-4-7-million-would-leave-district-65-in-same-financial-position-as-closing-dewey-lincolnwood/" target="_blank" rel="noopener">{% if es %}Ver las cifras de reparación{% else %}See the repair numbers{% endif %}</a></p>
+        </div>
+      </div>
+      <div>
+        <h3 class="cx-cols__title">{% if es %}Los nuevos problemas que crea{% else %}The new problems it creates{% endif %}</h3>
+        <div class="cx-point">
+          <h4>{% if es %}Edificios a cambio de autobuses{% else %}Buildings traded for busing{% endif %}</h4>
+          <p>{% if es %}Cerrar edificios traslada costos al transporte, que no deja de subir. Los ahorros se cuentan antes de los costos de transporte, y el costo de trasladar el programa STEP de Lincolnwood no está en el presupuesto.{% else %}Closing buildings shifts costs into rising transportation and busing expenses. The savings are counted before busing costs, and the cost of moving Lincolnwood's STEP program is not in the budget.{% endif %}</p>
+        </div>
+        <div class="cx-point">
+          <h4>{% if es %}Una enorme perturbación{% else %}A massive amount of disruption{% endif %}</h4>
+          <p>{% if es %}Nuevos límites, nuevas rutas de autobús y casi 650 niños empezando de nuevo, a cambio de un año.{% else %}New boundaries, new bus routes and nearly 650 children starting over, in exchange for one year.{% endif %}</p>
+        </div>
+        <div class="cx-point">
+          <h4>{% if es %}Un déficit de aprendizaje y un déficit de confianza{% else %}A deficit of learning and a deficit of trust{% endif %}</h4>
+          <p>{% if es %}El plan cambia un déficit presupuestario de corto plazo por dos de largo plazo: aprendizaje perdido para los niños y confianza perdida en toda la comunidad.{% else %}The plan trades a short-term budget deficit for two long-term ones: lost learning for kids, and lost trust across the community.{% endif %}</p>
         </div>
       </div>
     </div>
-    <p class="hm-source"><a href="https://evanstonroundtable.com/2026/11/05/district-65-now-says-financial-projection-off-by-27-35-million-school-closure-savings-less-than-previously-forecasted/" target="_blank" rel="noopener">{{ h.bandaid.source }}</a></p>
-  </div>
-</section>
 
-<section class="hm-section hm-section--cream" id="options" aria-labelledby="options-title">
-  <div class="hm-wrap">
-    <p class="hm-eyebrow">{{ h.options.eyebrow }}</p>
-    <h2 class="hm-h2" id="options-title">{{ h.options.title }} <br>{{ h.options.title2 }}</h2>
-    <p class="hm-intro hm-intro--wide">{{ h.options.text }}</p>
-    <ol class="hm-grid3 hm-levers">
-      {%- for item in h.options.items %}
-      <li class="hm-card hm-lever">
-        <span class="hm-lever__num" aria-hidden="true">{{ forloop.index | prepend: '0' }}</span>
-        <h3 class="hm-lever__title">{{ item.title }}</h3>
-        <p class="hm-lever__text">{{ item.text }}</p>
-      </li>
-      {%- endfor %}
-    </ol>
-
-    <figure class="hm-card hm-charts">
-      <figcaption class="hm-charts__head">
-        <span class="hm-charts__title">{{ h.options.chart_title }}</span>
-        <span class="hm-legend">
-          <span class="hm-legend__item"><span class="hm-legend__key hm-legend__key--base" aria-hidden="true"></span>{{ h.options.legend_base }}</span>
-          <span class="hm-legend__item"><span class="hm-legend__key hm-legend__key--int" aria-hidden="true"></span>{{ h.options.legend_int }}</span>
-          <span class="hm-legend__item"><span class="hm-legend__key hm-legend__key--open" aria-hidden="true"></span>{{ h.options.legend_open }}</span>
-        </span>
-      </figcaption>
-      <div class="hm-charts__row">
-        <div class="hm-chart">
-          <h3 class="hm-chart__title">{{ h.options.chart1_title }}</h3>
-          <img src="{{ '/assets/img/options-chart-district.png' | relative_url }}" alt="{{ h.options.chart1_alt }}" width="456" height="198" loading="lazy">
-          <p class="hm-chart__caption">{{ h.options.chart1_caption_html }}</p>
-        </div>
-        <div class="hm-chart">
-          <h3 class="hm-chart__title">{{ h.options.chart2_title }}</h3>
-          <img src="{{ '/assets/img/options-chart-levers.png' | relative_url }}" alt="{{ h.options.chart2_alt }}" width="450" height="196" loading="lazy">
-          <p class="hm-chart__caption">{{ h.options.chart2_caption_html }}</p>
-        </div>
-      </div>
-      <p class="hm-charts__note"><b>{{ h.options.note_bold }}</b> {{ h.options.note }} <a href="{{ options_url | relative_url }}">{{ h.options.model_link }}</a></p>
-    </figure>
-    <div class="hm-foot hm-foot--wide">
-      <p class="hm-foot__text">{{ h.options.disclaimer }}</p>
-      <a class="hm-btn hm-btn--navy hm-btn--lg hm-btn--display" href="{{ options_url | relative_url }}">{{ h.options.explore_btn }} {{ arrow }}</a>
-    </div>
-  </div>
-</section>
-
-<section class="hm-section hm-section--navy hm-act" id="act" aria-labelledby="act-title">
-  <svg class="hm-act__sun" width="420" height="420" viewBox="0 0 200 200" aria-hidden="true" focusable="false"><circle cx="100" cy="100" r="44" fill="#D9B96E"/><g stroke="#D9B96E" stroke-width="7" stroke-linecap="round"><line x1="100" y1="8" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="192"/><line x1="8" y1="100" x2="40" y2="100"/><line x1="160" y1="100" x2="192" y2="100"/><line x1="35" y1="35" x2="58" y2="58"/><line x1="142" y1="142" x2="165" y2="165"/><line x1="35" y1="165" x2="58" y2="142"/><line x1="142" y1="58" x2="165" y2="35"/></g></svg>
-  <div class="hm-wrap hm-act__inner">
-    <h2 class="hm-act__title" id="act-title">{{ h.act.title }} <br><mark class="hm-mark">{{ h.act.title_mark }}</mark></h2>
-    <p class="hm-act__lead">{{ h.act.text }}</p>
-    <div class="hm-act__grid">
-      <div class="hm-step hm-step--gold">
-        <p class="hm-step__label">{{ h.act.email_label }}</p>
-        <h3 class="hm-step__title hm-step__title--grow">{{ h.act.email_title }}</h3>
-        <a class="hm-btn hm-btn--navy hm-step__btn" href="{{ t.urls.write | relative_url }}">{{ h.act.email_btn }}</a>
-      </div>
-      <div class="hm-step">
-        <p class="hm-step__label">{{ h.act.show_label }}</p>
-        <h3 class="hm-step__title">{{ h.act.show_title }}</h3>
-        <p class="hm-step__text">{{ h.act.show_text }}</p>
-        <a class="hm-btn hm-btn--gold hm-step__btn" href="#event-title">{% if page.lang == 'es' %}Ver horarios de las audiencias{% else %}View hearing schedule{% endif %}</a>
-      </div>
-      <div class="hm-step">
-        <p class="hm-step__label">{{ h.act.sign_label }}</p>
-        <h3 class="hm-step__title">{{ h.act.sign_title }}</h3>
-        <p class="hm-step__text">{{ h.act.sign_text }}</p>
-        <a class="hm-btn hm-btn--gold hm-step__btn" href="{{ site.links.sign_letter }}" target="_blank" rel="noopener">{{ h.act.sign_btn }}</a>
-      </div>
-      <div class="hm-step" data-hm-share data-url="{{ share_url }}" data-copied="{{ h.act.copied }}">
-        <p class="hm-step__label">{{ h.act.share_label }}</p>
-        <h3 class="hm-step__title">{{ h.act.share_title }}</h3>
-        <p class="hm-step__text">{{ h.act.share_text }}</p>
-        <button type="button" class="hm-btn hm-btn--gold hm-step__btn" data-hm-copy><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg><span data-hm-copy-label>{{ h.act.copy_btn }}</span></button>
-        <span class="hm-visually-hidden" role="status" aria-live="polite" data-hm-copy-status></span>
-        <div class="hm-share">
-          {%- capture share_msg -%}{{ h.act.share_message }}{{ share_url }}{%- endcapture %}
-          <a class="hm-share__btn" href="mailto:?subject={{ h.act.share_subject | url_encode | replace: '+', '%20' }}&amp;body={{ share_msg | url_encode | replace: '+', '%20' }}" aria-label="{{ h.act.share_email }}" title="{{ h.act.share_email }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 7l9 6 9-6"/></svg></a>
-          <a class="hm-share__btn" href="sms:?&amp;body={{ share_msg | url_encode | replace: '+', '%20' }}" aria-label="{{ h.act.share_sms }}" title="{{ h.act.share_sms }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></a>
-          <a class="hm-share__btn" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_encode }}" target="_blank" rel="noopener" aria-label="{{ h.act.share_fb }}" title="{{ h.act.share_fb }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V10H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/></svg></a>
-          <button type="button" class="hm-share__btn" data-dialog-open="share-dialog" aria-haspopup="dialog" aria-label="{{ h.act.share_ig }}" title="{{ h.act.share_ig }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg></button>
-        </div>
+    <div class="cx-cta-row">
+      <p class="cx-cta-row__text"><mark class="cx-mark">{% if es %}Y tenemos la oportunidad de construir un plan mejor.{% else %}And we have an opportunity to build a better plan.{% endif %}</mark></p>
+      <div class="cx-cta-row__actions">
+        <a class="cx-btn cx-btn--navy" href="#pledge">{{ plc.button }}</a>
+        <a class="cx-link" href="{{ url_options | relative_url }}">{% if es %}Ver las otras opciones{% else %}See the other options{% endif %}</a>
       </div>
     </div>
   </div>
 </section>
 
-<a class="hm-next" href="{{ t.urls.new_homes | relative_url }}">
-  <span class="hm-wrap hm-next__inner">
-    <span class="hm-next__text">{{ h.next.text }}</span>
-    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-  </span>
-</a>
+<section class="cx-section cx-section--navy cx-grid-bg" id="equity" aria-labelledby="equity-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}2 de 3 · Equidad{% else %}2 of 3 · Equity{% endif %}</p>
+    <h2 class="cx-h2" id="equity-title">{% if es %}Nuestros estudiantes más vulnerables <mark class="cx-mark">merecen protección.</mark>{% else %}Our most vulnerable learners <mark class="cx-mark">deserve protection.</mark>{% endif %}</h2>
+    <p class="cx-lead">{% if es %}El plan del D65 no es equitativo. Los niños pagan el costo. Estos son los más afectados.{% else %}D65's plan is inequitable. Kids carry the cost. Here is who it hits hardest.{% endif %}</p>
+    <p class="cx-body">{% if es %}La equidad no es un eslogan. Es una responsabilidad, y debe demostrarse antes de un voto de cierre, no después.{% else %}Equity isn't a talking point. It's a responsibility, and it must be demonstrated before, not after, a closure vote.{% endif %}</p>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card cx-card--deep">
+        <h3 class="cx-card__title">{% if es %}Familias de TWI: tercera pérdida seguida{% else %}TWI families: a third loss in a row{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Dewey tiene un programa de inmersión bilingüe en español (TWI). El D65 ya cerró Bessie Rhodes y terminó el programa TWI de Willard. Ahora las familias de TWI de Dewey también serían desplazadas.{% else %}Dewey is home to a Spanish Two-Way Immersion program. D65 already closed Bessie Rhodes and ended Willard's TWI program. Now Dewey's TWI families would be uprooted too.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <h3 class="cx-card__title">{% if es %}Estudiantes de STEP: rutinas rotas{% else %}STEP students: routines uprooted{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}El programa STEP de Lincolnwood atiende a estudiantes con autismo que dependen de salones, personal y rutinas conocidos. El plan traslada todo el programa a otra escuela. Cualquier traslado necesita un plan con costos completos que preserve los espacios especializados, los apoyos terapéuticos, la seguridad y la dignidad de los estudiantes.{% else %}Lincolnwood's STEP program serves students with autism who rely on familiar rooms, staff and routines. The plan moves the whole program to another school. Any move needs a fully costed plan that preserves specialized spaces, therapeutic supports, student safety and dignity.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <h3 class="cx-card__title">{% if es %}Estudiantes con IEP y planes 504: apoyo interrumpido{% else %}Students with IEPs and 504s: support interrupted{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Estos estudiantes necesitan continuidad en su atención, personal especializado y apoyo individualizado durante cualquier transición, con espacio propio para terapia del habla, ocupacional y física, no pasillos ruidosos ni armarios convertidos.{% else %}These students need continuity of care, specialized staffing and individualized support through any transition, with dedicated space for speech, occupational and physical therapy, not noisy hallways or converted storage closets.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <h3 class="cx-card__title">{% if es %}Casi 650 niños empezando de nuevo{% else %}Nearly 650 children starting over{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Cada uno perdería su escuela, sus maestros y su comunidad. Muchos más niños tendrían que tomar el autobús o caminar largas distancias para llegar a la escuela.{% else %}Each would lose their school, teachers and community. Many more children would ride a bus or walk long distances to get to school.{% endif %}</p>
+      </article>
+    </div>
+    <aside class="cx-callout" aria-labelledby="dual-title">
+      <p class="cx-eyebrow">{% if es %}A contracorriente del estado{% else %}Out of step with the state{% endif %}</p>
+      <h3 class="cx-callout__title" id="dual-title">{% if es %}Illinois está <mark class="cx-mark">invirtiendo en la educación bilingüe.</mark>{% else %}Illinois is <mark class="cx-mark">investing in dual language education.</mark>{% endif %}</h3>
+      <p>{% if es %}Una nueva ley estatal, la <a class="cx-link" href="https://www.ilga.gov/Legislation/PublicActs/View/104-0266" target="_blank" rel="noopener">Ley Pública 104-0266</a>, ordena a la Junta de Educación del Estado publicar, a más tardar el 15 de diciembre de 2026, una guía para crear y ampliar programas de educación bilingüe, y tratar la educación bilingüe como parte de su marco de equidad. El plan del D65 vuelve a trasladar un programa establecido, sin un análisis del impacto.{% else %}A new state law, <a class="cx-link" href="https://www.ilga.gov/Legislation/PublicActs/View/104-0266" target="_blank" rel="noopener">Public Act 104-0266</a>, directs the State Board of Education to issue guidance on starting and expanding dual language programs by December 15, 2026, and to treat dual language education as part of its equity framework. D65's plan moves an established program again, without an analysis of the impact.{% endif %}</p>
+    </aside>
+  </div>
+</section>
+
+<section class="cx-section cx-section--mist" id="last-closures" aria-labelledby="last-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}El D65 todavía está evaluando{% else %}D65 is still assessing{% endif %}</p>
+    <h2 class="cx-h2 cx-h2--md" id="last-title">{% if es %}Los últimos cierres fueron en junio. Todavía estamos descubriendo lo que les costaron a los niños.{% else %}The last closures were in June. We are still learning what they cost kids.{% endif %}</h2>
+    <div class="cx-split">
+      <div>
+        <p class="cx-body">{% if es %}Kingsley y Bessie Rhodes cerraron en junio, y unos 800 estudiantes fueron asignados a un edificio nuevo este año escolar. El D65 todavía está evaluando el impacto en esos niños, y las primeras señales son preocupantes.{% else %}Kingsley and Bessie Rhodes closed in June, and about 800 students were assigned to a new building this school year. D65 is still assessing the impact on those children, and the early signs are troubling.{% endif %}</p>
+        <p class="cx-big-line">{% if es %}Según el propio conteo del distrito, <mark class="cx-mark">76 niños</mark> cambiarían de escuela por segundo año seguido.{% else %}By the district's count, <mark class="cx-mark">76 children</mark> would change schools for the second year in a row.{% endif %}</p>
+        <p class="cx-body">{% if es %}Antes de cerrar dos escuelas más, la junta debería saber lo que los dos últimos cierres les hicieron a los niños.{% else %}Before it closes two more schools, the board should know what the last two closures did to kids.{% endif %}</p>
+      </div>
+      <figure class="cx-photo">
+        <img src="{{ '/assets/img/photo-closures-crowd.jpg' | relative_url }}" alt="{% if es %}Familias con carteles en una reunión al aire libre contra los cierres de escuelas.{% else %}Families holding signs at an outdoor gathering against the school closures.{% endif %}" width="1200" height="800" loading="lazy" decoding="async">
+        <figcaption class="cx-credit">{% if es %}Foto: Heather Eidson{% else %}Photo: Heather Eidson{% endif %}</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--navy" aria-labelledby="research-title">
+  <div class="cx-wrap">
+    <h2 class="cx-eyebrow" id="research-title">{% if es %}Lo que han encontrado las investigaciones sobre cierres de escuelas{% else %}What research on school closures has found{% endif %}</h2>
+    <div class="cx-grid cx-grid--3">
+      <article class="cx-card cx-card--deep cx-card--plain">
+        <h3 class="cx-card__title">{% if es %}Chicago: 49 escuelas primarias cerradas{% else %}Chicago: 49 elementary schools closed{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Los estudiantes de las escuelas cerradas quedaron unos dos meses atrasados en matemáticas, y la brecha seguía ahí cuatro años después. Los resultados de lectura también bajaron, incluso en las escuelas que recibieron a los estudiantes.{% else %}Students from closed schools fell about two months behind in math, and the gap was still there four years later. Reading scores dipped too, including at the schools that took students in.{% endif %}</p>
+        <a class="cx-source" href="https://consortium.uchicago.edu/publications/school-closings-chicago-staff-and-student-experiences-and-academic-outcomes" target="_blank" rel="noopener">University of Chicago Consortium on School Research, 2018</a>
+      </article>
+      <article class="cx-card cx-card--deep cx-card--plain">
+        <h3 class="cx-card__title">{% if es %}Filadelfia: 30 escuelas cerradas{% else %}Philadelphia: 30 schools closed{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Aumentaron las ausencias de los estudiantes desplazados, y bajó el rendimiento de los estudiantes de las escuelas que los recibieron.{% else %}Absences rose for displaced students, and achievement fell for students at the schools that received them.{% endif %}</p>
+        <a class="cx-source" href="https://ideas.repec.org/a/eee/ecoedu/v69y2019icp25-60.html" target="_blank" rel="noopener">Economics of Education Review, 2019</a>
+      </article>
+      <article class="cx-card cx-card--deep cx-card--plain">
+        <h3 class="cx-card__title">{% if es %}Un distrito urbano que se encoge{% else %}A shrinking urban district{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Los estudiantes desplazados por los cierres sufrieron efectos negativos tanto en sus resultados como en su asistencia.{% else %}Students displaced by closures saw adverse effects on both test scores and attendance.{% endif %}</p>
+        <a class="cx-source" href="https://ideas.repec.org/a/eee/juecon/v71y2012i2p189-203.html" target="_blank" rel="noopener">Journal of Urban Economics, 2012</a>
+      </article>
+      <article class="cx-card cx-card--deep cx-card--plain cx-span-all">
+        <h3 class="cx-card__title">{% if es %}Texas: registros de todo el estado{% else %}Texas: statewide records{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Los resultados, la asistencia y la conducta empeoraron después de un cierre, y los problemas de conducta persistieron. Entre los 25 y los 27 años, estos estudiantes tenían menos estudios universitarios, menos empleo y menores ingresos.{% else %}Test scores, attendance and behavior all suffered after a closure, and behavior problems persisted. By ages 25 to 27, these students had less college, less employment and lower earnings.{% endif %}</p>
+        <a class="cx-source" href="https://edworkingpapers.com/ai24-963" target="_blank" rel="noopener">Annenberg Institute at Brown University, {% if es %}documento de trabajo{% else %}working paper{% endif %}, 2024</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--white" aria-labelledby="words-title">
+  <div class="cx-wrap">
+    <h2 class="cx-eyebrow" id="words-title">{% if es %}En sus palabras{% else %}In their words{% endif %}</h2>
+    <div class="cx-split cx-split--quote">
+      <div>
+        <figure class="cx-quote">
+          <blockquote{% if es %} lang="en"{% endif %}><p>“It is a shame to see our TWI program dwindle away year after year. A vote to advance this plan is a vote for further consolidation of the TWI program with no plan in place for its future preservation for our students, teachers, and families across any school with TWI. Our Spanish speaking community suffers loss after loss at the hands of this administration. When does it end?”</p></blockquote>
+          <figcaption>{% if es %}Amy Stewart, madre de familia de TWI en Dewey{% else %}Amy Stewart, Dewey TWI parent{% endif %}</figcaption>
+        </figure>
+        <p class="cx-body">{% if es %}Nuestros estudiantes merecen que su futuro lo defina una visión clara y positiva, no una perturbación reactiva. Antes de su voto decisivo, la junta necesita escuchar lo que el plan del D65 les haría a los niños, y medir el efecto en el aprendizaje y la equidad, no solo en el costo.{% else %}Our students deserve to have their futures shaped by a clear, positive vision rather than reactive disruption. Before the board takes its deciding vote, it needs to hear what D65's plan would do to children, and measure the effect on learning and equity, not only on cost.{% endif %}</p>
+      </div>
+      <figure class="cx-photo">
+        <img src="{{ '/assets/img/photo-twi-speaker.jpg' | relative_url }}" alt="{% if es %}Un padre habla frente a los micrófonos de la prensa en una reunión comunitaria.{% else %}A parent speaks into news microphones at a community gathering.{% endif %}" width="845" height="900" loading="lazy" decoding="async">
+        <figcaption class="cx-credit">{% if es %}Foto: Heather Eidson{% else %}Photo: Heather Eidson{% endif %}</figcaption>
+      </figure>
+    </div>
+    <div class="cx-cta-row">
+      <p class="cx-cta-row__text"><mark class="cx-mark">{% if es %}Y tenemos la oportunidad de construir un plan mejor.{% else %}And we have an opportunity to build a better plan.{% endif %}</mark></p>
+      <div class="cx-cta-row__actions">
+        <a class="cx-btn cx-btn--navy" href="#pledge">{{ plc.button }}</a>
+        <a class="cx-link" href="{{ t.urls.write | relative_url }}">{% if es %}Cuéntale tu historia a la junta{% else %}Tell the board your story{% endif %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<figure class="cx-illustration">
+  <img src="{{ '/assets/img/illustration-lights-on-band.jpg' | relative_url }}" alt="" width="1280" height="458" loading="lazy" decoding="async">
+</figure>
+
+<section class="cx-section cx-section--cream cx-grid-bg" id="community" aria-labelledby="community-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}3 de 3 · Toda nuestra comunidad{% else %}3 of 3 · Our whole community{% endif %}</p>
+    <h2 class="cx-h2" id="community-title">{% if es %}La visión debe ir <mark class="cx-mark">antes que los votos de cierre.</mark>{% else %}Vision should come <mark class="cx-mark">before closure votes.</mark>{% endif %}</h2>
+    <p class="cx-lead">{% if es %}El plan del D65 afectará a todo Evanston. Construyamos un plan que valga la pena apoyar.{% else %}D65's plan will impact all of Evanston. Let's build a plan worth supporting.{% endif %}</p>
+    <p class="cx-body">{% if es %}Cada residente, tenga o no hijos en el Distrito 65, tiene un interés directo en la calidad, la equidad y la salud financiera a largo plazo de las escuelas públicas de Evanston.{% else %}Every resident, whether they have children in District 65 or not, has a direct stake in the quality, equity and long-term financial health of Evanston's public schools.{% endif %}</p>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card cx-card--navy cx-card--plain">
+        <h3 class="cx-card__title">{% if es %}No hay que despejar el tablero. Hay que construir sobre él.{% else %}Don't clear the deck. Stack it.{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Viene una superintendencia permanente y hay elecciones de la junta por delante. Cerrar escuelas ahora dejaría a los nuevos líderes ejecutando un plan que no escribieron, con el problema presupuestario de largo plazo todavía sin resolver.{% else %}A permanent superintendent is coming and board elections are ahead. Closing schools now would leave new leaders carrying out a plan they didn't author, with the long-term budget problem still unsolved.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--navy cx-card--plain">
+        <h3 class="cx-card__title">{% if es %}Que los votantes decidan el mapa escolar{% else %}Let voters decide the footprint{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Mantener las escuelas abiertas ahora, hacer los ajustes presupuestarios que no cierran escuelas y llevar a los votantes un plan integral que haga avanzar las metas académicas.{% else %}Keep schools open now, make the budget adjustments that don't close a school, and bring voters a comprehensive plan that moves academic goals forward.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--navy cx-card--plain cx-span-all">
+        <h3 class="cx-card__title">{% if es %}La confianza es un activo financiero{% else %}Trust is a financial asset{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}La confianza de la comunidad sostiene la inscripción, la inversión pública y los futuros referendos. La perturbación repetida sin una visión de largo plazo la erosiona, y alimenta la caída de la inscripción que ya está afectando el presupuesto.{% else %}Community confidence supports enrollment, public investment and future referenda. Repeated disruption without a long-term vision erodes it, and feeds the enrollment decline already hurting the budget.{% endif %}</p>
+      </article>
+    </div>
+
+    <h3 class="cx-h3">{% if es %}Cerrar escuelas va en contra de la ciudad que Evanston planea ser.{% else %}Closing schools works against the city Evanston is planning to be.{% endif %}</h3>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card cx-card--white cx-card--plain">
+        <h4 class="cx-card__title">{% if es %}Una ciudad caminable{% else %}A walkable city{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}Evanston es una ciudad donde los niños caminan a la escuela, y el plan integral adoptado por la ciudad prioriza rutas seguras para llegar a pie y en bicicleta. El plan del D65 pondría a muchos más niños en un autobús o en largas caminatas.{% else %}Evanston is a city where kids walk to school, and the city's adopted comprehensive plan prioritizes safe walking and biking routes to get them there. D65's plan would put many more children on a bus or on long walks.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--white cx-card--plain">
+        <h4 class="cx-card__title">{% if es %}Una ciudad que crece{% else %}A growing city{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}El plan de la ciudad proyecta que la población de Evanston crecerá entre un 6% y un 40% para 2045, con nuevas viviendas en el centro y cerca del transporte público. El plan del D65 cierra escuelas justo cuando la ciudad planifica para más residentes.{% else %}The city's plan projects Evanston's population growing 6% to 40% by 2045, with new homes focused downtown and near transit. D65's plan closes schools just as the city plans for more residents.{% endif %}</p>
+        <a class="cx-card__link" href="{{ t.urls.new_homes | relative_url }}">{% if es %}Nuevas viviendas y escuelas{% else %}New homes and schools{% endif %}</a>
+      </article>
+      <article class="cx-card cx-card--white cx-card--plain cx-span-all">
+        <h4 class="cx-card__title">{% if es %}Una ciudad para las familias{% else %}A city for families{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}El plan de la ciudad fija la meta de aumentar el número de familias que eligen vivir aquí, y se compromete a trabajar con el Distrito 65 para atraerlas y retenerlas. Cerrar escuelas primero va en contra de esa meta.{% else %}The city's plan sets a goal of increasing the number of families who choose to live here, and commits to working with District 65 to attract and keep them. Closing schools first works against that goal.{% endif %}</p>
+      </article>
+    </div>
+
+    <h3 class="cx-h3">{% if es %}Si queremos salud fiscal a largo plazo, tenemos que apostar por Evanston.{% else %}If we want long-term fiscal health, we have to bet on Evanston.{% endif %}</h3>
+    <p class="cx-body">{% if es %}Nuestra comunidad tiene un historial comprobado de aprobar referendos. Pero los votantes necesitan ver una hoja de ruta transparente y colectiva antes de que se les pida invertir, y el plan del D65 pone en riesgo su confianza.{% else %}Our community has a proven record of passing referenda. But voters need to see a transparent, collective roadmap before they are asked to invest, and D65's plan puts their trust at risk.{% endif %}</p>
+    <div class="cx-poll">
+      <div>
+        <p class="cx-eyebrow">{% if es %}Lo que los votantes de Evanston le dijeron a una encuestadora independiente{% else %}What Evanston voters told an independent pollster{% endif %}</p>
+        <p class="cx-poll__big"><mark class="cx-mark">{% if es %}Casi 4 a 1{% else %}Nearly 4 to 1{% endif %}</mark></p>
+        <p class="cx-poll__text">{% if es %}Los votantes dicen que cerrar Dewey y Lincolnwood los hace menos propensos, no más, a apoyar un referéndum.{% else %}Voters say closing Dewey and Lincolnwood makes them less likely, not more likely, to support a referendum.{% endif %}</p>
+      </div>
+      <div>
+        <div class="cx-poll__bar"><span class="cx-poll__fill" style="width: 61%" aria-hidden="true"></span><span>{% if es %}41% menos propensos{% else %}41% less likely{% endif %}</span></div>
+        <div class="cx-poll__bar"><span class="cx-poll__fill cx-poll__fill--muted" style="width: 16%" aria-hidden="true"></span><span>{% if es %}11% más propensos{% else %}11% more likely{% endif %}</span></div>
+        <p class="cx-poll__source">{% if es %}Public Policy Polling, 665 votantes registrados de Evanston, 4 y 5 de noviembre de 2026. Margen de error de ±3.8 puntos.{% else %}Public Policy Polling, 665 registered Evanston voters, Nov. 4 and 5, 2026. Margin of error ±3.8 points.{% endif %} <a href="{{ t.urls.poll | relative_url }}">{% if es %}Más sobre la encuesta{% else %}Learn more about the poll{% endif %}</a></p>
+      </div>
+    </div>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card cx-card--white cx-card--plain">
+        <h4 class="cx-card__title">{% if es %}No son solo los padres{% else %}This is not just parents{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}La mayoría de los votantes encuestados no tiene hijos en una escuela del D65. El 66% quiere que la junta espere para cerrar escuelas hasta tener un plan a largo plazo.{% else %}Most voters polled have no child in a D65 school. 66% want the board to hold off on closing schools until it has a long-term plan.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--white cx-card--plain">
+        <h4 class="cx-card__title">{% if es %}Toda solución a largo plazo necesita a los votantes{% else %}Every long-term fix needs voters{% endif %}</h4>
+        <p class="cx-card__text">{% if es %}Todo plan que mantenga al D65 en terreno firme a largo plazo incluye un referéndum, también el del distrito. Cerrar escuelas aleja a los mismos votantes de los que depende un referéndum.{% else %}Every plan that keeps D65 on solid ground for the long term includes a referendum, the district's included. Closing schools drives away the very voters a referendum depends on.{% endif %}</p>
+      </article>
+    </div>
+    {%- capture share_subject -%}{% if es %}Un plan mejor para el D65{% else %}A better plan for D65{% endif %}{%- endcapture -%}
+    {%- capture share_body -%}{% if es %}Cerrar dos escuelas solo le da al D65 un año más. Hay un plan mejor: {% else %}Closing two schools only buys D65 one more year. There's a better plan: {% endif %}{{ share_url }}{%- endcapture -%}
+    <div class="cx-cta-row">
+      <p class="cx-cta-row__text"><mark class="cx-mark">{% if es %}Y tenemos la oportunidad de construir un plan mejor.{% else %}And we have an opportunity to build a better plan.{% endif %}</mark></p>
+      <div class="cx-cta-row__actions">
+        <a class="cx-btn cx-btn--navy" href="#pledge">{{ plc.button }}</a>
+        <a class="cx-link" href="mailto:?subject={{ share_subject | url_encode | replace: '+', '%20' }}&amp;body={{ share_body | url_encode | replace: '+', '%20' }}">{% if es %}Compártelo con un vecino{% else %}Share this with a neighbor{% endif %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--white" id="better-plan" aria-labelledby="better-title">
+  <div class="cx-wrap">
+    <p class="cx-eyebrow">{% if es %}Un camino mejor{% else %}A brighter path forward{% endif %}</p>
+    <h2 class="cx-h2" id="better-title">{% if es %}Un legado de visión, <mark class="cx-mark">no de manejo de crisis.</mark>{% else %}A legacy of vision, <mark class="cx-mark">not crisis management.</mark>{% endif %}</h2>
+    <p class="cx-lead">{% if es %}El Distrito 65 enfrenta una decisión clave: seguir reaccionando a las crisis o construir la base para el éxito a largo plazo.{% else %}District 65 has a defining choice: keep reacting to crises, or build the foundation for long-term success.{% endif %}</p>
+    <p class="cx-body">{% if es %}Hay opciones que equilibran el presupuesto con ambas escuelas abiertas. Así se ve un plan mejor.{% else %}There are options that balance the budget with both schools open. Here is what a better plan looks like.{% endif %}</p>
+    <div class="cx-grid cx-grid--3">
+      <article class="cx-card cx-card--cream cx-card--plain">
+        <span class="cx-card__num" aria-hidden="true">1</span>
+        <h3 class="cx-card__title">{% if es %}Empieza por los estudiantes{% else %}It starts with students{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Primero van lo académico, la educación especial, las artes y programas como la inmersión bilingüe (TWI).{% else %}Strong academics, special education, the arts and programs like Two-Way Immersion come first.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--cream cx-card--plain">
+        <span class="cx-card__num" aria-hidden="true">2</span>
+        <h3 class="cx-card__title">{% if es %}Se basa en números confiables{% else %}It rests on numbers everyone can trust{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Ningún voto de cierre hasta que termine la revisión financiera del distrito y se prueben otras opciones.{% else %}No closure vote until the district's financial review is finished and other options are tested.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--cream cx-card--plain">
+        <span class="cx-card__num" aria-hidden="true">3</span>
+        <h3 class="cx-card__title">{% if es %}Se construye con la comunidad{% else %}It is built with the community{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Padres, maestros y vecinos estamos listos para ayudar. Cuenten con nosotros.{% else %}Parents, teachers and neighbors are ready to help. Use us.{% endif %}</p>
+      </article>
+      <article class="cx-card cx-card--cream cx-card--plain cx-span-all">
+        <span class="cx-card__num" aria-hidden="true">4</span>
+        <h3 class="cx-card__title">{% if es %}Se gana un referéndum{% else %}It earns a referendum{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Un plan a largo plazo y fiscalmente responsable es lo que los votantes dicen que ganaría su apoyo.{% else %}A long-term, fiscally responsible plan is what voters say would win their support.{% endif %}</p>
+      </article>
+    </div>
+
+    <div class="cx-video">
+      <a href="{{ url_video | relative_url }}"><img src="{{ '/assets/img/video-lights-on.jpg' | relative_url }}" alt="{% if es %}Video: Podemos mantener las luces encendidas{% else %}Video: We Can Keep the Lights On{% endif %}" width="1280" height="720" loading="lazy" decoding="async"></a>
+      <div>
+        <p class="cx-eyebrow">Video</p>
+        <h3 class="cx-video__title">{% if es %}Podemos mantener las luces encendidas{% else %}We Can Keep The Lights On{% endif %}</h3>
+        <p class="cx-body">{% if es %}Un mensaje de esperanza para la Junta Escolar del D65.{% else %}A message of hope for the D65 School Board.{% endif %}</p>
+        <div class="cx-btns">
+          <a class="cx-btn cx-btn--navy" href="{{ url_video | relative_url }}">{% if es %}Ver el video{% else %}Watch the video{% endif %}</a>
+          <a class="cx-btn cx-btn--outline" href="{{ url_options | relative_url }}">{% if es %}Explorar un camino mejor{% else %}Explore a brighter path forward{% endif %}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cx-closing">
+      <p class="cx-statement">{% if es %}Construyamos el plan juntos, llevémoslo a los votantes y <mark class="cx-mark">sigámoslo como una sola comunidad.</mark>{% else %}Let's build the plan together, bring it to voters, and <mark class="cx-mark">see it through as one community.</mark>{% endif %}</p>
+    </div>
+  </div>
+</section>
+
+<section class="cx-section cx-section--navy cx-grid-bg" id="act" aria-labelledby="act-title">
+  <div class="cx-wrap">
+    <div class="cx-pledge-band__head">
+      <div data-pledge-counter data-lang="{{ page.lang }}" data-endpoint="{{ site.data.pledge.endpoint }}">
+        <p class="cx-count"><span class="cx-count__num" data-pl-count aria-live="polite" hidden></span> <span>{% if es %}vecinos ya se comprometieron{% else %}neighbors have pledged{% endif %}</span></p>
+        <h2 class="cx-h2 cx-h2--md" id="act-title">{{ plc.headline }} {{ plc.headline_mark }}</h2>
+      </div>
+      <a class="cx-btn cx-btn--gold cx-btn--lg" href="#pledge">{{ plc.button }}</a>
+    </div>
+    <p class="cx-eyebrow">{% if es %}Actúa ahora{% else %}Take action now{% endif %}</p>
+    <div class="cx-grid cx-grid--2">
+      <article class="cx-card cx-card--deep" id="hearing-preparation">
+        <span class="cx-card__num" aria-hidden="true">1</span>
+        <h3 class="cx-card__title">{% if es %}Ven a una audiencia sobre los cierres{% else %}Show up at a closure hearing{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Llena la sala y pídele a la junta que vote NO a los cierres apresurados. Tienes tres minutos. Una sala llena cuenta, aunque no pienses hablar.{% else %}Pack the room and ask the board to vote NO on rushed school closures. You get three minutes. A full room matters, even if you do not plan to speak.{% endif %}</p>
+        <div class="cx-times">
+          <p><strong>Dewey</strong>{% if es %}1 de dic., 7:45 p.m.<br>3 de dic., 5:15 p.m.<br>8 de dic., 7:45 p.m.{% else %}Dec. 1 at 7:45 p.m.<br>Dec. 3 at 5:15 p.m.<br>Dec. 8 at 7:45 p.m.{% endif %}</p>
+          <p><strong>Lincolnwood</strong>{% if es %}1 de dic., 5:15 p.m.<br>3 de dic., 7:45 p.m.<br>8 de dic., 5:15 p.m.{% else %}Dec. 1 at 5:15 p.m.<br>Dec. 3 at 7:45 p.m.<br>Dec. 8 at 5:15 p.m.{% endif %}</p>
+        </div>
+        <p class="cx-card__text">Joseph E. Hill Education Center, 1500 McDaniel Ave.</p>
+        <a class="cx-card__link" href="{{ url_hearings | relative_url }}">{% if es %}Horarios y cómo prepararse{% else %}Hearing schedule and how to prepare{% endif %}</a>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <span class="cx-card__num" aria-hidden="true">2</span>
+        <h3 class="cx-card__title">{% if es %}Firma el compromiso{% else %}Sign the pledge{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Muéstrale a la junta que hay un camino mejor: votar no al plan actual, construir uno mejor con nuestra comunidad, y apoyaremos el referéndum que lo financie.{% else %}Show the board there is a better path: vote no on the current plan, build a better one with our community, and we will support the referendum that funds it.{% endif %}</p>
+        <a class="cx-card__link" href="#pledge">{% if es %}Firma ahora{% else %}Sign now{% endif %}</a>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <span class="cx-card__num" aria-hidden="true">3</span>
+        <h3 class="cx-card__title">{% if es %}Escríbele a la junta{% else %}Write to the board{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}¿No puedes ir a una audiencia? Pide a los miembros de la junta que agoten todas las palancas que no cierran escuelas, y diles lo que el cierre significaría para tu familia.{% else %}Cannot make a hearing? Ask board members to exhaust every lever that doesn't close a school, and tell them what closing schools would mean for your family.{% endif %}</p>
+        <a class="cx-card__link" href="{{ t.urls.write | relative_url }}">{% if es %}Escríbele a la junta{% else %}Write to the board{% endif %}</a>
+      </article>
+      <article class="cx-card cx-card--deep">
+        <span class="cx-card__num" aria-hidden="true">4</span>
+        <h3 class="cx-card__title">{% if es %}Corre la voz{% else %}Spread the word{% endif %}</h3>
+        <p class="cx-card__text">{% if es %}Habla con vecinos, familias y miembros de la comunidad en todo Evanston. Los volantes están listos para imprimir y compartir.{% else %}Talk to neighbors, parents and community members across all of Evanston. Flyers are ready to print and share.{% endif %}</p>
+        <a class="cx-card__link" href="{{ url_resources | relative_url }}">{% if es %}Descargar volantes{% else %}Download flyers{% endif %}</a>
+      </article>
+    </div>
+    <p class="cx-small cx-note">{% if es %}Habrá interpretación en español en todas las audiencias.{% else %}Spanish interpretation is provided at all hearings. <span lang="es">Habrá interpretación en español en todas las audiencias.</span>{% endif %}</p>
+  </div>
+</section>
 
 </div>
-
-{%- comment -%} Share dialog (opened by the Instagram button in the Share card): Facebook, X, and a downloadable Instagram image {%- endcomment -%}
-<dialog class="dialog" id="share-dialog" aria-labelledby="share-title" data-share data-url="{{ share_url }}">
-  <button type="button" class="dialog__close" data-dialog-close aria-label="{{ t.updates.close }}">{% include icons/close.svg %}</button>
-  <h2 class="dialog__title" id="share-title">{{ h.share.title }}</h2>
-  <p>{{ h.share.lead }}</p>
-  <div class="share-grid">
-    <a class="share-grid__btn" href="#" data-network="fb" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">{% include icons/facebook.svg %}</a>
-    <a class="share-grid__btn" href="#" data-network="x" target="_blank" rel="noopener" aria-label="X" title="X">{% include icons/x.svg %}</a>
-    <button type="button" class="share-grid__btn" data-network="img" aria-label="Instagram" title="Instagram">{% include icons/instagram.svg %}</button>
-  </div>
-  <p class="share-status" data-share-status role="status" aria-live="polite"></p>
-  <div class="share-image" data-share-image hidden>
-    <img alt="{{ h.share.img_alt }}" width="170" height="170">
-    <p>{{ h.share.img_help }}</p>
-  </div>
-  <script type="application/json" data-share-text>{{ h.share.text | jsonify }}</script>
-</dialog>
