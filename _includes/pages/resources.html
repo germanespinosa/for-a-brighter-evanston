@@ -29,7 +29,7 @@
   <div class="cx-wrap">
     <h2 class="cx-h2" id="flyers-title">{% if es %}Volantes{% else %}Flyers{% endif %}</h2>
     <p class="cx-body">{% if es %}Tamaño carta, en inglés y español.{% else %}Letter size, in English and Spanish.{% endif %}</p>
-    <div class="cx-grid cx-grid--flyers">
+    <div class="cx-grid cx-grid--2">
       <article class="cx-flyer">
         <a class="cx-flyer__img" href="{{ flyer_file | relative_url }}"><img src="{{ flyer_thumb | relative_url }}" alt="{% if es %}Volante: Apostemos por Evanston y defendamos al Distrito 65{% else %}Flyer: Bet on Evanston and Show Up for D65{% endif %}" width="480" height="621" loading="lazy" decoding="async"></a>
         <h3 class="cx-flyer__title">{% if es %}Apostemos por Evanston y defendamos al Distrito 65{% else %}Bet on Evanston and Show Up for D65{% endif %}</h3>
