@@ -1,24 +1,19 @@
 {%- comment -%}
   Resources page (/resources/ and /es/recursos/), Nov. 2026 layout.
   Built from Kerstin's "FABE Site Update" mockup. Text in both languages is
-  written here. Flyers: assets/img/flyers/flyer-<letter>-<lang>.png (+ -thumb.webp).
-  Talking-points PDFs: add them to assets/files/ and set the two
-  `tp_*_file` values below; until then the cards say the PDF is coming soon.
+  written here. Supplied flyer and talking-points PDFs are in assets/files/.
   Styles: assets/css/campaign.css (cx- classes).
 {%- endcomment -%}
 {%- assign t = site.data.i18n[page.lang] -%}
 {%- assign plc = site.data.pledge[page.lang] -%}
 {%- if page.lang == 'es' -%}{%- assign es = true -%}{%- assign url_hearings = '/es/audiencias/' -%}{%- else -%}{%- assign es = false -%}{%- assign url_hearings = '/hearings/' -%}{%- endif -%}
-{%- assign tp_flyer_file = '' -%}
-{%- assign tp_handout_file = '' -%}
 {%- if es -%}
-  {%- assign flyer_titles = "Exige una solución real.|Los niños pagan el costo.|Es una solución falsa.|La confianza va primero.|Construyamos algo mejor." | split: "|" -%}
-  {%- assign flyer_texts = "El compromiso y las audiencias.|Lo que este plan les cuesta a los niños.|Por qué cerrar escuelas no arreglará el presupuesto.|La confianza y el referéndum.|Construir algo mejor." | split: "|" -%}
+  {%- assign flyer_file = '/assets/files/flyer-spanish.pdf' -%}
+  {%- assign flyer_thumb = '/assets/img/flyers/new-flyer-es.webp' -%}
 {%- else -%}
-  {%- assign flyer_titles = "Demand a real fix.|Kids carry the cost.|It's a false fix.|Trust comes first.|Build something better." | split: "|" -%}
-  {%- assign flyer_texts = "The pledge and the hearings.|What this plan costs kids.|Why closing schools won't fix the budget.|Trust and the referendum.|Building something better." | split: "|" -%}
+  {%- assign flyer_file = '/assets/files/flyer-english.pdf' -%}
+  {%- assign flyer_thumb = '/assets/img/flyers/new-flyer-en.webp' -%}
 {%- endif -%}
-{%- assign flyer_letters = "a,b,c,d,e" | split: "," -%}
 
 <div class="cx">
 
@@ -33,25 +28,17 @@
 <section class="cx-section cx-section--white" id="flyers" aria-labelledby="flyers-title">
   <div class="cx-wrap">
     <h2 class="cx-h2" id="flyers-title">{% if es %}Volantes{% else %}Flyers{% endif %}</h2>
-    <p class="cx-body">{% if es %}Tamaño carta, en inglés y español. Cada uno tiene un enfoque distinto, así que elige el que mejor le quede a tu cuadra. Todos los volantes incluyen las fechas de las audiencias y un código QR para el compromiso.{% else %}Letter size, in English and Spanish. Each takes a different angle, so pick the one that fits your block. Every flyer has the hearing dates and a QR code to the pledge.{% endif %}</p>
+    <p class="cx-body">{% if es %}Tamaño carta, en inglés y español.{% else %}Letter size, in English and Spanish.{% endif %}</p>
     <div class="cx-grid cx-grid--flyers">
-      {%- for letter in flyer_letters %}
-      {%- assign i = forloop.index0 %}
-      {%- capture thumb -%}/assets/img/flyers/flyer-{{ letter }}-{{ page.lang }}-thumb.webp{%- endcapture -%}
-      {%- capture file_en -%}/assets/img/flyers/flyer-{{ letter }}-en.png{%- endcapture -%}
-      {%- capture file_es -%}/assets/img/flyers/flyer-{{ letter }}-es.png{%- endcapture -%}
-      {%- capture file_mine -%}/assets/img/flyers/flyer-{{ letter }}-{{ page.lang }}.png{%- endcapture -%}
       <article class="cx-flyer">
-        <a class="cx-flyer__img" href="{{ file_mine | relative_url }}"><img src="{{ thumb | relative_url }}" alt="{% if es %}Volante: {% else %}Flyer: {% endif %}{{ flyer_titles[i] | escape }}" width="480" height="621" loading="lazy" decoding="async"></a>
-        <h3 class="cx-flyer__title">{{ flyer_titles[i] }}</h3>
-        <p class="cx-flyer__text">{{ flyer_texts[i] }}</p>
-        <p class="cx-flyer__links"><a href="{{ file_en | relative_url }}" download hreflang="en">English</a> <a href="{{ file_es | relative_url }}" download hreflang="es">Español</a></p>
+        <a class="cx-flyer__img" href="{{ flyer_file | relative_url }}"><img src="{{ flyer_thumb | relative_url }}" alt="{% if es %}Volante: Apostemos por Evanston y defendamos al Distrito 65{% else %}Flyer: Bet on Evanston and Show Up for D65{% endif %}" width="480" height="621" loading="lazy" decoding="async"></a>
+        <h3 class="cx-flyer__title">{% if es %}Apostemos por Evanston y defendamos al Distrito 65{% else %}Bet on Evanston and Show Up for D65{% endif %}</h3>
+        <p class="cx-flyer__links"><a href="{{ '/assets/files/flyer-english.pdf' | relative_url }}" download hreflang="en">English (PDF)</a> <a href="{{ '/assets/files/flyer-spanish.pdf' | relative_url }}" download hreflang="es">Español (PDF)</a></p>
         <details class="cx-small">
           <summary>{% if es %}Leer el texto del volante{% else %}Read the flyer text{% endif %}</summary>
-          {% include flyer-transcripts.html lang=page.lang letter=letter %}
+          {% include new-flyer-transcript.html %}
         </details>
       </article>
-      {%- endfor %}
     </div>
     <p class="cx-body cx-note">{% if es %}Imprime algunos para tu edificio o tu cuadra, pide a tu cafetería favorita que pegue uno, o lleva un paquete cuando salgas a tocar puertas.{% else %}Print a few for your building or your block, ask your favorite coffee shop to post one, or take a stack out canvassing.{% endif %} <a class="cx-link" href="https://docs.google.com/spreadsheets/d/19RI8LG9nMjeXgI6MuMNvc4D1-RJaYeSu/edit?gid=1937283420#gid=1937283420" target="_blank" rel="noopener">{% if es %}Apúntate para repartir volantes en una cuadra{% else %}Claim a block to canvass{% endif %}</a></p>
   </div>
@@ -62,22 +49,9 @@
     <h2 class="cx-h2" id="tp-title">{% if es %}Puntos clave{% else %}Talking points{% endif %}</h2>
     <div class="cx-grid cx-grid--2">
       <article class="cx-card cx-card--white">
-        <h3 class="cx-card__title">{% if es %}Apostemos por Evanston y apoyemos al D65{% else %}Bet on Evanston and Show Up for D65{% endif %}</h3>
-        <p class="cx-card__text">{% if es %}Volante de una página de Invest in Neighborhood Schools, For a Brighter Evanston y Legion of Data Nerds, con los tres puntos clave y los horarios de las audiencias.{% else %}One-page flyer from Invest in Neighborhood Schools, For a Brighter Evanston and the Legion of Data Nerds, with the three key points and the hearing times.{% endif %}</p>
-        {%- if tp_flyer_file != '' %}
-        <a class="cx-card__link" href="{{ tp_flyer_file | relative_url }}">{% if es %}Descargar el volante (PDF){% else %}Download the flyer (PDF){% endif %}</a>
-        {%- else %}
-        <span class="cx-pending">{% if es %}PDF disponible pronto{% else %}PDF coming soon{% endif %}</span>
-        {%- endif %}
-      </article>
-      <article class="cx-card cx-card--white">
         <h3 class="cx-card__title">{% if es %}Mensajes y puntos clave en detalle{% else %}Detailed messaging and talking points{% endif %}</h3>
         <p class="cx-card__text">{% if es %}La hoja completa detrás del volante. Úsala para preparar tus tres minutos en una audiencia o tu carta a la junta.{% else %}The full handout behind the flyer. Use it to prepare your three minutes at a hearing or your letter to the board.{% endif %}</p>
-        {%- if tp_handout_file != '' %}
-        <a class="cx-card__link" href="{{ tp_handout_file | relative_url }}">{% if es %}Descargar la hoja (PDF){% else %}Download the handout (PDF){% endif %}</a>
-        {%- else %}
-        <span class="cx-pending">{% if es %}PDF disponible pronto{% else %}PDF coming soon{% endif %}</span>
-        {%- endif %}
+        <p class="cx-flyer__links"><a href="{{ '/assets/files/talking-points-english.pdf' | relative_url }}" download hreflang="en">English (PDF)</a> <a href="{{ '/assets/files/talking-points-spanish.pdf' | relative_url }}" download hreflang="es">Español (PDF)</a></p>
       </article>
     </div>
   </div>
